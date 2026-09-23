@@ -1,0 +1,12 @@
+# ChinaFactoryHost — Hostinger Apache/LiteSpeed front-end 404 handling.
+# The @astrojs/node standalone server does not map unknown paths to 404.html
+# on its own, so unmatched routes would otherwise return the server's bare 404.
+# This serves the styled page (built to dist/client/404.html, served at /404.html).
+#
+# If Hostinger reverse-proxies requests to the Node process, Apache will NOT
+# substitute its own error document for a 4xx coming back from the backend
+# unless you also enable the line below. Uncomment it ONLY if the bare/unstyled
+# 404 still shows after deploy (some Hostinger plans disallow ProxyErrorOverride
+# in .htaccess and would 500 — so leave it commented unless needed).
+# ProxyErrorOverride On
+ErrorDocument 404 /404.html

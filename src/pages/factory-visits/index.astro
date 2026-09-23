@@ -1,0 +1,290 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Section from '../../components/Section.astro';
+import SectionHead from '../../components/SectionHead.astro';
+import PhotoSlot from '../../components/PhotoSlot.astro';
+import OnsitePhoto from '../../components/OnsitePhoto.astro';
+import Icon from '../../components/Icon.astro';
+import ComparisonTable from '../../components/ComparisonTable.astro';
+import Checklist from '../../components/Checklist.astro';
+import FAQ from '../../components/FAQ.astro';
+import RelatedNav from '../../components/RelatedNav.astro';
+import { waLink } from '../../data/site.ts';
+
+const title = 'China factory visits — planned around your product, not the tourist map';
+const description =
+  'Guided factory visits in China for buyers and creators. We verify the factory, confirm what is actually there before you fly, and stay beside you on the floor.';
+
+const wa = waLink('Hi, I would like to arrange factory visits in China.');
+
+const startingPoints = [
+  {
+    icon: 'clipboard',
+    title: 'I already have suppliers',
+    desc: 'You have a shortlist and a sinking feeling. We verify each one and run the visit so you meet the production manager, not a sales rep.',
+    href: '/services/brand-sourcing-visit/',
+    cta: 'Verify and visit',
+  },
+  {
+    icon: 'target',
+    title: 'I need help finding factories',
+    desc: 'You know the product but not the region. Tell us the category and quantity — we name the right cluster and shortlist real factories.',
+    href: '/contact/',
+    cta: 'Find my factories',
+  },
+  {
+    icon: 'route',
+    title: 'I am exploring the industry',
+    desc: 'You want to understand the landscape before committing. Start with the regions and industries, then turn it into a route.',
+    href: '/destinations/',
+    cta: 'See the regions',
+  },
+];
+
+const includes = [
+  'Five vetting checks run before a factory stays on your itinerary',
+  'Appointments made with the decision-maker, not only a sales contact',
+  'Transport between factories and inside the industrial cluster',
+  'An interpreter who knows the process vocabulary, not just small talk',
+  'Meeting notes, quotes and a written report after the trip',
+];
+
+const refusals = [
+  'We do not guarantee entry to a named brand factory — we check feasibility and arrange a comparable alternative where the answer is no.',
+  'We do not pass off a casual visit as a formal audit or product inspection.',
+  'We do not take undisclosed commissions from factories.',
+  'We do not promise filming access we have not confirmed in writing.',
+];
+
+const faqs = [
+  {
+    q: 'Can foreigners visit factories in China?',
+    a: [
+      'Yes, but a public factory directory is not the same as a walk-in. Visits are arranged by appointment, in advance, with the factory that actually makes your product. That arrangement — and knowing which factories will agree — is most of the service.',
+    ],
+  },
+  {
+    q: 'How is a factory visit different from a factory tour?',
+    a: [
+      'A tour shows you around. A visit is built around a decision — whether this supplier is real, can hold your volume, and can say yes to your terms. The itinerary is your shortlist, not a sightseeing loop.',
+    ],
+  },
+  {
+    q: 'How many factories can I visit in one day?',
+    a: [
+      'In one industrial cluster, two focused visits a day is realistic and productive. Three usually means cutting a walk-through short. We plan density around the cluster, not around a wish list, and we will tell you when your plan is too full.',
+    ],
+  },
+  {
+    q: 'How far in advance should I book?',
+    a: [
+      'Appointments are confirmed in advance, so the earlier the better — and if you need filming permission, that has its own lead time. We confirm what is realistic for your dates before you book a flight.',
+    ],
+  },
+  {
+    q: 'What if the factory says no?',
+    a: [
+      'We build alternatives into the plan. A refusal costs you a location, not a trip day — and we say so before you fly rather than at the gate.',
+    ],
+  },
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  active=""
+  crumbs={[]}
+  current="Factory visits"
+  cta={{
+    eyebrow: 'Next step',
+    title: 'Plan a visit around your product.',
+    lead: 'Tell us the category, the city and roughly when. You get a straight answer about what is realistic.',
+    primary: { label: 'Plan my visit', href: '/contact/' },
+    secondary: { label: 'Ask on WhatsApp', href: wa, external: true },
+  }}
+>
+  <section class="hero">
+    <div class="container">
+      <div class="split-7-5">
+        <div>
+          <p class="eyebrow">Factory visits</p>
+          <h1>China factory visits, planned around your product — not the tourist map.</h1>
+          <p class="lead hero__lead">
+            We arrange visits to real factories, confirm what is actually there before you fly, and
+            stay beside you on the floor. Filming for an audience, or signing a production run — the
+            multi-day version is a <a href="/china-sourcing-trips/">sourcing trip</a>.
+          </p>
+          <div class="btn-row">
+            <a class="btn btn--primary" href="/contact/">Plan my visit</a>
+            <a class="btn btn--secondary" href="/about/how-we-vet-factories/">See how we vet</a>
+          </div>
+        </div>
+        <div class="hero__media">
+          <PhotoSlot name="VISITS · ON THE FLOOR" variant="media">
+            <OnsitePhoto id="09" eager />
+          </PhotoSlot>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Section>
+    <div class="container container--md">
+      <SectionHead
+        eyebrow="The difference"
+        title="A factory visit is not a sightseeing tour."
+      />
+      <div class="prose stack">
+        <p>
+          A tour shows you around. A visit is built around a decision: whether <a href="/about/how-we-vet-factories/">this supplier is real</a>,
+          whether it can hold your volume, and whether the person in the room can actually agree to
+          your terms. That changes what gets booked, who you meet and what you leave with.
+        </p>
+        <p>
+          The difference is also why we verify before you arrive. A listing, a catalogue and a
+          friendly salesperson look identical whether you are dealing with a maker or a <a href="/guides/factory-vs-trading-company-china/">trading company</a>
+          renting an office above one. The distinction only becomes visible once somebody is
+          physically standing on the floor.
+        </p>
+      </div>
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container">
+      <SectionHead
+        eyebrow="Start where you are"
+        title="Three ways to start a visit."
+      />
+      <div class="grid--3">
+        {
+          startingPoints.map((s) => (
+            <article class="split-card">
+              <span class="split-card__icon"><Icon name={s.icon} size={32} /></span>
+              <h3 class="split-card__title">{s.title}</h3>
+              <p class="split-card__desc">{s.desc}</p>
+              <p class="split-card__cta">
+                <a class="link-arrow" href={s.href}>
+                  {s.cta}
+                  <Icon name="arrow" size={14} />
+                </a>
+              </p>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </Section>
+
+  <Section>
+    <div class="container container--md">
+      <SectionHead
+        eyebrow="What is included"
+        title="What a visit actually includes."
+      />
+      <Checklist title="On every hosted visit" numbered items={includes} />
+      <p class="u-mt-6">
+        The route and appointments are <a href="/services/factory-visit-planning/">visit planning</a>; the shortlist is <a href="/services/factory-matching/">factory matching</a>.
+      </p>
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container container--md">
+      <SectionHead
+        eyebrow="Boundaries"
+        title="What we will not do."
+        lead="Listed here rather than left for you to discover halfway through."
+      />
+      <Checklist items={refusals} plain refusal />
+    </div>
+  </Section>
+
+  <Section>
+    <div class="container">
+      <SectionHead
+        eyebrow="Know the terms"
+        title="Factory visit, audit and inspection are three different things."
+        lead="Mixing them up is how buyers overpay, or get promised a standard nobody certified."
+      />
+      <ComparisonTable
+        caption="Factory visit versus factory audit versus product inspection"
+        labelCol="Dimension"
+        columns={[
+          { name: 'Factory visit', sub: 'what we run', featured: true },
+          { name: 'Factory audit', sub: 'coordinated with specialists' },
+          { name: 'Product inspection', sub: 'a separate discipline' },
+        ]}
+        rows={[
+          {
+            label: 'Core question',
+            values: [
+              'Is this the right partner?',
+              'Does the factory meet a standard?',
+              'Does this batch meet the spec?',
+            ],
+          },
+          {
+            label: 'What gets checked',
+            values: [
+              'Licence, scope, floor, capacity, decision-maker',
+              'Systems, records, compliance evidence',
+              'The units in one specific order',
+            ],
+          },
+          {
+            label: 'Who does the work',
+            values: [
+              'Our team, on the ground',
+              'Certified auditors we coordinate',
+              'Independent QC inspectors',
+            ],
+          },
+          {
+            label: 'Deliverable',
+            values: [
+              'A written visit report',
+              'A formal audit report',
+              'An inspection report',
+            ],
+          },
+          {
+            label: 'What ChinaFactoryHost provides',
+            values: ['Yes — this is our core', 'Coordination only', 'Coordination only'],
+          },
+        ]}
+        footnote="A visit is not an audit and neither is an inspection. We do not pass a casual visit off as a formal audit; when you need one, we coordinate the right specialist and keep our own role explicit."
+      />
+      <p class="u-mt-6">
+        The full three-way distinction is in the <a href="/guides/factory-visit-vs-audit-vs-inspection/">guide</a>.
+      </p>
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container">
+      <SectionHead
+        eyebrow="Where to start"
+        title="Pick a region, or a category."
+      />
+      <RelatedNav
+        items={[
+          { k: 'Region', t: 'Yiwu', href: '/destinations/yiwu/' },
+          { k: 'Region', t: 'Shenzhen', href: '/destinations/shenzhen/' },
+          { k: 'Region', t: 'Ningbo / Hangzhou', href: '/destinations/ningbo-hangzhou/' },
+          { k: 'Industry', t: 'Beauty & packaging', href: '/industries/beauty-packaging/' },
+          { k: 'Industry', t: 'Toys, gifts & commodities', href: '/industries/toys-gifts-commodities/' },
+          { k: 'Method', t: 'How we vet', href: '/about/how-we-vet-factories/' },
+        ]}
+      />
+    </div>
+  </Section>
+
+  <Section tight>
+    <div class="container">
+      <SectionHead title="Questions buyers ask before booking." />
+      <FAQ items={faqs} />
+    </div>
+  </Section>
+</BaseLayout>

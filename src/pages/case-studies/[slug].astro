@@ -1,0 +1,304 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Section from '../../components/Section.astro';
+import SectionHead from '../../components/SectionHead.astro';
+import PhotoSlot from '../../components/PhotoSlot.astro';
+import OnsitePhoto from '../../components/OnsitePhoto.astro';
+import { pickUnique } from '../../data/onsite-photos.ts';
+import Timeline from '../../components/Timeline.astro';
+import Checklist from '../../components/Checklist.astro';
+import RedFlags from '../../components/RedFlags.astro';
+import Caveat from '../../components/Caveat.astro';
+import NoteStrip from '../../components/NoteStrip.astro';
+import VetLink from '../../components/VetLink.astro';
+import RelatedNav from '../../components/RelatedNav.astro';
+import { getCollection } from 'astro:content';
+import { waLink } from '../../data/site.ts';
+
+/* /case-studies/[slug]/ — one route driven by the caseStudies collection.
+   Every entry is flagged `placeholder` until we hold a real trip plus the
+   client's written permission to be named. */
+export async function getStaticPaths() {
+  const entries = await getCollection('caseStudies');
+  return entries.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const c = entry.data;
+const isCreator = c.clientType === 'creator';
+
+const num = (n) => (n === null ? '—' : String(n));
+const tbc = (n) => n === null;
+
+/* Gallery thumbs: one row on one page — no photo twice (see pickUnique). */
+const galleryPicks = pickUnique(c.gallery);
+
+const wa = waLink('Hi, I would like to plan a factory visit like one of your case studies.');
+---
+
+<BaseLayout
+  title={`${c.title} — ChinaFactoryHost case study`}
+  description={c.standfirst}
+  track={isCreator ? 'creator' : 'buyer'}
+  active="cases"
+  crumbs={[{ href: '/case-studies/', label: 'Case studies' }]}
+  current={c.title}
+  cta={{
+    /* Buyer path must not use dark bands — design system §4.1.8 */
+    variant: isCreator ? 'inverse' : 'plain',
+    eyebrow: 'Next step',
+    title: 'Start your own factory trip.',
+    lead: 'Tell us your category, city and rough dates — we will tell you what is realistic.',
+    primary: { label: 'Start your own factory trip', href: '/contact/' },
+    secondary: { label: 'Ask on WhatsApp', href: wa, external: true },
+  }}
+>
+  <article>
+    <!-- Hero -->
+    <section class="hero">
+      <div class="container container--md">
+        <p class="eyebrow">
+          <span class:list={['badge', isCreator ? 'badge--creator' : 'badge--buyer']}>
+            {isCreator ? 'Creator' : 'Brand buyer'}
+          </span>
+        </p>
+        <h1>{c.title}</h1>
+        <p class="lead hero__lead">{c.standfirst}</p>
+        <div class="u-mt-5">
+          <NoteStrip label="How to read this" marker="case"
+            >A sample write-up, not a record of a completed trip. It shows the structure and the
+            level of detail of the report you receive after a visit. The client, dates and figures
+            here are illustrative — we publish a real one only with that client's written
+            permission.</NoteStrip
+          >
+        </div>
+        <div class="article-meta">
+          <span>{c.place}</span>
+          <span>{c.category}</span>
+          <span data-placeholder={tbc(c.days) ? 'case' : undefined}>
+            <span class="num">{num(c.days)}</span> days
+          </span>
+          <span data-placeholder={tbc(c.factoriesVisited) ? 'case' : undefined}>
+            <span class="num">{num(c.factoriesVisited)}</span> factories visited
+          </span>
+          {c.crew && <span set:html={c.crew} />}
+        </div>
+        <div class="btn-row">
+          <a class="btn btn--primary" href="/contact/">Start your own factory trip</a>
+          <a class="btn btn--secondary" href="/case-studies/">All case studies</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Result strip -->
+    {
+      (!tbc(c.factoriesVisited) || !tbc(c.factoriesRejected) || !tbc(c.days)) && (
+        <section class="trust-bar trust-bar--light section--tight">
+          <div class="container">
+            <div class="trust-bar__grid">
+              <div class="trust-bar__item" data-placeholder={tbc(c.factoriesVisited) ? 'case' : undefined}>
+                <p class="trust-figure">
+                  <span class="num">{num(c.factoriesVisited)}</span>
+                </p>
+                <p class="trust-bar__label">Factories visited</p>
+              </div>
+              <div class="trust-bar__item" data-placeholder={tbc(c.factoriesRejected) ? 'case' : undefined}>
+                <p class="trust-figure">
+                  <span class="num">{num(c.factoriesRejected)}</span>
+                </p>
+                <p class="trust-bar__label">Removed on site</p>
+              </div>
+              <div class="trust-bar__item" data-placeholder={tbc(c.days) ? 'case' : undefined}>
+                <p class="trust-figure">
+                  <span class="num">{num(c.days)}</span>
+                </p>
+                <p class="trust-bar__label">Working days</p>
+              </div>
+            </div>
+            {/* The old foot line ("Result figures … not yet real client data")
+                was a note about our own draft status. Option A: it is gone.
+                Unsourced figures now carry data-placeholder="case" instead. */}
+          </div>
+        </section>
+      )
+    }
+
+    <!-- At a glance -->
+    <Section>
+      <div class="container container--md">
+        <SectionHead eyebrow="At a glance" title="The facts of the trip." />
+        <ul class="spec-list clean">
+          <li>
+            <span class="spec-list__k">Client type</span><span class="spec-list__v"
+              >{isCreator ? 'Content creator' : 'Brand buyer'}</span
+            >
+          </li>
+          <li>
+            <span class="spec-list__k">Category</span><span class="spec-list__v">{c.category}</span>
+          </li>
+          <li>
+            <span class="spec-list__k">Location</span><span class="spec-list__v">{c.place}</span>
+          </li>
+          {
+            c.cities.length > 0 && (
+              <li>
+                <span class="spec-list__k">Clusters</span>
+                <span class="spec-list__v">{c.cities.join(' · ')}</span>
+              </li>
+            )
+          }
+          <li>
+            <span class="spec-list__k">Duration</span><span
+              class="spec-list__v"
+              data-placeholder={tbc(c.days) ? 'case' : undefined}
+              ><span class="num">{num(c.days)}</span> working days</span
+            >
+          </li>
+          <li>
+            <span class="spec-list__k">Headline result</span><span
+              class="spec-list__v"
+              set:html={c.result}
+            ></span>
+          </li>
+        </ul>
+      </div>
+    </Section>
+
+    <!-- The brief -->
+    {
+      c.brief.length > 0 && (
+        <Section alternate>
+          <div class="container container--md">
+            <SectionHead eyebrow="What they asked for" title="The brief." />
+            <div class="prose stack">
+              {c.brief.map((p) => (
+                <p set:html={p} />
+              ))}
+            </div>
+          </div>
+        </Section>
+      )
+    }
+
+    <!-- What we did -->
+    {
+      c.itinerary.length > 0 && (
+        <Section>
+          <div class="container container--md">
+            <SectionHead eyebrow="Execution" title="How the days were run." />
+            <Timeline items={c.itinerary} media={isCreator} exclude={galleryPicks} />
+          </div>
+        </Section>
+      )
+    }
+
+    <!-- Filming / verification notes — Option A: when neither list has been
+         written yet the whole section is omitted, rather than leaving a heading
+         with nothing under it (V3 §8.5: a big empty slot reads as broken). -->
+    {
+      (c.cleared.length > 0 || c.refused.length > 0) && (
+        <Section alternate>
+          <div class="container container--md">
+            <SectionHead
+              eyebrow={isCreator ? 'Filming' : 'Verification'}
+              title={isCreator ? 'What cleared, and what did not.' : 'What each check found.'}
+              lead={
+                isCreator
+                  ? 'Published because the refusals are the informative part.'
+                  : 'Including the suppliers we advised against.'
+              }
+            />
+            {c.cleared.length > 0 && (
+              <Checklist
+                title={isCreator ? 'Cleared for filming' : 'Checks passed'}
+                items={c.cleared}
+              />
+            )}
+            {c.refused.length > 0 && (
+              <RedFlags
+                title={
+                  isCreator
+                    ? 'Refused — before anyone boarded a plane'
+                    : 'Failed — and why we walked away'
+                }
+                items={c.refused}
+              />
+            )}
+            {c.verifiedNote && (
+              <div class="u-mt-6">
+                <NoteStrip label="Verification">{c.verifiedNote}</NoteStrip>
+              </div>
+            )}
+          </div>
+        </Section>
+      )
+    }
+
+    <!-- Output — the section survives on the gallery alone so the page keeps its
+         media rhythm; the chip list is omitted when no deliverable is written. -->
+    {
+      (c.deliverables.length > 0 || c.gallery.length > 0) && (
+        <Section>
+          <div class="container container--md">
+            <SectionHead eyebrow="What came out" title="Deliverables." />
+            {c.deliverables.length > 0 && (
+              <ul class="chip-list">
+                {c.deliverables.map((o) => (
+                  <li>
+                    <span class="chip-tag">{o}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
+            {c.gallery.length > 0 && (
+              <div class="grid--3 u-mt-8">
+                {c.gallery.map((g, i) => (
+                  <div>
+                    <PhotoSlot name={g} variant="thumb">
+                      <OnsitePhoto id={galleryPicks[i]} />
+                    </PhotoSlot>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </Section>
+      )
+    }
+
+    <!-- What did not go well -->
+    {
+      c.problems.length > 0 && (
+        <Section alternate>
+          <div class="container container--md">
+            <Caveat
+              title="What did not go to plan"
+              body="Every real trip has one. Publishing this part is why the rest is worth reading."
+              items={c.problems}
+            />
+          </div>
+        </Section>
+      )
+    }
+
+    <!-- Client feedback — removed with the empty testimonial block: there is no
+         real client quote on this page, and a heading over an empty slot reads as
+         broken, not honest. -->
+
+    <!-- Trust + related -->
+    <Section alternate>
+      <div class="container">
+        <div class="container--md u-px-0 u-mb-8">
+          <VetLink
+            desc="Every factory on a hosted trip goes through the same five documented checks. Here is the method in full."
+          />
+        </div>
+        <SectionHead eyebrow="Keep going" title="Similar trips." />
+        {c.related.length > 0 && <RelatedNav items={c.related} />}
+      </div>
+    </Section>
+  </article>
+</BaseLayout>

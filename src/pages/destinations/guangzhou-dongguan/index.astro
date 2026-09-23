@@ -1,0 +1,154 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import DestinationPage from '../../../components/DestinationPage.astro';
+
+const title = 'Guangzhou & Dongguan factory visits — OEM and private label';
+const description =
+  'Beauty, garments, homeware and toys. Hosted OEM/ODM factory visits across Guangzhou and Dongguan for private-label brands.';
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  track="neutral"
+  active="destinations"
+  crumbs={[{ href: '/destinations/', label: 'Destinations' }]}
+  current="Guangzhou / Dongguan"
+  cta={{
+    eyebrow: 'Next step',
+    title: 'Plan a Guangzhou & Dongguan visit with the right suppliers in the room.',
+    lead: 'Send your product category and target volumes. We will separate the makers from the middlemen before you fly.',
+    /* No secondary: the primary already points at /contact/, and a second
+       button to the same page is a false choice (director's round-2 ruling). */
+    primary: { label: 'Plan my trip to Guangzhou', href: '/contact/' },
+    form: { destination: 'Guangzhou / Dongguan' },
+  }}
+>
+  <DestinationPage
+    region="Guangdong"
+    cityShort="Guangzhou"
+    slotName="GZ DG OEM FLOOR"
+    h1="Guangzhou & Dongguan: OEM and private label at every scale."
+    lead="Two adjacent cities that cover most of what a private-label brand needs — cosmetics and its packaging, garments, homeware and toys, with suppliers who already understand export requirements."
+    audience="Best for: private-label buyers in cosmetics, garments and homeware — and creators filming either."
+    micro={[
+      'Highest private-label density in China',
+      'Cosmetics, garments, homeware, toys',
+      'Comparatively open to visitors',
+    ]}
+    facts={[
+      {
+        k: 'Private-label readiness',
+        v: 'High',
+        note: 'Many suppliers here already produce for overseas brands under contract.',
+      },
+      {
+        k: 'Typical MOQ',
+        v: 'Mid to low',
+        note: 'Often negotiable relative to tooling-heavy clusters — see the industry pages for category detail.',
+      },
+      {
+        k: 'Filming notice',
+        v: '2–3 weeks',
+        note: 'Generally open, with clean rooms and formula areas the common exceptions.',
+      },
+    ]}
+    why={[
+      'Guangzhou brings trading infrastructure, cosmetics regulation familiarity and the <a href="/trade-shows/">Canton Fair</a> — the city’s twice-yearly trade fair. Dongguan brings the factories — injection moulding, garment sewing floors, furniture and electronics assembly.',
+      'The practical advantage for a private-label founder is that formulation, packaging, printing and assembly are all within one working radius. That shortens the loop from a design change to a physical sample considerably.',
+      'Both of our industry guides are rooted here: <a href="/industries/beauty-packaging/">beauty and personal-care packaging</a>, and <a href="/industries/toys-gifts-commodities/">toys, gifts and commodities</a>. If you are building a private label in either, this is the cluster your supplier almost certainly sits in.',
+      'Compared with Shenzhen, suppliers here are usually more open to being visited and filmed. Compared with Ningbo, they are usually more flexible on quantity.',
+    ]}
+    markets={[
+      {
+        k: 'Cosmetics & personal care',
+        v: 'Formula plants with filling and packing lines, plus separate packaging suppliers — see the industry page.',
+      },
+      {
+        k: 'Packaging',
+        v: 'Bottles, caps, pumps, tubes, cartons and printing — often a different factory entirely from the formula.',
+      },
+      { k: 'Garments', v: 'Cut-and-sew factories across the region, with <a href="/industries/textiles-fabrics/">fabric</a> sourcing nearby.' },
+      {
+        k: 'Homeware & furniture',
+        v: 'Wood, metal and mixed-material assembly across <a href="/destinations/foshan-shunde/">Foshan</a> and Dongguan.',
+      },
+      {
+        k: 'Toys & gifts',
+        v: 'Injection-moulded toys, plush, puzzles and seasonal gift lines — see the toys industry page.',
+      },
+      {
+        k: 'Injection moulding',
+        v: 'Dongguan tooling and moulding capacity serving half the consumer categories in Guangdong.',
+      },
+    ]}
+    itinTitle="Four days across two cities."
+    itinLead="Guangzhou for formula and packaging, Dongguan for the factories that make the parts."
+    itinerary={[
+      {
+        day: 'DAY 1',
+        time: 'GUANGZHOU',
+        title: 'Packaging suppliers',
+        desc: 'Bottles, closures and printing before anything else — because the packaging usually sets the MOQ.',
+        slot: 'GZ · PACKAGING',
+      },
+      {
+        day: 'DAY 2',
+        time: 'GUANGZHOU',
+        title: 'Formula plant visit',
+        desc: 'Raw material store, mixing, filling and QC. Clean rooms are usually off limits; the surrounding line often is not.',
+        slot: 'GZ · FILLING',
+      },
+      {
+        day: 'DAY 2',
+        time: 'TRANSFER',
+        title: 'Move to Dongguan',
+        desc: 'About an hour by road, timed to avoid rush hour rather than fitted around a meeting.',
+        slot: 'GZ DG · TRANSFER',
+      },
+      {
+        day: 'DAY 3',
+        time: 'DONGGUAN',
+        title: 'Tooling and injection',
+        desc: 'Mould store, machine floor and assembly. This is where subcontracting becomes visible if it is happening.',
+        slot: 'DG · INJECTION',
+      },
+      {
+        day: 'DAY 4',
+        time: 'WRAP',
+        title: 'Negotiation and handover',
+        desc: 'MOQ, tooling ownership and lead times settled with someone who can agree them.',
+        slot: 'DG · MEETING ROOM',
+      },
+    ]}
+    filmLead="Among the more filming-friendly of the large Chinese clusters, with predictable exceptions."
+    film={{
+      answer: 'Usually yes across filling, packing, moulding and assembly.',
+      lead: 'Two to three weeks is normally enough.',
+      refused: 'Clean rooms, any room containing customer formulations on a screen, and branded components.',
+      note: 'Cosmetics plants are usually relaxed about the floor and strict about formulations — ask for zones, not blanket permission.',
+    }}
+    seasons={[
+      'Best months: March–June and September–November.',
+      'Avoid the Canton Fair weeks in April and October unless that is why you are coming — hotels and factories are both stretched.',
+      'Chinese New Year closes both cities; garment and toy lines are busiest beforehand.',
+      'Christmas toy production runs roughly July–September, when Dongguan floors are least available for visits.',
+    ]}
+    timingWarnings={[
+      '<b>Assuming the packaging supplier and the product manufacturer are one company.</b> They rarely are.',
+      '<b>Coming during Canton Fair weeks without planning for it.</b> Availability and hotel prices both move.',
+      '<b>Visiting toy factories during the peak Christmas build.</b> Everything is running, nothing has time for a camera.',
+    ]}
+    vetDesc="Private label attracts intermediaries. Two of the five checks exist to tell a real factory from a well-presented one."
+    related={[
+      { k: 'Industry', t: 'Beauty & packaging', href: '/industries/beauty-packaging/' },
+      {
+        k: 'Industry',
+        t: 'Toys, gifts & commodities',
+        href: '/industries/toys-gifts-commodities/',
+      },
+      { k: 'Destination', t: 'Shenzhen', href: '/destinations/shenzhen/' },
+      { k: 'Destination', t: 'Yiwu', href: '/destinations/yiwu/' },
+    ]}
+  />
+</BaseLayout>

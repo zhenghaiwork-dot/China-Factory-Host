@@ -1,0 +1,12 @@
+---
+/* CaveatBlock — §5.15.3. Verifiable candour instead of self-praise: we publish
+   what we do NOT do. Oxide left border only; oxide never carries text. */
+interface Props { title: string; body: string; items?: string[]; }
+const { title, body, items } = Astro.props;
+---
+<div class="caveat">
+  <p class="caveat__eyebrow">What we don't do</p>
+  <h3 class="caveat__title">{title}</h3>
+  <p class="caveat__body">{body}</p>
+  {items && <ul class="caveat__list">{items.map((i) => <li><span>{i}</span></li>)}</ul>}
+</div>

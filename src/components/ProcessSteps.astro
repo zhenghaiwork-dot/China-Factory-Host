@@ -1,0 +1,47 @@
+---
+import Icon from './Icon.astro';
+/* ProcessSteps — §5.8 variant A (numbered column).
+   `body` is plain text; use the default slot if a step needs markup. */
+export interface Step {
+  n: string;
+  title: string;
+  body: string;
+  code?: string;
+  evidence?: string[];
+}
+/* layout="grid" — horizontal numbered columns on ≥1024 (short steps only;
+   steps with evidence lists stay vertical so the checklists keep their width). */
+interface Props { items: Step[]; layout?: 'vertical' | 'grid'; }
+const { items, layout = 'vertical' } = Astro.props;
+---
+<ol class:list={['steps', 'clean', { 'steps--grid': layout === 'grid' }]}>
+  {
+    items.map((s) => (
+      <li class="step">
+        <span class="step__num">{s.n}</span>
+        <div>
+          <div class="step__head">
+            <h3 class="step__title">{s.title}</h3>
+            {s.code && <span class="step__code">{s.code}</span>}
+          </div>
+          <div class="step__body">
+            <p>{s.body}</p>
+            {s.evidence && (
+              <>
+                <p class="step__evidence-label">What we check</p>
+                <ul class="step__evidence">
+                  {s.evidence.map((e) => (
+                    <li>
+                      <Icon name="check" size={16} />
+                      <span>{e}</span>
+                    </li>
+                  ))}
+                </ul>
+              </>
+            )}
+          </div>
+        </div>
+      </li>
+    ))
+  }
+</ol>

@@ -1,0 +1,17 @@
+---
+/* Fact grid — small mono-labelled evidence blocks. */
+interface Fact { k: string; v: string; note?: string; }
+interface Props { items: Fact[]; class?: string; }
+const { items, class: cls } = Astro.props;
+---
+<div class:list={['fact-grid', cls]}>
+  {
+    items.map((f) => (
+      <div class="fact">
+        <p class="fact__k">{f.k}</p>
+        <p class="fact__v" set:html={f.v}></p>
+        {f.note && <p class="fact__note">{f.note}</p>}
+      </div>
+    ))
+  }
+</div>

@@ -1,0 +1,226 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Section from '../../components/Section.astro';
+import SectionHead from '../../components/SectionHead.astro';
+import PhotoSlot from '../../components/PhotoSlot.astro';
+import OnsitePhoto from '../../components/OnsitePhoto.astro';
+import Icon from '../../components/Icon.astro';
+import InquiryForm from '../../components/InquiryForm.astro';
+import NoteStrip from '../../components/NoteStrip.astro';
+import Caveat from '../../components/Caveat.astro';
+import {
+  REPLY_TIME,
+  REPLY_TIME_PROMISE,
+  REPLY_TIME_SHORT,
+  FILMING_LEAD_TIME,
+  CONTACT_EMAIL,
+  HOST_NAME,
+  HOST_SIGNATURE,
+  isWaConfigured,
+  waLink,
+} from '../../data/site.ts';
+
+const title = "Contact — tell us what you're trying to do";
+const description =
+  'No funnel, no discovery call script. Five fields, or one WhatsApp message. If what you need is not something we do, you will hear that first.';
+
+/* Empty until WA_NUMBER is set in site.ts — in which case no wa.me anchor is
+   rendered anywhere on this page (critique M3). */
+const wa = waLink('Hi, I would like to plan a factory visit in China.');
+
+/* Built here rather than inline: an Astro attribute expression cannot hold a
+   `${...}` template substitution — the compiler reads it as a stray token. */
+const filmingCaveat = `If your trip is inside the next ${FILMING_LEAD_TIME} and involves filming — we may still help, but permission odds drop sharply.`;
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  track="neutral"
+  current="Contact"
+  cta={false}
+>
+  <section class="hero">
+    <div class="container">
+      <div class="split-7-5">
+        <div>
+          {/* Not just "Contact": this page is a landing target from search and
+              shared links, where the visitor has no idea whose site this is. */}
+          <p class="eyebrow">Contact ChinaFactoryHost</p>
+          <h1>Tell us what you're trying to do. We'll tell you if we can help.</h1>
+          <p class="lead hero__lead">
+            No funnel, no discovery call script. Five fields, or one WhatsApp message. If what you
+            need is not something we do, you will hear that first.
+          </p>
+        </div>
+        <div class="hero__media">
+          <PhotoSlot name="TEAM · ZHEJIANG BASE" variant="media">
+            <OnsitePhoto id="02" eager />
+          </PhotoSlot>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Three channels -->
+  <Section tight>
+    <div class="container">
+      <div class="channels">
+        <div class="channel">
+          <span class="channel__icon"><Icon name="wa" size={22} /></span>
+          <h2 class="channel__title">WhatsApp</h2>
+          <p class="channel__desc">
+            Fastest route, and how most clients reach us. Works from abroad, and the message text is
+            pre-filled so you do not have to write an introduction.
+          </p>
+          {
+            isWaConfigured ? (
+              <p class="u-mb-0">
+                <a class="btn btn--whatsapp" href={wa} target="_blank" rel="noopener"
+                  >Message us on WhatsApp</a
+                >
+              </p>
+            ) : (
+              <NoteStrip label="WhatsApp number" marker="wa-number"
+                >WhatsApp number to be published. Until then, use the form below — it reaches the
+                same team.</NoteStrip
+              >
+            )
+          }
+          <p class="form-footnote u-mt-0">{REPLY_TIME_PROMISE}, China working hours</p>
+        </div>
+        <div class="channel">
+          <span class="channel__icon"><Icon name="mail" size={22} /></span>
+          <h2 class="channel__title">Inquiry form</h2>
+          <p class="channel__desc">
+            Best when you have detail worth writing down — a category, a city, a specification, or a
+            supplier you already have doubts about.
+          </p>
+          <p class="u-mb-0"><a class="btn btn--secondary" href="#inquiry">Use the form below</a></p>
+          <p class="form-footnote u-mt-0">China time GMT+8 · we reply {REPLY_TIME}</p>
+        </div>
+        <div class="channel">
+          <span class="channel__icon"><Icon name="mail" size={22} /></span>
+          <h2 class="channel__title">Email</h2>
+          <p class="channel__desc">
+            For anything longer than a quick message, or if you prefer a written thread. Reaches the
+            same team as the form and WhatsApp.
+          </p>
+          <p class="u-mb-0"
+            ><a class="btn btn--secondary" href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a></p
+          >
+          <p class="form-footnote u-mt-0">China time GMT+8 · we reply {REPLY_TIME}</p>
+        </div>
+      </div>
+    </div>
+  </Section>
+
+  <!-- Form -->
+  <Section id="inquiry">
+    <div class="container container--md">
+      <SectionHead
+        eyebrow="Inquiry"
+        title="Five fields, one mandatory choice."
+        lead="The first question routes your message to the right person. Everything after that is whatever you think we need to know."
+      />
+      <InquiryForm />
+      <p class="u-mt-6 form-footnote">— {HOST_SIGNATURE}</p>
+      <div class="u-mt-6">
+        <NoteStrip label="What happens next"
+          >You get a reply from {HOST_NAME}, not an autoresponder. If your request is outside what we
+          do, the reply says that and suggests who might actually help. We do not add you to a
+          mailing list.</NoteStrip
+        >
+      </div>
+    </div>
+  </Section>
+
+  <!-- Response time + timezone -->
+  <Section alternate id="tz-table">
+    <div class="container container--md">
+      <SectionHead
+        eyebrow="Working hours"
+        title="China Time (GMT+8) against your clock."
+        lead="Put here because timezone arithmetic is where most scheduling goes wrong."
+      />
+      <table class="tz-table">
+        <caption class="sr-only">China Time GMT+8 against common client timezones</caption>
+        <thead>
+          <tr>
+            <th scope="col">Your location</th>
+            <th scope="col">Time zone</th>
+            <th scope="col">Our 09:00–18:00 is your…</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><th scope="row">US West Coast</th><td>PST / PDT</td><td>17:00–02:00 (previous day)</td></tr>
+          <tr><th scope="row">US East Coast</th><td>EST / EDT</td><td>20:00–06:00 (previous day)</td></tr>
+          <tr><th scope="row">United Kingdom</th><td>GMT / BST</td><td>01:00–10:00</td></tr>
+          <tr><th scope="row">Central Europe</th><td>CET / CEST</td><td>02:00–11:00</td></tr>
+          <tr><th scope="row">Australia East</th><td>AEST / AEDT</td><td>11:00–20:00</td></tr>
+          <tr><th scope="row">Southeast Asia</th><td>ICT / WIB</td><td>08:00–17:00</td></tr>
+        </tbody>
+      </table>
+      <p class="cost-footnote">
+        Our working day is Monday to Friday, 09:00–18:00 China Time. Overlap with North America is
+        small — that is why WhatsApp tends to work better than scheduled calls for anything urgent.
+      </p>
+    </div>
+  </Section>
+
+  <!-- HQ -->
+  <Section>
+    <div class="container container--md">
+      <SectionHead eyebrow="Where we are" title="Zhejiang headquarters, nationwide reach." />
+      <ul class="spec-list clean">
+        <li>
+          <span class="spec-list__k">Home base</span><span class="spec-list__v"
+            >Zhejiang — Hangzhou · Yiwu · Ningbo</span
+          >
+        </li>
+        <li>
+          <span class="spec-list__k">Resident team</span><span class="spec-list__v"
+            >Pearl River Delta — Shenzhen · Dongguan · Guangzhou</span
+          >
+        </li>
+        <li>
+          <span class="spec-list__k">Reachable with notice</span><span class="spec-list__v"
+            >Shandong · Hebei · Jiangsu · Fujian · Sichuan</span
+          >
+        </li>
+        <li>
+          <span class="spec-list__k">Working languages</span><span class="spec-list__v"
+            >English · Mandarin · local dialects at site level</span
+          >
+        </li>
+        <li>
+          <span class="spec-list__k">Response window</span><span class="spec-list__v"
+            >{REPLY_TIME_SHORT}, Monday–Friday GMT+8</span
+          >
+        </li>
+      </ul>
+      <div class="u-mt-6">
+        <NoteStrip label="Registered details" marker="case"
+          >Street address, registered company name and business licence number are still to be
+          published. Ask us for them — we will send them before you pay anything.</NoteStrip
+        >
+      </div>
+    </div>
+  </Section>
+
+  <!-- Straight-talking closer -->
+  <Section alternate>
+    <div class="container container--md">
+      <Caveat
+        title="Times when you should not contact us"
+        body="Honest about this too, so neither side wastes a week."
+        items={[
+          'If you only want the cheapest possible unit price and are not visiting China — a remote sourcing agent will serve you better.',
+          'If you need a licensed product certification or a full social-compliance audit — we are neither an auditor nor a certification body.',
+          filmingCaveat,
+          'If you want us to sign contracts or move money on your behalf — we will not.',
+        ]}
+      />
+    </div>
+  </Section>
+</BaseLayout>

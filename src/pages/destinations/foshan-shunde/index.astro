@@ -1,0 +1,83 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import DestinationPage from '../../../components/DestinationPage.astro';
+
+const title = 'Foshan & Shunde factory visits — furniture, appliances and ceramics';
+const description =
+  'Foshan and Shunde are the furniture, home-appliance and ceramics hub of Guangdong. Hosted visits for home and hardware buyers.';
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  track="neutral"
+  active="destinations"
+  crumbs={[{ href: '/destinations/', label: 'Destinations' }]}
+  current="Foshan / Shunde"
+  cta={{
+    eyebrow: 'Next step',
+    title: 'Plan a Foshan & Shunde visit for furniture or appliances.',
+    lead: 'Tell us the product. We will route you to the makers, not the showroom.',
+    primary: { label: 'Plan my Foshan trip', href: '/contact/' },
+    form: { destination: 'Foshan / Shunde' },
+  }}
+>
+  <DestinationPage
+    region="Guangdong"
+    cityShort="Foshan"
+    slotName="FS FURNITURE FLOOR"
+    h1="Foshan & Shunde: furniture, appliances and ceramics."
+    lead="Foshan is the furniture and ceramics hub of Guangdong, and Shunde is the home-appliance heart of it. A short distance from Guangzhou, it is the cluster for home and hardware buyers."
+    micro={[
+      'Furniture & home appliances',
+      'Ceramics & sanitaryware',
+      'A short transfer from Guangzhou',
+    ]}
+    facts={[
+      { k: 'What it is', v: 'Home & hardware hub', note: 'Furniture, small appliances and ceramics share one manufacturing belt.' },
+      { k: 'Typical MOQ', v: 'Mixed', note: 'Furniture is often container-led; small appliances can be lower.' },
+      { k: 'Reach', v: 'Near Guangzhou', note: 'Often combined with Guangzhou and Dongguan in one trip.' },
+    ]}
+    why={[
+      'Foshan is where furniture and ceramics have been made for generations — the showrooms are large, and the factories behind them are close by.',
+      'Shunde is the <a href="/industries/small-home-appliances/">appliance</a> half of the cluster, and often the place where a home-goods product has its motors, heating elements and safety testing.',
+      'The practical reason to visit is that a home-goods product is usually a mix of materials — wood, metal, glass, electrical — and this cluster has all of them within one radius.',
+      'The trade-off is that it is a mixed cluster, so the vetting has to work harder: a <a href="/guides/factory-vs-trading-company-china/">furniture showroom and the factory</a> that makes the pieces are not always the same business.',
+    ]}
+    markets={[
+      { k: 'Furniture', v: 'Wood, metal and mixed-material <a href="/industries/furniture-home-furnishing/">furniture</a>, with the showrooms concentrated in Foshan.' },
+      { k: 'Small appliances', v: 'Kitchen and <a href="/industries/small-home-appliances/">home appliances</a>, with motor and heating-element supply in Shunde.' },
+      { k: 'Ceramics & sanitaryware', v: 'Tiles, basins and sanitaryware, with the factories nearby.' },
+      { k: 'Hardware & fittings', v: 'Furniture fittings, handles and metal components that feed the <a href="/destinations/guangzhou-dongguan/">furniture belt</a>.' },
+    ]}
+    itinTitle="Two to three days, showroom then floor."
+    itinLead="See the showroom range, then walk the factory that makes it — and confirm they are the same business."
+    itinerary={[
+      { day: 'DAY 1', time: 'SHOWROOM', title: 'Foshan showroom', desc: 'The range and finish options for your product, recorded against each supplier.', slot: 'FS · SHOWROOM' },
+      { day: 'DAY 2', time: 'FACTORY', title: 'Factory floor', desc: 'The plant behind the showroom — confirm it exists and makes the pieces.', slot: 'FS · FLOOR' },
+      { day: 'DAY 3', time: 'SHUNDE', title: 'Appliance or fitting', desc: 'The electrical or hardware part of the product, in Shunde.', slot: 'SD · FLOOR' },
+    ]}
+    filmLead="Showrooms are easy to film; factories vary with the usual NDA and safety exceptions."
+    film={{
+      answer: 'Usually yes in showrooms; factory floors vary.',
+      lead: 'Two to three weeks.',
+      refused: 'Customer-specific runs and any area with unfinished designs on display.',
+      note: 'Furniture showrooms are large and well-lit — among the easier spaces to shoot.',
+    }}
+    seasons={[
+      'Best months: March–June and September–November.',
+      'Avoid the Canton Fair weeks in April and October unless that is why you are coming.',
+      'Chinese New Year shuts the cluster for one to three weeks.',
+    ]}
+    timingWarnings={[
+      '<b>Assuming the showroom is the factory.</b> In furniture especially, they are often different companies.',
+      '<b>Coming during Canton Fair weeks without planning for it.</b> Availability drops across the region.',
+    ]}
+    vetDesc="A furniture showroom is not a factory — two of the five checks exist to tell them apart."
+    related={[
+      { k: 'Destination', t: 'Guangzhou / Dongguan', href: '/destinations/guangzhou-dongguan/' },
+      { k: 'Destination', t: 'Shenzhen', href: '/destinations/shenzhen/' },
+      { k: 'Industry', t: 'Beauty & packaging', href: '/industries/beauty-packaging/' },
+    ]}
+  />
+</BaseLayout>

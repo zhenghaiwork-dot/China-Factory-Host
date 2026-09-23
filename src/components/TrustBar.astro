@@ -1,0 +1,32 @@
+---
+/* TrustBar — §5.4. Renders "—" when a figure is null: we do not publish counts
+   we cannot source. The unsourced state is carried by data-placeholder="case"
+   so a pre-launch grep still finds it — the visible "[ TBC ]" tag is retired
+   (critique round-2 N1). */
+interface Item { figure: string | null; unit?: string; label: string; }
+interface Props {
+  items: Item[];
+  light?: boolean;
+  foot?: string;
+  class?: string;
+}
+const { items, light, foot, class: cls } = Astro.props;
+---
+<section class:list={['trust-bar', { 'trust-bar--light': light }, cls]}>
+  <div class="container">
+    <div class="trust-bar__grid">
+      {
+        items.map((it) => (
+          <div class="trust-bar__item" data-placeholder={it.figure === null ? 'case' : undefined}>
+            <p class="trust-figure">
+              {it.figure === null ? '—' : it.figure}
+              {it.unit && <span class="trust-figure__unit">{it.unit}</span>}
+            </p>
+            <p class="trust-bar__label">{it.label}</p>
+          </div>
+        ))
+      }
+    </div>
+    {foot && <p class="trust-bar__foot">{foot}</p>}
+  </div>
+</section>

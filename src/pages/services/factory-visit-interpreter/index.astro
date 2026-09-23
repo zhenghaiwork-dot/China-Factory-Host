@@ -1,0 +1,203 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Section from '../../../components/Section.astro';
+import SectionHead from '../../../components/SectionHead.astro';
+import PhotoSlot from '../../../components/PhotoSlot.astro';
+import OnsitePhoto from '../../../components/OnsitePhoto.astro';
+import Checklist from '../../../components/Checklist.astro';
+import ProcessSteps from '../../../components/ProcessSteps.astro';
+import Caveat from '../../../components/Caveat.astro';
+import FAQ from '../../../components/FAQ.astro';
+import Icon from '../../../components/Icon.astro';
+import RelatedNav from '../../../components/RelatedNav.astro';
+import { waLink } from '../../../data/site.ts';
+
+const title = 'Factory visit interpreter — someone who knows the process vocabulary';
+const description =
+  'Not conversation Mandarin. An interpreter who carries tolerances, tooling terms and payment conditions both ways without softening them.';
+
+const wa = waLink('Hi, I would like an interpreter who understands manufacturing.');
+
+const vocabulary = [
+  { k: 'Tolerance', v: '"±0.1mm" is a spec; "very precise" is a hope. A general translator softens the number into an adjective; an interpreter keeps the number exact on both sides.' },
+  { k: 'MOQ and its reason', v: 'The minimum is not the point — the reason behind it is. Setup waste, material minimum or a number the factory likes saying all change what is negotiable.' },
+  { k: 'The polite refusal', v: '"Maybe", "it is difficult" and "we will consider it" are usually no. A business interpreter says so, instead of leaving you thinking you got a yes.' },
+  { k: 'Defect acceptance', v: 'AQL and defect thresholds are numbers. If they are translated as "we control quality", the number is lost — and the number is what you are buying.' },
+  { k: 'Payment terms', v: 'The deposit, the balance and what triggers each stage. Vague translation here is how a quote gets quietly more expensive.' },
+  { k: 'Tooling ownership', v: 'Who pays for the mould and who owns it. This is the field that gets lost most often, and the one that costs the most when it does.' },
+];
+
+const includes = [
+  'Technical vocabulary — tolerances, surface finish, defect acceptance — stated as numbers, not adjectives',
+  'Honest translation of the politeness codes, so a refusal is not dressed up as a maybe',
+  'A real-time record of what was agreed, so nothing depends on memory',
+  'Negotiation support that keeps the decision-maker at the table',
+  'The technical questions asked on the floor, not just the pleasantries in the meeting room',
+];
+
+const meeting = [
+  { n: '01', title: 'Before the meeting', body: 'The interpreter reads your spec first, so the technical vocabulary is loaded before anyone sits down. A translator who meets the product in the room is already behind.' },
+  { n: '02', title: 'In the room', body: 'Numbers are confirmed in both directions. When the factory says a tolerance, the interpreter restates it as a number, not a feeling.' },
+  { n: '03', title: 'On the floor', body: 'The technical questions get asked where the evidence is — at the line, at the QC bench, at the tooling store.' },
+  { n: '04', title: 'After the meeting', body: 'A written record of what was agreed, who agreed it and what is still open, while it is fresh.' },
+];
+
+const faqs = [
+  { q: 'Why not just use a translation app?', a: ['A phrasebook handles dinner. It does not distinguish a tolerance from a preference, and it will not tell you that "we will consider it" is a no. In a factory, those gaps cost real money.'] },
+  { q: 'Do you provide the interpreter on the visit?', a: ['Interpreting is part of every hosted visit. A standalone interpreter service is being prepared — ask us and we will tell you where it stands.'] },
+  { q: 'Can the interpreter help with negotiation?', a: ['Yes — not to negotiate for you, but to make sure what you say and what the factory hears are the same thing, and to keep the numbers exact on both sides.'] },
+  { q: 'Does the interpreter know my industry?', a: ['We match the interpreter to the category, so the vocabulary is technical, not generic. That is the difference between a factory interpreter and a business translator.'] },
+  { q: 'What if the conversation needs a dialect?', a: ['Site-level dialect help can be arranged where it matters. Most factory management switches to Mandarin for business, but the floor is sometimes another matter.'] },
+  { q: 'Do you write down what was agreed?', a: ['Yes — a real-time record, so nothing depends on memory three days later. The record is part of what you are paying for.'] },
+  { q: 'Does the interpreter negotiate for me?', a: ['No. The interpreter keeps the numbers and the meaning exact; the negotiation is yours. We sit beside you, we do not decide for you.'] },
+  { q: 'Can you interpret for multiple languages?', a: ['The business conversation is English–Mandarin. Site-level dialect help can be arranged where it matters.'] },
+  { q: 'What happens when the two sides disagree?', a: ['The interpreter keeps both sides exact and records the disagreement as it stands. We do not paper over it to keep the meeting warm — an unresolved number on the record is worth more than a false agreement.'] },
+  { q: 'Do you interpret at trade fairs too?', a: ['Yes — the same technical vocabulary applies on a booth as on a factory floor, and the fair is often where the first real conversation happens.'] },
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  active="services"
+  crumbs={[{ href: '/services/', label: 'Services' }]}
+  current="Factory visit interpreter"
+  cta={{
+    eyebrow: 'Next step',
+    title: 'Ask about interpreting for your visit.',
+    lead: 'Tell us the category and the cities. We will say how it works and whether it is available for your dates.',
+    primary: { label: 'Ask about interpreting', href: '/contact/' },
+    secondary: { label: 'Ask on WhatsApp', href: wa, external: true },
+  }}
+>
+  <section class="hero">
+    <div class="container">
+      <div class="split-7-5">
+        <div>
+          <p class="eyebrow">Factory visit interpreter</p>
+          <h1>Not conversation Mandarin. Process vocabulary.</h1>
+          <p class="lead hero__lead">
+            The expensive mistakes in a Chinese factory are translation failures wearing a different
+            hat — a misunderstood tolerance, an <a href="/guides/china-factory-visit-checklist/">MOQ</a> nobody explained the reason for.
+          </p>
+          <div class="btn-row">
+            <a class="btn btn--primary" href="/contact/">Ask about interpreting</a>
+            <a class="btn btn--secondary" href="/services/on-site-support/">See on-site support</a>
+          </div>
+        </div>
+        <div class="hero__media">
+          <PhotoSlot name="INTERPRET · THE MEETING" variant="media">
+            <OnsitePhoto id="02" />
+          </PhotoSlot>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Section>
+    <div class="container container--md">
+      <SectionHead
+        eyebrow="The difference"
+        title="What a business interpreter keeps, and what a translator loses."
+        lead="Translation is not neutral. The words that get softened are exactly the words that cost money."
+      />
+      <ul class="spec-list clean">
+        {vocabulary.map((v) => (
+          <li>
+            <span class="spec-list__k">{v.k}</span><span class="spec-list__v">{v.v}</span>
+          </li>
+        ))}
+      </ul>
+      <p class="u-mt-6">
+        The same vocabulary is what the <a href="/guides/china-factory-visit-checklist/">on-the-floor checklist</a> turns into questions.
+      </p>
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container container--md">
+      <SectionHead eyebrow="What you get" title="What the interpreter actually does." />
+      <Checklist title="Included" numbered items={includes} />
+      <p class="u-mt-6">
+        The interpreter travels to whichever <a href="/destinations/">cluster</a> your visit runs in.
+      </p>
+    </div>
+  </Section>
+
+  <Section>
+    <div class="container container--md">
+      <SectionHead eyebrow="A meeting" title="Before, during and after." />
+      <ProcessSteps items={meeting} />
+      <p class="u-mt-6">
+        The written record travels alongside the <a href="/about/how-we-vet-factories/">five checks</a>, so what was agreed and what was verified stay separate.
+      </p>
+    </div>
+  </Section>
+
+  <Section>
+    <div class="container container--md">
+      <SectionHead eyebrow="A sentence, softened" title="What a general translator does to a technical sentence." />
+      <ul class="spec-list clean">
+        <li><span class="spec-list__k">"±0.1mm"</span><span class="spec-list__v">A general translator says "very precise". The interpreter writes ±0.1mm. The difference is a rework order.</span></li>
+        <li><span class="spec-list__k">"We will consider it"</span><span class="spec-list__v">A general translator says "they will think about it". The interpreter says "that is a no". The difference is a deposit on a deal that was never going to happen.</span></li>
+        <li><span class="spec-list__k">"The boss is travelling"</span><span class="spec-list__v">A general translator relays it. The interpreter records it as a failed meeting, which is what it is.</span></li>
+      </ul>
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container container--md">
+      <SectionHead eyebrow="The cost" title="What a softened word actually costs." />
+      <ul class="spec-list clean">
+        <li><span class="spec-list__k">A tolerance turned into an adjective</span><span class="spec-list__v">Becomes a rework order you did not budget for.</span></li>
+        <li><span class="spec-list__k">A refusal turned into a maybe</span><span class="spec-list__v">Becomes a deposit on a deal that was never going to happen.</span></li>
+        <li><span class="spec-list__k">A payment term turned into vagueness</span><span class="spec-list__v">Becomes a quote that is quietly more expensive than the one you accepted.</span></li>
+      </ul>
+    </div>
+  </Section>
+
+  <Section>
+    <div class="container container--md">
+      <SectionHead eyebrow="More than words" title="When you need more than interpreting." />
+      <ul class="spec-list clean">
+        <li><span class="spec-list__k">Transport, hotel, logistics</span><span class="spec-list__v">That is <a href="/services/on-site-support/">on-site support</a>, not interpreting. We can cover both, but they are different services.</span></li>
+        <li><span class="spec-list__k">Negotiation strategy</span><span class="spec-list__v">The interpreter keeps the numbers and the meaning exact; the decision stays yours — that is what a <a href="/services/brand-sourcing-visit/">brand sourcing visit</a> runs.</span></li>
+      </ul>
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container container--md">
+      <Caveat
+        title="What an interpreter is not"
+        body="Translation is not decision-making. We keep the two separate."
+        items={[
+          'An interpreter does not sign, commit or negotiate on your behalf.',
+          'A business interpreter is not a certified technical auditor — we flag what we hear, and recommend specialists where it matters.',
+          'We will not soften a refusal into a maybe to make the room feel better.',
+        ]}
+      />
+    </div>
+  </Section>
+
+  <Section>
+    <div class="container">
+      <SectionHead title="Questions about interpreting." />
+      <FAQ items={faqs} />
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container">
+      <SectionHead eyebrow="Where next" title="Related pages." />
+      <RelatedNav
+        items={[
+          { k: 'Service', t: 'On-site support', href: '/services/on-site-support/' },
+          { k: 'Service', t: 'Brand sourcing visit', href: '/services/brand-sourcing-visit/' },
+          { k: 'Guide', t: 'Factory visit checklist', href: '/guides/china-factory-visit-checklist/' },
+          { k: 'Plan', t: 'Plan my trip', href: '/plan-my-trip/' },
+        ]}
+      />
+    </div>
+  </Section>
+</BaseLayout>

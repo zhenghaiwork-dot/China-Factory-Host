@@ -1,0 +1,167 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Section from '../../components/Section.astro';
+import SectionHead from '../../components/SectionHead.astro';
+import PhotoSlot from '../../components/PhotoSlot.astro';
+import OnsitePhoto from '../../components/OnsitePhoto.astro';
+import RelatedNav from '../../components/RelatedNav.astro';
+import { waLink } from '../../data/site.ts';
+
+const title = 'Destinations — Yiwu, Ningbo/Hangzhou, Shenzhen, Guangzhou/Dongguan';
+const description =
+  'Seven manufacturing regions we cover on the ground, each matched to the product categories it is actually strong in. Pick the cluster that fits what you make.';
+
+const wa = waLink('Hi, I am not sure which city fits my product category.');
+
+const destinations = [
+  { k: 'The home province', t: 'Zhejiang', href: '/destinations/zhejiang/' },
+  { k: 'Small commodities and gifts', t: 'Yiwu', href: '/destinations/yiwu/' },
+  { k: 'Appliances, hardware, textiles', t: 'Ningbo / Hangzhou', href: '/destinations/ningbo-hangzhou/' },
+  { k: 'Textiles & fabrics', t: 'Shaoxing / Keqiao', href: '/destinations/shaoxing-keqiao/' },
+  { k: 'Electronics and drones', t: 'Shenzhen', href: '/destinations/shenzhen/' },
+  { k: 'OEM and private label', t: 'Guangzhou / Dongguan', href: '/destinations/guangzhou-dongguan/' },
+  { k: 'Furniture & appliances', t: 'Foshan / Shunde', href: '/destinations/foshan-shunde/' },
+];
+
+const matchLogic = [
+  { k: 'What the cluster is strong in', v: 'A category with hundreds of nearby suppliers gets you real choice; one with five factories in the wrong province gets you a sales trip, not a shortlist.' },
+  { k: 'What access is realistic', v: 'Market-floor cities like <a href="/destinations/yiwu/">Yiwu</a> are easy to film; heavy-industry parks are stricter and slower to approve. We tell you which before you commit.' },
+  { k: 'How the days compose', v: 'Two clusters can sit a few hours apart by train — we plan routes that combine them instead of burning a day on backtracking.' },
+];
+
+const types = [
+  { k: 'The market city', v: '<a href="/destinations/yiwu/">Yiwu</a>. The market is the product — you go to see the range and the price floor, then trace the stalls back to the factories behind them.' },
+  { k: 'The manufacturing city', v: '<a href="/destinations/ningbo-hangzhou/">Ningbo</a>, <a href="/destinations/guangzhou-dongguan/">Dongguan</a>, <a href="/destinations/foshan-shunde/">Foshan</a>. The plant is the product — you go to walk the floor, see the tooling and meet the production manager.' },
+  { k: 'The trade-fair city', v: '<a href="/destinations/guangzhou-dongguan/">Guangzhou</a>. The fair is the anchor — you build a shortlist at the fair, then verify the promising names on the floor nearby.' },
+];
+
+const regionScope = [
+  { k: 'One region, done properly', v: 'Two or three days in one cluster beats two clusters skimmed. You see the comparison that matters — the second factory against the first — without a transfer day in between.' },
+  { k: 'Two regions', v: 'Worth it when the product genuinely spans clusters, or when a market day and a plant visit are the same week. Each transfer still costs most of a day.' },
+  { k: 'Three or more', v: 'Only on a long trip. Every extra region adds a travel day and a re-orientation, and the marginal factory visit gets shallower each time.' },
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  active="destinations"
+  crumbs={[]}
+  current="Destinations"
+  cta={{
+    eyebrow: 'Next step',
+    title: 'Not sure which cluster fits your product?',
+    lead: 'Tell us the category and the quantity. We will point you at the right region, or tell you plainly that none is the right fit.',
+    primary: { label: 'Plan my visit', href: '/contact/' },
+    secondary: { label: 'Ask on WhatsApp', href: wa, external: true },
+  }}
+>
+  <section class="hero">
+    <div class="container">
+      <div class="split-7-5">
+        <div>
+          <p class="eyebrow">Destinations</p>
+          <h1>Pick the right China cluster before you pick the factory.</h1>
+          <p class="lead hero__lead">
+            Each region below has a different industrial backbone. Going to the wrong city costs you
+            two travel days and shows you factories that were never going to make your product.
+          </p>
+          <div class="btn-row">
+            <a class="btn btn--primary" href="/contact/">Tell us your category — we'll name the city</a>
+          </div>
+        </div>
+        <div class="hero__media">
+          <PhotoSlot name="DESTINATIONS · THE CLUSTERS" variant="media">
+            <OnsitePhoto id="08" />
+          </PhotoSlot>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Section tight>
+    <div class="container">
+      <SectionHead
+        title="Seven regions, each with a different industrial backbone"
+        lead="Every page below is written from the ground: what the cluster actually makes, what access is realistic and how far the factories sit from the market."
+      />
+      <div class="related-nav" role="navigation" aria-label="Destinations">
+        {
+          destinations.map((d) => (
+            <a href={d.href}>
+              <span class="related-nav__k">{d.k}</span>
+              <span class="related-nav__t">{d.t}</span>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container container--md">
+      <SectionHead
+        title="How we match a category to a city"
+        lead="The match is driven by what you are buying or filming, not by what is closest to the airport."
+      />
+      <ul class="spec-list clean">
+        {matchLogic.map((m) => (
+          <li>
+            <span class="spec-list__k">{m.k}</span><span class="spec-list__v" set:html={m.v} />
+          </li>
+        ))}
+      </ul>
+    </div>
+  </Section>
+
+  <Section>
+    <div class="container container--md">
+      <SectionHead
+        eyebrow="Three kinds of destination"
+        title="A market city, a manufacturing city and a fair city are different trips."
+      />
+      <ul class="spec-list clean">
+        {types.map((t) => (
+          <li>
+            <span class="spec-list__k">{t.k}</span><span class="spec-list__v" set:html={t.v} />
+          </li>
+        ))}
+      </ul>
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container container--md">
+      <SectionHead
+        eyebrow="One region or several"
+        title="How many regions a trip can actually hold."
+        lead="The temptation is to cover the whole map. The reality is that every transfer costs a day."
+      />
+      <ul class="spec-list clean">
+        {regionScope.map((r) => (
+          <li>
+            <span class="spec-list__k">{r.k}</span><span class="spec-list__v">{r.v}</span>
+          </li>
+        ))}
+      </ul>
+      <p class="u-mt-6">
+        If you are not sure which cluster fits, run the <a href="/tools/china-manufacturing-hub-finder/">manufacturing hub finder</a>,
+        or let <a href="/services/factory-matching/">factory matching</a> turn your category into a shortlist.
+      </p>
+    </div>
+  </Section>
+
+  <Section>
+    <div class="container">
+      <SectionHead eyebrow="Where next" title="Related pages." />
+      <RelatedNav
+        items={[
+          { k: 'Tool', t: 'Manufacturing hub finder', href: '/tools/china-manufacturing-hub-finder/' },
+          { k: 'Page', t: 'All industries', href: '/industries/' },
+          { k: 'Service', t: 'Factory matching', href: '/services/factory-matching/' },
+          { k: 'Guide', t: 'How to plan a visit', href: '/guides/how-to-plan-a-china-factory-visit/' },
+        ]}
+      />
+    </div>
+  </Section>
+</BaseLayout>

@@ -1,0 +1,39 @@
+---
+import PhotoSlot from './PhotoSlot.astro';
+import OnsitePhoto from './OnsitePhoto.astro';
+import { pickUnique, type PhotoId } from '../data/onsite-photos.ts';
+/* ProcessSteps — §5.8 variant B (itinerary timeline). */
+export interface TlItem {
+  day: string;
+  time: string;
+  title: string;
+  desc: string;
+  slot?: string;
+}
+interface Props { items: TlItem[]; media?: boolean; exclude?: PhotoId[]; }
+const { items, media = false, exclude = [] } = Astro.props;
+/* One row of slots, one page: no photo twice — and nothing from `exclude`
+   either, so the page can keep the hero and other blocks distinct. */
+const picks = pickUnique(items.map((d) => d.slot || d.day), exclude);
+---
+<ol class="timeline clean">
+  {
+    items.map((d, i) => (
+      <li class="tl-item">
+        <span class="tl-dot" aria-hidden="true"></span>
+        <div>
+          <p class="tl-time">{d.day} · {d.time}</p>
+          <p class="tl-title">{d.title}</p>
+          <p class="tl-desc">{d.desc}</p>
+          {media && (
+            <div class="tl-media">
+              <PhotoSlot name={d.slot || d.day.toUpperCase()} variant="thumb">
+                <OnsitePhoto id={picks[i]} />
+              </PhotoSlot>
+            </div>
+          )}
+        </div>
+      </li>
+    ))
+  }
+</ol>

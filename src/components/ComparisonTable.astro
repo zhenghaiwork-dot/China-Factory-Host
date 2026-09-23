@@ -1,0 +1,160 @@
+---
+import Icon from './Icon.astro';
+/* ComparisonTable — §5.6. One data source, two renderings:
+   a real <table> at ≥1024px, per-plan cards below that. No horizontal scroll,
+   and the two can never drift because they are generated from the same rows. */
+export type Cell = boolean | string | { v: string; price?: boolean; tbc?: boolean; note?: string };
+export interface Col {
+  name: string;
+  sub?: string;
+  badge?: string;
+  featured?: boolean;
+  cta?: { label: string; href: string; variant?: string };
+}
+export interface Row { label: string; values: Cell[]; }
+interface Props {
+  columns: Col[];
+  rows: Row[];
+  caption: string;
+  labelCol?: string;
+  footnote?: string;
+  ctaRow?: { label: string; href: string; variant?: string; external?: boolean }[];
+}
+const { columns, rows, caption, labelCol = "What's included", footnote, ctaRow } = Astro.props;
+const featuredIdx = columns.findIndex((c) => c.featured);
+const textOf = (c: Cell): string => (typeof c === 'string' ? c : typeof c === 'boolean' ? '' : c.v);
+/* An empty href is an unconfigured channel (waLink() returns '' while WA_NUMBER
+   is unset). Drop those entries rather than render a wa.me URL (critique M3). */
+const ctas = (ctaRow ?? []).filter((b) => b.href.length > 0);
+---
+<div class="cmp">
+  <div class="cmp-desktop">
+    <table class="cmp-table">
+      <caption class="sr-only">{caption}</caption>
+      <thead>
+        <tr>
+          <th scope="col" class="cmp-table__labelcol">{labelCol}</th>
+          {
+            columns.map((c) => (
+              <th scope="col" class={c.featured ? 'is-featured' : undefined}>
+                {c.name}
+                {c.sub && <span class="cmp-head-sub">{c.sub}</span>}
+                {c.badge && <> <span class="badge badge--verified">{c.badge}</span></>}
+              </th>
+            ))
+          }
+        </tr>
+      </thead>
+      <tbody>
+        {
+          rows.map((r) => (
+            <tr>
+              <th scope="row" class="cmp-table__labelcol">{r.label}</th>
+              {r.values.map((v, i) => (
+                /* Undecided prices carry the marker as an attribute, not as the
+                   visible "[ TBC ]" tag (critique round-2 N1). */
+                <td
+                  class={i === featuredIdx ? 'featured-cell' : undefined}
+                  data-placeholder={typeof v === 'object' && v.tbc ? 'case' : undefined}
+                >
+                  {v === true && (
+                    <span class="cmp-cell">
+                      <Icon name="check" size={16} />
+                      <span>Included</span>
+                    </span>
+                  )}
+                  {v === false && (
+                    <span class="cmp-cell">
+                      <Icon name="cross" size={16} />
+                      <span>Not included</span>
+                    </span>
+                  )}
+                  {typeof v === 'string' && <span>{v}</span>}
+                  {typeof v === 'object' && v.price && (
+                    <span class="cmp-price">{v.v}</span>
+                  )}
+                  {typeof v === 'object' && !v.price && (
+                    <>
+                      <span class="num">{v.v}</span>
+                      {v.note && <span class="u-caption u-secondary"> {v.note}</span>}
+                    </>
+                  )}
+                </td>
+              ))}
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+    {
+      ctas.length > 0 && (
+        <div class="cmp-cta-row">
+          {ctas.map((b) => (
+            <a
+              class={`btn ${b.variant || 'btn--secondary'}`}
+              href={b.href}
+              target={b.external ? '_blank' : undefined}
+              rel={b.external ? 'noopener' : undefined}
+              data-placeholder={b.external ? 'wa-number' : undefined}
+            >
+              {b.label}
+            </a>
+          ))}
+        </div>
+      )
+    }
+  </div>
+
+  <div class="cmp-mobile">
+    <ul class="cmp-cards clean">
+      {
+        columns.map((c, i) => (
+          <li class:list={['cmp-card', { 'cmp-card--featured': c.featured }]}>
+            <div class="cmp-card__head">
+              <span class="cmp-card__name">{c.name}</span>
+              {c.badge && <span class="badge badge--verified">{c.badge}</span>}
+            </div>
+            <ul class="cmp-card__rows">
+              {rows.map((r) => {
+                const v = r.values[i];
+                return (
+                  <li>
+                    <span class="cmp-card__k">{r.label}</span>
+                    <span
+                      class="cmp-card__v"
+                      data-placeholder={typeof v === 'object' && v.tbc ? 'case' : undefined}
+                    >
+                      {v === true && (
+                        <>
+                          <Icon name="check" size={16} />
+                          <span class="sr-only">Included</span>
+                        </>
+                      )}
+                      {v === false && (
+                        <>
+                          <Icon name="cross" size={16} />
+                          <span class="sr-only">Not included</span>
+                        </>
+                      )}
+                      {typeof v === 'string' && <span>{v}</span>}
+                      {typeof v === 'object' && v.price && (
+                        <span class="cmp-price">{v.v}</span>
+                      )}
+                      {typeof v === 'object' && !v.price && <span>{textOf(v)}</span>}
+                    </span>
+                  </li>
+                );
+              })}
+            </ul>
+            {c.cta && (
+              <div class="cmp-card__cta">
+                <a class={`btn ${c.cta.variant || 'btn--primary'}`} href={c.cta.href}>{c.cta.label}</a>
+              </div>
+            )}
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+  {footnote && <p class="cmp-footnote">{footnote}</p>}
+</div>

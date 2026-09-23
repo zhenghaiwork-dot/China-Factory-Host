@@ -1,0 +1,91 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import IndustryPage from '../../../components/IndustryPage.astro';
+import { waLink } from '../../../data/site.ts';
+
+const title = 'Electronics & smart hardware — China factory visits';
+const description =
+  'PCB, SMT, assembly, testing and certification for electronics and smart hardware. Where the suppliers sit around Shenzhen and Dongguan, and what to check on the floor.';
+
+const wa = waLink('Hi, I am sourcing electronics in China and would like to check suppliers on site.');
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  track="buyer"
+  active="industries"
+  crumbs={[{ href: '/services/', label: 'Services' }]}
+  current="Electronics & smart hardware"
+  cta={{
+    variant: 'plain',
+    eyebrow: 'Next step',
+    title: 'Plan an electronics visit around the stage you are at.',
+    lead: 'Tell us whether you are at prototype, industrialization or volume. The checks are different at each.',
+    primary: { label: 'Plan an electronics factory visit', href: '/contact/' },
+    form: { destination: 'Electronics & smart hardware' },
+    secondary: { label: 'Ask on WhatsApp', href: wa, external: true },
+  }}
+>
+  <IndustryPage
+    slotName="SMT LINE"
+    h1="Electronics & smart hardware: the process is the product."
+    lead="Electronics is the category where the supplier's process control is the deliverable. Two factories can quote the same board and produce very different failure rates — the difference is only visible on the floor."
+    micro={[
+      'PCB, SMT, assembly, testing',
+      'Shenzhen + Dongguan supply chain',
+      'Prototype vs industrialization vs volume',
+    ]}
+    ctaLabel="Plan an electronics factory visit"
+    why={[
+      'Electronics concentrates around Shenzhen and Dongguan, where PCB fabrication, SMT assembly, testing and component supply sit within one working radius. That density is why a hardware product can go from design change to sample in days.',
+      'The risk in electronics is hidden in process control: solder quality, ESD handling, test coverage and the discipline of the line. None of it shows up in a catalogue.',
+      'The stage you are at changes what to check. At prototype you care about engineering support and iteration speed; at industrialization you care about DFM and test fixtures; at volume you care about yield and repeatability.',
+      'Certification is the other half. CE, FCC and safety marks are testable and frequently misunderstood by first-time buyers — a certificate that does not name your product does not cover your product.',
+    ]}
+    chainLead="Which supplier does which step, and where the risk concentrates."
+    chain={[
+      { k: 'PCB fabrication', v: 'The bare board — layer count, material and surface finish set the baseline.' },
+      { k: 'SMT assembly', v: 'Component placement and reflow — where solder quality and ESD discipline matter.' },
+      { k: 'Final assembly', v: 'Enclosure, cables, battery, testing — often a different plant from the SMT.' },
+      { k: 'Testing', v: 'ICT, functional test and burn-in — ask how much is automated versus by hand.' },
+      { k: 'Certification labs', v: 'Independent labs run the actual CE/FCC/safety testing; a supplier report is not the same thing.' },
+    ]}
+    checks={[
+      'ESD discipline on the SMT line — wrist straps and grounding, not just signs on the wall.',
+      'Solder paste control and reflow profiles, and whether they can show a real process record.',
+      'Test coverage — what is actually tested per board, and how failures are tracked.',
+      'Component sourcing — genuine versus grey-market parts, especially for ICs and batteries.',
+      'Whether the enclosure, battery and main board are made in the same plant or subcontracted.',
+      'A certificate that names your specific product and matches the actual production site.',
+    ]}
+    numbers={[
+      { k: 'PCB MOQ', v: 'Often low per board, but setup and testing dominate small runs.' },
+      { k: 'SMT setup', v: 'Stencils, programming and fixtures are a separate cost from the unit price.' },
+      { k: 'Sampling', v: 'Prototype, engineering sample, then pre-production — each a different stage of trust.' },
+      { k: 'Certification', v: 'Weeks to months, and it cannot start until the final design is frozen.' },
+      { k: 'Lead time', v: 'Component availability, not assembly, is usually what moves the date.' },
+    ]}
+    numberNote="These are ranges we see regularly, not quotes. The number that matters most in electronics is usually the one nobody quoted — setup, fixtures and certification."
+    complianceTitle="Certification by destination market"
+    compliance={[
+      'European Union: CE marking, plus the EMC and safety directives that apply to your product class.',
+      'United States: FCC for intentional and unintentional radiators, plus applicable safety certification.',
+      'Batteries and power: transport and safety requirements that sit on top of the product rules.',
+      'Labelling and documentation: the technical file and declaration that back up the mark.',
+    ]}
+    complianceCaveatBody="We check that certificates exist, that they name the right product and site, and that the lab is credibly independent. We do not interpret standards."
+    complianceCaveatItems={[
+      'We do not certify electronics — nothing we issue substitutes for accredited testing.',
+      'We cannot tell you a product passes a standard; only a lab can.',
+      'We will not rely on a supplier-provided certificate alone, and we will say so.',
+      'Requirements change. Confirm current obligations for your destination before committing.',
+    ]}
+    related={[
+      { k: 'Destination', t: 'Shenzhen', href: '/destinations/shenzhen/' },
+      { k: 'Destination', t: 'Guangzhou / Dongguan', href: '/destinations/guangzhou-dongguan/' },
+      { k: 'Industry', t: 'Small home appliances', href: '/industries/small-home-appliances/' },
+      { k: 'Trust', t: 'How we vet factories', href: '/about/how-we-vet-factories/' },
+    ]}
+  />
+</BaseLayout>

@@ -1,0 +1,136 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Section from '../../components/Section.astro';
+import SectionHead from '../../components/SectionHead.astro';
+import PhotoSlot from '../../components/PhotoSlot.astro';
+import OnsitePhoto from '../../components/OnsitePhoto.astro';
+import FAQ from '../../components/FAQ.astro';
+import { waLink } from '../../data/site.ts';
+
+const title = 'FAQ — the questions everyone asks first';
+const description =
+  'Common questions about factory visits and sourcing trips in China: who we are, how visits work, filming, pricing and when not to come.';
+
+const wa = waLink('Hi, I have a question I did not find answered on the site.');
+
+const service = [
+  { q: 'What exactly do you do?', a: ['We host factory visits and sourcing trips in China: verify the factory, plan the route, and stay beside you on the floor. For creators we coordinate filming permission; for buyers we verify suppliers and run the visit so you meet the decision-maker.'] },
+  { q: 'Where are you based?', a: ['Zhejiang — Hangzhou, Yiwu and Ningbo — with a resident team in Shenzhen, Dongguan and Guangzhou. Reachable elsewhere with notice. We do not claim the same depth everywhere, and we say so on the destination pages.'] },
+  { q: 'Are you a travel agency?', a: ['No. We do not resell flights, hotels or packaged tourism. We host factory visits and sourcing trips, and we add no margin to anything we do not run ourselves.'] },
+];
+
+const visits = [
+  { q: 'Can foreigners visit factories in China?', a: ['Yes, but a public directory is not a walk-in. Visits are arranged by appointment, in advance, with the factory that actually makes your product. Arranging that — and knowing which factories will agree — is most of the service.'] },
+  { q: 'How many factories can I visit in one day?', a: ['In one cluster, two focused visits a day is realistic. Three usually means cutting a walk-through short. We plan density around the cluster and will tell you when your plan is too full.'] },
+  { q: 'How far in advance should I book?', a: ['Appointments are confirmed in advance, so earlier is better — and filming permission has its own lead time. We confirm what is realistic for your dates before you book a flight.'] },
+  { q: 'What if a factory says no?', a: ['We build alternatives into the plan. A refusal costs you a location, not a trip day — and we say so before you fly rather than at the gate.'] },
+];
+
+const filming = [
+  { q: 'Can I film inside a Chinese factory?', a: ['Often yes, but it depends on the factory, the category and the city. Some welcome cameras, some allow it only with approval, and a few decline. We confirm what is realistic before you book a flight.'] },
+  { q: 'Who owns the footage?', a: ['You do. Some factories ask to review what you publish; that condition is agreed in writing up front. We do not take a cut of anything your content earns.'] },
+  { q: 'Can I bring a drone?', a: ['Assume no unless cleared in writing. Drone use around Chinese industrial zones involves registration and local restrictions that most visitors underestimate.'] },
+];
+
+const money = [
+  { q: 'Do you take commission from factories?', a: ['No. Our fee comes from you. That is the only way we can tell you to walk away from a factory on the day and mean it.'] },
+  { q: 'How much does a trip cost?', a: ['It depends on the category, cluster and dates. We quote your specific dates rather than publish a range that does not survive contact with real factories. Ask and you will get a number and a scope.'] },
+  { q: 'When should I not come?', a: ['Chinese New Year and National Day shut most factories for one to three weeks. We plan around the holiday calendar and will tell you plainly if your dates are bad.'] },
+];
+
+/* This page renders four FAQ groups but has to publish ONE FAQPage graph —
+   four competing FAQPage nodes on a single URL is ambiguous for parsers.
+   So the component is told to stay silent (schema={false} below) and the
+   combined graph is built here from the same four arrays, which keeps the
+   machine-readable copy from drifting away from the visible copy. */
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [...service, ...visits, ...filming, ...money].map((it) => ({
+    '@type': 'Question',
+    name: it.q,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: it.a.join(' '),
+    },
+  })),
+};
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  active=""
+  crumbs={[]}
+  current="FAQ"
+  cta={{
+    eyebrow: 'Next step',
+    title: 'Did not find your answer?',
+    lead: 'Ask directly — you get a reply from a person, not an autoresponder.',
+    primary: { label: 'Ask us', href: '/contact/' },
+    secondary: { label: 'Ask on WhatsApp', href: wa, external: true },
+  }}
+>
+  {/* One combined FAQPage covering all four groups — built in the frontmatter. */}
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+
+  <section class="hero">
+    <div class="container">
+      <div class="split-7-5">
+        <div>
+          <p class="eyebrow">FAQ</p>
+          <h1>The questions everyone asks first.</h1>
+          <p class="lead hero__lead">
+            Grouped by what they are really about. If yours is not here, ask — the answer is usually
+            short and straight.
+          </p>
+        </div>
+        <div class="hero__media">
+          <PhotoSlot name="FAQ · THE QUESTIONS" variant="media">
+            <OnsitePhoto id="01" eager />
+          </PhotoSlot>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Section>
+    <div class="container container--md">
+      <SectionHead eyebrow="About us" title="Who we are and what we do." />
+      <FAQ schema={false} items={service} />
+      <p class="u-mt-6">
+        The longer answer is on <a href="/about/">about the team</a> and <a href="/about/how-we-vet-factories/">how we vet</a>.
+      </p>
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container container--md">
+      <SectionHead eyebrow="Visits" title="How visits and trips work." />
+      <FAQ schema={false} items={visits} />
+      <p class="u-mt-6">
+        Start from <a href="/factory-visits/">factory visits</a> or a <a href="/china-sourcing-trips/">sourcing trip</a>.
+      </p>
+    </div>
+  </Section>
+
+  <Section>
+    <div class="container container--md">
+      <SectionHead eyebrow="Filming" title="Filming inside factories." />
+      <FAQ schema={false} items={filming} />
+      <p class="u-mt-6">
+        The full boundaries are in the <a href="/guides/can-you-film-inside-a-chinese-factory/">filming guide</a>.
+      </p>
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container container--md">
+      <SectionHead eyebrow="Money" title="Pricing, commissions and timing." />
+      <FAQ schema={false} items={money} />
+      <p class="u-mt-6">
+        The structure is spelled out on <a href="/pricing/">pricing</a>.
+      </p>
+    </div>
+  </Section>
+</BaseLayout>

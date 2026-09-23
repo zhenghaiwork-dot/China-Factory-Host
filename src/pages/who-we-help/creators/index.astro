@@ -1,0 +1,185 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Section from '../../../components/Section.astro';
+import SectionHead from '../../../components/SectionHead.astro';
+import PhotoSlot from '../../../components/PhotoSlot.astro';
+import OnsitePhoto from '../../../components/OnsitePhoto.astro';
+import Checklist from '../../../components/Checklist.astro';
+import RelatedNav from '../../../components/RelatedNav.astro';
+import Icon from '../../../components/Icon.astro';
+import { waLink, FILMING_LEAD_TIME, FILMING_LEAD_TIME_SHORT } from '../../../data/site.ts';
+
+const title = 'Creators — film inside real Chinese factories';
+const description =
+  'Factory filming for creators: permission requested in writing, a route built around your shot list, and a straight answer on what cannot be filmed.';
+
+const wa = waLink('Hi, I want to film inside factories in China.');
+
+const permission = [
+  { k: 'Who can say yes', v: 'The owner or the general manager — not the sales rep. A request that stops at sales almost never reaches the person who can approve it.' },
+  { k: 'How far ahead', v: 'Permission needs to be requested ' + FILMING_LEAD_TIME + ' ahead, in writing. Under ' + FILMING_LEAD_TIME_SHORT + ' the honest expectation is often a refusal, not because anyone is hostile, but because the request has not had time to route.' },
+  { k: 'The factory’s right to refuse', v: 'A factory can decline for any reason. Our job is not to overcome a no — it is to find out which factories will say yes, and to have a substitute ready before you fly.' },
+  { k: 'Why some lines are off-limits', v: 'Contract work for a foreign brand usually carries an NDA that forbids cameras on that line. It is not a policy choice; it is a legal one.' },
+];
+
+const filmable = [
+  'Assembly and packing lines — the most commonly approved areas',
+  'The warehouse and loading area',
+  'Worker and owner interviews, with consent',
+  'The production floor during a scheduled window',
+];
+
+const notFilmable = [
+  'Lines running a foreign-brand order under NDA',
+  'Clean rooms and certain finishing processes',
+  'Screens showing customer names or unshipped designs',
+  'The tooling or mould store in many plants — it is treated as IP',
+  'Drone use near industrial zones, unless cleared in writing',
+];
+
+const footage = [
+  { k: 'Who owns the footage', v: 'You do. Some factories ask to review what you publish — that condition is agreed in writing up front, not negotiated after the fact.' },
+  { k: 'The NDA reality', v: 'An NDA usually covers the factory’s customers and prices, not your footage. Read the scope before you sign, and we make sure the review clause is explicit.' },
+  { k: 'Delivery', v: 'You shoot on your own cards and drives. We do not hold, copy or publish anything — your footage leaves with you.' },
+];
+
+const logistics = [
+  { k: 'Power', v: 'Factory floors are 220V and usually fine, but a long shoot should bring its own batteries — the nearest socket may be across a moving line.' },
+  { k: 'Network', v: 'Signal inside a concrete plant is often poor. Plan to record offline and upload later; do not design a shoot around live streaming from the floor.' },
+  { k: 'Equipment entry', v: 'Declare cameras, lights and stabilisers ahead of time so security knows what is coming. Undeclared gear at the gate is the fastest way to lose a morning.' },
+  { k: 'Environment', v: 'Dust, heat and noise are part of the floor. Plan for them rather than discovering them on day one — it is what makes factory footage look real instead of staged.' },
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  active=""
+  crumbs={[]}
+  current="Creators"
+  cta={{
+    eyebrow: 'Next step',
+    title: 'Tell us what you want to shoot.',
+    lead: 'Send the category, the city and rough dates. You get a straight answer on what is feasible.',
+    primary: { label: 'Check my shoot is feasible', href: '/plan-my-trip/' },
+    secondary: { label: 'Ask on WhatsApp', href: wa, external: true },
+  }}
+>
+  <section class="hero">
+    <div class="container">
+      <div class="split-7-5">
+        <div>
+          <p class="eyebrow">Creators</p>
+          <h1>Film inside real factories — permits handled.</h1>
+          <p class="lead hero__lead">
+            Most factories say yes to filming when the request reaches the owner in the right form and
+            early enough. That is most of our job. The rest is being next to you when you shoot — the
+            full boundaries are in the <a href="/guides/can-you-film-inside-a-chinese-factory/">filming guide</a>.
+          </p>
+        </div>
+        <div class="hero__media">
+          <PhotoSlot name="CREATORS · ON THE LINE" variant="media">
+            <OnsitePhoto id="07" />
+          </PhotoSlot>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Section>
+    <div class="container container--md">
+      <SectionHead eyebrow="Permission" title="The real boundary of filming permission." />
+      <ul class="spec-list clean">
+        {permission.map((p) => (
+          <li>
+            <span class="spec-list__k">{p.k}</span><span class="spec-list__v">{p.v}</span>
+          </li>
+        ))}
+      </ul>
+      <p class="u-mt-6">
+        The route and the permits are run by the <a href="/services/creator-factory-tour/">creator factory tour</a>.
+      </p>
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container container--md">
+      <SectionHead eyebrow="The shot list" title="What you can film, and what you cannot." />
+      <Checklist title="Usually filmable" items={filmable} />
+      <div class="u-mt-6">
+        <Checklist title="Usually off-limits" items={notFilmable} refusal plain />
+      </div>
+      <p class="u-mt-6">
+        Which side of the line you are on is covered in the <a href="/guides/can-you-film-inside-a-chinese-factory/">filming guide</a>.
+      </p>
+    </div>
+  </Section>
+
+  <Section>
+    <div class="container container--md">
+      <SectionHead eyebrow="Ownership" title="Footage, NDA and who owns what." />
+      <ul class="spec-list clean">
+        {footage.map((f) => (
+          <li>
+            <span class="spec-list__k">{f.k}</span><span class="spec-list__v">{f.v}</span>
+          </li>
+        ))}
+      </ul>
+      <p class="u-mt-6">
+        Filming-friendly clusters like <a href="/destinations/yiwu/">Yiwu</a> are where most creator routes start.
+      </p>
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container container--md">
+      <SectionHead eyebrow="On the floor" title="Power, network and equipment limits." />
+      <ul class="spec-list clean">
+        {logistics.map((l) => (
+          <li>
+            <span class="spec-list__k">{l.k}</span><span class="spec-list__v">{l.v}</span>
+          </li>
+        ))}
+      </ul>
+      <p class="u-mt-6">
+        Equipment declaration is one of the pieces <a href="/services/on-site-support/filming-coordination/">filming coordination</a> handles in writing.
+      </p>
+    </div>
+  </Section>
+
+  <Section>
+    <div class="container container--md">
+      <SectionHead eyebrow="What we do" title="What filming coordination actually covers." />
+      <Checklist
+        title="We handle"
+        numbered
+        items={[
+          'Written permission requests addressed to the owner, not the sales contact',
+          'Shot restrictions agreed per zone, in writing, before you book',
+          'The substitute factory held, so a refusal costs you a location, not a shooting day',
+          'An interpreter who can ask the technical questions on the floor',
+        ]}
+      />
+      <p class="u-mt-6">
+        <a class="link-arrow" href="/services/on-site-support/filming-coordination/">
+          Read the full filming coordination service
+          <Icon name="arrow" size={14} />
+        </a>
+      </p>
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container">
+      <SectionHead eyebrow="Where to start" title="The pages creators usually need." />
+      <RelatedNav
+        items={[
+          { k: 'Service', t: 'Creator factory tour', href: '/services/creator-factory-tour/' },
+          { k: 'Service', t: 'Filming coordination', href: '/services/on-site-support/filming-coordination/' },
+          { k: 'Guide', t: 'Can you film inside a factory?', href: '/guides/can-you-film-inside-a-chinese-factory/' },
+          { k: 'Region', t: 'Yiwu', href: '/destinations/yiwu/' },
+        ]}
+      />
+    </div>
+  </Section>
+</BaseLayout>

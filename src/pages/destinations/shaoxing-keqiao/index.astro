@@ -1,0 +1,85 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import DestinationPage from '../../../components/DestinationPage.astro';
+
+const title = 'Shaoxing & Keqiao factory visits — textiles and fabrics';
+const description =
+  'Keqiao is the textile hub of Zhejiang: the fabric market, then the mills that weave, dye and finish. Hosted visits for garment and home-textile buyers.';
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  track="buyer"
+  active="destinations"
+  crumbs={[{ href: '/destinations/', label: 'Destinations' }]}
+  current="Shaoxing / Keqiao"
+  cta={{
+    variant: 'plain',
+    eyebrow: 'Next step',
+    title: 'Plan a Shaoxing & Keqiao fabric trip.',
+    lead: 'Tell us the fabric, the weight and roughly how much. We will route you to the mills that actually run it.',
+    primary: { label: 'Plan my textile trip', href: '/contact/' },
+    form: { destination: 'Shaoxing / Keqiao' },
+  }}
+>
+  <DestinationPage
+    region="Zhejiang"
+    cityShort="Shaoxing"
+    track="buyer"
+    slotName="SX TEXTILE MILL"
+    h1="Shaoxing & Keqiao: where the fabric actually gets made."
+    lead="Keqiao is the textile market of eastern China, and the mills around Shaoxing are where that fabric is woven, dyed and finished. It is the cluster to visit when the fabric is the product."
+    micro={[
+      'The Keqiao textile market',
+      'Weaving, dyeing and finishing mills',
+      'For garment and home-textile buyers',
+    ]}
+    facts={[
+      { k: 'What it is', v: 'Textile hub', note: 'A market plus the mills behind it — the market shows, the mills make.' },
+      { k: 'Typical MOQ', v: 'Fabric-led', note: 'Grey fabric runs on quantity; finishing often sets the minimum.' },
+      { k: 'Best for', v: 'Fabric buyers', note: 'Garment brands and home-textile importers sourcing cloth itself.' },
+    ]}
+    why={[
+      'Keqiao is where textile buyers go to see the full range of a fabric before committing to it — weight, hand feel, colour, and the finishing that changes both.',
+      'The market and the mills are the same cluster, so a sample seen in the morning can be traced to a mill in the afternoon.',
+      'The reason to come here rather than just ordering swatches is colour and finish: those do not survive being described, only being seen against each other.',
+      'The trade-off is that this is a fabric cluster, not a finished-goods one. If you are buying cut-and-sew garments, the factories are more likely around Guangzhou or Hangzhou.',
+    ]}
+    markets={[
+      { k: 'Grey fabric', v: 'Woven base cloth sold by the roll, before dyeing and finishing.' },
+      { k: 'Dyeing & finishing', v: 'The mills that add colour, coating and handle — the step that changes a fabric the most.' },
+      { k: 'Home textile', v: 'Curtain, bedding and upholstery fabrics, often with their own printing.' },
+      { k: 'Garment fabric', v: 'Shirting, outerwear and knit fabrics for cut-and-sew programmes.' },
+    ]}
+    itinTitle="Two to three days, market first then mills."
+    itinLead="See the range at the market, then trace the shortlist to the mills that actually run it."
+    itinerary={[
+      { day: 'DAY 1', time: 'MARKET', title: 'Keqiao market', desc: 'Fabric ranges for your category, with weights and prices recorded against each supplier.', slot: 'SX · MARKET' },
+      { day: 'DAY 2', time: 'MILL A', title: 'Weaving and finishing', desc: 'A mill visit to see the cloth being made and finished, not just sampled.', slot: 'SX · MILL' },
+      { day: 'DAY 3', time: 'MILL B', title: 'Second mill, comparison', desc: 'The same visit structure, so the two mills can be compared rather than remembered differently.', slot: 'SX · MILL 2' },
+    ]}
+    filmLead="Mills are filmable in principle, with the usual exceptions around finishing chemistry."
+    film={{
+      answer: 'Often yes on the weaving and market floor; finishing lines vary.',
+      lead: 'Two to three weeks.',
+      refused: 'Some finishing processes and any area running a customer-specific run.',
+      note: 'Dust and chemical smells are part of the environment — plan equipment accordingly.',
+    }}
+    seasons={[
+      'Best months: March–June and September–November.',
+      'Chinese New Year shuts the mills for one to three weeks.',
+      'The October National Day week is a hard shutdown.',
+    ]}
+    timingWarnings={[
+      '<b>Buying a fabric without seeing the finished sample.</b> Dyeing changes everything; the market swatch is the starting point, not the answer.',
+      '<b>Assuming the stall is the mill.</b> Many market stalls are agents — the five checks tell you which.',
+    ]}
+    vetDesc="Textile intermediaries are common — the check that matters here is whether the stall and the mill are the same business."
+    related={[
+      { k: 'Destination', t: 'Ningbo / Hangzhou', href: '/destinations/ningbo-hangzhou/' },
+      { k: 'Destination', t: 'Zhejiang', href: '/destinations/zhejiang/' },
+      { k: 'Industry', t: 'Toys, gifts & commodities', href: '/industries/toys-gifts-commodities/' },
+    ]}
+  />
+</BaseLayout>

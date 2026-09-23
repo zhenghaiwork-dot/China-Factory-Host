@@ -1,0 +1,160 @@
+---
+import Section from './Section.astro';
+import SectionHead from './SectionHead.astro';
+import PhotoSlot from './PhotoSlot.astro';
+import OnsitePhoto from './OnsitePhoto.astro';
+import { pickPhoto } from '../data/onsite-photos.ts';
+import Checklist from './Checklist.astro';
+import Caveat from './Caveat.astro';
+import NoteStrip from './NoteStrip.astro';
+import VetLink from './VetLink.astro';
+import RelatedNav from './RelatedNav.astro';
+
+/* IndustryPage — shared skeleton for /industries/*.
+   Same reasoning as DestinationPage: two pages, one template. */
+export interface Spec { k: string; v: string; }
+export interface Rel { k: string; t: string; href: string; }
+
+interface Props {
+  slotName: string;
+  strip?: boolean;
+  h1: string;
+  lead: string;
+  /* Who this page is for, shown on the FIRST screen. The two industry pages
+     used to bury their "For creators… / For buyers…" sentences at the end of the
+     opening prose block, so a visitor had to scroll before they could tell
+     whether the page applied to them. Optional so other pages are unaffected. */
+  audience?: string;
+  micro: string[];
+  ctaLabel: string;
+  why: string[];
+  chainLead: string;
+  chain: Spec[];
+  checks: string[];
+  numbers: Spec[];
+  numberNote?: string;
+  complianceTitle: string;
+  compliance: string[];
+  complianceCaveatBody: string;
+  complianceCaveatItems: string[];
+  related: Rel[];
+}
+const c = Astro.props;
+---
+<section class="hero">
+  <div class="container">
+    <div class="split-7-5">
+      <div>
+        <p class="eyebrow">Industry</p>
+        <h1>{c.h1}</h1>
+        <p class="lead hero__lead">{c.lead}</p>
+        {c.audience && <p class="u-sm u-secondary">{c.audience}</p>}
+        <div class="btn-row btn-row--stack">
+          <a class="btn btn--primary" href="/contact/">{c.ctaLabel}</a>
+          <a class="btn btn--secondary" href="/about/how-we-vet-factories/"
+            >See how we check suppliers</a
+          >
+        </div>
+        <ul class="hero__micro">
+          {c.micro.map((m) => <li>{m}</li>)}
+        </ul>
+      </div>
+      <div class="hero__media">
+        <PhotoSlot name={`IND · ${c.slotName}`} variant={c.strip ? 'strip' : 'media'}>
+          <OnsitePhoto id={pickPhoto(c.slotName)} eager />
+        </PhotoSlot>
+      </div>
+    </div>
+  </div>
+</section>
+
+<Section>
+  <div class="container container--md">
+    <SectionHead eyebrow="Why this category" title="What makes this category different to buy." />
+    <div class="prose stack">
+      {c.why.map((p) => <p set:html={p} />)}
+    </div>
+  </div>
+</Section>
+
+<Section alternate>
+  <div class="container container--md">
+    <SectionHead
+      eyebrow="Supply chain shape"
+      title="Who actually makes which part."
+      lead={c.chainLead}
+    />
+    <ul class="spec-list clean">
+      {
+        c.chain.map((m) => (
+          <li>
+            <span class="spec-list__k">{m.k}</span><span class="spec-list__v" set:html={m.v}></span>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</Section>
+
+<Section>
+  <div class="container container--md">
+    <SectionHead eyebrow="On the floor" title="Checks specific to this category." />
+    <Checklist title="What to verify on site" numbered items={c.checks} />
+  </div>
+</Section>
+
+<Section alternate>
+  <div class="container">
+    <SectionHead
+      eyebrow="Numbers"
+      title="MOQ, sampling and lead time — the ranges we actually see."
+      lead="Ranges, not promises. Ask us for the driver behind any specific number before you plan a launch around it."
+    />
+    <ul class="spec-list clean spec-list--split">
+      {
+        c.numbers.map((m) => (
+          <li>
+            <span class="spec-list__k">{m.k}</span><span class="spec-list__v" set:html={m.v}></span>
+          </li>
+        ))
+      }
+    </ul>
+    {
+      c.numberNote && (
+        <div class="u-mt-6">
+          <NoteStrip label="Reading these ranges">{c.numberNote}</NoteStrip>
+        </div>
+      )
+    }
+  </div>
+</Section>
+
+<Section>
+  <div class="container container--md">
+    <SectionHead
+      eyebrow="Compliance"
+      title="Target-market requirements you cannot skip."
+    />
+    <Checklist title={c.complianceTitle} items={c.compliance} />
+    <Caveat
+      title="What we can and cannot verify here"
+      body={c.complianceCaveatBody}
+      items={c.complianceCaveatItems}
+    />
+  </div>
+</Section>
+
+<Section alternate>
+  <div class="container container--md">
+    <VetLink
+      desc="Every supplier in this category goes through the same five documented checks before it reaches your itinerary."
+    />
+  </div>
+</Section>
+
+<Section>
+  <div class="container">
+    <SectionHead eyebrow="Keep going" title="Where this category is made." />
+    <RelatedNav items={c.related} />
+  </div>
+</Section>

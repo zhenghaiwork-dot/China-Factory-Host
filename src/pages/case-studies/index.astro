@@ -1,0 +1,150 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Section from '../../components/Section.astro';
+import SectionHead from '../../components/SectionHead.astro';
+import CaseCard from '../../components/CaseCard.astro';
+import NoteStrip from '../../components/NoteStrip.astro';
+import PhotoSlot from '../../components/PhotoSlot.astro';
+import OnsitePhoto from '../../components/OnsitePhoto.astro';
+import RelatedNav from '../../components/RelatedNav.astro';
+import { getCollection } from 'astro:content';
+import { waLink } from '../../data/site.ts';
+import { pickUnique } from '../../data/onsite-photos.ts';
+
+const title = 'Sample trip reports — the format you receive';
+const description =
+  'Sample write-ups of hosted factory trips for creators and brand buyers. Each one shows the structure and level of detail of the report you receive after a visit.';
+
+const wa = waLink('Hi, I would like to see examples of factory trips similar to mine.');
+
+const entries = (await getCollection('caseStudies')).sort(
+  (a, b) => a.data.order - b.data.order || a.data.title.localeCompare(b.data.title)
+);
+
+/* Page-level photo coordination: the hero band uses onsite-06, so the two
+   sample-report cards pick from the rest without colliding with it or each
+   other. Keep in sync with the hero <OnsitePhoto id="06"> below. */
+const cardPicks = pickUnique(
+  entries.map((e) => e.data.photo),
+  ['06']
+);
+
+const structure = [
+  { k: 'The brief', v: 'What the client asked for before the trip — the product, the target market and the question the trip was meant to answer.' },
+  { k: 'The cities', v: 'Why these <a href="/destinations/">clusters</a> and not others. A report that cannot justify the city is a report that guessed the city.' },
+  { k: 'The shortlist', v: 'Which suppliers were considered, which survived <a href="/about/how-we-vet-factories/">the pre-screen</a>, and which check removed the rest.' },
+  { k: 'The route', v: 'Day by day — what was visited, in what order, and why that order, as in <a href="/services/factory-visit-planning/">visit planning</a>.' },
+  { k: 'What was verified', v: 'The <a href="/about/how-we-vet-factories/">five checks</a> recorded per factory, with what was actually seen on the floor.' },
+  { k: 'What was rejected', v: 'The suppliers removed during the trip, and the specific check that removed them.' },
+  { k: 'What happened next', v: 'The samples, quotes and follow-up actions the trip produced.' },
+  { k: 'What a visit cannot prove', v: 'A one-day snapshot does not predict a supplier six months later, and a visit is not <a href="/guides/factory-visit-vs-audit-vs-inspection/">an audit or a certification</a> — the report states its own limits rather than overclaiming.' },
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  track="neutral"
+  active="cases"
+  current="Case studies"
+  cta={{
+    eyebrow: 'Next step',
+    title: 'Start your own factory trip.',
+    lead: 'Tell us the category, the city and roughly when. You will get a straight answer about what is realistic.',
+    primary: { label: 'Start your own factory trip', href: '/contact/' },
+    secondary: { label: 'Ask on WhatsApp', href: wa, external: true },
+  }}
+>
+  <!-- 1 · Hero -->
+  <section class="hero">
+    <div class="container">
+      <div class="split-7-5">
+        <div>
+          <p class="eyebrow">Case studies</p>
+          <h1>Sample trip reports — the format you receive.</h1>
+          <p class="lead hero__lead">
+            Each entry below is written up the same way: the brief, what cleared, what did not, and
+            what came out.
+          </p>
+          <div class="u-mt-6">
+            <NoteStrip label="How to read these" marker="case"
+              >Sample write-ups, not records of completed trips. They exist to show the structure and
+              level of detail of the report you receive. The clients, dates and figures in them are
+              illustrative. A real write-up goes up only with that client's written permission.</NoteStrip
+            >
+          </div>
+          <div class="btn-row u-mt-6">
+            <a class="btn btn--primary" href="/contact/">Plan my visit</a>
+          </div>
+        </div>
+        <div class="hero__media">
+          <PhotoSlot name="REPORT · SAMPLE SPREAD" variant="media">
+            <OnsitePhoto id="06" />
+          </PhotoSlot>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2 · What a report contains -->
+  <Section>
+    <div class="container container--md">
+      <SectionHead
+        eyebrow="The format"
+        title="What every report contains."
+        lead="A useful trip report is not a diary — it is the evidence behind a decision. Every entry follows the same structure."
+      />
+      <ul class="spec-list clean">
+        {structure.map((s) => (
+          <li>
+            <span class="spec-list__k">{s.k}</span><span class="spec-list__v" set:html={s.v} />
+          </li>
+        ))}
+      </ul>
+      <p class="u-mt-6">
+        The verification is scored on the <a href="/tools/factory-visit-scorecard/">factory visit scorecard</a>, and the trip itself is what a
+        <a href="/services/brand-sourcing-visit/">brand sourcing visit</a> or a <a href="/services/creator-factory-tour/">creator factory tour</a> runs.
+      </p>
+    </div>
+  </Section>
+
+  <!-- 3 · Grid -->
+  <Section tight alternate>
+    <div class="container">
+      <SectionHead eyebrow="The samples" title="Two example reports." />
+      <div class="case-grid case-grid--two">
+        {
+          entries.map((e, k) => (
+            <CaseCard
+              href={`/case-studies/${e.id}/`}
+              type={e.data.clientType}
+              destination={e.data.destination}
+              photo={e.data.photo}
+              id={cardPicks[k]}
+              category={e.data.category}
+              place={e.data.place}
+              title={e.data.title}
+              result={e.data.result}
+              info={e.data.info}
+            />
+          ))
+        }
+      </div>
+    </div>
+  </Section>
+
+  <!-- 4 · Where next -->
+  <Section>
+    <div class="container">
+      <SectionHead eyebrow="Where next" title="Turn the format into your own trip." />
+      <RelatedNav
+        items={[
+          { k: 'Service', t: 'Brand sourcing visit', href: '/services/brand-sourcing-visit/' },
+          { k: 'Service', t: 'Creator factory tour', href: '/services/creator-factory-tour/' },
+          { k: 'Trust', t: 'How we vet factories', href: '/about/how-we-vet-factories/' },
+          { k: 'Plan', t: 'Plan my trip', href: '/plan-my-trip/' },
+        ]}
+      />
+    </div>
+  </Section>
+</BaseLayout>

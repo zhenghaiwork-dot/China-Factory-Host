@@ -1,0 +1,89 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import IndustryPage from '../../../components/IndustryPage.astro';
+import { waLink } from '../../../data/site.ts';
+
+const title = 'Furniture & home furnishing — China factory visits';
+const description =
+  'Wood, metal and mixed-material furniture from the Foshan, Dongguan and Anji clusters. Materials, structure, packaging and what to check on the floor.';
+
+const wa = waLink('Hi, I am sourcing furniture in China and would like to visit factories.');
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  track="buyer"
+  active="industries"
+  crumbs={[{ href: '/services/', label: 'Services' }]}
+  current="Furniture & home furnishing"
+  cta={{
+    variant: 'plain',
+    eyebrow: 'Next step',
+    title: 'Plan a furniture visit that traces the factory, not the showroom.',
+    lead: 'Tell us the product and the volume. We will separate the makers from the showroom fronts.',
+    primary: { label: 'Plan a furniture factory visit', href: '/contact/' },
+    form: { destination: 'Furniture & home furnishing' },
+    secondary: { label: 'Ask on WhatsApp', href: wa, external: true },
+  }}
+>
+  <IndustryPage
+    slotName="FURNITURE LINE"
+    h1="Furniture & home furnishing: the showroom is not the factory."
+    lead="Furniture is the category where the gap between a showroom and a factory is widest. A beautiful showroom can hide a factory that does not actually make the pieces — and the difference shows up as quality drift, not as price."
+    micro={[
+      'Foshan, Dongguan, Anji clusters',
+      'Wood, metal, mixed materials',
+      'Showroom ≠ factory',
+    ]}
+    ctaLabel="Plan a furniture factory visit"
+    why={[
+      'Furniture concentrates in Foshan and Dongguan in Guangdong, with Anji in Zhejiang strong in office chairs. The showrooms are concentrated in Foshan; the factories are around them.',
+      'The risk in furniture is structural: the difference between a piece that survives shipping and one that does not is in the joints, the packaging and the weight of the wood — none of which a showroom shows you.',
+      'Furniture is also where subcontracting is most common: the frame from one shop, the upholstery from another, the finishing from a third. Knowing who does which step changes your MOQ and your warranty risk.',
+      'The reason to visit is packaging and structure. You can only judge whether a flat-packed piece survives a container by seeing how it is packed and what it weighs.',
+    ]}
+    chainLead="Which part is made where, and where the risk concentrates."
+    chain={[
+      { k: 'Frame & structure', v: 'Wood or metal frames — often a different shop from the upholstery.' },
+      { k: 'Upholstery', v: 'Foam, fabric and sewing — frequently subcontracted.' },
+      { k: 'Finishing', v: 'Stain, lacquer or coating — the step where consistency is hardest.' },
+      { k: 'Packaging', v: 'Flat-pack cartoning and load testing — where shipping damage is decided.' },
+      { k: 'Assembly & QC', v: 'Final assembly and the checks that catch a loose joint before the container.' },
+    ]}
+    checks={[
+      'Confirm the factory makes the frames — not just assembles kits from elsewhere.',
+      'See the joints and the joinery; ask about the weight and grade of the wood.',
+      'Foam and fabric — check the density and whether the upholstery is done in-house.',
+      'Packaging: flat-pack cartoning, load testing and how a full container is built.',
+      'Finishing consistency across a run — colour and coating vary more than buyers expect.',
+      'Who holds responsibility when a part is subcontracted — get it in writing.',
+    ]}
+    numbers={[
+      { k: 'MOQ', v: 'Often container-led — a full container mix rather than per-SKU minimums.' },
+      { k: 'Sampling', v: 'A pre-production sample, then a shipping sample, then the run.' },
+      { k: 'Tooling', v: 'New moulds or jigs are a separate cost, owned by whoever pays for them.' },
+      { k: 'Lead time', v: 'Usually the finishing and the packaging queue, not the woodworking.' },
+    ]}
+    numberNote="These are ranges we see, not quotes. In furniture, ask about the packaging and the container build — that is where the landed cost actually lives."
+    complianceTitle="Destination-market requirements"
+    compliance={[
+      'Stability and tipping requirements for furniture sold in your market.',
+      'Formaldehyde and VOC limits for engineered wood.',
+      'Flammability where it applies — upholstery and children’s products.',
+      'Labelling and assembly instructions that match the market language and rules.',
+    ]}
+    complianceCaveatBody="We check that test reports exist and that they match the product and materials you are buying. We do not interpret standards."
+    complianceCaveatItems={[
+      'We do not certify furniture or issue compliance marks.',
+      'We cannot confirm a product passes a standard — only a lab can.',
+      'Requirements vary by market. Confirm current rules before committing.',
+    ]}
+    related={[
+      { k: 'Destination', t: 'Foshan / Shunde', href: '/destinations/foshan-shunde/' },
+      { k: 'Destination', t: 'Guangzhou / Dongguan', href: '/destinations/guangzhou-dongguan/' },
+      { k: 'Industry', t: 'Small home appliances', href: '/industries/small-home-appliances/' },
+      { k: 'Trust', t: 'How we vet factories', href: '/about/how-we-vet-factories/' },
+    ]}
+  />
+</BaseLayout>

@@ -1,0 +1,221 @@
+---
+import Logo from './Logo.astro';
+import Icon from './Icon.astro';
+import {
+  NAV,
+  REPLY_TIME_PROMISE,
+  isWaConfigured,
+  waLink,
+  type NavEntry,
+} from '../data/site.ts';
+
+interface Props {
+  active?: string;
+}
+const { active = '' } = Astro.props;
+
+const isGroup = (n: NavEntry): n is Extract<NavEntry, { items: unknown }> => 'items' in n;
+
+/* ---------- Utility rail (§6.2) ----------
+   The rail is a WAYFINDING strip, not a contact strip. Its left slot lifts the
+   vetting method to the top of every page, which satisfies the mandatory
+   internal-link rule (requirements §5.3 rule 1) at the site's highest point.
+
+   The right slot has its own gate: it renders only when at least TWO verifiable
+   contact facts exist. We have exactly two:
+     · China Time (GMT+8)          — verifiable
+     · REPLY_TIME_PROMISE          — a commitment we control, not a claim
+   The promise is imported from site.ts, not retyped: two response times on one
+   page is exactly the defect this rail shipped with (critique M2).
+   The WhatsApp number in site.ts is empty, so it is deliberately NOT used to pad
+   this strip (§6.2: never fill the rail with invented contacts). Once a real
+   number lands, add it to RAIL_FACTS and the gate keeps working. */
+const VET_HREF = '/about/how-we-vet-factories/';
+const RAIL_FACTS: string[] = [
+  'China Time GMT+8',
+  REPLY_TIME_PROMISE,
+];
+
+/* Drawer WhatsApp slot. waLink() returns '' until a real number is configured;
+   in that case the channel button is not rendered at all — a wa.me link built
+   from a placeholder number dials a stranger (critique M3). */
+const waDrawer = waLink('Hi, I would like to plan a factory visit in China.');
+
+/* ---------- Dropdown shapes (§6.4) ----------
+   Four items or fewer, so this is never a mega-menu. Destinations is the only
+   group whose sub-labels run long, so it is the only two-column card. */
+const isWide = (key: string) => key === 'destinations';
+
+/* 'vet' and 'cases' used to be top-level header links with their own keys.
+   They are now items inside the About group, but three pages still pass
+   active="vet" / active="cases" — rather than edit content files mid-build,
+   the old keys are aliased to the group that now owns them, so the header
+   still marks the right entry as current. */
+const ACTIVE_ALIAS: Record<string, string> = { vet: 'about', cases: 'about' };
+const activeKey = ACTIVE_ALIAS[active] ?? active;
+const MENU_FOOT: Record<string, { label: string; href: string }> = {
+  industries: { label: 'See how we vet factories', href: VET_HREF },
+};
+---
+<header class="site-header">
+  <div class="rail">
+    <div class="container rail__inner">
+      <a class="rail__lead" href={VET_HREF}>
+        <Icon name="shield" size={14} />
+        {/* Wrapped so the text (not the whole anchor) takes the ellipsis: the
+            icon is display:block from the base reset, so a block-formatted
+            anchor pushed the icon onto its own clipped line above the text. */}
+        <span class="rail__lead-text">Every supplier goes through a 5-step check — see how</span>
+      </a>
+      {
+        RAIL_FACTS.length >= 2 && (
+          <div class="rail__facts">
+            {RAIL_FACTS.map((fact, i) => (
+              <>
+                {i > 0 && <span class="rail__sep" aria-hidden="true">·</span>}
+                <span class="rail__fact">{fact}</span>
+              </>
+            ))}
+          </div>
+        )
+      }
+    </div>
+  </div>
+
+  <div class="site-header__bar">
+    <div class="container site-header__inner">
+      <a class="brand" href="/" aria-label="ChinaFactoryHost — home">
+        <Logo />
+        {/* Three-part visual parse. A single 15px camel-cased run made the eye
+            read "China Factory Host" as three generic words, and the only
+            colour landed on Host — i.e. the brand's red was spent emphasising
+            the syllable most likely to be misread as web hosting. Now Factory
+            is the boldest ink (what the business is about), Host carries the
+            brand red at a quieter weight, and China recedes. */}
+        <span class="brand__word"
+          ><span class="brand__geo">China</span><span class="brand__core">Factory</span><span
+            class="brand__host">Host</span
+          ></span
+        >
+      </a>
+
+      <nav class="nav" aria-label="Primary">
+        {
+          NAV.map((n) =>
+            isGroup(n) ? (
+              <div class="nav-group">
+                <button
+                  class="nav-trigger"
+                  type="button"
+                  aria-expanded="false"
+                  aria-controls={`nav-${n.key}`}
+                  aria-current={n.key === activeKey ? 'true' : undefined}
+                >
+                  {n.label}
+                  <Icon name="chevron" size={12} />
+                </button>
+                <div
+                  class:list={['nav-menu', isWide(n.key) && 'nav-menu--2col']}
+                  id={`nav-${n.key}`}
+                  role="group"
+                  aria-label={n.title}
+                >
+                  <p class="nav-menu__title">{n.title}</p>
+                  {n.items.map((i) => (
+                    <a class="nav-menu__link" href={i.href}>
+                      <span class="nav-menu__label">{i.label}</span>
+                      <span class="nav-menu__sub">{i.sub}</span>
+                    </a>
+                  ))}
+                  {MENU_FOOT[n.key] && (
+                    <p class="nav-menu__foot">
+                      <a class="link-arrow" href={MENU_FOOT[n.key].href}>
+                        {MENU_FOOT[n.key].label}
+                      </a>
+                    </p>
+                  )}
+                </div>
+              </div>
+            ) : (
+              <a class="nav-link" href={n.href} aria-current={n.key === activeKey ? 'page' : undefined}>
+                {n.label}
+              </a>
+            )
+          )
+        }
+      </nav>
+
+      {/* §6.6 — the header carries EXACTLY one button. V2 had two ("Talk to us"
+          ghost + "Plan my trip"), which diluted the only real CTA on the page.
+          Secondary actions inside the menu are text links, not buttons. */}
+      <div class="site-header__actions">
+        <a class="btn btn--primary" href="/contact/">Plan my visit</a>
+        <button
+          class="burger"
+          type="button"
+          data-burger
+          aria-expanded="false"
+          aria-controls="mobile-nav"
+          aria-label="Open menu"
+        >
+          <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false">
+            <path d="M2,5 H18 M2,10 H18 M2,15 H18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="butt"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="mobilenav" id="mobile-nav" aria-hidden="true">
+  <div class="container">
+    {
+      NAV.filter(isGroup).map((n) => (
+        <div class="mobilenav__group">
+          <p class="mobilenav__label">{n.title}</p>
+          <ul class="clean">
+            {n.items.map((i) => (
+              <li>
+                <a class="mobilenav__link" href={i.href}>
+                  <span class="mobilenav__head">{i.label}</span>
+                  {i.sub && <span class="mobilenav__sub">{i.sub}</span>}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))
+    }
+    <div class="mobilenav__group">
+      <p class="mobilenav__label">More</p>
+      {
+        NAV.filter((n) => !isGroup(n)).map((n) => (
+          <a class="mobilenav__link" href={(n as { href: string }).href}>
+            <span class="mobilenav__head">{(n as { label: string }).label}</span>
+          </a>
+        ))
+      }
+    </div>
+    {/* §6.5 — the drawer is a screen of its own and WhatsApp is a channel, not a
+        brand action, so the two-button budget here is an explicit exemption.
+        The channel button only exists once a real number is configured: an
+        unconfigured waLink() must not become an anchor (critique M3). */}
+    <div class="mobilenav__cta">
+      <a class="btn btn--primary btn--block" href="/contact/">Plan my visit</a>
+      {
+        isWaConfigured && (
+          <a
+            class="btn btn--whatsapp btn--block"
+            href={waDrawer}
+            target="_blank"
+            rel="noopener"
+            data-placeholder="wa-number"
+          >
+            <Icon name="wa" size={20} />
+            Message us on WhatsApp
+          </a>
+        )
+      }
+    </div>
+  </div>
+</div>

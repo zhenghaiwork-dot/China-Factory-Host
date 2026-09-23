@@ -1,0 +1,187 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Section from '../../../components/Section.astro';
+import SectionHead from '../../../components/SectionHead.astro';
+import PhotoSlot from '../../../components/PhotoSlot.astro';
+import OnsitePhoto from '../../../components/OnsitePhoto.astro';
+import Checklist from '../../../components/Checklist.astro';
+import Caveat from '../../../components/Caveat.astro';
+import Timeline from '../../../components/Timeline.astro';
+import RelatedNav from '../../../components/RelatedNav.astro';
+import { waLink } from '../../../data/site.ts';
+
+const title = 'First-time buyers — your first China sourcing trip, de-risked';
+const description =
+  'Your first trip to China, handled from the ground up: the right cluster, working payment methods, and a first-visit checklist instead of a guess.';
+
+const wa = waLink('Hi, this is my first sourcing trip to China and I would like help.');
+
+const mistakes = [
+  'Scheduling five factories into one day — three of the five would get twenty minutes each.',
+  'Treating a Yiwu market stall as the factory — the stall is often a trader, and the maker is an hour away.',
+  'Asking the factory to prepare the sample room only after you land — by then the production calendar has moved on.',
+  'Booking the flight before the supplier list has passed a registration check.',
+  'Trusting the Alibaba photo gallery as evidence of a production floor.',
+];
+
+const timing = [
+  { k: 'Days for a first trip', v: 'Three to five. Fewer than three and you cannot reach the factories, which sit outside the cities. More than five and a first-timer usually runs out of decisions before days.' },
+  { k: 'Factories per day', v: 'Two, in the same cluster. A walk-through with the production manager takes most of a morning; the second visit is the comparison, not the filler.' },
+  { k: 'Why not more', v: 'Factories in China sit in industrial zones outside the city centre. The time between two visits is travel, not coffee. Three visits usually means one gets cut short.' },
+];
+
+const beforeAfter = [
+  { k: 'Visa and invitation', v: 'Solve before you fly. An invitation letter and the right visa take time; a hotel receipt and a letter from a supplier are usually part of it.' },
+  { k: 'Payment setup', v: 'Solve before you fly. Alipay and WeChat Pay are how most things are paid; a foreign card alone does not always work. Set up the apps while you still have your home bank available.' },
+  { k: 'Communication', v: 'Solve before you fly. WeChat is how Chinese suppliers actually reach you. Without it you are invisible to the people you are coming to meet.' },
+  { k: 'Hotel district', v: 'Solve before you fly — choose the district near the industrial zone, not the tourist centre. The wrong hotel adds an hour to every morning.' },
+  { k: 'SIM, transport, interpreter', v: 'These can wait until you land, and we arrange them. A local SIM, the driver who knows the industrial parks, and the interpreter are day-one, not month-one.' },
+];
+
+const expectations = [
+  { k: 'MOQ', v: 'Not one number. Stock items in a market city can start in the hundreds; anything with tooling starts where the mould is worth running. Ask which part sets the minimum, not just what the minimum is.' },
+  { k: 'Sampling', v: 'Measured in weeks for anything with tooling or printing, days only for stock items. The sample has to be made, and the factory will not stop a production line to make yours.' },
+  { k: 'Quote validity', v: 'A quote has a date. Material prices move, so a number from six months ago is a starting point, not a promise. Ask for the validity window when you ask for the price.' },
+];
+
+const itinerary = [
+  { day: 'DAY 1', time: 'ARRIVAL', title: 'Pick-up and brief', desc: 'Airport or station pick-up, then an hour going through the shortlist and what each factory actually makes, before anyone drives anywhere.' },
+  { day: 'DAY 2', time: 'MARKET', title: 'The market, if your category has one', desc: 'Yiwu-style categories start at the market to see the range and the price floor before the factories. Tooled categories skip this and go straight to the floor.' },
+  { day: 'DAY 3', time: 'FACTORY A', title: 'First real factory', desc: 'The walk-through: receiving, the line, the QC bench, the packing. This is where the catalogue photo either matches or it does not.' },
+  { day: 'DAY 4', time: 'FACTORY B', title: 'Second factory, comparison terms', desc: 'Same visit, same questions. The point is that the second quote arrives informed by the first.' },
+  { day: 'DAY 5', time: 'WRAP', title: 'Quotes and a written list', desc: 'Every quote normalised to one specification, and a written list of what you saw, what you distrust and what to ask for next.' },
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  active=""
+  crumbs={[]}
+  current="First-time buyers"
+  cta={{
+    eyebrow: 'Next step',
+    title: 'Make the first trip the one that counts.',
+    lead: 'Tell us the product and roughly when. We will handle the parts that trip first-timers up.',
+    primary: { label: 'Plan my first trip', href: '/plan-my-trip/' },
+    secondary: { label: 'Ask on WhatsApp', href: wa, external: true },
+  }}
+>
+  <section class="hero">
+    <div class="container">
+      <div class="split-7-5">
+        <div>
+          <p class="eyebrow">First-time buyers</p>
+          <h1>Your first China trip, without the expensive mistakes.</h1>
+          <p class="lead hero__lead">
+            The first trip is where most buyers lose the most: the wrong city, a supplier that never
+            got checked, and a week of friction with payments and maps. We remove the first two and
+            handle the third — <a href="/services/factory-matching/">factory matching</a> is how the shortlist gets real.
+          </p>        </div>
+        <div class="hero__media">
+          <PhotoSlot name="FIRST-TIME · THE TRIP" variant="media">
+            <OnsitePhoto id="10" />
+          </PhotoSlot>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Section>
+    <div class="container container--md">
+      <SectionHead eyebrow="The mistakes" title="Five mistakes that cost first-timers the most." />
+      <Checklist title="Each one is avoidable" items={mistakes} refusal />
+      <p class="u-mt-6">
+        The market-stall mistake is the most common — <a href="/destinations/yiwu/">Yiwu</a> is full of traders, and
+        many are honest. The other kind is why the checks exist.
+      </p>
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container container--md">
+      <SectionHead eyebrow="The schedule" title="How many days, and how many factories a day." />
+      <ul class="spec-list clean">
+        {timing.map((t) => (
+          <li>
+            <span class="spec-list__k">{t.k}</span><span class="spec-list__v">{t.v}</span>
+          </li>
+        ))}
+      </ul>
+      <p class="u-mt-6">
+        The whole sequence follows <a href="/how-it-works/">the process</a> — shortlist, check, route, floor, report.
+      </p>
+    </div>
+  </Section>
+
+  <Section>
+    <div class="container container--md">
+      <SectionHead
+        eyebrow="The logistics"
+        title="What to solve before you fly, and what can wait."
+        lead="Most first-trip friction is decided before the plane lands. Half of it is avoidable from your sofa."
+      />
+      <ul class="spec-list clean">
+        {beforeAfter.map((b) => (
+          <li>
+            <span class="spec-list__k">{b.k}</span><span class="spec-list__v">{b.v}</span>
+          </li>
+        ))}
+      </ul>
+      <p class="u-mt-6">
+        The day-one pieces — SIM, transport, interpreter — are what <a href="/services/on-site-support/">on-site support</a> covers once you land.
+      </p>
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container container--md">
+      <SectionHead eyebrow="The expectations" title="Where first-timer expectations break." />
+      <ul class="spec-list clean">
+        {expectations.map((e) => (
+          <li>
+            <span class="spec-list__k">{e.k}</span><span class="spec-list__v">{e.v}</span>
+          </li>
+        ))}
+      </ul>
+      <p class="u-mt-6">
+        These are the same expectations we walk through on the <a href="/guides/china-factory-visit-checklist/">on-the-floor checklist</a>.
+      </p>
+    </div>
+  </Section>
+
+  <Section>
+    <div class="container container--md">
+      <SectionHead eyebrow="Day by day" title="What a first trip actually looks like." />
+      <Timeline items={itinerary} />
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container container--md">
+      <Caveat
+        title="When we will tell you not to come"
+        body="Some first trips should not happen yet, and we would rather say so than take the fee."
+        items={[
+          'If you are only here to compare Alibaba prices and do not plan to place an order, a visit is a week you could spend at a screen.',
+          'If the category is still undefined, every factory you meet will be the wrong factory.',
+          'If your dates land on a holiday shutdown, the floors will be empty and the answer will be to come another week.',
+        ]}
+      />
+    </div>
+  </Section>
+
+  <Section>
+    <div class="container">
+      <SectionHead eyebrow="Where to start" title="Three places first-timers usually need." />
+      <RelatedNav
+        items={[
+          { k: 'Region', t: 'Pick the right cluster', href: '/destinations/' },
+          { k: 'Service', t: 'Factory matching', href: '/services/factory-matching/' },
+          { k: 'Plan', t: 'How the process works', href: '/how-it-works/' },
+          { k: 'Trust', t: 'How we vet factories', href: '/about/how-we-vet-factories/' },
+        ]}
+      />
+    </div>
+  </Section>
+</BaseLayout>

@@ -1,0 +1,90 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import IndustryPage from '../../../components/IndustryPage.astro';
+import { waLink } from '../../../data/site.ts';
+
+const title = 'Small home appliances — China factory visits';
+const description =
+  'Kitchen and home appliances from the Cixi, Shunde and Zhongshan clusters. Motors, heating elements, safety testing and what to check on the floor.';
+
+const wa = waLink('Hi, I am sourcing small home appliances in China and would like to visit factories.');
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  track="buyer"
+  active="industries"
+  crumbs={[{ href: '/services/', label: 'Services' }]}
+  current="Small home appliances"
+  cta={{
+    variant: 'plain',
+    eyebrow: 'Next step',
+    title: 'Plan an appliance visit around the safety test, not just the price.',
+    lead: 'Tell us the product and the destination market. We will check what the safety file actually covers.',
+    primary: { label: 'Plan an appliance factory visit', href: '/contact/' },
+    form: { destination: 'Small home appliances' },
+    secondary: { label: 'Ask on WhatsApp', href: wa, external: true },
+  }}
+>
+  <IndustryPage
+    slotName="APPLIANCE LINE"
+    h1="Small home appliances: the safety file is the product."
+    lead="An appliance is the category where a cheaper quote most often hides an incomplete safety file. The motor and the heating element are where quality and liability live — and they are also the parts most likely to be subcontracted."
+    micro={[
+      'Cixi, Shunde, Zhongshan clusters',
+      'Motors, heating elements, safety testing',
+      'Tooling-led economics',
+    ]}
+    ctaLabel="Plan an appliance factory visit"
+    why={[
+      'Small home appliances concentrate in Cixi in Zhejiang and Shunde and Zhongshan in Guangdong. Cixi is strong in heating and kitchen categories; Shunde is the motor and appliance heart of the Pearl River Delta.',
+      'The risk in appliances is the safety file. A product sold into Europe or North America needs real certification for the exact model, and a certificate that names a different model or a different factory does not cover yours.',
+      'Tooling drives the economics: a new housing mould is a separate, significant cost, and stock shapes avoid it. MOQ is usually set by the tooling and the printed parts, not by the motor.',
+      'The reason to visit is to see the safety testing and the motor source. Those are the two things a PDF will never show you, and the two things that decide whether the product is actually sellable in your market.',
+    ]}
+    chainLead="Which part is made where, and where the safety risk concentrates."
+    chain={[
+      { k: 'Housing & tooling', v: 'Injection-moulded housings — usually the MOQ and tooling driver.' },
+      { k: 'Motor', v: 'Often purchased from a specialist motor maker, not made in-house.' },
+      { k: 'Heating element', v: 'The safety-critical part for kettles, toasters and heaters.' },
+      { k: 'Controls & PCBA', v: 'Thermostats, timers and boards — often assembled locally.' },
+      { k: 'Safety testing', v: 'Hi-pot, earth continuity and the certification the market requires.' },
+    ]}
+    checks={[
+      'The motor source — who makes it, and whether it is rated for your duty cycle.',
+      'The heating element and its insulation — the single highest-liability part.',
+      'Safety testing on the line: hi-pot, earth continuity and any in-line checks.',
+      'A certificate that names your exact model and the actual production site.',
+      'Tooling ownership for a custom housing, stated in writing before payment.',
+      'Whether the motor, the board or the heating element is subcontracted — and to whom.',
+    ]}
+    numbers={[
+      { k: 'MOQ', v: 'Usually set by the housing tooling and printed parts, not the motor.' },
+      { k: 'New tooling', v: 'A new housing mould is a separate, significant cost with its own lead time.' },
+      { k: 'Sampling', v: 'Engineering sample, then pre-production, then the safety test on that sample.' },
+      { k: 'Certification', v: 'Weeks to months, and it cannot start until the final design is frozen.' },
+    ]}
+    numberNote="These are ranges we see, not quotes. The number that matters in appliances is the certification cost and lead time — it is the part first-time buyers forget to price."
+    complianceTitle="Safety certification by market"
+    compliance={[
+      'European Union: CE marking, plus the Low Voltage Directive and applicable product standards.',
+      'United States: UL or equivalent NRTL certification for the product class.',
+      'United Kingdom: UKCA where applicable, with largely retained requirements.',
+      'Plugs, voltages and frequency differences that change the product and its testing.',
+    ]}
+    complianceCaveatBody="We check that certificates exist, that they name the right model and factory, and that the lab is credibly independent. We do not interpret standards."
+    complianceCaveatItems={[
+      'We do not certify appliances — nothing we issue substitutes for accredited testing.',
+      'We cannot confirm a product passes a standard; only a lab can.',
+      'We will not rely on a supplier-provided certificate alone, and we will say so.',
+      'Requirements change. Confirm current rules for your market before committing.',
+    ]}
+    related={[
+      { k: 'Destination', t: 'Foshan / Shunde', href: '/destinations/foshan-shunde/' },
+      { k: 'Destination', t: 'Ningbo / Hangzhou', href: '/destinations/ningbo-hangzhou/' },
+      { k: 'Industry', t: 'Electronics & smart hardware', href: '/industries/electronics-smart-hardware/' },
+      { k: 'Trust', t: 'How we vet factories', href: '/about/how-we-vet-factories/' },
+    ]}
+  />
+</BaseLayout>

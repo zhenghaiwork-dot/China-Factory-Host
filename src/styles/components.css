@@ -1,0 +1,2665 @@
+/* ============================================================
+   ChinaFactoryHost.com — Components
+   Source: design/03-design-system-v3.md — Ch.4 (radius/border/shadow),
+           Ch.6 (navigation), Ch.7 (cards), Ch.8 (PhotoSlot),
+           Ch.9.3 (A/B/C migration classes). All values come from tokens.css.
+   Load order: tokens.css -> base.css -> components.css
+
+   Three global V3 rules that are applied here and must not be undone:
+     1. No pill radii anywhere. The scale is 0/3/4/5/8/10/14 + 50% (§4.1);
+        --radius-pill was deleted, so "retired" is now enforced by absence.
+     2. Static surfaces carry a border, never a shadow. Shadow = "lifted" (§4.4).
+     3. Control boundaries (inputs, selects, outlined buttons, chips) use
+        --border-control-color (3.60:1) — not the hairline/decoration tiers.
+   ============================================================ */
+
+/* ============================================================
+   0. Icons helper (stroke inherits currentColor)
+   ============================================================ */
+.icon { flex: none; }
+.i-check { color: var(--color-verified); }
+/* A cross glyph carries meaning ("not included") → non-text contrast ≥3:1.
+   --ink-400 (#A9A29A) was ~2.2:1; --text-muted is 5.74:1. */
+.i-cross { color: var(--text-muted); }
+.i-warn  { color: var(--color-warning); }
+
+/* ============================================================
+   1. Buttons（第 5.16 节）
+   ============================================================ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: 48px;                 /* mobile touch target */
+  padding: 0 var(--space-6);
+  border-radius: var(--radius-pill);
+  border: 1px solid transparent;
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  font-weight: var(--fw-semibold);
+  line-height: 1.2;
+  text-decoration: none;
+  cursor: pointer;
+  /* V4: a wrapping pill reads as two stacked chips (mobile header bug) */
+  white-space: nowrap;
+  /* V4 craft: buttons animate transform + shadow too, not just colour. A pill
+     that only changes fill reads as a flat swatch; a 1px lift with a coloured
+     shadow is what the Elementor reference does on every CTA. */
+  transition: background-color var(--duration-fast) var(--ease-out),
+              border-color     var(--duration-fast) var(--ease-out),
+              color            var(--duration-fast) var(--ease-out),
+              box-shadow       var(--duration-fast) var(--ease-out),
+              transform        var(--duration-fast) var(--ease-out);
+}
+@media (min-width: 1024px) { .btn { min-height: 50px; font-size: 1rem; } }
+/* 2026-09-20 audit P0-2, second attempt. min-width:0 stopped the grid TRACK
+   from being pushed out, but the button itself is still 438px wide at 390px
+   because nowrap makes its min-content width the label's full length. Re-run
+   measured scrollWidth 458 on /destinations/ — unchanged.
+   So on phone widths the pill is allowed to wrap. Two-line pills are normal on
+   mobile; a page you can drag sideways is not. Short labels still fit on one
+   line, so nothing else moves. */
+@media (max-width: 480px) {
+  .btn { white-space: normal; text-align: center; line-height: 1.3; }
+}
+.btn--block { display: flex; width: 100%; }
+
+/* The primary fill is the BRAND RED pill — the reference's non-hero CTAs are
+   red pills and its hero CTA is teal. The old "black is action, red is
+   wayfinding" split belonged to the oxblood direction and is retired. */
+.btn--primary   { background: var(--action-bg); color: var(--action-text); }
+.btn--primary:hover  {
+  background: var(--action-bg-hover);
+  color: var(--action-text);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(208, 32, 42, 0.28);
+}
+.btn--primary:active { background: var(--action-bg-pressed); color: var(--action-text); transform: translateY(0); box-shadow: none; }
+
+/* Teal pill — the reference's HERO call-to-action is teal while every other
+   CTA is red. This mirrors that split exactly. */
+.btn--second { background: var(--green-700); color: var(--on-inverse-text-strong); }
+.btn--second:hover {
+  background: var(--green-800);
+  color: var(--on-inverse-text-strong);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-accent-green);
+}
+.btn--second:active { transform: translateY(0); box-shadow: none; }
+
+/* On the photographic hero the red pill still works, but the reference's hero
+   CTA is teal — so the hero swaps to .btn--second in the markup. The white
+   fallback below only applies if a red primary is ever used over the photo,
+   where the old near-black fill vanished entirely (first real screenshot). */
+.hero-full .btn--primary { background: #FFFFFF; color: var(--text-primary); }
+.hero-full .btn--primary:hover { background: var(--surface-tint); color: var(--text-primary); }
+/* #DFE4EB was the only occurrence of that colour on the site. It is the pressed
+   state of the white primary button on the light hero, one step darker than the
+   --surface-tint it hovers to; --ink-150 (#DBE0EA) is within 5/4/5 — not
+   distinguishable — and takes it off the literal-colour list.
+   (audit-visual.md P2-9) */
+.hero-full .btn--primary:active { background: var(--ink-150); color: var(--text-primary); }
+
+/* Outlined button = a control boundary → WCAG 1.4.11 needs ≥3:1 (§4.2) */
+.btn--secondary { background: transparent; color: var(--color-text); border-color: var(--border-control-color); }
+.btn--secondary:hover { background: var(--color-surface-subtle); border-color: var(--border-ink-color); color: var(--color-text); }
+/* 2026-09-20 audit P1-3: the outlined button had no pressed state at all —
+   :active existed only for .btn--primary/.btn--second, so 17 routes offered no
+   feedback when the secondary CTA was pressed. */
+.btn--secondary:active { background: var(--color-surface-muted); color: var(--color-text); transform: translateY(0); }
+
+/* .btn--ghost removed (S7): a borderless control, retired in V3. The last two
+   call sites now use .btn--secondary, and a dead rule would keep showing up in
+   every "no V2 leftovers" grep. */
+
+.btn--whatsapp { background: var(--color-whatsapp); color: #FFFFFF; }
+.btn--whatsapp:hover { background: var(--color-whatsapp-hover); color: #FFFFFF; }
+
+/* Disabled is the ONE place --text-disabled may appear (WCAG 1.4.3 exempts
+   inactive controls). Never reuse this colour as body copy (§11.4 #1). */
+.btn[aria-disabled="true"], .btn:disabled {
+  background: var(--color-surface-muted);
+  color: var(--text-disabled);
+  border-color: transparent;
+  cursor: not-allowed;
+}
+
+.btn-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-top: var(--space-8);
+}
+.btn-row .btn { flex: 1 1 auto; }
+@media (min-width: 768px) {
+  .btn-row { gap: var(--space-4); }
+  .btn-row .btn { flex: 0 0 auto; }
+}
+.btn-row--stack { flex-direction: column; }
+.btn-row--stack .btn { width: 100%; }
+/* Whatever follows a row of buttons is explanatory small print (an intent
+   note, an audience line) or the next content block — it must never sit flush
+   against the buttons. Headings and paragraphs carry margin-top: 0 in this
+   system (h1-h4 reset, p has bottom margin only), so without this rule the
+   gap was literally 0px. Elements with their own larger top margin keep it:
+   the rule only fills the hole. Measured defect 2026-09-21: the vetting page's
+   intent note rendered 0px under the CTA pair. */
+.btn-row + * { margin-top: var(--space-6); }
+
+/* ============================================================
+   2. Badges / tags / placeholder markers
+   ============================================================ */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 4px 8px;
+  border-radius: var(--radius-xs);
+  font-family: var(--font-body);
+  font-size: var(--fs-micro);
+  font-weight: 500;
+  letter-spacing: var(--ls-micro);
+  text-transform: uppercase;
+  line-height: 1.3;
+  white-space: nowrap;
+}
+/* Audience badges: creator = solid near-black, buyer = outline. Two shapes,
+   not two hues — the distinction survives a greyscale print (§3.3). */
+.badge--creator { background: var(--action-bg); color: var(--action-text); }
+.badge--buyer   { background: transparent; border: 1px solid var(--border-control-color); color: var(--text-primary); }
+/* "Plan ahead" / "inside" read as the same state: caution */
+.badge--soon    { background: var(--caution-bg); border: 1px solid var(--color-caution); color: var(--color-caution); }
+/* The verification seal is OUTLINED on a tinted ground with a check glyph and
+   the word VERIFIED — three redundant encodings so stop-colour never carries
+   the meaning alone (§3.2). */
+.badge--verified{ background: var(--verified-bg); border: 1px solid var(--color-border-accent); color: var(--color-accent); }
+/* .badge--placeholder is deleted. It was a *visible* amber badge reading
+   "Placeholder" — shipping it announced our draft status to a client on the
+   deepest page of the funnel (critique round-2 N1). The pre-launch anchor is
+   now the data-placeholder attribute, which is invisible. */
+.badge--tbc     { background: var(--color-surface-subtle); border: var(--border-divider); color: var(--text-muted); }
+
+.chip-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 8px;
+  border-radius: var(--radius-xs);
+  background: var(--color-surface-subtle);
+  border: var(--border-hairline);
+  font-family: var(--font-body);
+  font-size: var(--fs-micro);
+  letter-spacing: var(--ls-mono-tag);
+  color: var(--text-secondary);
+}
+.chip-list { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.chip-list li { list-style: none; }
+
+/* .tbc / .tbc--inline are deleted along with the visible "[ TBC ]" tag.
+   Unsourced figures render as "—" and carry data-placeholder="case". */
+
+
+/* Card field pair（V3 §7.2）—— label is mono, value is body. That contrast is
+   the whole point: it reads as a recorded field, not a marketing line. */
+.card__field { margin-bottom: var(--space-3); }
+.card__field-k {
+  display: block;
+  font-family: var(--font-body);
+  font-size: var(--fs-label);
+  font-weight: 500;
+  line-height: var(--lh-label);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 2px;
+}
+.card__field-v { font-size: var(--fs-body-sm); color: var(--text-primary); }
+.card__fields { margin: var(--space-4) 0 0; }
+
+/* Multi-tag stack over card media（§7.2） */
+.card__tags {
+  position: absolute;
+  top: var(--space-3);
+  left: var(--space-3);
+  z-index: 2;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  max-width: calc(100% - var(--space-6));
+}
+
+/* ============================================================
+   3. PhotoSlot（V3 第 8.5 节）— 「底片 / Plate」
+   ------------------------------------------------------------
+   V2 drew a blueprint: 24px grid, two diagonal crop ticks, an isometric
+   factory line drawing, `[ PHOTO — XXX ]` in brackets, an amber Placeholder
+   badge and a looping shimmer. Its problem was not that it looked unprofessional
+   — it was that it announced "something is missing here", eight times a page.
+
+   V3 stopped pretending the slot is an image. It is a quiet sheet of tinted
+   paper with a nameplate in the corner, like a gallery wall waiting for its
+   painting. No grid, no ticks, no glyph, no shimmer, no badge.
+
+   V4 (2026-09-18) composes that empty state instead of just tinting it. Sixty
+   flat fields read as a wireframe; the plate now reads as deliberate negative
+   space: cool two-stop gradient · one hairline edge · a single 135° hatch that
+   fades out before it reaches the type · a short editorial rule (the same
+   grammar as .eyebrow::before) · two lines of quiet type. Still no grid, no
+   tick, no glyph, no badge, no shimmer, and nothing photographic.
+
+   Every colour is a --slot-* variable so §24b can re-point the whole plate
+   inside a dark band in ONE block instead of re-authoring it.
+   ============================================================ */
+.photo-slot {
+  --slot-bg-1: var(--ink-050);                  /* #F4F6FA — cool, not warm */
+  --slot-bg-2: var(--ink-100);                  /* #E6EBF5 */
+  --slot-edge: var(--border-strong-color);      /* #CDD2D8 — the "cut line" */
+  --slot-line: rgba(26, 25, 23, 0.055);         /* hatch · ink at ~5% */
+  --slot-ink:  var(--text-muted);               /* #616670 · 5.76:1 on #FFF */
+
+  position: relative;
+  display: block;
+  max-width: 100%;                /* never push a flex/grid parent wider */
+  aspect-ratio: var(--slot-ratio, var(--ratio-plate));
+  background-image: linear-gradient(152deg, var(--slot-bg-1) 0%, var(--slot-bg-2) 100%);
+  box-shadow: inset 0 0 0 1px var(--slot-edge);
+  overflow: hidden;
+}
+
+/* The one graphic element. A 135° hairline hatch, strongest at the top-right
+   corner and dissolved before it reaches the label bottom-left — so the texture
+   gives the plate a direction without ever competing with the type. */
+.photo-slot__mark {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: repeating-linear-gradient(135deg,
+    var(--slot-line) 0 1px, transparent 1px 10px);
+  -webkit-mask-image: linear-gradient(to bottom left,
+    #000 0%, rgba(0, 0, 0, 0.40) 44%, transparent 76%);
+          mask-image: linear-gradient(to bottom left,
+    #000 0%, rgba(0, 0, 0, 0.40) 44%, transparent 76%);
+}
+
+/* The nameplate. It is real text, not decoration — it says what belongs on this
+   plate, which is exactly the information a placeholder owes the reader.
+   Weakness comes from 11px × tracked uppercase in a corner, NOT from failing
+   contrast: #616670 on the darkest stop (#E6EBF5) is 4.82:1 ✅ AA. */
+.photo-slot__label {
+  position: absolute;
+  left: var(--space-4);
+  right: var(--space-4);
+  bottom: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  pointer-events: none;
+}
+/* 28px rule — the site's own eyebrow grammar, not a crop tick. */
+.photo-slot__label::before {
+  content: '';
+  width: 28px;
+  height: 1px;
+  margin-bottom: var(--space-2);
+  background: var(--slot-edge);
+}
+.photo-slot__name {
+  font-family: var(--font-body);
+  font-size: var(--fs-micro);
+  font-weight: 500;
+  line-height: var(--lh-label);
+  letter-spacing: var(--ls-micro);
+  text-transform: uppercase;
+  color: var(--slot-ink);
+  font-variant-numeric: tabular-nums lining-nums;
+  /* Long slot codes (VETTING-CHECKLIST-COVER) break instead of overflowing. */
+  overflow-wrap: anywhere;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+/* Honest, and deliberately second-tier: sentence case, regular weight. */
+.photo-slot__note {
+  font-family: var(--font-body);
+  font-size: var(--fs-micro);
+  font-weight: 400;
+  line-height: var(--lh-label);
+  letter-spacing: 0.01em;
+  color: var(--slot-ink);
+}
+
+/* A real photograph switches the plate decoration off — but NOT the ratio, so
+   dropping in the real file never reflows the page (§8.5). */
+.photo-slot img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.photo-slot:has(img) { background-image: none; box-shadow: none; }
+.photo-slot:has(img) .photo-slot__mark,
+.photo-slot:has(img) .photo-slot__label { display: none; }
+
+.photo-slot--hero   { --slot-ratio: 16 / 9; }
+.photo-slot--media  { --slot-ratio: 4 / 3; }
+.photo-slot--card   { --slot-ratio: 16 / 9; }
+.photo-slot--thumb  { --slot-ratio: 3 / 2; }
+.photo-slot--avatar { --slot-ratio: 1 / 1; }
+.photo-slot--strip  { --slot-ratio: 21 / 9; }
+.photo-slot--doc    { --slot-ratio: 1 / 1.414; }
+
+/* Below ~64px on the short edge there is no room for a nameplate (§8.5):
+   the avatar degrades to a plain tinted field, the thumbnail keeps the name
+   only and drops the second line. */
+.photo-slot--avatar .photo-slot__label { display: none; }
+.photo-slot--thumb  .photo-slot__note  { display: none; }
+
+/* Narrow plates (the 120px .download__thumb doc, thumbs in a timeline column)
+   get the tighter inset so the type never sits on the edge. */
+@media (max-width: 600px) {
+  .photo-slot__label {
+    left: var(--space-3);
+    right: var(--space-3);
+    bottom: var(--space-3);
+    gap: 1px;
+  }
+  .photo-slot__label::before { margin-bottom: var(--space-1); }
+}
+
+/* §24b — the dark band re-points the plate, it does not re-author it. One block
+   switches every colour the plate paints with, exactly like the band's semantic
+   --color-text* remap. Contrast re-measured inside the band:
+     · text  --on-inverse-text-muted #8A8F99 on #232120 = 5.41:1 ✅ AA
+     · edge  goes LIGHT (rgba(245,242,238,.16)) on purpose — --on-inverse-border
+             #33302C on #232120 is ~1.2:1 and the frame would dissolve.
+     · hatch --on-inverse-grid, the band's own texture value.               */
+.section--inverse .photo-slot,
+.hero--inverse      .photo-slot,
+.cta--inverse       .photo-slot,
+.hero-full          .photo-slot {
+  --slot-bg-1: var(--surface-inverse-2);        /* #232120 */
+  --slot-bg-2: var(--ink-950);                  /* #1A1917 */
+  --slot-edge: var(--on-inverse-border-subtle);
+  --slot-line: var(--on-inverse-grid);
+  --slot-ink:  var(--on-inverse-text-muted);
+}
+
+/* ============================================================
+   4. Header / Nav（V3 第 6 章）— two-tier header
+   ------------------------------------------------------------
+   ┌ .site-header ────────────────────────────────────────────┐
+   │  .rail              (36/40px, solid near-black, always)  │
+   │  .site-header__bar  (64/84px, --header-bg, sticky)       │
+   └──────────────────────────────────────────────────────────┘
+   The rail is a WAYFINDING strip, not a contact strip: its left slot promotes
+   the vetting method to the top of every page (requirement §5.3 rule 1), which
+   an empty "contact bar" could never justify. Its right slot renders only when
+   at least two verifiable facts exist — see Header.astro.
+   ============================================================ */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-sticky);
+}
+/* The rail keeps its solid fill even in --over-hero mode. Reference site fades
+   it with the header; we do not, because this strip carries a link the reader
+   must be able to read, and hero.jpg's top edge is unverified (§6.2). */
+.rail {
+  height: var(--rail-h);
+  /* Reference-site move: the utility strip is BRAND-OXBLOOD, not near-black.
+     This is the single highest-leverage colour change on the page — the red bar
+     at the very top establishes the palette before anything else renders
+     (white on #6E000B = 12.59:1, AAA). */
+  background: var(--color-accent);
+  color: rgba(255, 255, 255, 0.82);
+  /* was --font-mono at --fs-micro with wide overline tracking: at 100% zoom it
+     rendered ~10px and read as a discount banner. Body face at the caption step
+     (14px), normal tracking — still a quiet utility strip, but legible.
+     (audit-visual.md P2-3: this used to say "13px" while the code said
+     0.8125rem = 14.625px — off the --fs-* ladder entirely. Now --fs-caption.) */
+  font-family: var(--font-body);
+  font-size: var(--fs-caption);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  display: flex;
+  align-items: center;
+}
+.rail__inner { display: flex; align-items: center; gap: var(--space-4); width: 100%; }
+/* 2026-09-19 — flex + text-level ellipsis. The lead used to go `display:block`
+   when space ran out, but the shield Icon is display:block from the base reset,
+   so the icon wrapped onto its own line and got clipped by the fixed rail
+   height (visible as a stray square above the text at 768–1023). Ellipsis now
+   lives on the text span; the icon keeps its place at every width. */
+/* padding-block: 10px — WCAG 2.5.8 target size: this anchor was 24px tall,
+   under the 44px minimum (audit 2026-09-20, 21/21 routes). The rail has a fixed
+   height, so the padding grows the hit area without changing the layout. */
+/* padding-block was 10px, chosen when the rail ran at 0.8125rem (14.625px) —
+   24.1px of text + 20px = 44.1px. Moving the rail onto --fs-caption (14px)
+   dropped the line box to 23.1px and the target to 43.1px, i.e. 1px under the
+   44px floor. 12px puts it at 47.1px. (Measured: 350x43 -> 350x47.) */
+.rail__lead { display: flex; align-items: center; gap: var(--space-2); min-width: 0; color: var(--on-inverse-text-strong); font-weight: var(--fw-semibold); padding-block: var(--space-3); }
+.rail__lead svg { flex: none; }
+.rail__lead-text { min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.rail a { color: var(--on-inverse-text-strong); text-decoration: none; }
+.rail a:hover { color: var(--on-inverse-text-strong); text-decoration: underline; text-underline-offset: 3px; }
+.rail__facts { margin-left: auto; display: flex; align-items: center; gap: var(--space-6); }
+/* 2026-09-20 audit P0-1: this used --on-inverse-text-secondary (#B4B9C3),
+   whose documented 8.92:1 is measured against the NEAR-BLACK #1A1917 surface.
+   On the brand-red rail (#D0202A) it actually lands at 2.72:1 — the only
+   WCAG AA failure on the site, on every one of the 21 routes. White is 5.35:1
+   here. Do not "fix" this by editing the token: other inverse blocks rely on it
+   against the dark surface. */
+.rail__fact { color: var(--on-inverse-text-strong); white-space: nowrap; }
+.rail__fact a { color: var(--on-inverse-text-strong); }
+.rail__sep { color: var(--on-inverse-border); }
+@media (max-width: 767px) {
+  /* small screens: the vetting link only — contacts live in the drawer and the
+     sticky WhatsApp bar, which is where a thumb can actually reach them. */
+  .rail__facts { display: none; }
+  .rail__inner { flex-wrap: nowrap; }
+}
+/* 2026-09-19 — tablet (768–1023): the fixed-height rail clipped a wrapped
+   second line ("…check — / see how") and the two facts squeezed the lead.
+   Ellipsis is now handled by .rail__lead-text at every width; the facts only
+   survive where they genuinely fit. */
+@media (max-width: 899px) {
+  .rail__facts { display: none; }
+}
+
+.site-header__bar {
+  background: var(--header-bg);
+  border-bottom: 1px solid var(--border-hairline-color);
+  transition: background var(--duration-base) var(--ease-out),
+              box-shadow var(--duration-base) var(--ease-out),
+              border-color var(--duration-base) var(--ease-out);
+}
+/* app.js toggles .is-stuck on .site-header — the shadow belongs to the bar */
+.site-header.is-stuck .site-header__bar { box-shadow: var(--shadow-sticky); }
+
+.site-header__inner {
+  height: var(--header-h);
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+/* ---------- Transparent-over-hero → solid-on-scroll (§6.3) ----------
+   Enabled only via body.over-hero, which only index.astro sets, because only
+   index.astro has a full-bleed photograph. White nav text on a light page is
+   the single most common readability accident in this pattern. */
+.over-hero .site-header__bar {
+  background: transparent;
+  border-bottom-color: transparent;
+}
+.over-hero .site-header__bar .nav-trigger,
+.over-hero .site-header__bar .nav-link,
+.over-hero .site-header__bar .brand__mark,
+.over-hero .site-header__bar .brand__word,
+.over-hero .site-header__bar .brand__geo,
+.over-hero .site-header__bar .brand__core,
+/* ---------- M1: the second half of the wordmark ----------
+   .brand__host is a <span> INSIDE .brand__word and carries --color-accent
+   (#6E000B). Whitening the parent never touched it, so over the hero scrim the
+   wordmark rendered "ChinaFactory" in white + "Host" in oxblood at 1.33–1.91:1 —
+   half the logo was effectively invisible on the homepage. The footer below
+   already overrode BOTH parent and child; this is that pattern mirrored.
+
+   Both halves take --on-inverse-text. --on-inverse-link (#E39A94) would keep the
+   two-tone look but only reaches ~2.9:1 on the scrim's mid-grey, so the split is
+   carried by font-weight instead (§3.1's three-part weight step). */
+.over-hero .site-header__bar .brand__host { color: var(--on-inverse-text); }
+.over-hero .site-header__bar .nav-trigger svg { color: currentColor; }
+.over-hero .site-header__bar .burger { color: var(--on-inverse-text-strong); }
+/* The default .brand:hover rule below drops the wordmark to --text-primary, which
+   is INK — invisible on the scrim. Over the hero, hover stays inverse. */
+.over-hero .site-header__bar .brand:hover .brand__word,
+.over-hero .site-header__bar .brand:hover .brand__host { color: var(--on-inverse-text); }
+/* the moment it is stuck it goes back to solid — never white-on-light */
+.over-hero .site-header.is-stuck .site-header__bar {
+  background: var(--header-bg);
+  border-bottom-color: var(--border-hairline-color);
+}
+.over-hero .site-header.is-stuck .site-header__bar .nav-trigger,
+.over-hero .site-header.is-stuck .site-header__bar .nav-link,
+.over-hero .site-header.is-stuck .site-header__bar .brand__mark,
+.over-hero .site-header.is-stuck .site-header__bar .brand__word,
+.over-hero .site-header.is-stuck .site-header__bar .burger { color: var(--text-primary); }
+/* Matching __host reset: without it the over-hero rule above (0,3,0) out-specifies
+   the base .brand__host rule (0,1,0) and the wordmark stays near-white on the
+   solid light bar after scroll. It resets to the wordmark's NORMAL second tone
+   (--color-accent), not to --text-primary, so the stuck homepage header looks
+   exactly like the header on every other page. */
+.over-hero .site-header.is-stuck .site-header__bar .brand__geo { color: var(--text-secondary); }
+.over-hero .site-header.is-stuck .site-header__bar .brand__core { color: var(--text-primary); }
+.over-hero .site-header.is-stuck .site-header__bar .brand:hover .brand__word { color: var(--text-primary); }
+.over-hero .site-header.is-stuck .site-header__bar .brand:hover .brand__host { color: var(--color-accent); }
+
+/* Wordmark（第 3.1 节三段式权重切分） */
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  text-decoration: none;
+  flex: none;
+  /* 2026-09-20 audit P0-3: the logo link measured 165×28 — a 28px tap target
+     in the most-tapped spot on the page. padding-block grows the hit area to
+     44px. No negative margin to compensate: in the footer the wordmark sits
+     above the blurb, and pulling the box back up would eat into that gap. */
+  padding-block: 8px;
+}
+.brand__mark { width: 28px; height: 28px; color: var(--text-primary); flex: none; }
+.brand__word {
+  font-family: var(--font-display);
+  font-size: var(--fs-body-sm);
+  font-weight: var(--fw-semibold);
+  letter-spacing: -0.015em;
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+/* 2026-09-19 — three-part wordmark parse (domain stays ChinaFactoryHost).
+   One 15px camel-cased run read as three generic words, and the only colour
+   fell on "Host" — the brand's single red was spent on the syllable most
+   likely to be misread as web hosting. New hierarchy:
+     Factory = boldest ink (what the business is about)
+     Host    = brand red, quieter weight (what we DO: we host you there)
+     China   = muted, recedes (it is context, not the claim)
+   Every dark-surface override below must list ALL THREE spans now, for exactly
+   the reason documented for __host: a child rule never touches the new spans. */
+.brand__geo  { color: var(--text-secondary); font-weight: var(--fw-regular); }
+.brand__core { color: var(--text-primary);  font-weight: var(--fw-bold); }
+.brand__host { color: var(--color-accent);  font-weight: var(--fw-semibold); }
+.brand:hover .brand__word { color: var(--text-primary); text-decoration: underline; text-underline-offset: 4px; }
+@media (min-width: 1024px) { .brand__word { font-size: var(--fs-h5); } }
+.site-footer .brand__mark { color: var(--on-inverse-text-strong); }
+.site-footer .brand__word { color: var(--on-inverse-text-strong); }
+.site-footer .brand__geo  { color: var(--color-text-inverse-3); }
+.site-footer .brand__core { color: var(--on-inverse-text-strong); }
+.site-footer .brand__host { color: var(--color-text-inverse-2); }
+/* Same trap as the over-hero case: the default :hover rule above paints the
+   wordmark in --text-primary, which is ink on the footer's #1A1917 (1.40:1).
+   Every dark surface the wordmark can land on needs its own hover pair. */
+.site-footer .brand:hover .brand__word,
+.site-footer .brand:hover .brand__geo,
+.site-footer .brand:hover .brand__core { color: var(--on-inverse-text-strong); }
+.site-footer .brand:hover .brand__host { color: var(--color-text-inverse-2); }
+
+/* ---------- Primary nav（§6.4）---------- */
+.nav { display: none; }
+@media (min-width: 1024px) {
+  .nav {
+    display: flex;
+    align-items: center;
+    gap: var(--space-6);
+    margin-left: var(--space-8);
+    flex-wrap: nowrap;
+  }
+}
+/* V4 craft: at ~1024-1180px the container gets tight and nav items wrapped to
+   two lines ("How we / vet") — never acceptable in a primary nav. Items never
+   wrap; the GAP gives way instead. */
+.nav-trigger, .nav-link { white-space: nowrap; }
+@media (min-width: 1024px) and (max-width: 1220px) {
+  .nav { gap: var(--space-4); margin-left: var(--space-5); }
+}
+.nav-group { position: relative; }
+.nav-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);   /* was a bare 6px, off the spacing ladder */
+  min-height: 44px;                 /* touch target */
+  background: none;
+  border: 0;
+  padding: 0;
+  font-family: var(--font-body);
+  font-size: var(--fs-body-sm);
+  font-weight: var(--fw-medium);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: color var(--duration-instant) var(--ease-out);
+}
+/* The reference site darkens to #000 on hover. Our base is already near-black,
+   so the differential moves to the underline — which also survives colour
+   blindness (§6.4). */
+.nav-trigger:hover {
+  color: var(--text-primary);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+}
+.nav-trigger svg { width: 12px; height: 12px; color: var(--text-muted); transition: transform var(--duration-base) var(--ease-out); }
+.nav-group:hover .nav-trigger svg,
+.nav-group:focus-within .nav-trigger svg { transform: rotate(180deg); }
+.nav-trigger[aria-current="true"] {
+  color: var(--color-accent);
+  box-shadow: inset 0 -3px 0 var(--color-accent);
+}
+/* 2026-09-20 audit P1-3: no pressed state on the dropdown triggers. */
+.nav-trigger:active { color: var(--color-accent); }
+.nav-link:active { opacity: 0.7; }
+
+/* White dropdown card, real border, slide-down entry — all three taken from the
+   reference. No search box: on a 23-route static site it promises a corpus we
+   do not have (§1.1 #9). That slot holds the single CTA instead. */
+.nav-menu {
+  position: absolute;
+  top: calc(100% + var(--space-2));
+  left: 0;
+  min-width: 320px;
+  background: var(--surface);
+  border: var(--border-hairline);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: var(--space-6);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-8px);
+  transition: opacity var(--duration-base) var(--ease-out),
+              transform var(--duration-base) var(--ease-out),
+              visibility var(--duration-base);
+  z-index: var(--z-dropdown);
+}
+.nav-group:hover .nav-menu,
+.nav-group:focus-within .nav-menu { opacity: 1; visibility: visible; transform: none; }
+/* 4 items per group, never a mega-menu — mega earns its keep only above 3
+   dimensions of dense information (§6.4). Destinations gets two columns
+   because it is the only group whose items carry long sub-labels. */
+.nav-menu--2col { min-width: 520px; display: grid; grid-template-columns: 1fr 1fr; column-gap: var(--space-4); }
+.nav-menu--2col .nav-menu__title,
+.nav-menu--2col .nav-menu__foot { grid-column: 1 / -1; }
+
+.nav-menu__title {
+  font-family: var(--font-body);
+  font-size: var(--fs-label);
+  /* Weight stays 500 — this is a group heading inside a dropdown, deliberately
+     lighter than a section eyebrow. But it was inheriting --lh-body (1.65), so a
+     12px uppercase label carried a 19.8px line box and floated in it. */
+  line-height: var(--lh-label);
+  font-weight: 500;
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--text-muted);
+  padding: 0 var(--space-3) var(--space-3);
+}
+.nav-menu__link {
+  display: block;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  transition: background-color var(--duration-instant) var(--ease-out),
+              color var(--duration-instant) var(--ease-out);
+}
+/* `sub` was mono 11px in V2 — unreadable at that size. It is a description, so
+   it uses the body stack at caption size (§9.3). */
+.nav-menu__sub {
+  display: block;
+  font-family: var(--font-body);
+  font-size: var(--fs-caption);
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+.nav-menu__label { font-size: var(--fs-body-sm); font-weight: var(--fw-semibold); color: var(--text-primary); }
+.nav-menu__link:hover { background: var(--surface-sunken); }
+.nav-menu__link:hover .nav-menu__label { color: var(--color-accent); }
+.nav-menu__foot {
+  margin-top: var(--space-3);
+  padding: var(--space-3) var(--space-3) 0;
+  border-top: var(--border-divider);
+}
+.nav-menu__foot /* The card/link CTA: an ACTION, not body copy, so it carries the second colour
+   (deep ink green) rather than neutral link ink — and it no longer spends red. */
+.link-arrow { font-size: var(--fs-caption); color: var(--green-700); }
+.link-arrow:hover { color: var(--green-800); }
+
+.nav-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-family: var(--font-body);
+  font-size: var(--fs-body-sm);
+  font-weight: var(--fw-medium);
+  color: var(--text-primary);
+  text-decoration: none;
+  transition: color var(--duration-instant) var(--ease-out);
+}
+.nav-link:hover { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 4px; }
+/* current item: accent + a 3px solid rule — the reference site's mechanism, and
+   the one place where oxblood earns its keep as wayfinding (§6.4) */
+.nav-link[aria-current="page"] {
+  color: var(--color-accent);
+  font-weight: var(--fw-semibold);
+  box-shadow: inset 0 -3px 0 var(--color-accent);
+}
+
+.site-header__actions { margin-left: auto; display: flex; align-items: center; gap: var(--space-2); }
+@media (min-width: 1024px) { .site-header__actions { gap: var(--space-3); } }
+/* 2026-09-20 audit P0-3: 40px on mobile only — the ≥1024 breakpoint below was
+   already 44px. Unified to 44px so the header CTA meets WCAG 2.5.8 everywhere. */
+.site-header__actions .btn { min-height: 44px; font-size: var(--fs-caption); padding: 0 var(--space-4); }
+@media (min-width: 1024px) { .site-header__actions .btn { min-height: 44px; font-size: var(--fs-body-sm); } }
+
+/* Hamburger — minimal, no box. A bordered square around two lines is the
+   single cheapest-looking element in a header (§6.5). */
+.burger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  /* 2026-09-20 audit: the flex row squeezed this to 42px wide (height was fine),
+     so it fell 2px under the 44px target. min-width stops the shrink. */
+  width: 44px; min-width: 44px; height: 44px;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  color: var(--text-primary);
+  cursor: pointer;
+}
+.burger svg { width: 20px; height: 20px; }
+@media (min-width: 1024px) { .burger { display: none; } }
+
+/* ---------- Mobile drawer（§6.5）---------- */
+.mobilenav {
+  position: fixed;
+  inset: calc(var(--rail-h) + var(--header-h)) 0 0 0;
+  background: var(--surface);
+  z-index: var(--z-overlay);
+  overflow-y: auto;
+  padding: var(--space-4) 0 var(--space-16);
+  display: none;
+}
+.mobilenav.is-open { display: block; }
+.mobilenav__group + .mobilenav__group { border-top: var(--border-divider); }
+/* a legitimate field-label job — this is a group heading, not a section eyebrow */
+.mobilenav__label {
+  font-family: var(--font-body);
+  font-size: var(--fs-label);
+  font-weight: 500;
+  /* Same correction as .nav-menu__title: --lh-label instead of the inherited
+     --lh-body, so a 12px uppercase label stops carrying a 19.8px line box. */
+  line-height: var(--lh-label);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--text-muted);
+  padding: var(--space-4) var(--space-4) var(--space-2);
+}
+.mobilenav__link {
+  display: block;
+  padding: var(--space-4);
+  /* navigation is a Body/UI job (§2.3): the serif stack is reserved for
+     H1–H4, hero lead, section titles and pull quotes */
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  font-weight: var(--fw-semibold);
+  color: var(--text-primary);
+  text-decoration: none;
+  border-bottom: var(--border-hairline);
+}
+.mobilenav__sub {
+  display: block;
+  font-family: var(--font-body);
+  font-size: var(--fs-caption);
+  font-weight: 400;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+.mobilenav__cta { padding: var(--space-6) var(--space-4); display: grid; gap: var(--space-3); }
+
+/* ============================================================
+   5. Breadcrumb（第 5.15.5 节）
+   ============================================================ */
+.breadcrumb { padding-block: var(--space-4); }
+.breadcrumb ol { display: flex; flex-wrap: wrap; align-items: center; margin: 0; padding: 0; list-style: none; }
+.breadcrumb li { display: flex; align-items: center; font-size: var(--fs-caption); color: var(--color-text-muted); }
+.breadcrumb li + li::before {
+  content: '/';
+  color: var(--ink-300);
+  margin: 0 var(--space-2);
+}
+/* 2026-09-20 audit P0-3 + P2-2: 23px tall (under the 44px target) and the hover
+   colour snapped with no transition. padding-block grows the hit area; the
+   breadcrumb strip has room for it. */
+/* padding-inline is for WIDTH, not height: the block padding already gets the
+   45px height, but the shortest crumb label ("About", on
+   /about/how-we-vet-factories/) only renders 42px wide, so the target came out
+   42x45. 2px a side closes it to 46px without visibly moving the separators. */
+.breadcrumb a { color: var(--color-text-muted); text-decoration: none; display: inline-block; padding-block: 11px; padding-inline: 2px; transition: color var(--duration-fast) var(--ease-out); }
+.breadcrumb a:hover { color: var(--color-accent); text-decoration: underline; }
+.breadcrumb [aria-current="page"] { color: var(--text-secondary); }
+
+/* ============================================================
+   6. Hero（第 5.3 节）
+   ============================================================ */
+.hero {
+  padding-top: clamp(2.5rem, 1.6rem + 4vw, 6rem);
+  padding-bottom: var(--section-py);
+}
+.hero--inverse {
+  background: var(--color-surface-inverse);
+  color: var(--color-text-inverse);
+}
+.hero--inverse h1, .hero--inverse .hero__lead { color: var(--on-inverse-text-strong); }
+.hero--inverse .lead { color: var(--color-text-inverse-2); }
+.hero--inverse .eyebrow { color: var(--color-text-inverse-3); }
+.hero__lead { margin-top: var(--space-4); max-width: 52ch; font-size: var(--fs-lead); line-height: var(--lh-lead); color: var(--color-text-secondary); }
+.hero h1 { max-width: 18ch; font-size: calc(var(--fs-hero) * var(--track-display-scale)); }
+.hero h1.display-xl { font-size: calc(var(--fs-hero-xl) * var(--track-display-scale)); }
+.hero__micro {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-top: var(--space-6);
+  font-family: var(--font-body);
+  font-size: var(--fs-micro);
+  letter-spacing: var(--ls-micro);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+.hero__micro li { list-style: none; display: flex; align-items: center; gap: var(--space-3); }
+.hero__micro li + li::before { content: '·'; color: var(--ink-300); }
+.hero--inverse .hero__micro { color: var(--color-text-inverse-3); }
+.hero--inverse .hero__micro li + li::before { color: var(--color-text-inverse-3); }
+.hero__media { margin-top: var(--space-8); }
+@media (min-width: 1024px) { .hero__media { margin-top: 0; } }
+.hero__panel {
+  background: var(--color-surface);
+  border: var(--border-default);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+}
+
+/* ---------- Full-bleed hero with an overlaid scrim（§5.4, §8.3）----------
+   DOM order is mandatory: img → .scrim → .content. A CSS background-image
+   would look identical and lose alt / loading / width / height and
+   object-position, so we never do it that way (§8.3). */
+.hero-full {
+  position: relative;
+  /* 68vh, not 78vh: the reference hero leaves the surface section visible
+     above the fold, which is what makes the rhythm read as "big image → light
+     content band" instead of "wall of photo". */
+  min-height: 68vh;
+  display: flex;
+  align-items: flex-start;
+  overflow: hidden;
+  background: var(--surface-inverse);
+}
+@media (max-width: 767px) { .hero-full { min-height: 60vh; } }
+/* The header is sticky and sits in normal flow, so a hero that must sit UNDER it
+   has to be pulled up by the full rail + bar height. The rail covers the photo's
+   top edge — it stays solid by design (§6.2 deviation ②) — and the transparent
+   bar shows the photo through the gap. Without this pull-up the transparent bar
+   would sit on --surface and the white nav text would be invisible. Applied to
+   <main> rather than the section because main is a flex item, so the negative
+   margin cannot collapse through it. */
+.over-hero main { margin-top: calc(-1 * (var(--rail-h) + var(--header-h))); }
+.hero-full__media { position: absolute; inset: 0; z-index: 0; }
+/* hero.jpg is 1600x1000 and the only real photograph on the site, so the focal
+   point lives here rather than inline. 62%/40% keeps the workshop action in
+   frame at every cover-crop; the header-contrast measurement in _hero_lum.cjs
+   was taken at this exact object-position. */
+.hero-full__media img { width: 100%; height: 100%; object-fit: cover; object-position: 62% 40%; filter: saturate(0.55) contrast(1.04); }
+/* --scrim-hero α ≥ 0.68 across the 0–42% text zone ⇒ white text is AAA.
+   --scrim-top sits on top of it to guarantee the transparent header's own
+   text never falls out of the ≥0.66 band. */
+.hero-full__scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: var(--scrim-hero);
+  pointer-events: none;
+}
+.hero-full__scrim-top {
+  position: absolute;
+  inset: 0 0 auto 0;
+  /* --scrim-top reaches its alpha 0.66 stop at 62% of its own height, and the
+     measured requirement (§6.2) is that 0.66 lands on the BOTTOM EDGE of the
+     header bar — i.e. at (--rail-h + --header-h). So the element must be
+     (rail + bar) / 0.62 tall. Sizing it to just (rail + bar) would let the
+     gradient decay to ~0.65 while the nav text is still on screen. Measured
+     with _hero_lum.cjs: this puts the worst-case white nav text at 18.7:1 and
+     the pure-white-pixel floor at 7.7:1, both AAA. */
+  height: calc((var(--rail-h) + var(--header-h)) / 0.62);
+  z-index: 2;
+  background: var(--scrim-top);
+  pointer-events: none;
+}
+.hero-full__content {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  /* Reference-site move: hero text is CENTRED, not top-left. Centre-aligned
+     display type over a photo is the entire "established operator" signal the
+     user pointed at; the asymmetric top-left variant read as a SaaS landing. */
+  text-align: center;
+  padding-top: calc(var(--rail-h) + var(--header-h) + var(--space-10));
+  padding-bottom: var(--section-py-hero);
+  color: var(--on-inverse-text);
+}
+.hero-full__content h1 { color: var(--on-inverse-text-strong); max-width: 34ch; margin-inline: auto; font-size: var(--fs-hero); line-height: var(--lh-hero); hyphens: none; }
+.hero-full__lead { margin-inline: auto; margin-top: var(--space-5); max-width: 52ch; font-size: var(--fs-lead); line-height: var(--lh-lead); color: var(--on-inverse-text-secondary); }
+.hero-full__actions { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: var(--space-3) var(--space-6); margin-top: var(--space-8); }
+/* §6.6 hero budget: exactly one button + one text link. The text link is white
+   (17.57:1 on the scrim) and carries the underlay so it reads as a link. */
+.hero-full__actions .link-arrow { color: var(--on-inverse-text); }
+.hero-full__actions .link-arrow:hover { color: var(--on-inverse-link-hover); }
+/* .hero-full__claims retired: the three claims used to sit on the photograph at
+   --fs-body-sm, where they read as a footnote. They are now a full-width strip
+   directly under the hero, which also softens the hard photo-to-surface edge
+   the first screenshot exposed. */
+
+/* 5a. Claims strip — the three qualitative trust statements that used to sit on
+   the hero photograph. Now a full-width band on the page surface, directly
+   under the hero, so they carry real weight and bridge the photo-to-surface
+   cut. Still deliberately NUMBER-FREE: we cannot source a figure yet, and a
+   fabricated count is worse than no count. */
+.claims-strip { background: var(--color-surface); border-bottom: 1px solid var(--border-hairline-color); }
+.claims-strip__inner {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+  padding-top: var(--space-6);
+  padding-bottom: var(--space-6);
+}
+@media (min-width: 768px) { .claims-strip__inner { grid-template-columns: repeat(3, 1fr); gap: var(--space-8); } }
+.claims-strip__item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  font-size: var(--fs-body);
+  font-weight: var(--fw-medium);
+  color: var(--text-primary);
+  line-height: 1.4;
+}
+/* List check / cross glyphs — two sizes only, set by the type size of the list
+   they sit in (audit-visual.md P1-2). Body-level lists (--fs-body) get 18px,
+   caption-level lists (--fs-caption / --fs-body-sm) get 16px. Optical offset is
+   --space-1 (4px) in every case; do not reintroduce per-component 1px/3px.
+   .testimonial__verified svg (12px) is a badge ornament, not a list glyph. */
+.claims-strip__item svg { width: 18px; height: 18px; color: var(--color-verified); flex: none; margin-top: var(--space-1); }
+
+/* ============================================================
+   7. AudienceSplitter（第 5.3.2 节）
+   ============================================================ */
+.splitter__q {
+  font-family: var(--font-body);
+  font-size: var(--fs-label);
+  font-weight: 500;
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-4);
+}
+.splitter__grid { display: grid; gap: var(--space-4); }
+@media (min-width: 768px) { .splitter__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-6); } }
+.split-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-surface);
+  border: var(--border-default);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  /* 不能写 color: inherit —— 那会继承深色 band 的文字色；
+     写 var(--color-text)，由上面的「有底组件」复位规则保证始终相对自身底色 */
+  color: var(--color-text);
+  overflow: hidden;
+  /* V4 craft: a card on white carries a soft two-layer shadow even at rest —
+     flat-on-flat is what read as "cheap" next to the Elementor reference. */
+  box-shadow: var(--shadow-card);
+  transition: border-color var(--duration-base) var(--ease-out),
+              box-shadow var(--duration-base) var(--ease-out),
+              transform var(--duration-base) var(--ease-out);
+}
+.split-card::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 4px;
+}
+/* Card identity edges: the SECOND colour and a neutral rule — not two bars of
+   brand red. Red is reserved for the one primary CTA per screen. */
+.split-card--creator::before { background: var(--green-700); }
+.split-card--buyer::before   { background: var(--border-strong-color); }
+/* The edge is absolutely positioned, so it does not push content down on its
+   own. Cards that actually paint it add the 4px back as top padding, which
+   keeps the optical gap between the edge and the first line at 24px — the
+   same as .service-card, which carries no edge at all.
+   Cards WITHOUT a modifier (e.g. the "what we do" trio on /) paint nothing
+   there, so they keep the plain symmetric 24px instead of an unexplained
+   28/24 split. (audit-visual.md P1-3) */
+.split-card--creator,
+.split-card--buyer { padding-top: calc(var(--space-6) + 4px); }
+/* ---------- M7: the card is an <article>, not a link ----------
+   It was rebuilt as <article> + a single .link-arrow, but the old hover lift
+   stayed on the card: mousing anywhere over it lifted the card 2px and nothing
+   happened on click (cursor is still default). The affordance has to come from
+   the thing that IS clickable, so the lift is driven by :has(.link-arrow:hover).
+   The card itself only deepens its border. */
+/* V4 craft: hover is now MULTI-DIMENSIONAL — the reference lifts the card 4px,
+   deepens the shadow, warms the border toward the brand AND slides the arrow.
+   One channel alone (border-color only) is what looked unfinished. */
+.split-card:hover {
+  border-color: var(--border-hover-color);
+  box-shadow: var(--shadow-card-hover);
+  transform: translateY(-3px);
+}
+/* 2026-09-20 audit P1-3: .split-card was the one card family still without a
+   pressed state (homepage audience cards + /services/). */
+.split-card:active { transform: translateY(-1px); box-shadow: var(--shadow-card); }
+.split-card:has(.link-arrow:hover) { box-shadow: var(--shadow-card-hover); transform: translateY(-4px); }
+.split-card .link-arrow svg { transition: transform var(--duration-base) var(--ease-out); }
+.split-card:hover .link-arrow svg { transform: translateX(4px); }
+/* Reference: card icons are LARGE (~40px) and COLOURED — red on one card, teal
+   on the next. Two-tone line glyphs are the single biggest source of the
+   reference site's polish, and a 24px ink glyph carries none of it. The
+   "accent ≤3 per screen" rule belonged to the oxblood direction and no longer
+   applies: the reference uses its red freely in icon work. */
+.split-card__icon { width: 40px; height: 40px; color: var(--ink-700); margin-bottom: var(--space-4); }
+.split-card__icon svg { width: 40px; height: 40px; stroke-width: 1.5; }
+.split-card--buyer .split-card__icon { color: var(--green-700); }
+.split-card__title { margin-bottom: var(--space-3); }
+/* Short rule under the card title — the reference separates title from body
+   with a hairline on every card. */
+.split-card__title::after {
+  content: '';
+  display: block;
+  width: 40px;
+  height: 2px;
+  background: currentColor;
+  opacity: 0.18;
+  margin-top: var(--space-3);
+}
+.split-card__desc { font-size: var(--fs-body-sm); color: var(--color-text-secondary); max-width: 46ch; }
+.split-card__bullets { margin: var(--space-4) 0 0; padding: 0; list-style: none; display: grid; gap: var(--space-2); }
+.split-card__bullets li { display: flex; gap: var(--space-2); font-size: var(--fs-caption); color: var(--color-text-secondary); }
+.split-card__bullets svg { width: 16px; height: 16px; margin-top: var(--space-1); }
+/* 2026-09-20 audit: these inline links inside a feature list measured 18px
+   tall. inline-block + padding gives them a 44px hit area without disturbing
+   the line rhythm (the list gap absorbs it). */
+.split-card__bullets a { display: inline-block; padding-block: 13px; }
+.split-card__evidence {
+  margin-top: var(--space-5);
+  padding-top: var(--space-4);
+  border-top: var(--border-divider);
+  font-family: var(--font-body);
+  font-size: var(--fs-caption);
+  letter-spacing: var(--ls-mono-tag);
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+/* Same caption-tier check as the rest (16px). No margin-top here: this row is
+   `display:flex; align-items:center`, so the glyph is centred on the text
+   already — adding the 4px optical offset the list rules use would push it low.
+   (audit-visual.md P1-2 missed this one; it is the only centred check row.) */
+.split-card__evidence svg { width: 16px; height: 16px; color: var(--color-verified); flex: none; }
+/* §6.6: a split card is itself the link — zero buttons inside it. */
+.split-card__cta { margin-top: auto; padding-top: var(--space-5); }
+
+/* ============================================================
+   8. TrustBar（第 5.4 节）
+   ============================================================ */
+.trust-bar { background: var(--color-surface-inverse); padding-block: var(--section-py-tight); }
+.trust-bar--light { background: var(--color-surface-subtle); }
+.trust-bar__grid { display: grid; gap: var(--space-6); }
+@media (min-width: 768px) {
+  .trust-bar__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-8); }
+  .trust-bar__item + .trust-bar__item { border-left: 1px solid var(--on-inverse-border-subtle); padding-left: var(--space-8); }
+  .trust-bar--light .trust-bar__item + .trust-bar__item { border-left: var(--border-divider); }
+}
+@media (max-width: 767px) {
+  .trust-bar__item + .trust-bar__item { border-top: 1px solid var(--on-inverse-border-subtle); padding-top: var(--space-6); }
+  .trust-bar--light .trust-bar__item + .trust-bar__item { border-top: var(--border-divider); }
+}
+.trust-figure {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  font-family: var(--font-body);
+  font-size: var(--fs-data-xl);
+  font-weight: var(--fw-semibold);
+  line-height: 1;
+  letter-spacing: -0.01em;
+  font-variant-numeric: tabular-nums lining-nums;
+  color: var(--on-inverse-text-strong);
+}
+.trust-bar--light .trust-figure { color: var(--color-text); }
+.trust-figure__unit { font-size: var(--fs-caption); font-weight: 400; color: var(--on-inverse-text-muted); letter-spacing: 0; }
+.trust-bar--light .trust-figure__unit { color: var(--text-muted); }
+/* Field-label spec (§2.6): the label under a figure is a card field, not a caption. */
+.trust-bar__label {
+  margin-top: var(--space-3);
+  font-family: var(--font-body);
+  font-size: var(--fs-label);
+  font-weight: 500;
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--on-inverse-text-muted);
+}
+.trust-bar--light .trust-bar__label { color: var(--text-muted); }
+.trust-bar__foot { margin-top: var(--space-6); font-size: var(--fs-caption); color: var(--color-text-inverse-3); max-width: 60ch; }
+.trust-bar--light .trust-bar__foot { color: var(--color-text-muted); }
+
+/* ============================================================
+   9. ServiceCard（第 5.5 节）
+   ============================================================ */
+.service-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--color-surface);
+  border: var(--border-default);
+  border-radius: var(--radius-lg);   /* §4.1: cards are 8px, never more */
+  padding: var(--space-6);
+  box-shadow: var(--shadow-card);
+  transition: border-color var(--duration-base) var(--ease-out),
+              box-shadow var(--duration-base) var(--ease-out),
+              transform var(--duration-base) var(--ease-out);
+}
+/* M7: same correction as .split-card — the card is a container, the .link-arrow
+   inside it is the control. Lift on the control's hover, not on the card's. */
+.service-card:hover {
+  border-color: var(--border-hover-color);
+  box-shadow: var(--shadow-card-hover);
+  transform: translateY(-3px);
+}
+.service-card:has(.link-arrow:hover) { box-shadow: var(--shadow-card-hover); transform: translateY(-4px); }
+/* 2026-09-20 audit P1-3: hover lifts the card to -3/-4px but pressing it did
+   nothing. Settling to -1px (not 0) reads as "pressed, still raised". */
+.service-card:active { transform: translateY(-1px); box-shadow: var(--shadow-card); }
+.service-card:focus-within { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+.service-card .link-arrow svg { transition: transform var(--duration-base) var(--ease-out); }
+.service-card:hover .link-arrow svg { transform: translateX(4px); }
+/* V3 §7.3: no tinted square behind the glyph. An icon on a coloured chip is
+   Elementor grammar; the glyph alone, straight onto the card, is editorial. */
+/* Same reference-driven correction as .split-card__icon: large, coloured, and
+   alternating red / teal down the row so a 3-up grid reads as designed rather
+   than as a list. The "no tinted square behind the glyph" rule still holds —
+   the glyph is bare on the card, just bigger and coloured. */
+.service-card__icon {
+  display: grid; place-items: center;
+  width: 40px; height: 40px;
+  margin-bottom: var(--space-4);
+  color: var(--ink-700);
+}
+.service-card__icon svg { width: 40px; height: 40px; color: currentColor; stroke-width: 1.5; }
+/* 3-col grid: middle column teal so every row reads red / teal / red */
+.service-card:nth-of-type(3n + 2) .service-card__icon { color: var(--green-700); }
+.service-card__title { margin-bottom: var(--space-2); }
+.service-card__title::after {
+  content: '';
+  display: block;
+  width: 40px;
+  height: 2px;
+  background: currentColor;
+  opacity: 0.18;
+  margin-top: var(--space-3);
+  margin-bottom: var(--space-3);
+}
+.service-card__desc { font-size: var(--fs-body-sm); color: var(--color-text-secondary); }
+.service-card__list { margin: var(--space-4) 0 0; padding: 0; list-style: none; display: grid; gap: var(--space-2); }
+.service-card__list li { display: flex; gap: var(--space-2); font-size: var(--fs-caption); color: var(--color-text-secondary); }
+.service-card__list svg { width: 16px; height: 16px; margin-top: var(--space-1); color: var(--color-verified); }
+.service-card__cta { margin-top: auto; padding-top: var(--space-5); }
+.service-card__cta .link-arrow { font-size: var(--fs-body-sm); font-weight: var(--fw-semibold); }
+
+/* "Plan ahead" is signalled three ways — caution badge, dashed edge, sunken
+   surface — so the card no longer needs to be faded. Opacity 0.72 dropped the
+   body text to roughly 4.4:1; the state reads clearly without it. */
+.service-card--soon {
+  background: var(--color-surface-subtle);
+  border: var(--border-dashed);
+}
+.service-card--soon:hover { transform: none; box-shadow: none; border-color: var(--border-strong-color); }
+.service-card__soon-badge { position: absolute; top: var(--space-4); right: var(--space-4); }
+.service-card { position: relative; }
+
+/* 2026-09-20 audit fixes, all on the same component:
+   · P0-3  min-height 44px — these links measured 22–30px tall and are the
+           "next step" affordance on 10 routes.
+   · P1-1  transition on `color`: the SVG already animated its 3px slide while
+           the label snapped to the hover colour instantly. Two channels moving
+           at different speeds is exactly what reads as cheap.
+   · P1-3  :active — no pressed feedback at all before. */
+.link-arrow {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--color-link);
+  text-decoration: none;
+  min-height: 44px;
+  transition: color var(--duration-fast) var(--ease-out);
+}
+.link-arrow svg { width: 14px; height: 14px; transition: transform var(--duration-fast) var(--ease-out); }
+.link-arrow:hover { color: var(--color-accent-hover); text-decoration: underline; text-underline-offset: 3px; }
+.link-arrow:hover svg { transform: translateX(3px); }
+.link-arrow:active { color: var(--color-accent); opacity: 0.7; }
+
+/* ============================================================
+   10. ComparisonTable（第 5.6 节）
+   ============================================================ */
+.cmp {
+  background: var(--color-surface);
+  border: var(--border-default);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+}
+@media (min-width: 1024px) { .cmp { padding: var(--space-8); } }
+.cmp-table { width: 100%; border-collapse: collapse; }
+.cmp-table th, .cmp-table td { text-align: left; vertical-align: top; }
+.cmp-table thead th {
+  background: var(--color-surface);
+  border-bottom: var(--border-emphasis);
+  padding: var(--space-4);
+  font-family: var(--font-body);
+  font-size: var(--fs-h4);
+  font-weight: var(--fw-semibold);
+  color: var(--color-text);
+}
+.cmp-table thead th.is-featured {
+  background: var(--color-accent-tint);
+  border-left: var(--border-accent);
+  border-right: var(--border-accent);
+  border-top: 3px solid var(--color-accent);
+}
+.cmp-table thead th:not(.is-featured) { border-left: var(--border-divider); }
+.cmp-table__labelcol { width: 220px; }
+.cmp-table tbody th {
+  width: 220px;
+  padding: var(--space-4);
+  font-size: var(--fs-caption);
+  font-weight: var(--fw-medium);
+  color: var(--text-secondary);
+  border-bottom: var(--border-divider);
+  border-left: var(--border-divider);
+}
+.cmp-table tbody td {
+  padding: var(--space-4);
+  font-size: var(--fs-body-sm);
+  color: var(--text-secondary);
+  border-bottom: var(--border-divider);
+  border-left: var(--border-divider);
+}
+.cmp-table tbody td:last-child { border-right: var(--border-divider); }
+.cmp-table tbody tr td.featured-cell { background: var(--color-accent-tint); border-left: var(--border-accent); border-right: var(--border-accent); }
+.cmp-table tbody tr:last-child th, .cmp-table tbody tr:last-child td { border-bottom: 0; }
+.cmp-table .row-featured th { background: transparent; }
+.cmp-head-sub { display: block; font-family: var(--font-body); font-size: var(--fs-micro); font-weight: 400; letter-spacing: var(--ls-micro); color: var(--text-muted); margin-top: 4px; text-transform: uppercase; }
+.cmp-price { font-family: var(--font-body); font-size: var(--fs-data-lg); font-weight: var(--fw-semibold); color: var(--color-text); line-height: 1.1; font-variant-numeric: tabular-nums lining-nums; }
+.cmp-cell { display: flex; align-items: flex-start; gap: var(--space-2); }
+.cmp-cell svg { width: 16px; height: 16px; margin-top: var(--space-1); flex: none; }
+.cmp-footnote { margin-top: var(--space-5); font-size: var(--fs-caption); color: var(--color-text-muted); max-width: 76ch; }
+.cmp-cta-row { display: flex; flex-wrap: wrap; gap: var(--space-3); margin-top: var(--space-6); }
+
+/* 桌面显示表格 / 移动显示卡片 —— 同一份数据两种渲染 */
+.cmp-desktop { display: none; }
+.cmp-mobile  { display: block; }
+@media (min-width: 1024px) {
+  .cmp-desktop { display: block; }
+  .cmp-mobile  { display: none; }
+}
+.cmp-cards { display: grid; gap: var(--space-4); }
+.cmp-card {
+  background: var(--color-surface);
+  border: var(--border-default);
+  border-radius: var(--radius-md);
+  padding: var(--space-5);
+}
+.cmp-card--featured { border-color: var(--color-border-accent); background: var(--color-accent-tint); }
+.cmp-card__head { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); margin-bottom: var(--space-4); }
+.cmp-card__name { font-family: var(--font-display); font-size: var(--fs-h4); font-weight: var(--fw-semibold); }
+.cmp-card__rows { margin: 0; padding: 0; list-style: none; display: grid; }
+.cmp-card__rows li { display: grid; grid-template-columns: 1fr auto; gap: var(--space-3); padding: var(--space-3) 0; border-top: var(--border-hairline); }
+.cmp-card__rows li:first-child { border-top: 0; }
+.cmp-card__k { font-size: var(--fs-caption); color: var(--text-muted); }
+.cmp-card__v { font-size: var(--fs-body-sm); color: var(--text-secondary); text-align: right; }
+.cmp-card__cta { margin-top: var(--space-5); }
+.cmp-card__cta .btn { width: 100%; }
+
+/* ============================================================
+   11. CostComparisonTable（第 5.7 节）
+   ============================================================ */
+.cost-desktop { display: none; }
+.cost-mobile  { display: block; }
+@media (min-width: 1024px) {
+  .cost-desktop { display: block; }
+  .cost-mobile  { display: none; }
+}
+.cost-table { width: 100%; border-collapse: collapse; }
+.cost-table caption { text-align: left; }
+.cost-table th, .cost-table td { padding: var(--space-4); text-align: left; border-bottom: var(--border-divider); }
+.cost-table thead th {
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  font-weight: var(--fw-semibold);
+  border-bottom: var(--border-emphasis);
+}
+.cost-table thead th:nth-child(2) { background: var(--color-surface-subtle); }
+.cost-table thead th:nth-child(3) { background: var(--color-accent-tint); }
+.cost-table tbody th { font-size: var(--fs-body-sm); font-weight: var(--fw-medium); color: var(--text-secondary); width: 30%; }
+.cost-table td.diy { background: var(--color-surface-subtle); color: var(--text-secondary); }
+.cost-table td.us  { background: var(--color-accent-tint); color: var(--text-primary); border-left: var(--border-accent); border-right: var(--border-accent); }
+.cost-table td .num { font-weight: 500; }
+/* §3.2 rule: a number never shares a frame with the accent. Money figures are
+   mono + --text-primary, full stop — the accent stays wayfinding. */
+.cost-table td.us .num { color: var(--text-primary); }
+.cost-table td.diy .num::before { content: ''; }
+.cost-hidden {
+  font-family: var(--font-body);
+  font-size: var(--fs-micro);
+  letter-spacing: var(--ls-micro);
+  color: var(--color-warning-text);
+  margin-left: var(--space-2);
+  white-space: nowrap;
+}
+.cost-total th, .cost-total td { border-top: var(--border-emphasis); border-bottom: 0; padding-top: var(--space-5); }
+.cost-total th { font-weight: var(--fw-semibold); color: var(--color-text); }
+.cost-total td .num { font-size: var(--fs-data-lg); font-weight: var(--fw-semibold); line-height: 1.1; }
+.cost-total td.diy .num { color: var(--text-secondary); }
+.cost-total td.us .num { color: var(--text-primary); }
+.cost-footnote { margin-top: var(--space-5); font-size: var(--fs-caption); color: var(--color-text-muted); max-width: 76ch; }
+
+.cost-card {
+  background: var(--color-surface);
+  border: var(--border-default);
+  border-radius: var(--radius-md);
+  padding: var(--space-5);
+}
+.cost-card + .cost-card { margin-top: var(--space-4); }
+.cost-card--us { border-color: var(--color-border-accent); background: var(--color-accent-tint); }
+.cost-card--diy { background: var(--color-surface-subtle); }
+.cost-card__rows { margin: var(--space-4) 0 0; padding: 0; list-style: none; }
+.cost-card__rows li { display: grid; grid-template-columns: 1fr auto; gap: var(--space-3); padding: var(--space-3) 0; border-top: var(--border-hairline); }
+.cost-card__rows li:first-child { border-top: 0; }
+.cost-card__k { font-size: var(--fs-caption); color: var(--text-muted); }
+.cost-card__v { font-size: var(--fs-body-sm); text-align: right; }
+.cost-card--us .cost-card__total { color: var(--text-primary); }
+.cost-card__total-row { border-top: var(--border-emphasis); margin-top: var(--space-3); padding-top: var(--space-4); display: grid; grid-template-columns: 1fr auto; gap: var(--space-3); font-weight: var(--fw-semibold); }
+
+/* ============================================================
+   12. ProcessSteps（第 5.8 节）
+   ============================================================ */
+.steps { display: grid; gap: var(--space-8); }
+@media (min-width: 768px) { .steps { gap: var(--space-10); } }
+.step { position: relative; display: grid; grid-template-columns: 36px 1fr; gap: var(--space-4); }
+@media (min-width: 768px) { .step { grid-template-columns: 44px 1fr; gap: var(--space-6); } }
+.step + .step { margin-top: var(--space-8); }
+@media (min-width: 768px) { .step + .step { margin-top: var(--space-10); } }
+.step::before {
+  content: '';
+  position: absolute;
+  left: 17px;
+  top: 44px;
+  bottom: calc(-1 * var(--space-8) + 8px);
+  width: 2px;
+  background: var(--ink-200);
+}
+@media (min-width: 768px) {
+  .step::before { left: 21px; top: 52px; bottom: calc(-1 * var(--space-10) + 8px); }
+}
+.step:last-child::before { display: none; }
+.step__num {
+  width: 36px; height: 36px;
+  display: grid; place-items: center;
+  background: var(--color-surface);
+  border: 2px solid var(--color-accent);
+  /* Reference (chinatours.com "Easy Booking Steps"): the step marker is a THIN
+     OUTLINED CIRCLE, not a rounded square. radius-sm here made it read as a
+     chip. Circle is what makes a 4-step band look like a process. */
+  border-radius: var(--radius-circle);
+  font-family: var(--font-body);
+  font-size: var(--fs-body-sm);
+  font-weight: var(--fw-semibold);
+  color: var(--color-accent);
+  font-variant-numeric: tabular-nums lining-nums;
+}
+@media (min-width: 768px) { .step__num { width: 44px; height: 44px; font-size: var(--fs-body); } }
+.step__head { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--space-3); }
+.step__title { flex: 1 1 auto; }
+.step__code { font-family: var(--font-body); font-size: var(--fs-micro); letter-spacing: var(--ls-micro); color: var(--text-muted); }
+.step__body { margin-top: var(--space-3); }
+.step__evidence-label {
+  font-family: var(--font-body);
+  font-size: var(--fs-label);
+  font-weight: 500;
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: var(--space-3);
+}
+.step__evidence {
+  margin: 0;
+  padding: var(--space-4);
+  list-style: none;
+  background: var(--color-surface-subtle);
+  border-radius: var(--radius-sm);
+  display: grid;
+  gap: var(--space-2);
+}
+.step__evidence li { display: flex; gap: var(--space-2); font-size: var(--fs-caption); color: var(--text-secondary); line-height: 1.6; }
+.step__evidence svg { width: 16px; height: 16px; margin-top: var(--space-1); color: var(--color-verified); flex: none; }
+
+/* Variant C — horizontal numbered columns (chinatours "easy steps" pattern).
+   The home page's four short steps ran as a vertical line in a 1320px band:
+   each step ~700 wide, ~300px of dead space right, four stacked rows tall.
+   Four columns fill the band and read like a process, not a list.
+   DOM unchanged — same .step markup, connector simply off. */
+.steps--grid { display: grid; gap: var(--space-8); }
+@media (min-width: 1024px) {
+  .steps--grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-6); }
+  .steps--grid .step { grid-template-columns: 1fr; gap: 0; }
+  .steps--grid .step::before { display: none; }
+  .steps--grid .step + .step { margin-top: 0; }
+  .steps--grid .step__num { margin-bottom: var(--space-5); }
+  .steps--grid .step__head { display: block; }
+  .steps--grid .step__title { padding-bottom: var(--space-4); border-bottom: var(--border-default); }
+  .steps--grid .step__body { margin-top: var(--space-4); }
+}
+
+/* Variant B — 横向时间轴 */
+.timeline { display: grid; gap: var(--space-6); }
+@media (min-width: 1024px) {
+  .timeline { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: var(--space-4); position: relative; }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 0; right: 0; top: 5px;
+    height: 2px;
+    background: var(--ink-200);
+  }
+}
+.tl-item { position: relative; }
+@media (max-width: 1023px) {
+  .tl-item { display: grid; grid-template-columns: 20px 1fr; gap: var(--space-4); }
+  .tl-item::before {
+    content: '';
+    position: absolute;
+    left: 5px; top: 16px; bottom: calc(-1 * var(--space-6));
+    width: 2px; background: var(--ink-200);
+  }
+  .tl-item:last-child::before { display: none; }
+}
+.tl-dot {
+  display: block;
+  width: 12px; height: 12px;
+  border-radius: var(--radius-circle);
+  background: var(--color-accent);
+  margin-bottom: var(--space-3);
+}
+.tl-time { font-family: var(--font-body); font-size: var(--fs-label); letter-spacing: var(--ls-mono-tag); color: var(--text-muted); text-transform: uppercase; }
+.tl-title { font-family: var(--font-display); font-size: var(--fs-body); font-weight: var(--fw-semibold); margin-top: var(--space-1); }
+.tl-desc { font-size: var(--fs-caption); color: var(--color-text-secondary); margin-top: var(--space-2); }
+.tl-media { margin-top: var(--space-3); }
+
+/* ============================================================
+   13. ChecklistBlock（第 5.15.1 节）
+   ============================================================ */
+/* 2026-09-19 — de-homogenised. Four blocks used to share ONE signature
+   (four-sided border + red left rule), so every content block on every page
+   looked like the same component (director: "每个板块都很像 / 都要左边一条吗").
+   Each block now wears a different grammar, chosen to fit its meaning:
+
+     .checklist   "verified list"  → white card + captioned header rule
+     .caveat      "limits"         → ochre tint + DASHED full border, square
+     .testimonial "quote"          → white card + large quotation glyph
+     .vet-link    "do this next"   → white bar + circular badge icon
+
+   Only one red-per-screen rule is unaffected: removing four competing red
+   rules actually strengthens the one remaining call to action. */
+.checklist {
+  background: var(--color-surface);
+  border: var(--border-default);
+  border-radius: var(--radius-md);
+  /* No shadow: on the same page this block sits next to .vet-link (shadowed
+     action bar) and .fact (filled tile). Shadow is reserved for things you can
+     act on, so the three blocks stop reading as the same white rectangle. */
+  /* Tighter top padding so the header rule reads as a caption bar rather than
+     as padding around floating text. */
+  padding: var(--space-5) var(--space-6) var(--space-6);
+}
+.checklist__title {
+  font-family: var(--font-body);
+  font-size: var(--fs-label);
+  font-weight: 500;
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: var(--space-4);
+  padding-bottom: var(--space-3);
+  border-bottom: var(--border-divider);
+}
+.checklist__list { margin: 0; padding: 0; list-style: none; display: grid; gap: var(--space-3); }
+.checklist__list li { display: flex; gap: var(--space-3); font-size: var(--fs-body-sm); color: var(--text-secondary); line-height: 1.6; }
+.checklist__list svg { width: 18px; height: 18px; margin-top: var(--space-1); color: var(--color-verified); flex: none; }
+.checklist__num { font-family: var(--font-body); font-size: var(--fs-caption); color: var(--color-accent); flex: none; padding-top: 2px; font-variant-numeric: tabular-nums lining-nums; }
+/* plain — no surface at all: a caption rule above a bare list. */
+.checklist--plain {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 0;
+}
+/* ---------- M6: refusals must not wear the verification stamp ----------
+   --color-verified is the site's single "we checked this" ink. Using the same
+   oxblood check beside "We do not take undisclosed commissions" reads as
+   "confirmed: we do this" — the opposite of the sentence. A refusal gets a
+   neutral rule in secondary ink, so the two list kinds cannot be confused. */
+.checklist--refusal .checklist__list li { color: var(--text-primary); }
+.checklist__rule {
+  width: 14px;
+  height: 2px;
+  margin-top: calc(0.8em - 1px);
+  background: var(--text-secondary);
+  flex: none;
+}
+
+/* ============================================================
+   14. RedFlagList（第 5.15.2 节）
+   ============================================================ */
+/* §3.3 maps "红旗信号" to the stop status, not caution — a red flag is a stop,
+   not a caveat. Redundant encoding keeps it distinct from the wayfinding accent:
+   this block is a filled tint with warning glyphs, the accent is a thin rule. */
+.redflags {
+  background: var(--stop-bg);
+  border: var(--border-danger);
+  border-radius: var(--radius-md);
+  padding: var(--space-6);
+}
+.redflags__title {
+  font-family: var(--font-body);
+  font-size: var(--fs-label);
+  font-weight: 500;
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--color-stop);
+  margin-bottom: var(--space-4);
+}
+.redflags__list { margin: 0; padding: 0; list-style: none; display: grid; gap: var(--space-3); }
+.redflags__list li { display: flex; gap: var(--space-3); }
+/* 2026-09-19 — blocks stacked inside one section (Timing: seasonal checklist,
+   then red flags) touched with zero beat between them: the redflags title read
+   as a continuation of the checklist above. One explicit rhythm step. */
+.checklist + .redflags { margin-top: var(--space-10); }
+/* Same defect class, found by the 2026-09-21 rhythm audit: on the six industry
+   pages the compliance Caveat sits directly under the compliance Checklist. */
+.checklist + .caveat { margin-top: var(--space-8); }
+.redflags__list svg { width: 18px; height: 18px; margin-top: var(--space-1); color: var(--color-stop); flex: none; }
+.redflags__text { font-size: var(--fs-body-sm); color: var(--color-stop); line-height: 1.6; }
+.redflags__text b { font-weight: var(--fw-semibold); }
+.redflags__note { font-size: var(--fs-caption); color: var(--color-text-secondary); line-height: 1.6; }
+.redflags__foot { margin-top: var(--space-5); font-size: var(--fs-caption); }
+
+/* ============================================================
+   15. CaveatBlock（第 5.15.3 节）
+   ============================================================ */
+.caveat {
+  background: var(--ochre-100);
+  /* Dashed, all four sides, square corners — the only dashed grammar on the
+     site. "Boundary / provisional" is exactly what a caveat means, and it can
+     no longer be mistaken for the checklist or quote cards above it. */
+  border: var(--border-dashed);
+  border-radius: var(--radius-none);
+  padding: var(--space-6);
+}
+.caveat__eyebrow {
+  font-family: var(--font-body);
+  font-size: var(--fs-label);
+  font-weight: 500;
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--ochre-700);
+  margin-bottom: var(--space-2);
+}
+.caveat__title { margin-bottom: var(--space-3); }
+.caveat__body { font-size: var(--fs-body-sm); color: var(--text-secondary); max-width: 62ch; }
+.caveat__list { margin: var(--space-4) 0 0; padding: 0; list-style: none; display: grid; gap: var(--space-2); }
+.caveat__list li { display: flex; gap: var(--space-3); font-size: var(--fs-caption); color: var(--text-secondary); line-height: 1.6; }
+.caveat__list li::before { content: '—'; color: var(--ochre-600); flex: none; }
+
+/* ============================================================
+   16. DownloadGate（第 5.15.4 节）
+   ============================================================ */
+.download {
+  background: var(--color-surface);
+  border: var(--border-default);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  box-shadow: var(--shadow-card);
+}
+@media (min-width: 1024px) {
+  .download { padding: var(--space-8); display: grid; grid-template-columns: 7fr 5fr; gap: var(--space-10); align-items: center; }
+}
+.download__thumb { width: 120px; margin-bottom: var(--space-5); }
+/* h1-h4 carry margin: 0 in this system, so the h3 above the lead text sat
+   flush against it (0px). 12px — the same eyebrow-to-heading step. */
+.download h3 { margin-bottom: var(--space-3); }
+.download__meta { font-family: var(--font-body); font-size: var(--fs-label); letter-spacing: var(--ls-mono-tag); color: var(--text-muted); margin-top: var(--space-3); }
+.download__form-wrap { margin-top: var(--space-6); }
+@media (min-width: 1024px) { .download__form-wrap { margin-top: 0; } }
+.download__form { display: grid; gap: var(--space-3); }
+@media (min-width: 480px) { .download__form { grid-template-columns: 1fr auto; align-items: start; } }
+.download__micro { margin-top: var(--space-3); font-size: var(--fs-caption); color: var(--color-text-muted); }
+.download__success {
+  display: flex; align-items: center; gap: var(--space-3);
+  font-size: var(--fs-body-sm); font-weight: var(--fw-semibold); color: var(--color-accent);
+}
+
+/* ============================================================
+   17. FilterGrid + CaseCard（第 5.10 节 / §7.3）
+   ============================================================ */
+.filter {
+  background: var(--color-surface);
+  border: var(--border-default);
+  border-radius: var(--radius-md);
+  padding: var(--space-5);
+  margin-bottom: var(--space-8);
+}
+@media (min-width: 1024px) { .filter { padding: var(--space-6); } }
+.filter__row + .filter__row { margin-top: var(--space-5); }
+.filter__legend {
+  font-family: var(--font-body);
+  font-size: var(--fs-label);
+  font-weight: 500;
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+}
+.filter__legend::before { content: ''; width: 16px; height: 2px; background: var(--color-accent); flex: none; }
+.filter__chips { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+/* Filter chip = a control: 4px radius, ≥3:1 boundary. It is NOT a pill — there
+   is no pill radius left in the scale (§4.1). */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);   /* was a bare 6px, off the spacing ladder */
+  background: var(--color-surface);
+  border: var(--border-control);
+  border-radius: var(--radius-sm);
+  padding: 8px 16px;
+  font-family: var(--font-body);
+  font-size: var(--fs-caption);
+  font-weight: var(--fw-medium);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: background-color var(--duration-fast) var(--ease-out),
+              border-color var(--duration-fast) var(--ease-out),
+              color var(--duration-fast) var(--ease-out);
+}
+.chip:hover { border-color: var(--border-ink-color); background: var(--color-surface-subtle); }
+.chip[aria-pressed="true"] { background: var(--action-bg); border-color: var(--action-bg); color: var(--action-text); }
+.chip svg { width: 14px; height: 14px; display: none; }
+.chip[aria-pressed="true"] svg { display: block; }
+.chip:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+.filter__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-top: var(--space-5);
+  padding-top: var(--space-4);
+  border-top: var(--border-divider);
+}
+.filter__count { font-family: var(--font-body); font-size: var(--fs-micro); letter-spacing: var(--ls-micro); color: var(--text-muted); text-transform: uppercase; }
+
+.case-grid { display: grid; gap: var(--space-6); }
+@media (min-width: 768px) { .case-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 1024px) { .case-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.case-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-surface);
+  border: var(--border-default);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  box-shadow: var(--shadow-card);
+  /* 2026-09-20 audit P2-1: the card is an <a>, so the global a:hover recolours
+     it — but `color` was not in the transition list, so the text snapped while
+     the border/shadow/transform moved smoothly. */
+  transition: border-color var(--duration-fast) var(--ease-out),
+              color        var(--duration-fast) var(--ease-out),
+              box-shadow var(--duration-base) var(--ease-out),
+              transform var(--duration-base) var(--ease-out);
+}
+.case-card:hover {
+  border-color: var(--border-hover-color);
+  box-shadow: var(--shadow-card-hover);
+  /* -3px, was -4px. Every other card in the family (--split-card, --service-card,
+     .pillar, .related-nav a) lifts 3px, and /case-studies/ puts .case-card and
+     .related-nav a side by side, where a 1px difference in lift reads as one
+     card being stickier than the other. (audit-visual.md P2-8)
+     The -4px on :has(.link-arrow:hover) is a DIFFERENT step — that one is the
+     control-driven lift, and it is still 4px by design. */
+  transform: translateY(-3px);
+}
+.case-card:active { transform: translateY(-1px); box-shadow: var(--shadow-card); }
+.case-card:hover .case-card__media { overflow: hidden; }
+/* V4 craft: the image zoom must be SLOWER than the card lift (600ms vs 220ms)
+   or the two motions read as one jittery move. */
+.case-card:hover .case-card__media .photo-slot { transform: scale(1.05); }
+/* §7.2 "uniform image height": every card in a grid resolves --card-media-h to
+   the same number at the same viewport, so a 3-up desktop row and a 1-up mobile
+   stack both keep a level baseline. A 16/9 ratio does not — it tracks width. */
+.case-card__media { display: block; position: relative; overflow: hidden; height: var(--card-media-h); }
+.case-card__media .photo-slot {
+  height: 100%;
+  aspect-ratio: auto;
+  box-shadow: none;
+  transition: transform var(--duration-media) var(--ease-out);
+}
+/* The media must inherit the card's top corners or it squares off the radius —
+   a classic cheap-looking seam. */
+.case-card__media { border-radius: calc(var(--radius-lg) - 1px) calc(var(--radius-lg) - 1px) 0 0; }
+.case-card__type { position: absolute; top: var(--space-3); left: var(--space-3); z-index: 2; display: flex; flex-wrap: wrap; gap: var(--space-2); max-width: calc(100% - var(--space-6)); }
+.case-card__body { padding: var(--space-5); display: flex; flex-direction: column; gap: var(--space-3); flex: 1 1 auto; }
+.case-card__title { font-family: var(--font-display); font-size: var(--fs-h4); font-weight: var(--fw-semibold); line-height: var(--lh-h4); }
+.case-card__field-k {
+  display: block;
+  font-family: var(--font-body);
+  font-size: var(--fs-label);
+  font-weight: 500;
+  line-height: var(--lh-label);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 2px;
+}
+.case-card__field-v { font-size: var(--fs-body-sm); color: var(--text-primary); }
+.case-card__fields { display: grid; gap: var(--space-3); margin: var(--space-1) 0 0; }
+.case-card__result { display: flex; align-items: flex-start; gap: var(--space-2); font-family: var(--font-body); font-size: var(--fs-body-sm); font-weight: var(--fw-semibold); color: var(--color-accent); line-height: 1.5; font-variant-numeric: tabular-nums lining-nums; }
+.case-card__result svg { width: 16px; height: 16px; margin-top: var(--space-1); flex: none; }
+.case-card__cta { margin-top: auto; padding-top: var(--space-3); }
+.case-card__info { font-size: var(--fs-caption); color: var(--color-text-muted); }
+.case-card[hidden] { display: none; }
+
+.filter-empty {
+  background: var(--color-surface-subtle);
+  border: var(--border-dashed);
+  border-radius: var(--radius-lg);
+  padding: var(--space-12) var(--space-6);
+  text-align: center;
+}
+.filter-empty__icon { width: 48px; height: 48px; margin: 0 auto var(--space-4); color: var(--ink-300); }
+.filter-empty__title { font-family: var(--font-display); font-size: var(--fs-h4); font-weight: var(--fw-semibold); margin-bottom: var(--space-3); }
+.filter-empty__body { font-size: var(--fs-body-sm); color: var(--color-text-secondary); max-width: 46ch; margin: 0 auto var(--space-6); }
+.filter-empty__actions { display: flex; flex-wrap: wrap; gap: var(--space-3); justify-content: center; }
+
+/* ============================================================
+   18. FAQAccordion（第 5.11 节）
+   ============================================================ */
+.faq { display: grid; gap: var(--space-2); max-width: var(--container-prose); }
+.faq-item {
+  background: var(--color-surface);
+  border: var(--border-default);
+  border-radius: var(--radius-md);
+}
+.faq-item[open] { border-color: var(--border-strong-color); }
+.faq-item__q {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-4) var(--space-5);
+  font-family: var(--font-display);
+  font-size: var(--fs-body);
+  font-weight: var(--fw-semibold);
+  color: var(--color-text);
+  cursor: pointer;
+  list-style: none;
+  transition: background-color var(--duration-fast) var(--ease-out);
+}
+.faq-item__q::-webkit-details-marker { display: none; }
+.faq-item__q:hover { background: var(--color-surface-subtle); }
+/* 2026-09-20 audit P1-3: the disclosure row already animated on hover; adding
+   the pressed step makes opening a question feel like a real control. */
+.faq-item__q:active { background: var(--color-surface-muted); }
+.faq-item__q:focus-visible { outline: 2px solid var(--color-accent); outline-offset: -2px; }
+.faq-item__icon { position: relative; width: 20px; height: 20px; flex: none; }
+.faq-item__icon::before, .faq-item__icon::after {
+  content: '';
+  position: absolute;
+  background: var(--color-accent);
+  transition: transform var(--duration-base) var(--ease-in-out);
+}
+.faq-item__icon::before { top: 9px; left: 0; width: 20px; height: 2px; }
+.faq-item__icon::after  { left: 9px; top: 0; width: 2px; height: 20px; }
+.faq-item[open] .faq-item__icon::after { transform: rotate(90deg); }
+.faq-item[open] .faq-item__icon::before { transform: rotate(180deg); }
+.faq-item__a { padding: 0 var(--space-5) var(--space-5); }
+.faq-item[open] .faq-item__a { animation: faq-in var(--duration-base) var(--ease-out); }
+@keyframes faq-in { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+.faq-item__a p { font-size: var(--fs-body-sm); color: var(--text-secondary); line-height: 1.65; }
+@media (prefers-reduced-motion: reduce) { .faq-item[open] .faq-item__a { animation: none; } }
+
+/* ============================================================
+   19. TestimonialBlock（第 5.12 节）
+   ============================================================ */
+.testimonial {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  margin: 0;
+  background: var(--color-surface);
+  border: var(--border-default);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  padding: var(--space-6);
+}
+/* No decorative "::before quote glyph": Testimonial.astro already wraps the copy
+   in typographic quotation marks (&#8220;…&#8221;), so a second quote mark in
+   the corner would double up. This block is separated by its CONTENT instead —
+   large quoted text + avatar + verified chip are a combination no other block
+   carries — plus it is one of only two shadowed surfaces on a page (the other
+   being .vet-link, which is an action bar and looks nothing like it). */
+.testimonial__quote { font-size: var(--fs-lead); line-height: 1.5; color: var(--color-text); max-width: 58ch; margin: 0; }
+.testimonial__by { display: flex; align-items: center; gap: var(--space-3); margin-top: var(--space-2); }
+.testimonial__avatar { width: 40px; height: 40px; flex: none; }
+.testimonial__avatar .photo-slot { border-radius: 0; box-shadow: none; }
+.testimonial__initial {
+  width: 40px; height: 40px; flex: none;
+  display: grid; place-items: center;
+  background: var(--color-surface-subtle);
+  font-family: var(--font-body);
+  font-size: var(--fs-body-sm); font-weight: var(--fw-semibold);
+  color: var(--text-secondary);
+}
+.testimonial__name { font-size: var(--fs-caption); font-weight: var(--fw-semibold); color: var(--color-text); }
+.testimonial__role { font-size: var(--fs-caption); color: var(--color-text-secondary); }
+.testimonial__verified { display: inline-flex; align-items: center; gap: 4px; font-family: var(--font-body); font-size: var(--fs-micro); letter-spacing: var(--ls-micro); text-transform: uppercase; color: var(--color-accent); margin-top: 2px; }
+.testimonial__verified svg { width: 12px; height: 12px; }
+/* Consistent with .caveat above: dashed = provisional / awaiting real content. */
+.testimonial--empty { border: var(--border-dashed); background: var(--color-surface-subtle); box-shadow: none; }
+.testimonial--empty .testimonial__quote { font-size: var(--fs-body); color: var(--color-text-secondary); }
+.testimonial-grid { display: grid; gap: var(--space-6); }
+@media (min-width: 1024px) { .testimonial-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+/* ============================================================
+   20. CTASection（第 5.13 节）
+   ============================================================ */
+.cta { padding-block: var(--section-py); }
+.cta--inverse {
+  background-color: var(--color-surface-inverse);
+  background-image:
+    linear-gradient(to right,  var(--on-inverse-grid) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--on-inverse-grid) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+.cta--plain { background: var(--color-surface-subtle); }
+.cta--inverse h2 { color: var(--on-inverse-text-strong); max-width: 24ch; }
+.cta--inverse .lead { color: var(--color-text-inverse-2); }
+.cta__inner { text-align: center; display: grid; justify-items: center; }
+.cta__inner .lead { max-width: 56ch; }
+.cta__inner h2 { max-width: 24ch; }
+.cta__actions { display: flex; flex-wrap: wrap; gap: var(--space-3); justify-content: center; margin-top: var(--space-8); }
+.cta__actions .btn { flex: 1 1 220px; }
+@media (min-width: 768px) { .cta__actions .btn { flex: 0 0 auto; } }
+.cta__micro { margin-top: var(--space-5); font-size: var(--fs-caption); color: var(--color-text-inverse-3); }
+.cta--plain .cta__micro { color: var(--color-text-muted); }
+
+/* ---------- Split mode: the closing band becomes copy + compact form ----------
+   Decision pages give the band a second job. The band keeps its own dark
+   surface; the form card is a light-surface island inside it (its colours are
+   pinned in §21). Two columns from 1024px, stacked below. The button group is
+   not rendered at all in this mode — the form IS the action. */
+.cta__inner--split { text-align: left; justify-items: stretch; gap: var(--space-8); }
+@media (min-width: 1024px) {
+  .cta__inner--split {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 460px);
+    column-gap: var(--space-12);
+    gap: var(--space-10);
+    align-items: start;
+  }
+}
+.cta__copy { min-width: 0; text-align: left; }
+/* micro sits at the end of the copy column in split mode (CTASection renders it
+   there), so it reads as the closing line of the argument instead of a
+   stranded sentence below the taller form card. */
+.cta__inner--split .cta__micro { margin-top: var(--space-6); }
+.cta__form { min-width: 0; }
+
+/* ============================================================
+   21. InquiryForm（第 5.14 节）
+   ============================================================ */
+.form-grid { display: grid; gap: var(--space-5); }
+@media (min-width: 768px) { .form-grid--2 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.field { display: flex; flex-direction: column; }
+/* V4 craft: form labels now speak the same "field grammar" as the card field
+   labels and footer contact facts — uppercase, semibold, letter-spaced. A form
+   whose labels are plain small grey reads like an unstyled default. */
+.field__label {
+  font-family: var(--font-body);
+  font-size: var(--fs-label);
+  font-weight: var(--fw-semibold);
+  line-height: var(--lh-label);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: var(--space-2);
+}
+.field__hint { font-size: var(--fs-caption); color: var(--color-text-muted); margin-top: var(--space-2); }
+/* The V2 compliance gap this closes: --color-border-strong (#B9BEC8, 1.86:1)
+   was doing duty as a control boundary, which WCAG 1.4.11 fails (needs ≥3:1).
+   --border-control-color is 3.60:1 on #FFF, 3.29:1 on the page tint. */
+.field input, .field select, .field textarea {
+  min-height: 48px;
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-surface);
+  border: var(--border-control);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-size: var(--fs-body-sm);
+  color: var(--color-text);
+  width: 100%;
+}
+.field textarea { min-height: 120px; resize: vertical; line-height: 1.6; }
+/* Placeholder text is text: at this size it needs 4.5:1, so --text-muted
+   (5.74:1). --ink-400 was ~2.2:1 and unreadable on a bright screen. */
+.field input::placeholder, .field textarea::placeholder { color: var(--text-muted); }
+.field input:focus, .field select:focus, .field textarea:focus {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 0;
+  border-color: var(--focus-ring);
+  box-shadow: var(--shadow-focus);
+}
+.field input[disabled], .field textarea[disabled] { background: var(--color-surface-muted); color: var(--text-disabled); cursor: not-allowed; }
+.field input[aria-invalid="true"], .field textarea[aria-invalid="true"] { border-color: var(--color-danger); }
+.field__error { font-size: var(--fs-caption); color: var(--color-danger); margin-top: var(--space-2); }
+
+.radio-group { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.radio-chip { position: relative; }
+.radio-chip input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.radio-chip span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 0 var(--space-4);
+  background: var(--color-surface);
+  border: var(--border-control);
+  border-radius: var(--radius-sm);
+  font-size: var(--fs-caption);
+  font-weight: var(--fw-medium);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: background-color var(--duration-fast) var(--ease-out), color var(--duration-fast) var(--ease-out), border-color var(--duration-fast) var(--ease-out);
+}
+.radio-chip span:hover { border-color: var(--border-ink-color); background: var(--color-surface-subtle); }
+.radio-chip input:checked + span { background: var(--action-bg); border-color: var(--action-bg); color: var(--action-text); }
+.radio-chip input:focus-visible + span { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+
+.form-status { border-radius: var(--radius-md); padding: var(--space-6); display: flex; flex-direction: column; gap: var(--space-3); }
+.form-status--ok { background: var(--success-bg); border: 1px solid var(--color-success); }
+.form-status--err { background: var(--stop-bg); border: var(--border-danger); }
+.form-status__icon { width: 48px; height: 48px; }
+.form-status--ok .form-status__icon { color: var(--color-success); }
+.form-status--err .form-status__icon { color: var(--color-stop); }
+.form-status__title { font-family: var(--font-display); font-size: var(--fs-h4); font-weight: var(--fw-semibold); }
+.form-status__note { font-size: var(--fs-caption); color: var(--color-text-muted); }
+.form-footnote { margin-top: var(--space-5); font-family: var(--font-body); font-size: var(--fs-micro); letter-spacing: var(--ls-micro); text-transform: uppercase; color: var(--text-muted); }
+.form-shell { background: var(--color-surface); border: var(--border-default); border-radius: var(--radius-lg); padding: var(--space-6); }
+/* Same flush-heading defect as .download: the form's h2 (u-mt-0, margin 0 by
+   the heading reset) rendered 0px above its lead line. */
+.form-shell h2 { margin-bottom: var(--space-3); }
+@media (min-width: 1024px) { .form-shell { padding: var(--space-10); } }
+
+/* compact variant — used inside the closing band (§5.13), where the card sits
+   under a full-width H2 and must not out-shout it: tighter padding, one step
+   down in heading size. The footnote is dropped because the band's own
+   .cta__micro directly below already carries the same response-time promise. */
+.form-shell--compact { padding: var(--space-5); border-radius: var(--radius-md); }
+@media (min-width: 1024px) { .form-shell--compact { padding: var(--space-6); } }
+.form-shell--compact h2 { font-size: var(--fs-h4); line-height: var(--lh-h4); }
+.form-shell--compact .lead { font-size: var(--fs-caption); }
+.form-shell--compact .form-footnote { display: none; }
+.form-grid--compact { gap: var(--space-4); }
+
+/* ---------- Colour pin: white form card inside a dark band -------------------
+   「谁有底，谁负责自己的文字色」(§24b). The band remaps the semantic text tokens
+   to on-inverse values for everything inside it; the form card supplies a WHITE
+   background, so it must re-state the light-surface values or it renders
+   light-grey on white (--color-text-muted lands at ~2.4:1).
+   :where(.form-shell) in §24b covers the text/border tokens but is deliberately
+   specificity-0, and it does NOT carry --focus-ring or --color-accent — both of
+   which the band remaps, which would put a 2.3:1 pink focus ring on the card's
+   inputs. The band's `.cta--inverse h2 / .lead / .btn--primary` rules are
+   element/child selectors that reach past :where() entirely. Pin all of them.
+   Do NOT weaken the §24b remap itself — it still owns the band. */
+.cta--inverse .cta__form {
+  --color-text:           var(--text-primary);            /* 17.57:1 on #FFF */
+  --color-text-secondary: var(--text-secondary);          /*  9.35:1 on #FFF */
+  --color-text-muted:     var(--text-muted);              /*  5.76:1 on #FFF */
+  --color-link:           var(--green-700);               /*  7.13:1 on #FFF */
+  --color-accent-hover:   var(--accent-700);
+  --color-border:         var(--border-hairline-color);
+  --color-border-strong:  var(--border-strong-color);
+  --color-accent:         var(--accent-600);              /*  5.40:1 on #FFF */
+  --focus-ring:           var(--accent-600);              /*  5.40:1 on #FFF */
+}
+/* Element selectors are not reached by the variable pin above. */
+.cta--inverse .cta__form h2 { color: var(--text-primary); }
+.cta--inverse .cta__form .lead { color: var(--text-secondary); }
+/* The band paints its primary button WHITE (--on-inverse-action-bg) — that is
+   an invisible button on the white card, so the card restores the red action. */
+.cta--inverse .cta__form .btn--primary { background: var(--action-bg); color: var(--action-text); border-color: var(--action-bg); }
+.cta--inverse .cta__form .btn--primary:hover { background: var(--action-bg-hover); border-color: var(--action-bg-hover); color: var(--action-text); }
+
+/* 三通道卡片 */
+.channels { display: grid; gap: var(--space-4); }
+@media (min-width: 1024px) { .channels { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.channel {
+  background: var(--color-surface);
+  border: var(--border-default);
+  border-radius: var(--radius-md);
+  padding: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+/* V4 craft: bare 40px coloured glyph — same grammar as .split-card/.service-card.
+   The old tinted chip behind a 22px glyph was Elementor grammar the rest of the
+   site retired; consistency between card families IS the polish. */
+.channel__icon { width: 40px; height: 40px; margin-bottom: var(--space-4); color: var(--ink-700); }
+.channel__icon svg { width: 40px; height: 40px; color: currentColor; stroke-width: 1.5; }
+.channel:nth-of-type(2) .channel__icon { color: var(--green-700); }
+/* Same 21px step as .form-shell--compact h2 — that one is weight 700 on
+   --lh-h4, so the two read as two different type sizes. Aligned here.
+   (audit-visual.md P2-7) */
+.channel__title { font-family: var(--font-display); font-size: var(--fs-h4); font-weight: var(--fw-bold); line-height: var(--lh-h4); }
+.channel__desc { font-size: var(--fs-caption); color: var(--color-text-secondary); }
+.channel .btn { margin-top: auto; }
+
+/* 时区表 */
+.tz-table { width: 100%; border-collapse: collapse; }
+.tz-table th, .tz-table td { text-align: left; padding: var(--space-3) var(--space-4); border-bottom: var(--border-divider); font-size: var(--fs-caption); }
+.tz-table thead th { font-family: var(--font-body); font-weight: var(--fw-semibold); border-bottom: var(--border-emphasis); }
+/* Body stack here too (critique S6, director's ruling: mono limit wins). The
+   old-style-figure misalignment this rule was guarding against is handled by
+   tabular-nums from base.css, so the cell keeps its numeric column alignment
+   without inheriting a monospace family. */
+.tz-table td { font-family: var(--font-body); color: var(--text-secondary); }
+.tz-table th[scope="row"] { font-family: var(--font-body); font-weight: var(--fw-medium); color: var(--text-secondary); }
+
+/* ============================================================
+   22. CoverageMap（第 5.9 节）
+   ============================================================ */
+.coverage__canvas {
+  position: relative;
+  aspect-ratio: 720 / 420;
+  background-color: var(--color-surface);
+  background-image:
+    linear-gradient(to right,  var(--color-grid) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--color-grid) 1px, transparent 1px);
+  background-size: var(--map-grid-size) var(--map-grid-size);
+  border: var(--border-default);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+/* The four corner crop ticks are gone: they were the same "engineering drawing"
+   grammar as the old PhotoSlot and read as unfinished artwork (§9.3 C). */
+.coverage__svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.map-region-t1 { fill: var(--map-region-t1-bg); stroke: var(--map-region-t1-border); stroke-width: 1; }
+.map-region-t2 { fill: var(--map-region-t2-bg); stroke: var(--map-region-t2-border); stroke-width: 1; }
+.map-region-t3 { fill: #FFFFFF; stroke: var(--map-tier3-stroke); stroke-width: 1; stroke-dasharray: 4 3; }
+.map-label {
+  font-family: var(--font-body);
+  font-size: var(--map-code-size);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  paint-order: stroke;
+  stroke: var(--color-bg);
+  stroke-width: 3px;
+  stroke-linejoin: round;
+}
+.map-label--t1 { fill: var(--accent-700); }
+.map-label--t2 { fill: var(--ink-600); }
+.map-label--t3 { fill: var(--ink-600); }
+/* 城市全名：节点正下方居中（12px mono），三档统一 */
+.map-node-name {
+  font-family: var(--font-body);
+  font-size: var(--map-name-size);
+  letter-spacing: 0.04em;
+  text-anchor: middle;
+  fill: var(--ink-700);
+  paint-order: stroke;
+  stroke: var(--color-bg);
+  stroke-width: 3px;
+  stroke-linejoin: round;
+}
+.map-node-name--t1 { fill: var(--ink-800); }
+
+/* 节点内 3 字母 IATA 码：11px mono 600，三档都放得进（r ≥ 11） */
+.map-node-inside {
+  font-family: var(--font-body);
+  font-size: var(--map-code-size);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-anchor: middle;
+  fill: var(--map-tier1-text);
+}
+.map-node-inside--t2 { fill: var(--map-tier2-text); }
+.map-node-inside--t3 { fill: var(--map-tier3-text); }
+
+.map-node-t1 { fill: var(--map-tier1-fill); }
+.map-node-t2 { fill: var(--map-tier2-fill); stroke: var(--map-tier2-stroke); stroke-width: 1; }
+.map-node-t3 { fill: var(--map-tier3-fill); stroke: var(--map-tier3-stroke); stroke-width: 1; stroke-dasharray: 3 2.5; }
+.map-link { fill: none; stroke: var(--map-link-stroke); stroke-width: 1; stroke-dasharray: 2 4; }
+.map-hq-box { fill: none; stroke: var(--color-accent); stroke-width: 1.5; }
+.map-hq-label { font-family: var(--font-body); font-size: var(--map-code-size); letter-spacing: 0.08em; fill: var(--accent-700); paint-order: stroke; stroke: var(--color-bg); stroke-width: 3px; }
+
+.coverage__desktop { display: none; }
+.coverage__mobile  { display: block; }
+@media (min-width: 768px) {
+  .coverage__desktop { display: block; }
+  .coverage__mobile  { display: none; }
+}
+.legend { display: flex; flex-wrap: wrap; gap: var(--space-4) var(--space-6); margin-top: var(--space-5); }
+/* base.css's `ul.clean` reset (0,1,1) beats the bare `.legend` class (0,1,0)
+   and zeroes that margin-top — the legend sat flush against the map canvas.
+   Re-assert at higher specificity. Measured defect 2026-09-21. */
+ul.legend.clean { margin-top: var(--space-5); }
+.legend__item { display: flex; align-items: center; gap: var(--space-2); font-family: var(--font-body); font-size: var(--fs-label); letter-spacing: var(--ls-mono-tag); color: var(--text-secondary); }
+/* Graphic dots are circles (--radius-circle), not pills. */
+.legend__dot { width: 12px; height: 12px; border-radius: var(--radius-circle); flex: none; }
+.legend__dot--t1 { background: var(--map-tier1-fill); }
+.legend__dot--t2 { background: var(--map-tier2-fill); border: 1px solid var(--map-tier2-stroke); }
+.legend__dot--t3 { background: var(--map-tier3-fill); border: 1px dashed var(--map-tier3-stroke); }
+.tier-cards { display: grid; gap: var(--space-4); }
+.tier-card { background: var(--color-surface); border: var(--border-default); border-radius: var(--radius-md); padding: var(--space-4); }
+.tier-card__title { display: flex; align-items: center; gap: var(--space-2); font-family: var(--font-body); font-size: var(--fs-label); font-weight: 500; letter-spacing: var(--ls-label); text-transform: uppercase; color: var(--text-secondary); margin-bottom: var(--space-3); }
+.tier-card__cities { display: flex; flex-wrap: wrap; gap: var(--space-2); list-style: none; margin: 0; padding: 0; }
+.tier-card__cities li {
+  font-family: var(--font-body);
+  font-size: var(--fs-micro);
+  letter-spacing: var(--ls-mono-tag);
+  background: var(--color-surface-subtle);
+  border-radius: var(--radius-xs);
+  padding: 4px 8px;
+  color: var(--text-secondary);
+}
+
+/* ============================================================
+   23. Footer（V3 第 7 章 / §1.1 #8）
+   ------------------------------------------------------------
+   Structure copied from the reference: a widget grid, then a copyright bar.
+   Two deliberate changes:
+     · column titles are semantically H2 but visually field labels, so the
+       footer never competes with the page outline;
+     · there is NO social column. We have no public profiles, and a row of grey
+       icons we cannot back is the cheapest possible broker signal. That slot
+       holds verifiable contact facts instead.
+   ============================================================ */
+/* The footer has a background, so per the "whoever has a surface owns its text
+   colour" rule it also has to own its LINKS. It was declaring `color` for its
+   own text but leaving --color-link alone, so every footer <a> that did not set
+   a colour of its own (`.footer__wa a`) fell through to base.css
+   `a { color: var(--color-link) }` = --ink-700 #4A4642 — 1.88:1 on #1A1917,
+   i.e. effectively invisible. Measured on 21/21 routes (audit-visual runtime).
+   Remapping the variables fixes the ones we forgot too, not just the one we saw. */
+.site-footer {
+  background: var(--color-surface-inverse);
+  color: var(--color-text-inverse-2);
+  --color-link:       var(--on-inverse-link);        /* #E39A94  7.79:1 */
+  --color-link-hover: var(--on-inverse-link-hover);  /* #EFC0BC 10.82:1 */
+  padding-block: var(--space-12) var(--space-8);
+  margin-top: auto;
+}
+.site-footer h2 { color: var(--on-inverse-text-strong); }
+.footer__grid { display: grid; gap: var(--space-8); }
+@media (min-width: 768px) { .footer__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+/* 6 columns, was 5: a Resources column was added so the three hub pages
+   (/guides/, /tools/, /who-we-help/) have a second crawlable path. The brand
+   column keeps the widest share; the five link columns are equal so no single
+   list looks privileged. At 1200px that leaves ~150px per link column — every
+   label in site.ts is short enough to sit on one line at that width (verified
+   by the interaction audit's overflow check, which reports 0 buckets).
+   gap is --space-6, not --space-8: six columns now share the row, and there is
+   no --space-7 on the ladder (it jumps 6 -> 8), so --space-7 would resolve to
+   invalid and collapse the gap to 0. 24px x 5 = 120px, leaving ~169px per link
+   column inside the 1200px container. */
+@media (min-width: 1024px) { .footer__grid { grid-template-columns: 1.4fr repeat(5, minmax(0, 1fr)); gap: var(--space-6); } }
+.footer__col-title {
+  font-family: var(--font-body);
+  font-size: var(--fs-label);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-label);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--on-inverse-text-strong);   /* reference footer headings are bright white bold, not muted */
+  margin: 0 0 var(--space-4);
+}
+.footer__nav { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-2); }
+/* 2026-09-20 audit P1-2: the footer links were the only nav on the site whose
+   hover had no transition — 21/21 routes. */
+.footer__nav a { color: var(--color-text-inverse-2); text-decoration: none; font-size: var(--fs-caption); transition: color var(--duration-fast) var(--ease-out); }
+.footer__nav a:hover { color: var(--on-inverse-text-strong); text-decoration: underline; text-underline-offset: 3px; }
+.footer__blurb { font-size: var(--fs-caption); color: var(--color-text-inverse-2); max-width: 42ch; margin-top: var(--space-4); }
+.footer__meta { font-family: var(--font-body); font-size: var(--fs-micro); letter-spacing: var(--ls-micro); color: var(--on-inverse-text-muted); margin-top: var(--space-4); }
+/* contact-facts column — one field pair per fact, same grammar as a card */
+.footer__facts { display: grid; gap: var(--space-4); margin: 0; }
+.footer__fact-k {
+  font-family: var(--font-body);
+  font-size: var(--fs-label);
+  font-weight: 500;
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--on-inverse-text-muted);
+  margin: 0 0 2px;
+}
+.footer__fact-v { font-size: var(--fs-caption); color: var(--on-inverse-text); margin: 0; }
+.footer__fact-v a { color: var(--on-inverse-text); text-decoration: none; }
+.footer__fact-v a:hover { color: var(--on-inverse-link); text-decoration: underline; text-underline-offset: 3px; }
+.footer__bottom {
+  margin-top: var(--space-10);
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--on-inverse-border-subtle);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4) var(--space-6);
+  align-items: center;
+  justify-content: space-between;
+}
+.footer__copy { font-size: var(--fs-caption); color: var(--on-inverse-text-muted); margin: 0; }
+.footer__legal { display: flex; flex-wrap: wrap; gap: var(--space-4); list-style: none; margin: 0; padding: 0; }
+.footer__legal a { font-size: var(--fs-caption); color: var(--on-inverse-text-muted); text-decoration: none; }
+.footer__legal a:hover { color: var(--color-text-inverse-2); text-decoration: underline; }
+/* 2026-09-20 audit P0-3: the "Ask us for our number" link measured 150×23 —
+   under the 44px target on 21/21 routes. padding-block fixes it without
+   changing the footer's layout, since the row has space around it. */
+.footer__wa { display: inline-flex; align-items: center; gap: var(--space-2); }
+.footer__wa a { display: inline-block; padding-block: 11px; }
+
+/* ============================================================
+   24. WhatsApp 吸底条 + FAB（第 5.2 节 · 二选一）
+   ------------------------------------------------------------
+   §6.6 exemption: these are a permanent CHANNEL, not a brand action, so they
+   do not count against the button budget — but they must also never use
+   --action-bg, or they would compete with the one primary CTA.
+   ============================================================ */
+.wa-bar {
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  z-index: var(--z-sticky);
+  min-height: var(--bottombar-h);
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  background: var(--color-surface);
+  border-top: var(--border-default);
+  box-shadow: var(--shadow-md);
+  padding: var(--space-3) var(--container-px);
+  padding-bottom: calc(var(--space-3) + env(safe-area-inset-bottom, 0px));
+}
+.wa-bar__note { font-family: var(--font-body); font-size: var(--fs-micro); letter-spacing: var(--ls-micro); color: var(--text-muted); text-transform: uppercase; }
+.wa-bar__actions { margin-left: auto; display: flex; gap: var(--space-2); align-items: center; }
+.wa-bar .btn { min-height: 44px; font-size: var(--fs-caption); }
+@media (min-width: 768px) { .wa-bar { display: none; } }
+
+.wa-fab { display: none; }
+@media (min-width: 768px) {
+  .wa-fab {
+    position: fixed;
+    right: 32px;
+    bottom: 32px;
+    z-index: var(--z-fab);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    width: 52px;
+    height: 52px;
+    padding: 0;
+    /* S8: was --radius-pill (999px) — the only capsule on the site. The FAB is a
+       square control that grows on hover, so it takes the card radius. */
+    border-radius: var(--radius-lg);
+    background: var(--color-whatsapp);
+    color: #FFFFFF;
+    box-shadow: var(--shadow-md);
+    text-decoration: none;
+    overflow: hidden;
+    transition: width var(--duration-base) var(--ease-out), box-shadow var(--duration-base) var(--ease-out), background-color var(--duration-fast) var(--ease-out);
+  }
+  .wa-fab:hover { width: 168px; box-shadow: var(--shadow-lg); background: var(--color-whatsapp-hover); }
+  /* 12px, was a bare 14px. The FAB is a fixed 52px square, so the icon plus its
+     side margins have to fit: 24 + 12 + 12 = 48 leaves 4px of slack, whereas
+     --space-4 (16px) would total 56 and overflow the control. */
+  .wa-fab svg { width: 24px; height: 24px; margin: 0 var(--space-3); flex: none; }
+  .wa-fab__label { font-size: var(--fs-body-sm); font-weight: var(--fw-semibold); white-space: nowrap; opacity: 0; transition: opacity var(--duration-base) var(--ease-out); }
+  .wa-fab:hover .wa-fab__label { opacity: 1; }
+  .wa-fab { animation: fab-in var(--duration-slow) var(--ease-spring) 1.2s backwards; }
+  @keyframes fab-in { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { .wa-fab { animation: none; } }
+}
+
+/* ============================================================
+   24b. Inverse band — Light 主题内的深色区块（V3 §3.4）
+   ------------------------------------------------------------
+   深色 band 永远是「显式 opt-in」：只有写了 .section--inverse（或
+   .hero--inverse / .cta--inverse）才会变深。任何 data-track 都不会
+   隐式把区块变黑 —— V1 那套「否定式排除」的反色规则已整体删除。
+
+   实现方式：不枚举后代元素改 color（那会误伤「深色 band 里的浅色卡片」），
+   改为 **在 band 上重映射语义文本变量**。base.css 里 h1–h4 / a / .lead /
+   .eyebrow 全部走 var(--color-text*)，因此自动跟随；<p> 因为没有显式
+   color 声明，直接继承 band 的 color。两者都正确，且无特异性冲突。
+
+   配套：所有自带 background 的组件在下方「肯定式声明」里把自己的文本
+   变量复位到浅色值 —— 「谁有底，谁负责自己的文字色」。
+   ============================================================ */
+.section--inverse,
+.hero--inverse,
+.cta--inverse,
+.hero-full {
+  --color-text:            var(--on-inverse-text);             /* #F5F2EE 15.74:1 */
+  --color-text-secondary:  var(--on-inverse-text-secondary);   /* #B4B9C3  8.84:1 */
+  --color-text-muted:      var(--on-inverse-text-muted);       /* #8A8F99  5.36:1 */
+  --color-link:            var(--on-inverse-link);             /* #E39A94  7.79:1 */
+  --color-accent-hover:    var(--on-inverse-link-hover);       /* #EFC0BC 10.82:1 */
+  --color-border:          var(--on-inverse-border);
+  --color-border-strong:   var(--on-inverse-border);
+  --color-grid:            var(--on-inverse-grid);
+  /* §3.4 rule 3, enforced rather than documented: oxblood is 1.40:1 on
+     #1A1917, so inside a dark band the accent IS the on-inverse link colour.
+     This catches every un-enumerated descendant — focus rings, seal borders,
+     eyebrow rules — instead of relying on each one remembering. */
+  --color-accent:          var(--on-inverse-link);
+  --focus-ring:            var(--on-inverse-link);
+
+  /* The remapping above only fixes descendants that READ var(--color-text*).
+     A bare <p>/<span> with no class inherits `color` directly, so the band
+     itself must declare it — otherwise it stays --ink-900 on #1A1917, i.e.
+     1:1 and completely invisible. Measured: .cta--inverse and .hero-full both
+     reported color == background before this line (audit-visual.md P1-4);
+     .section--inverse already had it, so this is a no-op for that one. */
+  color: var(--on-inverse-text);
+}
+
+.section--inverse {
+  background: var(--color-surface-inverse);
+  /* 可选蓝图网格：background-image: 24px 网格 + var(--on-inverse-grid) */
+}
+
+/* 反色 band 内的链接 hover（a:hover 走 --color-accent-hover，已重映射） */
+.section--inverse a:hover { color: var(--on-inverse-link-hover); }
+
+/* eyebrow 前的 24px 短横是装饰元素：强调色在近黑上只有 1.4:1，低于非文本
+   3:1 的下限 —— 反色语境换成 --on-inverse-link（7.79:1） */
+.section--inverse .eyebrow::before,
+.hero--inverse      .eyebrow::before,
+.cta--inverse       .eyebrow::before { background: var(--on-inverse-link); }
+
+/* 反色 band 内的按钮：CTA 带（cta--inverse / section--inverse）主按钮走白，
+   但内页 hero（hero--inverse）与首页 hero 同语法 —— hero CTA = teal pill
+   （参考站的 hero CTA 是 teal）。此前白 pill 是 V2「黑=action」残留。 */
+.section--inverse .btn--primary,
+.cta--inverse       .btn--primary {
+  background: var(--on-inverse-action-bg);
+  color: var(--on-inverse-action-text);
+  border-color: var(--on-inverse-action-bg);
+}
+.section--inverse .btn--primary:hover,
+.cta--inverse       .btn--primary:hover {
+  background: var(--ink-100);
+  border-color: var(--ink-100);
+  color: var(--on-inverse-action-text);
+}
+.hero--inverse .btn--primary {
+  background: var(--green-700);
+  color: var(--on-inverse-text-strong);
+  border-color: var(--green-700);
+}
+.hero--inverse .btn--primary:hover {
+  background: var(--green-800);
+  border-color: var(--green-800);
+  color: var(--on-inverse-text-strong);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-accent-green);
+}
+.hero--inverse .btn--primary:active { transform: translateY(0); box-shadow: none; }
+.section--inverse .btn--secondary,
+.hero--inverse      .btn--secondary,
+.cta--inverse       .btn--secondary {
+  color: var(--on-inverse-text);
+  border-color: var(--on-inverse-border-subtle);
+}
+.section--inverse .btn--secondary:hover,
+.hero--inverse      .btn--secondary:hover,
+.cta--inverse       .btn--secondary:hover {
+  background: var(--on-inverse-surface);
+  border-color: var(--on-inverse-border);
+  color: var(--on-inverse-text);
+}
+
+/* Badges on a dark band: the near-black creator fill would disappear into the
+   band, and the light seal tint would invert the seal's contrast. Re-state. */
+.section--inverse .badge--creator,
+.hero--inverse      .badge--creator,
+.cta--inverse       .badge--creator { background: var(--on-inverse-action-bg); color: var(--on-inverse-action-text); }
+.section--inverse .badge--buyer,
+.hero--inverse      .badge--buyer,
+.cta--inverse       .badge--buyer { border-color: var(--on-inverse-border-subtle); color: var(--on-inverse-text); }
+.section--inverse .badge--verified,
+.hero--inverse      .badge--verified,
+.cta--inverse       .badge--verified { background: transparent; border-color: var(--on-inverse-link); color: var(--on-inverse-link); }
+
+/* ---------- 肯定式声明：有 background 的组件负责自己的文字色 ----------
+   做法：把语义文本变量复位到「浅底」值（用 primitive，不受 band 重映射影响），
+   组件内部的 h1–h4 / .lead / a / p 无论嵌在哪层 band 里都相对自身底色正确。
+
+   用 :where() 把整条规则的特异性压到 0,0,0：
+     · 能压过「继承」（继承永远输给任何匹配声明）—— 这是它的目的；
+     · 但压不过组件自己的 color 声明（.badge--soon 等 0,1,0 仍然生效）——
+       不会因为加了这条规矩而把别人的设计意图洗掉。
+   新增组件时照此办理；漏一个只会回到继承色，不会黑底黑字。            */
+:where(
+  .cmp, .cmp-card, .fact, .faq-item, .checklist, .redflags, .caveat,
+  .note-strip, .vet-link, .download, .form-shell, .tier-card,
+  .service-card, .case-card, .card, .chip, .chip-tag, .related-nav, .photo-slot,
+  .hero__panel, .split-card, .pillar, .testimonial, .spec-list, .step__num,
+  .field__input, .wa-panel, .coverage__canvas
+) {
+  --color-text:           var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-muted:     var(--text-muted);
+  --color-link:           var(--green-700);   /* second colour, not red — "one red per screen" */
+  --color-accent-hover:   var(--accent-700);
+  --color-border:         var(--border-hairline-color);
+  --color-border-strong:  var(--border-strong-color);
+  color: var(--color-text);
+}
+
+/* ============================================================
+   25. Misc blocks used across pages
+   ============================================================ */
+.vet-link {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-4);
+  background: var(--color-surface);
+  border: var(--border-default);
+  border-radius: var(--radius-md);
+  padding: var(--space-5) var(--space-6);
+  box-shadow: var(--shadow-card);
+}
+/* Grammar: a circular verified badge. Round + centered glyph is unlike the
+   checklist's captioned rectangle, the caveat's dashed tint and the quote's
+   glyph — this is the "proceed here" block and it should look like an action. */
+.vet-link__badge {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  flex: none;
+  border-radius: var(--radius-circle);
+  /* green-100 with the green seal: the verified pairing the site already uses
+     for tick glyphs (accent tint would put a green check on a pink disc). */
+  background: var(--green-100);
+  color: var(--color-verified);
+}
+.vet-link__copy { flex: 1 1 320px; min-width: 0; }
+.vet-link__action { margin-left: auto; }
+.vet-link__title { font-family: var(--font-display); font-size: var(--fs-h4); font-weight: var(--fw-semibold); }
+.vet-link__desc { font-size: var(--fs-caption); color: var(--color-text-secondary); max-width: 56ch; margin-top: var(--space-1); }
+
+.fact-grid { display: grid; gap: var(--space-5); }
+@media (min-width: 768px) { .fact-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+/* Grammar: a FILLED TILE, not a card. Numbers read best on a quiet flat fill
+   with no outline competing with the value; three of these in a row should
+   look like a data strip, not like three more cards. */
+.fact {
+  background: var(--color-surface-subtle);
+  border: 0;
+  border-radius: var(--radius-md);
+  padding: var(--space-5);
+}
+.fact__k { font-family: var(--font-body); font-size: var(--fs-label); font-weight: 500; letter-spacing: var(--ls-label); text-transform: uppercase; color: var(--text-muted); }
+.fact__v { display: block; margin-top: var(--space-2); font-family: var(--font-body); font-size: var(--fs-data-lg); font-weight: var(--fw-semibold); color: var(--color-text); line-height: 1.1; font-variant-numeric: tabular-nums lining-nums; }
+.fact__note { font-size: var(--fs-caption); color: var(--color-text-muted); margin-top: var(--space-2); }
+
+.pillars { display: grid; gap: var(--space-4); }
+@media (min-width: 768px) { .pillars { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.pillar {
+  background: var(--color-surface);
+  border: var(--border-default);
+  border-radius: var(--radius-md);
+  padding: var(--space-5);
+  box-shadow: var(--shadow-card);
+  transition: border-color var(--duration-base) var(--ease-out),
+              box-shadow var(--duration-base) var(--ease-out),
+              transform var(--duration-base) var(--ease-out);
+}
+.pillar:hover { border-color: var(--border-hover-color); box-shadow: var(--shadow-card-hover); transform: translateY(-3px); }
+.pillar__n { font-family: var(--font-body); font-size: var(--fs-label); font-weight: 500; color: var(--color-accent); letter-spacing: var(--ls-label); }
+.pillar__t { font-family: var(--font-display); font-size: var(--fs-h4); font-weight: var(--fw-semibold); margin-top: var(--space-2); }
+.pillar__d { font-size: var(--fs-caption); color: var(--color-text-secondary); margin-top: var(--space-2); }
+
+/* Grammar: an ANNOTATION, not a box. It used to be the same grey tile as .fact,
+   two blocks apart on the same page. Now it has no fill and no sides at all —
+   just a top hairline above the label, which is how a footnote behaves.
+   The label carries the red so the eye lands on "NOTE / READ THIS" and then
+   reads across, rather than scanning past a grey rectangle. */
+.note-strip {
+  background: transparent;
+  border: 0;
+  border-top: var(--border-divider);
+  border-radius: 0;
+  padding: var(--space-4) 0 0;
+  /* The hairline is the strip's top edge — it must not touch the block above,
+     or the divider reads as part of that block. First-child margins collapse
+     with the wrapper's, so wrapped instances do not double up. */
+  margin-top: var(--space-6);
+  font-size: var(--fs-caption);
+  color: var(--color-text-secondary);
+}
+.note-strip__mono { font-family: var(--font-body); font-size: var(--fs-label); font-weight: 600; letter-spacing: var(--ls-label); text-transform: uppercase; color: var(--color-accent); display: inline; margin-right: var(--space-2); }
+
+.related-nav { display: grid; gap: var(--space-3); }
+@media (min-width: 768px) { .related-nav { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 1024px) { .related-nav { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.related-nav a {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;   /* grid child: allow long words to wrap instead of overflowing */
+  background: var(--color-surface);
+  border: var(--border-default);
+  border-radius: var(--radius-lg);
+  /* 16px, not the 24px of .service-card / .split-card — deliberately tighter.
+     This is a 4-up strip of navigation tiles carrying only a kicker + a one-line
+     title, not a content card; at 24px they read as four bloated boxes and the
+     strip stops reading as "next steps". (audit-visual.md P1-3: documented as
+     intentional rather than silently drifted.) */
+  padding: var(--space-4);
+  text-decoration: none;
+  color: var(--color-text);
+  box-shadow: var(--shadow-card);
+  /* 2026-09-20 audit P2-1: hover recolours .related-nav__t, so `color` has to
+     be in the list or the city name snaps while everything else glides. */
+  transition: border-color var(--duration-base) var(--ease-out),
+              color        var(--duration-base) var(--ease-out),
+              box-shadow var(--duration-base) var(--ease-out),
+              transform var(--duration-base) var(--ease-out);
+}
+.related-nav a:hover {
+  border-color: var(--border-hover-color);
+  box-shadow: var(--shadow-card-hover);
+  transform: translateY(-3px);
+}
+/* P1-3: pressed feedback, settled at -1px rather than 0. */
+.related-nav a:active { transform: translateY(-1px); box-shadow: var(--shadow-card); }
+.related-nav a:hover .related-nav__t { color: var(--color-accent); transition: color var(--duration-base) var(--ease-out); }
+/* Block display is the actual bug fix: these were inline spans, so the bold
+   city name ran straight into the uppercase label ("…GIFTSYiwu") and the
+   margin-top on __t never applied. */
+.related-nav__k { display: block; font-family: var(--font-body); font-size: var(--fs-label); font-weight: 500; letter-spacing: var(--ls-label); text-transform: uppercase; color: var(--text-muted); }
+.related-nav__t { display: block; font-family: var(--font-display); font-size: var(--fs-body); font-weight: var(--fw-semibold); margin-top: var(--space-2); overflow-wrap: anywhere; }
+
+/* Article / long-form helpers */
+.spec-list { margin: 0; padding: 0; list-style: none; display: grid; gap: var(--space-3); }
+.spec-list li { display: grid; grid-template-columns: 1fr; gap: 2px; }
+.spec-list__k { font-family: var(--font-body); font-size: var(--fs-label); font-weight: 500; letter-spacing: var(--ls-label); text-transform: uppercase; color: var(--text-muted); }
+.spec-list__v { font-size: var(--fs-body-sm); color: var(--text-secondary); }
+@media (min-width: 768px) {
+  .spec-list li { grid-template-columns: 180px 1fr; gap: var(--space-4); align-items: baseline; }
+}
+/* 2026-09-19 — two-column variant for short-row lists (markets, camera access).
+   In a 1200px container a 1-col spec list stacks 4–6 tight rows against
+   ~400px of dead space on the right — the "窄 + 挤" combination the director
+   flagged. Two columns halve the height and use the band. */
+@media (min-width: 900px) {
+  .spec-list--split { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-5) var(--space-8); }
+  .spec-list--split li { grid-template-columns: minmax(120px, 170px) 1fr; }
+}
+
+.article-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3) var(--space-5);
+  /* Sits under the "How to read this" strip in the case-study hero; without a
+     top margin of its own it rendered 0px below that strip. */
+  margin-top: var(--space-5);
+  font-family: var(--font-body);
+  font-size: var(--fs-micro);
+  letter-spacing: var(--ls-micro);
+  text-transform: uppercase;
+  color: var(--text-muted);
+  padding-bottom: var(--space-5);
+  border-bottom: var(--border-divider);
+  margin-bottom: var(--space-6);
+}
+
+/* 2026-09-19 — widescreen pass for the pages the global centering pass missed.
+   1) .note-strip is a p, so base.css caps it at --measure (~558px). As a direct
+      child (or wrapped in a spacer div) of a 1130–1250px container it sat flush
+      left with ~400–970px of dead space on its right — the "窄 + 单侧空白"
+      pattern. Centering the block (text stays left-aligned) matches the
+      treatment .section-head/.prose already got. Scoped with child combinators
+      so strips inside .channel cards, .coverage diagrams and hero split columns
+      keep their deliberate geometry. */
+@media (min-width: 1024px) {
+  .section .container > .note-strip,
+  .section .container > div > .note-strip {
+    margin-inline: auto;
+  }
+  /* 2) On /services/creator-factory-tour/ the "Why the price is blank" strip
+        sat directly against the FactGrid above it — no rhythm step between a
+        card grid and an aside. One spacing token fixes the crowding at every
+        viewport; nothing else changes. */
+  .fact-grid + .note-strip {
+    margin-top: var(--space-8);
+  }
+  /* 3) Case detail pages nest a bare .container--md (no .container class, so
+        no auto margins) inside the default container to narrow the vet-link
+        band — it rendered 25px left of centre. Centering a max-width block
+        inside a wider one is always the intent. */
+  .section .container > .container--md {
+    margin-inline: auto;
+  }
+}
+/* 4) /case-studies/ holds exactly two sample reports; the default 3-column
+      case-grid left the whole third column empty at ≥1024. Two columns fill
+      the band with the same cards. Pages that do have three+ cards keep the
+      default grid. */
+@media (min-width: 1024px) {
+  .case-grid--two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}

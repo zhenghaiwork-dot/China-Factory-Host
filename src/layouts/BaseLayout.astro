@@ -1,0 +1,172 @@
+---
+import '../styles/tokens.css';
+import '../styles/base.css';
+import '../styles/components.css';
+
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import Breadcrumb from '../components/Breadcrumb.astro';
+import WhatsAppBar from '../components/WhatsAppBar.astro';
+import CTASection from '../components/CTASection.astro';
+import { REPLY_TIME_MICRO, SITE, SITE_URL } from '../data/site.ts';
+import { SERVICE_SCHEMA } from '../data/service-schema.ts';
+
+export interface Crumb { href: string; label: string; }
+interface Props {
+  title: string;
+  description: string;
+  /** dual-track energy switch — design system §6.2 */
+  track?: 'creator' | 'buyer' | 'neutral';
+  active?: string;
+  crumbs?: Crumb[];
+  current?: string;
+  /** closing CTA; pass false to omit (e.g. the contact page, which ends in the form) */
+  cta?: false | {
+    eyebrow?: string;
+    title: string;
+    lead?: string;
+    primary: { label: string; href: string };
+    secondary?: { label: string; href: string; external?: boolean };
+    micro?: string;
+    variant?: 'inverse' | 'plain';
+    /** split mode — closing band renders a compact inquiry form instead of a button */
+    form?: { destination?: string; submitLabel?: string };
+  };
+  ogImage?: string;
+  bodyClass?: string;
+}
+
+const {
+  title,
+  description,
+  track = 'neutral',
+  active = '',
+  crumbs = [],
+  current = '',
+  /* Closing CTA default. Two V3 hard rules are enforced by this shape:
+       · no `eyebrow` — §1.1 #7 forbids a mono uppercase label above a section
+         heading, and the closing band is a section with an H2. The prop still
+         exists on CTASection; pages simply must not pass it.
+       · no `secondary` button — §6.6 caps a section (.cta is named explicitly)
+         at ONE button. The WhatsApp channel is already permanently reachable
+         through .wa-fab / .wa-bar, which are exempt from the budget. */
+  cta = {
+    title: 'Plan my factory trip.',
+    lead: 'Tell us the category, the city and roughly when. You get a straight answer about what is realistic — including when we are not the right people for the job.',
+    primary: { label: 'Plan my factory visit', href: '/contact/' },
+    /* The site-wide constant, not a retyped sentence: the closing band, the rail
+       and the footer must never disagree about response time (critique M2). */
+    micro: REPLY_TIME_MICRO,
+  },
+  ogImage = '/og-default.svg',
+  bodyClass,
+} = Astro.props;
+
+/* Pages pass their own title / lead / primary and deliberately omit `micro`:
+   the closing band's promise is REPLY_TIME_MICRO for every page, so the sentence
+   exists in exactly one place (critique M2). A page that genuinely needs another
+   closing line can still pass one. */
+const ctaProps = cta === false ? false : { micro: REPLY_TIME_MICRO, ...cta };
+
+const canonical = new URL(Astro.url.pathname, SITE_URL).href;
+const og = new URL(ogImage, SITE_URL).href;
+
+/* JSON-LD. Evidence-gating applies here too: Organization carries ONLY what the
+   site itself states on its pages — name, url, what the service is, where it
+   operates. No address, phone, founder name, rating or price until those are
+   published; a schema field we cannot back with a page is worse than a missing
+   field, because it is machine-readable fiction. */
+const orgSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: SITE,
+  url: SITE_URL,
+  description:
+    'Hosted factory visits in China: verified factory shortlists, on-the-ground escorts and filming coordination for content creators and brand buyers.',
+  areaServed: 'China',
+};
+
+/* Derived from the same crumbs/current props the visible breadcrumb renders —
+   one source of truth, so the visible trail and the machine-readable trail can
+   never disagree. */
+const trail = [...crumbs, ...(current ? [{ href: Astro.url.pathname, label: current }] : [])];
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: trail.map((c, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    name: c.label,
+    item: new URL(c.href, SITE_URL).href,
+  })),
+};
+
+/* Service, for the eight service routes. Looked up by pathname from a single
+   table rather than passed per page: those pages are being rewritten in
+   parallel by the content build, and this way nothing there has to change.
+   Same evidence gate as above — no price, rating, address or phone. */
+const service = SERVICE_SCHEMA[Astro.url.pathname];
+const serviceSchema = service && {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  name: service.name,
+  description: service.description,
+  serviceType: service.serviceType,
+  areaServed: 'China',
+  provider: {
+    '@type': 'Organization',
+    name: SITE,
+    url: SITE_URL,
+  },
+};
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#1A1917" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={SITE} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={og} />
+    <meta property="og:url" content={canonical} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/favicon.svg" />
+    <link rel="sitemap" href="/sitemap.xml" type="application/xml" />
+    <script type="application/ld+json" set:html={JSON.stringify(orgSchema)} />
+    {trail.length > 1 && (
+      <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+    )}
+    {service && (
+      <script type="application/ld+json" set:html={JSON.stringify(serviceSchema)} />
+    )}
+    <!-- Behaviour layer. Loaded as a bundled <script> (not a frontmatter import)
+         so it never executes during server-side prerendering. -->
+    <script>
+      import '../scripts/app.js';
+    </script>
+  </head>
+  <body data-track={track} class={bodyClass}>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <Header active={active} />
+
+    <Breadcrumb crumbs={crumbs} current={current} />
+
+    <main id="main">
+      <slot />
+    </main>
+
+    {ctaProps !== false && <CTASection {...ctaProps} />}
+
+    <Footer />
+
+    <WhatsAppBar />
+  </body>
+</html>

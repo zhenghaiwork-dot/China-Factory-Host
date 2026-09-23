@@ -1,0 +1,15 @@
+---
+interface Item { href: string; k: string; t: string; }
+interface Props { items: Item[]; }
+const { items } = Astro.props;
+---
+<nav class="related-nav" aria-label="Related pages">
+  {
+    items.map((i) => (
+      <a href={i.href}>
+        <span class="related-nav__k">{i.k}</span>
+        <span class="related-nav__t">{i.t}</span>
+      </a>
+    ))
+  }
+</nav>

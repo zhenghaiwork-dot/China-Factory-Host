@@ -1,0 +1,202 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Section from '../../components/Section.astro';
+import SectionHead from '../../components/SectionHead.astro';
+import PhotoSlot from '../../components/PhotoSlot.astro';
+import OnsitePhoto from '../../components/OnsitePhoto.astro';
+import { waLink } from '../../data/site.ts';
+
+const title = 'China trade shows and the factory visits that follow them';
+const description =
+  'How we pair a Chinese trade show with real factory visits: Yiwu Fair in October, the East China Fair in Shanghai, Canton Fair seasons, the Ningbo export hall in May, and what to verify on the floor afterwards.';
+
+const wa = waLink('Hi, I am planning around a trade show in China and want to add factory visits.');
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  active="trade-shows"
+  crumbs={[]}
+  current="Trade shows"
+  cta={{
+    eyebrow: 'Next step',
+    title: 'Going to a fair? Add the factory days.',
+    lead: 'Tell us which fair and roughly when. We will say whether the factory days fit around it, or that the timing does not work.',
+    primary: { label: 'Plan around a trade show', href: '/contact/' },
+    secondary: { label: 'Ask on WhatsApp', href: wa, external: true },
+  }}
+>
+  <section class="hero">
+    <div class="container">
+      <div class="split-7-5">
+        <div>
+          <p class="eyebrow">Trade shows</p>
+          <h1>A fair gets you samples. A factory gets you the truth.</h1>
+          <p class="lead hero__lead">
+            Sourcing platforms and fair organisers will happily tell you what a trade show is and when
+            it runs — they do it better than we could, and there is no point competing with them. What
+            nobody sells you is the part that follows: walking into the actual factory behind the
+            booth, before you commit.
+          </p>
+          <div class="btn-row">
+            <a class="btn btn--primary" href="/contact/">Plan a fair week with factory days</a>
+          </div>
+        </div>
+        <div class="hero__media">
+          <PhotoSlot name="TRADE SHOW · THEN FACTORY" variant="media">
+            <OnsitePhoto id="08" eager />
+          </PhotoSlot>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Section tight>
+    <div class="container">
+      <SectionHead
+        title="The fairs we plan around"
+        lead="We only list fairs we can actually combine with factory visits inside the same trip. Dates are set by each organiser and do move — confirm on the official site before booking anything."
+      />
+      <ul class="spec-list">
+        <li>
+          <span class="spec-list__k">Yiwu Fair · October · Yiwu</span>
+          <span
+            >The China Yiwu International Commodities Fair runs every October at the Yiwu International
+            Expo Centre — the 32nd edition is 21–24 October 2026. Around 3,000 exhibitors over
+            110,000 m². This is the strongest pairing we offer: the market, the fair and the
+            factories are all inside one city, so you can shortlist on the floor and be on a
+            production line the next morning.</span
+          >
+        </li>
+        <li>
+          <span class="spec-list__k">East China Fair · March · Shanghai</span>
+          <span
+            >The East China Fair (Huajiaohui) is held at the Shanghai New International Expo Centre —
+            the 35th edition runs 1–4 March 2027. Jointly hosted by nine East China provinces and
+            cities including Zhejiang and Ningbo, weighted towards light industry, garments and
+            textiles. Pairs naturally with the textile and household-goods clusters in Zhejiang and
+            Jiangsu, a short train ride away.</span
+          >
+        </li>
+        <li>
+          <span class="spec-list__k">Canton Fair · spring and autumn · Guangzhou</span>
+          <span
+            >The largest and the most crowded, running in spring and autumn sessions. Strong for
+            private label and OEM conversations, and it pairs with Guangzhou, Foshan and Dongguan
+            factories. Worth knowing: the autumn session overlaps the Yiwu Fair, and a lot of Yiwu
+            suppliers are in Guangzhou that week rather than at home.</span
+          >
+        </li>
+        <li>
+          <span class="spec-list__k">Ningbo export consumer goods fair · May · Ningbo</span>
+          <span
+            >The export hall of the China–CEEC Expo &amp; International Consumer Goods Fair, hosted by
+            the Zhejiang provincial government with the Ministry of Commerce. Plan around one thing
+            first: it is not annual. The last edition ran 22–25 May 2025 and the organisers list the
+            next for May 2027. That edition filled 60,000 m² of the Ningbo International Conference
+            and Exhibition Center with around 1,028 exhibitors, and drew overseas buyers from 72
+            countries. Categories are household goods, gifts and crafts, appliances, home textiles and
+            garments, stationery, outdoor and kitchen-and-bath — close to a map of what this cluster
+            actually makes, which is why the factory days afterwards tend to be productive.</span
+          >
+        </li>
+      </ul>
+      <p class="u-mt-6">
+        Edition numbers, halls and exact dates belong to the organisers — confirm the current one on
+        <a href="https://www.cceecexpo.org" target="_blank" rel="noopener">cceecexpo.org</a> before you
+        book flights. Then
+        <a class="link-arrow" href="/destinations/ningbo-hangzhou/">see what a Ningbo factory week looks like</a>.
+      </p>
+      <p>
+        Every fair on this list sits inside a cluster we already work in:
+        <a href="/destinations/yiwu/">Yiwu</a> for commodities and small goods,
+        <a href="/destinations/guangzhou-dongguan/">Guangzhou and Dongguan</a> for the private-label
+        and OEM conversations the Canton Fair is full of, and
+        <a href="/destinations/zhejiang/">Zhejiang</a> for the textile and household-goods mills that
+        stand behind the East China Fair.
+      </p>
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container">
+      <SectionHead
+        eyebrow="How the week runs"
+        title="Shortlist on the floor, verify the next day."
+        lead="The mistake is treating the fair as the trip. It is the filter; the factory days are the decision."
+      />
+      <ul class="spec-list">
+        <li>
+          <span class="spec-list__k">Before you fly</span>
+          <span
+            >We turn your categories into a target list with hall and district, so the floor is a
+            route rather than a wander. Hotels and drivers in a fair city are booked solid weeks
+            ahead — this is the step people leave too late.</span
+          >
+        </li>
+        <li>
+          <span class="spec-list__k">On the floor</span>
+          <span
+            >Collecting prices, MOQs and booth numbers into one structured list, with the same
+            five checks applied to whoever is behind the table. Plenty of booths are trading
+            companies; that is normal, and it only matters if you do not know.</span
+          >
+        </li>
+        <li>
+          <span class="spec-list__k">The day after</span>
+          <span
+            >The shortlist goes into factories — usually 30–60 minutes out of the fair city. Two
+            visits in a day is the useful number, because the second quote arrives informed by the
+            first.</span
+          >
+        </li>
+        <li>
+          <span class="spec-list__k">After you fly home</span>
+          <span
+            >Every quote normalised to one specification, so comparison is real rather than
+            remembered.</span
+          >
+        </li>
+      </ul>
+      <p class="u-mt-6">
+        The five checks we run on the floor are the same ones we run on any visit —
+        <a href="/about/how-we-vet-factories/">how we vet factories</a> sets them out, and the
+        <a href="/tools/factory-visit-scorecard/">factory visit scorecard</a> is where they get
+        written down before you forget them. If you would rather have the factory days sequenced
+        around the fair for you, that is
+        <a href="/services/factory-visit-planning/">visit planning</a>.
+      </p>
+    </div>
+  </Section>
+
+  <Section>
+    <div class="container container--md">
+      <SectionHead
+        eyebrow="Boundaries"
+        title="What we are not."
+        lead="Stated plainly, because a fair week attracts a lot of people selling things they should not."
+      />
+      <ul class="spec-list">
+        <li>
+          <span class="spec-list__k">Not an exhibitor service</span>
+          <span>We do not sell booth space, build stands or register you as an exhibitor.</span>
+        </li>
+        <li>
+          <span class="spec-list__k">Not a commission agent</span>
+          <span
+            >We are not paid a percentage of your order, and we do not take a cut from the factory.
+            That is what lets us tell you a supplier is wrong.</span
+          >
+        </li>
+        <li>
+          <span class="spec-list__k">Not a date authority</span>
+          <span
+            >Fair dates, halls and visitor registration belong to the organisers. We plan around
+            them; we do not speak for them.</span
+          >
+        </li>
+      </ul>
+    </div>
+  </Section>
+</BaseLayout>

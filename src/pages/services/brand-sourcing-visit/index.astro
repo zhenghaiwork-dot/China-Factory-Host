@@ -1,0 +1,408 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Section from '../../../components/Section.astro';
+import SectionHead from '../../../components/SectionHead.astro';
+import PhotoSlot from '../../../components/PhotoSlot.astro';
+import OnsitePhoto from '../../../components/OnsitePhoto.astro';
+import Icon from '../../../components/Icon.astro';
+import ServiceCard from '../../../components/ServiceCard.astro';
+import Timeline from '../../../components/Timeline.astro';
+import Checklist from '../../../components/Checklist.astro';
+import Caveat from '../../../components/Caveat.astro';
+import ComparisonTable from '../../../components/ComparisonTable.astro';
+import FactGrid from '../../../components/FactGrid.astro';
+import FAQ from '../../../components/FAQ.astro';
+import { waLink, REPORT_TURNAROUND } from '../../../data/site.ts';
+
+const title = 'Brand sourcing visit — verify the China factory before you wire the deposit';
+const description =
+  `A hosted verification trip: five documented checks per factory, the production manager in the room, and a written report ${REPORT_TURNAROUND}.`;
+
+const wa = waLink('Hi, I would like to plan a factory visit to verify suppliers in China.');
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  track="buyer"
+  active="services"
+  crumbs={[{ href: '/services/', label: 'Services' }]}
+  current="Brand sourcing visit"
+  cta={{
+    /* Buyer path must not use dark bands — design system §4.1.8 */
+    variant: 'plain',
+    eyebrow: 'Next step',
+    title: 'Request a sourcing visit plan.',
+    lead: 'Tell us your category, target cluster and rough dates. You will get a realistic day-by-day plan — including where we think it is a bad idea.',
+    primary: { label: 'Request a sourcing visit plan', href: '/contact/' },
+    form: { destination: 'Brand sourcing visit' },
+    secondary: { label: 'Ask on WhatsApp', href: wa, external: true },
+  }}
+>
+  <!-- 1 · Hero — no oversized imagery; a narrow strip only -->
+  <section class="hero">
+    <div class="container">
+      <div class="split-7-5">
+        <div>
+          <p class="eyebrow">Brand sourcing visit</p>
+          <h1>Verify the China factory before you wire the deposit.</h1>
+          <p class="lead hero__lead">
+            You are not paying for a tour. You are paying to find out, before committing money,
+            whether the supplier you found actually makes anything — as opposed to a <a href="/guides/factory-vs-trading-company-china/">trading company</a> — and can say yes to your terms.
+          </p>
+          <div class="btn-row">
+            <a class="btn btn--primary" href="/contact/">Request a sourcing visit plan</a>
+            <a class="btn btn--secondary" href="/about/how-we-vet-factories/"
+              >Read the vetting method first</a
+            >
+          </div>
+        </div>
+        <div class="hero__media">
+          <PhotoSlot name="SOURCING · SUPPLIER MEETING" variant="media">
+            <OnsitePhoto id="02" />
+          </PhotoSlot>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="container container--md u-mt-8">
+    <PhotoSlot name="BUYER STRIP · NINGBO PLANT" variant="strip">
+    <OnsitePhoto id="09" />
+  </PhotoSlot>
+  </div>
+
+  <!-- 2 · Who this is for -->
+  <Section>
+    <div class="container">
+      <SectionHead
+        eyebrow="Who this is for"
+        title="Three kinds of buyer, one problem."
+        lead="If you recognise yourself here, this is the page for you. If not, say so and we will tell you who else could help."
+      />
+      <div class="grid--3">
+        <ServiceCard
+          icon="shield"
+          title="Amazon FBA sellers"
+          desc="You have a supplier quote and a sinking feeling. You need to know whether the factory exists, whether it can hold your volume, and whether the unit price assumes a specification you never agreed to."
+          list={[
+            'Licence and scope confirmed before booking',
+            'Capacity matched to your forecast',
+            'Written note on anything that will not scale',
+          ]}
+          cta="Plan an Amazon supplier check"
+          href="/contact/"
+        />
+        <ServiceCard
+          icon="doc"
+          title="Shopify founders & private label"
+          desc="First production run, no existing relationship, and a category where tooling and MOQ decisions will still be hurting you in a year."
+          list={[
+            'Tooling ownership clarified in writing',
+            'MOQ drivers explained, not accepted',
+            'Second-supplier option identified',
+          ]}
+          cta="Plan a first-run visit"
+          href="/contact/"
+        />
+        <ServiceCard
+          icon="clipboard"
+          title="Brand sourcing leads"
+          desc="You already buy from China and something has stopped working — quality drift, missed lead times, or a supplier who has quietly started subcontracting."
+          list={[
+            'Subcontracting signals checked on the floor',
+            'Alternative capacity in the same cluster',
+            'Negotiation conducted in the room',
+          ]}
+          cta="Plan a supplier review visit"
+          href="/contact/"
+        />
+      </div>
+    </div>
+  </Section>
+
+  <!-- 3 · Five-day structure -->
+  <Section alternate>
+    <div class="container container--md">
+      <SectionHead
+        eyebrow="Sample structure"
+        title="Five working days, two or three factories per day."
+        lead="Density comes from staying inside one industrial cluster. Crossing half a province between appointments is how these trips lose two days."
+      />
+      <Timeline
+        items={[
+          {
+            day: 'DAY 1',
+            time: 'ARRIVAL',
+            title: 'Pick-up and shortlist review',
+            desc: 'We go through your shortlist line by line and run registration checks before agreeing the visiting order. Usually one or two suppliers do not survive this.',
+          },
+          {
+            day: 'DAY 2',
+            time: 'FACTORY A + B',
+            title: 'Two factories in one cluster',
+            desc: 'Full walk-throughs with the production manager present. No back-to-back meetings in showrooms.',
+          },
+          {
+            day: 'DAY 3',
+            time: 'FACTORY C + D',
+            title: 'Capacity and quality depth',
+            desc: 'Equipment counts, QC bench, tooling store, and whether any part of the process is being subcontracted out.',
+          },
+          {
+            day: 'DAY 4',
+            time: 'NEGOTIATION',
+            title: 'Numbers in the room',
+            desc: 'MOQ, tooling, lead time, payment terms and sampling — negotiated with whoever can actually agree to them.',
+          },
+          {
+            day: 'DAY 5',
+            time: 'WRAP',
+            title: 'Debrief and written handover',
+            desc: 'A structured recap before you fly, then the written report covering every factory visited and rejected.',
+          },
+        ]}
+      />
+      <p class="u-mt-6">
+        The day-by-day route is what <a href="/services/factory-visit-planning/">visit planning</a> builds, cluster by cluster.
+      </p>
+    </div>
+  </Section>
+
+  <!-- 4 · The core guarantee -->
+  <Section>
+    <div class="container container--md">
+      <SectionHead
+        eyebrow="The thing that matters"
+        title="You will meet somebody who can say yes."
+        lead="A day spent with a sales representative produces photos and nothing else. We treat “the boss is travelling” as a failed visit and record it as one."
+      />
+      <Checklist
+        title="What we confirm before a factory stays on the itinerary"
+        numbered
+        items={[
+          'The five checks on the vetting page have been run, with the failing steps named',
+          'The production manager or owner has confirmed attendance for your meeting slot',
+          'The line relevant to your product is in production during the week you visit',
+          'Tooling and raw materials will be shown, not described',
+          'Quote validity, lead-time assumptions and payment terms are understood before you arrive',
+        ]}
+      />
+      <p class="u-mt-6">
+        <a class="link-arrow" href="/about/how-we-vet-factories/"
+          >Read the five checks in full<Icon name="arrow" size={14} /></a
+        >
+      </p>
+    </div>
+  </Section>
+
+  <!-- 5 · Deliverables -->
+  <Section alternate>
+    <div class="container container--md">
+      <SectionHead
+        eyebrow="What you take home"
+        title="Deliverables, not impressions."
+        lead="Buyers decide on documentation. Here is exactly what leaves our hands, and when."
+      />
+      <ul class="spec-list clean">
+        <li>
+          <span class="spec-list__k">Factory report</span><span class="spec-list__v"
+            >One per visited factory: licence scope, address check, equipment list, shift pattern,
+            headcount, photographic record, meeting notes.</span
+          >
+        </li>
+        <li>
+          <span class="spec-list__k">Quote comparison</span><span class="spec-list__v"
+            >Quotes normalised to one specification so they can actually be compared — including why
+            a cheaper quote is cheaper.</span
+          >
+        </li>
+        <li>
+          <span class="spec-list__k">Capacity &amp; equipment data</span><span class="spec-list__v"
+            >Machine counts and cycle time against your forecast volume, with the arithmetic
+            visible.</span
+          >
+        </li>
+        <li>
+          <span class="spec-list__k">Risk notes</span><span class="spec-list__v"
+            >Every reservation we have, written down — including suppliers we advise you not to use
+            and why.</span
+          >
+        </li>
+        <li>
+          <span class="spec-list__k">Rejected suppliers</span><span class="spec-list__v"
+            >The ones removed before or during the visit, and which check removed them.</span
+          >
+        </li>
+        <li>
+          <span class="spec-list__k">Timing</span><span class="spec-list__v"
+            >Written report {REPORT_TURNAROUND}, sooner if your deposit decision has a deadline.</span
+          >
+        </li>
+      </ul>
+      <p class="u-mt-6">
+        The report is scored the same way across suppliers — see the <a href="/tools/factory-visit-scorecard/">factory visit scorecard</a>.
+      </p>
+    </div>
+  </Section>
+
+  <!-- 6 · Transparent pricing logic -->
+  <Section>
+    <div class="container">
+      <SectionHead
+        eyebrow="Money, stated plainly"
+        title="How we are paid — and how we are not."
+        lead="The question behind most hesitation is whether someone is being paid by the factory to put you in front of them. This is our answer, in a table."
+      />
+      <ComparisonTable
+        caption="ChinaFactoryHost compared with a commission-based sourcing agent"
+        labelCol="Dimension"
+        columns={[
+          { name: 'ChinaFactoryHost', sub: 'what we do' },
+          { name: 'Commission-based agent', sub: 'the usual alternative' },
+        ]}
+        rows={[
+          {
+            label: 'Who pays for the hosting',
+            values: [
+              'You. A stated day rate or trip fee.',
+              'Often nobody — which is the point worth asking about.',
+            ],
+          },
+          { label: 'Money from the factory', values: [false, true] },
+          {
+            label: 'Reason to steer you to a supplier',
+            values: ['None that pays', 'Higher commission on some factories'],
+          },
+          {
+            label: 'Willing to tell you to walk away',
+            values: ['Yes, and it is in the report', 'Structurally discouraged'],
+          },
+          {
+            label: 'Quote you see',
+            values: ['The factory’s figure, unmodified', 'Sometimes bundled with margin'],
+          },
+          {
+            label: 'Fee disclosure',
+            values: ['Stated before booking', 'Frequently not disclosed'],
+          },
+        ]}
+        footnote="We are not claiming every agent works badly — many are good at their job. We are saying that if you cannot see who pays whom, you cannot price the advice you are getting."
+      />
+
+      <div class="grid--3 u-mt-8">
+        <FactGrid
+          items={[
+            {
+              k: 'Hosting day rate',
+              /* Blank on purpose — no visible [ PRICE TBC ] tag (round-2 N1). */
+              v: '$—',
+              note: 'Interpreting, transport coordination, factory access and negotiation support, per day.',
+            },
+            {
+              k: 'Sourcing commission',
+              v: 'Separate line',
+              note: 'If we later help place an order, that arrangement is quoted separately and agreed before it applies. Never folded into your unit price.',
+            },
+            {
+              k: 'Flights, hotel, visa',
+              v: 'You book them',
+              note: 'We do not resell these and add no margin to them.',
+            },
+          ]}
+        />
+      </div>
+    </div>
+  </Section>
+
+  <!-- 7 · MOQ & negotiation -->
+  <Section alternate>
+    <div class="container container--md">
+      <SectionHead
+        eyebrow="In the room"
+        title="Support where the deal is actually decided."
+        lead="Most failed negotiations are translation failures wearing a different hat — a misunderstood tolerance, an MOQ nobody explained the reasoning for."
+      />
+      <Checklist
+        title="Negotiation and technical support"
+        items={[
+          'Tolerances, surface finish and defect acceptance stated in numbers, not adjectives',
+          'MOQ explained by its actual driver — setup waste, material minimum, or a number the factory likes saying',
+          'Tooling cost separated from unit price, and tooling ownership confirmed in writing',
+          'Sample cost and lead time agreed before the production clock starts',
+          'Payment terms and what triggers each stage',
+        ]}
+      />
+      <p class="u-mt-6">
+        The numbers stay exact in the room because of the <a href="/services/factory-visit-interpreter/">interpreter</a>.
+      </p>
+    </div>
+  </Section>
+
+  <!-- 8 · Caveat -->
+  <Section>
+    <div class="container container--md">
+      <Caveat
+        title="What this visit cannot guarantee"
+        body="Booking a hosted visit does not remove the risk of manufacturing in China. It removes the specific risk of paying a supplier you have not verified."
+        items={[
+          'We cannot guarantee business outcomes — no one can promise your first run ships on time.',
+          'We do not audit labour compliance or financial stability. We flag what we see and recommend specialists.',
+          'A visit snapshot does not predict behaviour six months later. Repeat visits exist for that.',
+          'We are not a certification body and issue no certificates of any kind.',
+          'We will not pretend a supplier is fine to avoid an awkward day with them.',
+        ]}
+      />
+      <p class="u-mt-6">
+        The trip runs in whichever <a href="/destinations/">cluster</a> your suppliers sit in.
+      </p>
+    </div>
+  </Section>
+
+  <!-- 9 · FAQ -->
+  <Section alternate>
+    <div class="container container--md">
+      <SectionHead eyebrow="Practical questions" title="What buyers ask before booking." />
+      <FAQ
+        items={[
+          {
+            q: 'How many days do I need?',
+            a: [
+              'Three days is workable for two or three suppliers in one cluster. Five days covers four to six suppliers plus a negotiation day. Anything beyond ten days is usually better split into two trips.',
+            ],
+          },
+          {
+            q: 'What is a normal MOQ in China?',
+            a: [
+              'It depends entirely on the process. Injection moulding often starts around 1,000–5,000 units because tooling setup dominates; assembly and packing can be far lower. Rather than a generic answer, we tell you the driver behind each factory’s number so you know which part is negotiable.',
+            ],
+          },
+          {
+            q: 'What if we get there and the production manager is unavailable?',
+            a: [
+              'We reschedule that stop or replace it. Either way it is recorded in the report as a failed criterion, not quietly dropped.',
+            ],
+          },
+          {
+            q: 'Do you place orders for us afterwards?',
+            a: [
+              'We can follow up on sampling and production coordination, and that arrangement is quoted separately. We do not take a silent cut of your unit price.',
+            ],
+          },
+          {
+            q: 'Can you visit suppliers I found on Alibaba?',
+            a: [
+              'Yes. Bringing your existing shortlist is one of the most useful versions of this trip — including when the result is telling you to drop half of it.',
+            ],
+          },
+          {
+            q: 'When should I not come?',
+            a: [
+              'Chinese New Year and the National Day holiday shut lines down for days to weeks, and the two weeks either side are unreliable for sampling. We will tell you the exact windows for your cluster before you book flights.',
+            ],
+          },
+        ]}
+      />
+    </div>
+  </Section>
+</BaseLayout>

@@ -1,0 +1,52 @@
+---
+import Icon from './Icon.astro';
+/* ServiceCard — §5.5. `icon` is an Icon name; `soon` renders the plan-ahead state. */
+interface Props {
+  title: string;
+  desc: string;
+  href: string;
+  icon?: string;
+  list?: string[];
+  cta?: string;
+  soon?: boolean;
+}
+const { title, desc, href, icon, list, cta, soon } = Astro.props;
+---
+{
+  soon ? (
+    <article class="service-card service-card--soon">
+      <span class="badge badge--soon service-card__soon-badge">Plan ahead</span>
+      <span class="service-card__icon">{icon && <Icon name={icon} size={32} />}</span>
+      <h3 class="service-card__title">{title}</h3>
+      <p class="service-card__desc">{desc}</p>
+      <div class="service-card__cta">
+        <a class="link-arrow" href={href}>
+          {cta || 'Ask when this opens'}
+          <Icon name="arrow" size={14} />
+        </a>
+      </div>
+    </article>
+  ) : (
+    <article class="service-card">
+      <span class="service-card__icon">{icon && <Icon name={icon} size={32} />}</span>
+      <h3 class="service-card__title">{title}</h3>
+      <p class="service-card__desc">{desc}</p>
+      {list && (
+        <ul class="service-card__list">
+          {list.map((i) => (
+            <li>
+              <Icon name="check" size={14} />
+              <span>{i}</span>
+            </li>
+          ))}
+        </ul>
+      )}
+      <div class="service-card__cta">
+        <a class="link-arrow" href={href}>
+          {cta || 'Read more'}
+          <Icon name="arrow" size={14} />
+        </a>
+      </div>
+    </article>
+  )
+}

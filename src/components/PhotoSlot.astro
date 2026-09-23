@@ -1,0 +1,55 @@
+---
+/* PhotoSlot — V3 §8.5, the 「底片 / Plate」 concept.
+
+   V2 drew a blueprint here: a 24px grid, two diagonal crop ticks, an isometric
+   factory line drawing, a `[ PHOTO — XXX ]` bracketed mono caption, an amber
+   Placeholder badge and a looping shimmer. The problem was never that it looked
+   unprofessional — it was that it announced "something is missing" eight times a
+   page, which reads as "this site is unfinished".
+
+   V3 stopped pretending the slot is an image: a quiet sheet of tinted paper with
+   a nameplate in the corner, like a gallery wall waiting for its painting.
+   Correct, but bare — sixty flat fields read as a wireframe, not as a layout.
+
+   V4 composes the empty state instead. Still no grid, no ticks, no glyph, no
+   badge, no shimmer, and never anything that could be mistaken for photography:
+   a cool two-stop gradient, one hairline edge, a single 135° hatch that fades
+   out before it reaches the label, and a short editorial rule above the type.
+   It reads as intentional negative space — the plate looks designed to be empty.
+
+   Every colour is a --slot-* variable, so .section--inverse / .cta--inverse
+   re-point the whole plate in one block (components.css §3) rather than
+   re-authoring it. The label keeps the plate HONEST: `Photo pending` says the
+   photograph is still owed, and it is real readable text, not decoration.
+
+   `data-placeholder="image"` marks the slot: a pre-launch grep must still find
+   every empty plate in one pass, and the value is namespaced so it can never be
+   confused with a dead WhatsApp number again (critique M3 — both used to be
+   `data-placeholder="true"`, 174 indistinguishable hits).
+
+   A real photograph can be passed as a child; the plate decoration switches
+   itself off (see `.photo-slot:has(img)`) but the aspect-ratio stays, so
+   dropping in the real file never reflows the page. */
+interface Props {
+  /** what belongs on this plate, e.g. "Shenzhen · electronics floor" */
+  name: string;
+  variant?: 'hero' | 'media' | 'card' | 'thumb' | 'avatar' | 'strip' | 'doc';
+  class?: string;
+}
+const { name, variant = 'card', class: cls } = Astro.props;
+/* A filled slot must stop announcing itself as a placeholder, or the pre-launch
+   grep counts real photographs as empty plates. Slot children are only ever
+   <img>/<picture>, so "a child was passed" == "the plate is filled". */
+const filled = Astro.slots.has('default');
+---
+<div
+  class:list={['photo-slot', `photo-slot--${variant}`, cls]}
+  data-placeholder={filled ? undefined : 'image'}
+>
+  <span class="photo-slot__mark" aria-hidden="true"></span>
+  <span class="photo-slot__label">
+    <span class="photo-slot__name">{name}</span>
+    <span class="photo-slot__note">Photo pending</span>
+  </span>
+  <slot />
+</div>

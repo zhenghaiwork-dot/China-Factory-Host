@@ -1,0 +1,13 @@
+---
+/* Note strip — the mono-labelled aside used for diagram notes and definitions. */
+interface Props {
+  label: string;
+  /** invisible pre-launch anchor — one of "case" | "image" | "wa-number" */
+  marker?: 'case' | 'image' | 'wa-number';
+}
+const { label, marker } = Astro.props;
+---
+<p class="note-strip" data-placeholder={marker}>
+  <span class="note-strip__mono">{label}</span>
+  <slot />
+</p>

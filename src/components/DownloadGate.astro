@@ -1,0 +1,76 @@
+---
+import PhotoSlot from './PhotoSlot.astro';
+import Icon from './Icon.astro';
+/* DownloadGate — lead magnet block.
+
+   It posts to the same endpoint as the contact form (POST /api/inquiry/) but
+   carries `intent=download`, which tells the server to accept an email address
+   alone. Without that flag the endpoint demanded name + goal and answered 400
+   on every single download request.
+
+   The asset is real: public/downloads/factory-vetting-checklist.pdf, generated
+   by `npm run pdf` from the vetting page content. It is only revealed after a
+   200 from the server — we never show a download link for a request that did
+   not reach us. */
+interface Props {
+  id?: string;
+  title?: string;
+  lead?: string;
+  meta?: string;
+  photo?: string;
+  downloadHref?: string;
+}
+const {
+  id = 'checklist-download',
+  title = 'Factory vetting checklist',
+  lead = 'The five checks and the twenty evidence points we work through on site, in the order we run them.',
+  meta = '5 checks · 20 evidence points · 5-page PDF',
+  photo = 'VETTING-CHECKLIST-COVER',
+  downloadHref = '/downloads/factory-vetting-checklist.pdf',
+} = Astro.props;
+---
+<div class="download" id={id}>
+  <div>
+    <div class="download__thumb"><PhotoSlot name={photo} variant="doc" /></div>
+    <h3>{title}</h3>
+    <p class="lead u-mt-0">{lead}</p>
+    <p class="download__meta">{meta}</p>
+  </div>
+  <div class="download__form-wrap">
+    <form class="download__form" data-form>
+      <div class="field">
+        <label class="field__label sr-only" for="dl-email">Email address</label>
+        <input id="dl-email" name="email" type="email" required placeholder="you@domain.com" />
+      </div>
+      <p><button class="btn btn--primary" type="submit">Get the checklist</button></p>
+
+      {/* Tells the server this is the lead-magnet gate, not the contact form.
+          Without it the endpoint requires name + goal and answers 400. */}
+      <input type="hidden" name="intent" value="download" />
+
+      {/* Honeypot — same contract as InquiryForm: bots fill it, humans cannot. */}
+      <div hidden aria-hidden="true" style="display:none">
+        <label for={`${id}-site`}>Website</label>
+        <input id={`${id}-site`} name="website" type="text" tabindex="-1" autocomplete="off" />
+      </div>
+    </form>
+    <p class="download__micro">One email. No drip sequence, no selling your address.</p>
+    <div class="download__success" data-form-status="ok" hidden>
+      <Icon name="checkBig" size={24} />
+      <span tabindex="-1">Your copy is ready.</span>
+      <p>
+        <a class="btn btn--primary" href={downloadHref} download>Download the PDF</a>
+      </p>
+    </div>
+    <div class="form-status form-status--err" data-form-status="err" hidden tabindex="-1">
+      <p class="form-status__title">Something went wrong.</p>
+      {/* Deliberately not "ask us on WhatsApp": the site has no WhatsApp number
+          published yet (WA_NUMBER is empty, which auto-hides every WhatsApp CTA),
+          so that would be a dead end. The contact page always exists. */}
+      <p class="form-status__note">
+        Please try again, or <a href="/contact/">ask us on the contact page</a> and we'll send the
+        file directly.
+      </p>
+    </div>
+  </div>
+</div>

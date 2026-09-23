@@ -1,0 +1,157 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Section from '../../components/Section.astro';
+import SectionHead from '../../components/SectionHead.astro';
+import PhotoSlot from '../../components/PhotoSlot.astro';
+import OnsitePhoto from '../../components/OnsitePhoto.astro';
+import { waLink, REPORT_TURNAROUND } from '../../data/site.ts';
+
+const title = 'Tools — China manufacturing hub finder and factory visit scorecard';
+const description =
+  'Two working tools: find which Chinese region actually makes your product, and score every factory you visit on the same dimensions so the shortlist is decided on evidence.';
+
+const wa = waLink('Hi, I would like to use your factory visit tools.');
+
+/* Precomputed in frontmatter: Astro 7's Rust compiler rejects template literals
+   inside inline attribute/tag expressions. */
+const reportLine =
+  'If you would rather have the same dimensions filled in by somebody who walks the floor for a living, that is a hosted visit, and the written report lands ' +
+  REPORT_TURNAROUND +
+  '.';
+
+const tools = [
+  { k: 'Where to go', t: 'Manufacturing hub finder — match your product to the cluster that really makes it', href: '/tools/china-manufacturing-hub-finder/' },
+  { k: 'How to decide', t: 'Factory visit scorecard — score every supplier on the same six dimensions', href: '/tools/factory-visit-scorecard/' },
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  active=""
+  crumbs={[]}
+  current="Tools"
+  cta={{
+    eyebrow: 'Next step',
+    title: 'Want the scorecard filled in for you?',
+    lead: 'Send the category and the cities. We will say what a hosted visit would cover, and what it would cost, before you commit to anything.',
+    primary: { label: 'Plan my visit', href: '/contact/' },
+    secondary: { label: 'Ask on WhatsApp', href: wa, external: true },
+  }}
+>
+  <section class="hero">
+    <div class="container">
+      <div class="split-7-5">
+        <div>
+          <p class="eyebrow">Tools</p>
+          <h1>Two tools: where to go, and how to score what you see.</h1>
+          <p class="lead hero__lead">
+            Tools are the part of this site you use rather than read. The hub finder maps your
+            product to the Chinese cluster that actually makes it, so you choose the region before
+            you choose a factory. The scorecard is what you fill in on the floor, so every supplier
+            is judged on the same evidence instead of on how friendly the sales manager was.
+          </p>
+          <div class="btn-row">
+            <a class="btn btn--primary" href="/tools/china-manufacturing-hub-finder/">Find my region</a>
+          </div>
+        </div>
+        <div class="hero__media">
+          <PhotoSlot name="TOOLS · ON THE GROUND" variant="media">
+            <OnsitePhoto id="09" eager />
+          </PhotoSlot>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Section tight>
+    <div class="container">
+      <SectionHead
+        title="The two tools, in the order you use them"
+        lead="Region first, scoring second. Picking factories before you have picked the cluster is the most common way a sourcing trip gets wasted."
+      />
+      <div class="related-nav" role="navigation" aria-label="Tools">
+        {
+          tools.map((d) => (
+            <a href={d.href}>
+              <span class="related-nav__k">{d.k}</span>
+              <span class="related-nav__t">{d.t}</span>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container">
+      <SectionHead
+        title="How a tool differs from a guide"
+        lead="A guide tells you what to think about. A tool works the other way round: you bring the product or the factory, and the page hands you back a decision."
+      />
+      <ul class="spec-list">
+        <li>
+          <span class="spec-list__k">They take your input</span>
+          <span>Neither is an article with a form at the bottom. The hub finder starts from what you make; the scorecard starts from the factory in front of you.</span>
+        </li>
+        <li>
+          <span class="spec-list__k">No signup, nothing to install</span>
+          <span>Both are ordinary pages. There is no account, no download and no email wall between you and the answer — read them in the airport if that is when you need them.</span>
+        </li>
+        <li>
+          <span class="spec-list__k">They stop at the boundary</span>
+          <span>The hub finder tells you which region makes your category. It does not name a factory — naming one requires the licence, scope and capacity checks, which is the visit itself.</span>
+        </li>
+        <li>
+          <span class="spec-list__k">Where the scorecard leads</span>
+          <span>{reportLine}</span>
+        </li>
+      </ul>
+    </div>
+  </Section>
+  <Section>
+    <div class="container container--md">
+      <SectionHead
+        eyebrow="Which one first"
+        title="Pick by what you already have, not by what sounds useful."
+        lead="Both are free and neither asks for an email. The one worth opening depends on how far your trip has already got."
+      />
+      <ul class="spec-list">
+        <li>
+          <span class="spec-list__k">You have a product and no region</span>
+          <span
+            >Use the hub finder. Choosing suppliers before choosing the cluster produces quotes you
+            cannot actually compare, because the two factories are pricing different labour,
+            different material chains and different distances to port.</span
+          >
+        </li>
+        <li>
+          <span class="spec-list__k">You already have a shortlist</span>
+          <span
+            >Use the scorecard. The question has stopped being who exists and become which of these
+            three, and that is answered with evidence rather than discovery.</span
+          >
+        </li>
+        <li>
+          <span class="spec-list__k">You are standing in the factory now</span>
+          <span
+            >Use the scorecard on your phone, in the building. The six dimensions are all things you
+            can see within an hour, and none of them survive being remembered at the hotel that
+            night.</span
+          >
+        </li>
+      </ul>
+      <p class="u-mt-6">
+        Both tools stop at a boundary on purpose. The hub finder stops at the region, because naming a
+        factory takes licence, scope and capacity checks — that is
+        <a href="/services/factory-matching/">what factory matching actually is</a>. Whatever region
+        it points you at, <a href="/destinations/">the destination pages</a> say what else that
+        cluster is good at, which matters the moment your second product is not the same animal as
+        your first. The scorecard stops at your own judgement, because it can only score what happens
+        on the floor, and the part that decides most deals happens before and after it — read
+        <a href="/about/how-we-vet-factories/">how we vet factories</a> for that side. If you want the
+        sequence end to end in one page, <a href="/how-it-works/">how it works</a> is the whole thing.
+      </p>
+    </div>
+  </Section>
+</BaseLayout>

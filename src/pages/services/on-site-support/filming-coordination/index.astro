@@ -1,0 +1,391 @@
+---
+import BaseLayout from '../../../../layouts/BaseLayout.astro';
+import Section from '../../../../components/Section.astro';
+import SectionHead from '../../../../components/SectionHead.astro';
+import PhotoSlot from '../../../../components/PhotoSlot.astro';
+import OnsitePhoto from '../../../../components/OnsitePhoto.astro';
+import ComparisonTable from '../../../../components/ComparisonTable.astro';
+import ProcessSteps from '../../../../components/ProcessSteps.astro';
+import RedFlags from '../../../../components/RedFlags.astro';
+import NoteStrip from '../../../../components/NoteStrip.astro';
+import FAQ from '../../../../components/FAQ.astro';
+import { waLink, FILMING_LEAD_TIME } from '../../../../data/site.ts';
+
+const title = 'Filming coordination — how permission to film inside Chinese factories actually works';
+const description =
+  'Personal shoot or commercial production: how filming permission is requested, what is usually refused, who owns the footage, and realistic lead times by cluster and category.';
+
+const waAsk = waLink(
+  'Hi, I would like to know if filming inside factories in China is possible for my shoot.'
+);
+const waCheck = waLink(
+  'Hi, can you check whether filming inside factories in China is feasible for my shoot?'
+);
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  track="creator"
+  active="services"
+  crumbs={[
+    { href: '/services/', label: 'Services' },
+    { href: '/services/on-site-support/', label: 'On-site support' },
+  ]}
+  current="Filming coordination"
+  cta={{
+    eyebrow: 'Next step',
+    title: 'Check if your shoot is feasible.',
+    lead: 'Send the city, category and rough dates. You get an honest read on permission odds, lead time and what will probably be refused.',
+    primary: { label: 'Check if your shoot is feasible', href: '/contact/' },
+    form: { destination: 'Filming coordination' },
+    secondary: { label: 'Ask on WhatsApp', href: waCheck, external: true },
+  }}
+>
+  <!-- 1 · Hero -->
+  <section class="hero hero--inverse">
+    <div class="container">
+      <div class="split-7-5">
+        <div>
+          <p class="eyebrow">Filming coordination</p>
+          <h1 class="display-xl">
+            Yes, you can usually film inside Chinese factories. Here's exactly how we make it
+            happen.
+          </h1>
+          <p class="lead hero__lead">
+            “Can I film inside?” is the question every creator asks first, and almost nobody answers
+            it concretely. Below is how permission actually works in practice — including the cases
+            where the honest answer is no. The short answer is in the <a href="/guides/can-you-film-inside-a-chinese-factory/">filming guide</a>.
+          </p>
+          <div class="btn-row btn-row--stack">
+            <a class="btn btn--primary" href="/contact/">Check if your shoot is feasible</a>
+            <a class="btn btn--secondary" href="/services/creator-factory-tour/"
+              >See the creator factory tour</a
+            >
+          </div>
+        </div>
+        <div class="hero__media">
+          <PhotoSlot name="FILMING · CAMERA ON LINE" variant="media">
+            <OnsitePhoto id="07" eager />
+          </PhotoSlot>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2 · Two tiers -->
+  <Section>
+    <div class="container">
+      <SectionHead
+        eyebrow="Two levels of shoot"
+        title="Personal video shoot or commercial production."
+        lead="The permission path, the lead time and the risk of refusal all change with how big the production is. We ask early because factories answer very differently to each."
+      />
+      <ComparisonTable
+        caption="Personal shoot versus commercial production"
+        labelCol="Dimension"
+        columns={[
+          { name: 'Personal shoot', sub: 'you and a camera' },
+          {
+            name: 'Commercial production',
+            sub: 'crew, lights, client deliverable',
+            featured: true,
+            badge: 'Needs lead time',
+          },
+        ]}
+        rows={[
+          { label: 'Crew size', values: [{ v: '1–2 people' }, { v: '3–8 people' }] },
+          {
+            label: 'Permission difficulty',
+            values: [{ v: 'Usually straightforward' }, { v: 'Case by case, sometimes refused' }],
+          },
+          { label: 'Ask this early', values: [{ v: '2–3 weeks' }, { v: '4–6 weeks' }] },
+          {
+            label: 'Typical equipment allowed',
+            values: [
+              { v: 'Body, 2–3 lenses, handheld gimbal' },
+              { v: 'Lighting, tripods, multiple bodies — declared in advance' },
+            ],
+          },
+          {
+            label: 'Factory likely to review footage',
+            values: [
+              { v: 'Sometimes' },
+              { v: 'Often, and it is written into the permission' },
+            ],
+          },
+          {
+            label: 'Risk of refusal',
+            values: [{ v: 'Low' }, { v: 'Medium, higher with branded lines' }],
+          },
+          {
+            label: 'Coordination fee',
+            values: [{ v: 'Included in the trip' }, { v: 'Quoted separately' }],
+          },
+          { label: 'Second unit / local crew', values: [false, { v: 'On request' }] },
+        ]}
+        ctaRow={[
+          { label: 'Check if your shoot is feasible', href: '/contact/', variant: 'btn--secondary' },
+          { label: 'Ask about filming permission', href: waAsk, variant: 'btn--secondary', external: true },
+        ]}
+        footnote="Everything above describes typical outcomes, not guarantees. The actual answer depends on which factory, which line and what it is producing that week."
+      />
+    </div>
+  </Section>
+
+  <!-- 3 · What we do in advance -->
+  <Section alternate>
+    <div class="container container--md">
+      <SectionHead
+        eyebrow="The work before you arrive"
+        title="Five things that happen before you board the plane."
+        lead="Permission is rarely granted by charm on the day. It is granted because somebody asked a specific question, of a specific person, in writing, with enough notice."
+      />
+      <ProcessSteps
+        items={[
+          {
+            n: '01',
+            code: 'FILM-01',
+            title: 'Identify who actually decides',
+            body: 'Sales staff can rarely grant filming permission. We find out who can — usually the owner or plant manager — and address the request there.',
+            evidence: [
+              'Owner or plant manager identified by name',
+              'Contact made directly rather than through a sales channel',
+              'Decision-maker confirmed, not assumed',
+            ],
+          },
+          {
+            n: '02',
+            code: 'FILM-02',
+            title: 'Submit a written request with scope',
+            body: 'A vague “can we film?” invites a vague no. We submit dates, crew size, equipment list and intended zones, so the answer is specific too.',
+            evidence: [
+              'Dates, crew and equipment declared up front',
+              'Zones requested explicitly — assembly, warehouse, QC, tooling',
+              'Purpose stated honestly: documentary content, not a news investigation',
+            ],
+          },
+          {
+            n: '03',
+            code: 'FILM-03',
+            title: 'Agree restrictions in writing',
+            body: 'Restricted zones exist at every plant. Getting them written down protects you — you stop discovering rules at the doorway.',
+            evidence: [
+              'Off-limits zones named in writing',
+              'Whether the factory requires review before publishing',
+              'Any requirements about faces, screens or customer logos',
+            ],
+          },
+          {
+            n: '04',
+            code: 'FILM-04',
+            title: 'Build filming windows into the itinerary',
+            body: 'A factory visit scheduled for 40 minutes cannot produce a real sequence. We build in time to re-shoot, which changes permission conversations too.',
+            evidence: [
+              'Per-stop shooting time agreed before booking',
+              'Second location held in reserve for refusals',
+              'Production calendar checked so lines are actually running',
+            ],
+          },
+          {
+            n: '05',
+            code: 'FILM-05',
+            title: 'Re-confirm 48 hours out',
+            body: 'Things change: a rush order arrives, a manager travels. We re-confirm permission two days before each stop and re-plan the same day if it slips.',
+            evidence: [
+              'Written re-confirmation 48 hours ahead',
+              'Substitute factory held for every destination',
+              'No surprises delivered at the gate',
+            ],
+          },
+        ]}
+      />
+      <p class="u-mt-6">
+        The full boundary — what gets approved and what does not — is in the <a href="/guides/can-you-film-inside-a-chinese-factory/">filming guide</a>,
+        and the audience it serves is spelled out under <a href="/who-we-help/creators/">creators</a>.
+      </p>
+    </div>
+  </Section>
+
+  <!-- 4 · Risks and restrictions -->
+  <Section>
+    <div class="container container--md">
+      <SectionHead
+        eyebrow="The honest part"
+        title="Where filming fails, and why."
+        lead="We would rather lose a booking by being straight than sell you a trip that falls apart in a factory car park."
+      />
+      <RedFlags
+        title="Refusal patterns — expect these"
+        items={[
+          '<b>Factories running a foreign-brand order under NDA.</b> Usually a flat no, occasionally a denial that the line exists.',
+          '<b>Categories with genuine process secrecy</b> — some coating, plating and clean-room processes are off limits for hygiene and IP reasons.',
+          '<b>Screens and documents containing customer names or unshipped designs.</b> This is the most common on-site correction.',
+          `<b>Requests made less than ${FILMING_LEAD_TIME} out.</b> Often refused purely for lack of time to route it internally.`,
+          '<b>Drone use near industrial zones.</b> Registration and local restrictions make this unreliable; assume no unless cleared in writing.',
+        ]}
+        foot={{
+          href: '/services/creator-factory-tour/',
+          label: 'See what a creator trip looks like instead',
+        }}
+      />
+      <div class="u-mt-6">
+        <NoteStrip label="When permission is refused"
+          >We tell you before you book flights, not at the gate. Every itinerary is built with a
+          substitute factory so a refusal costs you a location, not a shooting day.</NoteStrip
+        >
+      </div>
+    </div>
+  </Section>
+
+  <!-- 5 · Footage ownership -->
+  <Section alternate>
+    <div class="container container--md">
+      <SectionHead
+        eyebrow="Rights"
+        title="Who owns the footage."
+        lead="A question creators are right to ask twice."
+      />
+      <ul class="spec-list clean">
+        <li>
+          <span class="spec-list__k">Your footage</span><span class="spec-list__v"
+            >Owned by you. We take no rights, no revenue share and no credit requirement.</span
+          >
+        </li>
+        <li>
+          <span class="spec-list__k">Factory review</span><span class="spec-list__v"
+            >Some plants ask to see material before it publishes. Where that applies, it is agreed in
+            writing up front, and we tell you before you shoot.</span
+          >
+        </li>
+        <li>
+          <span class="spec-list__k">Restricted material</span><span class="spec-list__v"
+            >If a zone was declared off limits, we do not film there and do not ask again on the
+            day.</span
+          >
+        </li>
+        <li>
+          <span class="spec-list__k">Appearing workers</span><span class="spec-list__v"
+            >Faces are filmed only where it has been agreed. If someone declines, we stop.</span
+          >
+        </li>
+        <li>
+          <span class="spec-list__k">Our own use</span><span class="spec-list__v"
+            >We do not publish your material anywhere without a separate written agreement.</span
+          >
+        </li>
+      </ul>
+      <p class="u-mt-6">
+        Ownership is one part of the wider <a href="/services/on-site-support/">on-site support</a> package.
+      </p>
+    </div>
+  </Section>
+
+  <!-- 6 · Feasibility reference table -->
+  <Section>
+    <div class="container container--md">
+      <SectionHead
+        eyebrow="Quick reference"
+        title="Filming expectation by cluster and category."
+        lead="A static map of what to expect — no form, no waiting. These are the patterns we have seen often enough to print them."
+      />
+      <ul class="spec-list clean">
+        <li>
+          <span class="spec-list__k">Yiwu · small commodities</span><span class="spec-list__v"
+            ><b>Typically friendly.</b> Ask <span class="num">2</span> weeks ahead. Refusals usually
+            limited to specific stalls rather than factories.</span
+          >
+        </li>
+        <li>
+          <span class="spec-list__k">Shenzhen · electronics</span><span class="spec-list__v"
+            ><b>Usually possible, conditions attached.</b> Ask <span class="num">3–4</span> weeks
+            ahead. Branded lines and any NDA customer work are the common refusals.</span
+          >
+        </li>
+        <li>
+          <span class="spec-list__k">Guangzhou / Dongguan · beauty packaging</span><span
+            class="spec-list__v"
+            ><b>Good access.</b> Ask <span class="num">2–3</span> weeks ahead. Clean rooms are
+            restricted; filling and packing lines are usually fine.</span
+          >
+        </li>
+        <li>
+          <span class="spec-list__k">Guangzhou / Dongguan · toys &amp; gifts</span><span
+            class="spec-list__v"
+            ><b>Good access seasonally.</b> Ask <span class="num">2–3</span> weeks ahead. Avoid peak
+            pre-Christmas production months when floors are under pressure.</span
+          >
+        </li>
+        <li>
+          <span class="spec-list__k">Ningbo / Hangzhou · appliances &amp; hardware</span><span
+            class="spec-list__v"
+            ><b>Slower, more formal.</b> Ask <span class="num">4–6</span> weeks ahead. Larger plants
+            route requests through compliance, which is slower but rarely hostile.</span
+          >
+        </li>
+        <li>
+          <span class="spec-list__k">Ningbo / Hangzhou · textiles</span><span class="spec-list__v"
+            ><b>Varies widely.</b> Ask <span class="num">3</span> weeks ahead. Print and dye sections
+            commonly restricted.</span
+          >
+        </li>
+      </ul>
+      <div class="u-mt-6">
+        <NoteStrip label="Reading this table"
+          >An expectation, not an answer. Your specific factory, product and production calendar
+          decide it. Ask us and we will check the actual plant rather than quote the average.</NoteStrip
+        >
+      </div>
+      <p class="u-mt-6">
+        The patterns above vary by <a href="/destinations/">cluster</a> — the destination pages carry the specifics.
+      </p>
+    </div>
+  </Section>
+
+  <!-- 7 · FAQ -->
+  <Section alternate>
+    <div class="container container--md">
+      <SectionHead eyebrow="Before you ask" title="Questions we get about filming permission." />
+      <FAQ
+        items={[
+          {
+            q: 'Can I really film inside Chinese factories?',
+            a: [
+              'Usually yes. The request needs to reach somebody who can say yes, be specific about zones and equipment, and arrive with enough lead time. Where that is not possible, we tell you rather than let you find out on site.',
+            ],
+          },
+          {
+            q: 'What if permission is granted and then withdrawn?',
+            a: [
+              'It happens. We build every itinerary with a substitute factory so a withdrawal costs a location rather than a shooting day, and we re-confirm 48 hours before each stop to catch it early.',
+            ],
+          },
+          {
+            q: 'Will the factory want to approve my video first?',
+            a: [
+              'Sometimes, most often for larger plants and commercial productions. It is agreed in writing before you shoot so you know the condition before you commit.',
+            ],
+          },
+          {
+            q: 'Can I film workers?',
+            a: [
+              'Where it has been agreed. Some factories are comfortable, some are not, and individuals can decline. We do not film faces that have not been agreed to.',
+            ],
+          },
+          {
+            q: 'Do I need permits from the authorities?',
+            a: [
+              'Factory permission is the practical requirement and the one we arrange. Drone flight and certain commercial productions involve additional registration, which we flag case by case.',
+            ],
+          },
+          {
+            q: 'Is there anything you will not ask a factory for?',
+            a: [
+              'Yes. We will not misrepresent your content as promotional material for the factory, and we will not ask for access to anything a plant has already refused in writing.',
+            ],
+          },
+        ]}
+      />
+    </div>
+  </Section>
+</BaseLayout>

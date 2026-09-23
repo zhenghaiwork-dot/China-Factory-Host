@@ -1,0 +1,152 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Section from '../../../components/Section.astro';
+import SectionHead from '../../../components/SectionHead.astro';
+import PhotoSlot from '../../../components/PhotoSlot.astro';
+import OnsitePhoto from '../../../components/OnsitePhoto.astro';
+import Checklist from '../../../components/Checklist.astro';
+import ProcessSteps from '../../../components/ProcessSteps.astro';
+import Caveat from '../../../components/Caveat.astro';
+import RelatedNav from '../../../components/RelatedNav.astro';
+import { waLink } from '../../../data/site.ts';
+
+const title = 'How to plan a China factory visit — the guide';
+const description =
+  'Plan a factory visit around your product: pick the cluster, shortlist real factories, pre-screen them, then build a route that respects the cluster.';
+
+const wa = waLink('Hi, I would like help planning a factory visit in China.');
+
+const steps = [
+  { n: '01', title: 'Define the product and quantity', body: 'The cluster follows from the category, and the quantity decides whether you are a market order or a tooling order. Everything downstream depends on getting these two right.' },
+  { n: '02', title: 'Pick the region, not the airport', body: 'The city that actually makes your category. A cheap flight into the wrong city costs two travel days and shows you factories that were never going to make your product.' },
+  { n: '03', title: 'Shortlist wide, then pre-screen down', body: 'Start with more candidates than you need, then remove them with registration and scope checks. The shortlist is what survives the check, not what you started with.' },
+  { n: '04', title: 'Confirm appointments with the decision-maker', body: 'A confirmed meeting with a sales rep is not a confirmed visit. The appointment has to reach the person who can say yes.' },
+  { n: '05', title: 'Build the route around clusters', body: 'Two visits a day in one cluster, sequenced so the second quote arrives informed by the first. Density, not distance, is what makes a trip productive.' },
+];
+
+const timing = [
+  { k: 'Days', v: 'Three to five for a first trip. Factories sit outside the cities, so every factory day is a travel day too.' },
+  { k: 'Factories per day', v: 'Two, in the same cluster. A walk-through with the production manager takes most of a morning; the second visit is the comparison.' },
+  { k: 'When to go', v: 'Avoid the holiday shutdowns — Chinese New Year and the National Day week close most floors. The calendar, not your availability, decides the good weeks.' },
+];
+
+const lockDown = [
+  'The supplier list, confirmed real — before you book flights, not after.',
+  'Filming permission in writing, if you are filming.',
+  'The hotel district near the industrial zone, not the tourist centre.',
+  'Payment and WeChat set up, so you are reachable the moment you land.',
+];
+
+const mistakes = [
+  'Starting with the travel and hoping the product fits the city.',
+  'Trusting a catalogue and a friendly salesperson without a registration check.',
+  'Overpacking the day — three visits usually means one walk-through gets cut short.',
+  'Booking flights before the supplier list is confirmed real.',
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  active=""
+  crumbs={[]}
+  current="How to plan a China factory visit"
+  cta={{
+    eyebrow: 'Next step',
+    title: 'Plan the visit around your product.',
+    lead: 'Tell us the category and roughly when. We will build the route.',
+    primary: { label: 'Plan my visit', href: '/contact/' },
+    secondary: { label: 'Ask on WhatsApp', href: wa, external: true },
+  }}
+>
+  <section class="hero">
+    <div class="container">
+      <div class="split-7-5">
+        <div>
+          <p class="eyebrow">Guide</p>
+          <h1>Plan the factory visit around the product, not the travel.</h1>
+          <p class="lead hero__lead">
+            The single biggest planning mistake is starting from the flights and hoping the factories
+            fit. Work backwards: product, <a href="/destinations/">cluster</a>, shortlist, route.
+          </p>
+        </div>
+        <div class="hero__media">
+          <PhotoSlot name="GUIDE · PLANNING" variant="media">
+            <OnsitePhoto id="09" />
+          </PhotoSlot>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Section>
+    <div class="container container--md">
+      <SectionHead eyebrow="Work backwards" title="Five steps, in order." />
+      <ProcessSteps items={steps} />
+      <p class="u-mt-6">
+        If you do not know which region makes your product, run it through the <a href="/tools/china-manufacturing-hub-finder/">manufacturing hub finder</a> first.
+        The route itself is what <a href="/how-it-works/">the process</a> turns into a trip, and the <a href="/guides/china-factory-visit-checklist/">on-the-floor checklist</a> is what you run on each visit.
+      </p>
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container container--md">
+      <SectionHead eyebrow="The numbers" title="How long, and how many factories a day." />
+      <ul class="spec-list clean">
+        {timing.map((t) => (
+          <li>
+            <span class="spec-list__k">{t.k}</span><span class="spec-list__v">{t.v}</span>
+          </li>
+        ))}
+      </ul>
+      <p class="u-mt-6">
+        The exact number depends on the cluster — two factories in the same <a href="/destinations/">industrial zone</a>
+        are one morning, two across a province are a lost day. When the route gets complex, this is what
+        <a href="/services/factory-visit-planning/">visit planning</a> exists for.
+      </p>
+    </div>
+  </Section>
+
+  <Section>
+    <div class="container container--md">
+      <SectionHead eyebrow="Before you book" title="What to lock down before the flight." />
+      <Checklist title="Do these first" items={lockDown} />
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container container--md">
+      <SectionHead eyebrow="What goes wrong" title="The four mistakes that waste a trip." />
+      <Checklist title="Avoid these" items={mistakes} refusal plain />
+    </div>
+  </Section>
+
+  <Section>
+    <div class="container container--md">
+      <Caveat
+        title="When to hand the planning to someone local"
+        body="Planning is not hard because it is complicated — it is hard because the ground truth lives in industrial-zone addresses, shift times and a holiday calendar that a map does not show."
+        items={[
+          'Industrial-park addresses are poorly served by map apps; a driver who knows the park saves an hour a day.',
+          'The holiday calendar and the production calendar both decide your window, and neither is on your calendar.',
+          'A cluster only makes sense once you have seen how the factories sit relative to each other.',
+        ]}
+      />
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container">
+      <SectionHead eyebrow="Start here" title="Related pages." />
+      <RelatedNav
+        items={[
+          { k: 'Region', t: 'Pick the cluster', href: '/destinations/' },
+          { k: 'Service', t: 'Factory visit planning', href: '/services/factory-visit-planning/' },
+          { k: 'Trust', t: 'How we vet factories', href: '/about/how-we-vet-factories/' },
+          { k: 'Process', t: 'How it works', href: '/how-it-works/' },
+        ]}
+      />
+    </div>
+  </Section>
+</BaseLayout>

@@ -1,0 +1,81 @@
+---
+/* CostComparisonTable — §5.7. DIY vs hosted, with the hidden-cost rows called
+   out. Undecided figures render as "—" and carry no visible placeholder tag
+   (critique round-2 N1); the footnote states the reason in visitor language. */
+export interface CostRow { item: string; diy: string; us: string; total?: boolean; hidden?: boolean; }
+interface Props { rows: CostRow[]; caption: string; footnote?: string; }
+const { rows, caption, footnote } = Astro.props;
+const num = (v: string) => v !== '—';
+const plain = rows.filter((r) => !r.total);
+const totals = rows.filter((r) => r.total);
+---
+<div class="cmp">
+  <div class="cost-desktop">
+    <table class="cost-table">
+      <caption class="sr-only">{caption}</caption>
+      <thead>
+        <tr>
+          <th scope="col">Cost item</th>
+          <th scope="col">DIY (self-organized)</th>
+          <th scope="col">With ChinaFactoryHost</th>
+        </tr>
+      </thead>
+      <tbody>
+        {
+          rows.map((r) => (
+            <tr class={r.total ? 'cost-total' : undefined}>
+              <th scope="row">
+                {r.item}
+                {r.hidden && <span class="cost-hidden">[ HIDDEN ]</span>}
+              </th>
+              <td class="diy">{r.diy}</td>
+              <td class="us">{r.us}</td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <div class="cost-mobile">
+    <div class="cost-card cost-card--diy">
+      <h3 class="cmp-card__name">DIY (self-organized)</h3>
+      <ul class="cost-card__rows">
+        {
+          plain.map((r) => (
+            <li>
+              <span class="cost-card__k">
+                {r.item}
+                {r.hidden && <span class="cost-hidden">[ HIDDEN ]</span>}
+              </span>
+              <span class="cost-card__v">{num(r.diy) ? <span class="num">{r.diy}</span> : '—'}</span>
+            </li>
+          ))
+        }
+      </ul>
+      {totals.map((r) => (
+        <p class="cost-card__total-row"><span>Estimated total</span><span class="num cost-card__total">{r.diy}</span></p>
+      ))}
+    </div>
+    <div class="cost-card cost-card--us">
+      <h3 class="cmp-card__name">With ChinaFactoryHost</h3>
+      <ul class="cost-card__rows">
+        {
+          plain.map((r) => (
+            <li>
+              <span class="cost-card__k">
+                {r.item}
+                {r.hidden && <span class="cost-hidden">[ HIDDEN ]</span>}
+              </span>
+              <span class="cost-card__v">{num(r.us) ? <span class="num">{r.us}</span> : '—'}</span>
+            </li>
+          ))
+        }
+      </ul>
+      {totals.map((r) => (
+        <p class="cost-card__total-row"><span>Estimated total</span><span class="num cost-card__total">{r.us}</span></p>
+      ))}
+    </div>
+  </div>
+  {footnote && <p class="cost-footnote">{footnote}</p>}
+</div>

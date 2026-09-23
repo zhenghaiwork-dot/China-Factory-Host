@@ -1,0 +1,420 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Section from '../../../components/Section.astro';
+import SectionHead from '../../../components/SectionHead.astro';
+import PhotoSlot from '../../../components/PhotoSlot.astro';
+import OnsitePhoto from '../../../components/OnsitePhoto.astro';
+import FactGrid from '../../../components/FactGrid.astro';
+import NoteStrip from '../../../components/NoteStrip.astro';
+import ComparisonTable from '../../../components/ComparisonTable.astro';
+import Timeline from '../../../components/Timeline.astro';
+import Checklist from '../../../components/Checklist.astro';
+import Caveat from '../../../components/Caveat.astro';
+import CaseCard from '../../../components/CaseCard.astro';
+import FAQ from '../../../components/FAQ.astro';
+import { waLink, FILMING_LEAD_TIME, FILMING_LEAD_TIME_SHORT } from '../../../data/site.ts';
+import { pickUnique } from '../../../data/onsite-photos.ts';
+
+const title = 'Creator factory tour — film inside real Chinese factories, permits handled';
+const description =
+  'Group and private factory tours for creators. Filming permission requested in writing 3–4 weeks ahead, technical interpreter on the floor, and a straight answer on what cannot be filmed before you book.';
+
+const wa = waLink('Hi, I want to film inside factories in China. Can you tell me what is feasible?');
+
+/* Photo coordination for this page: the hero is onsite-01; the three case
+   cards pick first (avoiding the hero and each other), then the day-by-day
+   timeline avoids hero + cards — so no photograph appears on this page twice.
+   The card seeds must stay in sync with the <CaseCard photo={...}> props below. */
+const casePicks = pickUnique(
+  ['CASE · YIWU AISLE', 'CASE · SZX SMT LINE', 'CASE · DG FILLING LINE'],
+  ['01']
+);
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  track="creator"
+  active="services"
+  crumbs={[{ href: '/services/', label: 'Services' }]}
+  current="Creator factory tour"
+  cta={{
+    eyebrow: 'Next step',
+    title: 'Tell us what you want to shoot. We will tell you if it is feasible.',
+    lead: 'Send your category, city and rough dates. You get a straight answer including the parts that will not work.',
+    primary: { label: 'Check upcoming tour dates', href: '/contact/' },
+    form: { destination: 'Creator factory tour' },
+    secondary: { label: 'Ask about filming permission', href: wa, external: true },
+  }}
+>
+  <!-- 1 · Hero -->
+  <section class="hero hero--inverse">
+    <div class="container">
+      <div class="split-7-5">
+        <div>
+          <p class="eyebrow">Creator factory tour</p>
+          <h1 class="display-xl">Film the real China factory floor — permits handled.</h1>
+          <p class="lead hero__lead">
+            Most factories say yes to filming when the request reaches the owner in the right form
+            and early enough. That is most of our job. The rest is being next to you when you shoot.
+          </p>
+          <div class="btn-row btn-row--stack">
+            <a class="btn btn--primary" href="/contact/">Check upcoming tour dates</a>
+            <a class="btn btn--secondary" href="/services/on-site-support/filming-coordination/"
+              >Ask about filming permission</a
+            >
+          </div>
+          <ul class="hero__micro">
+            <li>Permission requested <span class="num">3–4</span> weeks ahead</li>
+            <li>Interpreter who knows the process vocabulary</li>
+            <li>You own your footage</li>
+          </ul>
+        </div>
+        <div class="hero__media">
+          <PhotoSlot name="CREATOR-HERO · LINE SHOOT" variant="media">
+            <OnsitePhoto id="01" eager />
+          </PhotoSlot>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2 · The three questions creators actually ask first -->
+  <Section tight>
+    <div class="container">
+      <SectionHead
+        eyebrow="Straight answers first"
+        title="Can you film here? Three questions, answered plainly."
+      />
+      <FactGrid
+        items={[
+          {
+            k: 'Can I film?',
+            v: 'Usually',
+            note: 'Owner-run factories are generally open to being filmed. Refusals cluster in defence-adjacent lines, brand-contract OEM plants and anything with a foreign-brand NDA.',
+          },
+          {
+            k: 'What can I film?',
+            v: 'Depends on zone',
+            note: 'Assembly, packing, warehouse and interviews are normally fine. Restricted areas exist in every plant, and we find out which before you arrive — not at the gate.',
+          },
+          {
+            k: 'How early to ask?',
+            v: '3–4 weeks',
+            note: `Under ${FILMING_LEAD_TIME_SHORT} and the answer is often “not this time”. We tell you the real window for your category, not a generic one.`,
+          },
+        ]}
+      />
+      <p class="u-mt-6">
+        The full boundaries — what gets approved, what does not, and the lead time — are in the <a href="/guides/can-you-film-inside-a-chinese-factory/">filming guide</a>.
+      </p>
+    </div>
+  </Section>
+
+  <!-- 3 · Group vs Private -->
+  <Section alternate>
+    <div class="container">
+      <SectionHead
+        eyebrow="Two ways to travel"
+        title="Group tour or private tour."
+        lead="The difference is not luxury. It is how much control you need over what gets filmed and when."
+      />
+
+      <ComparisonTable
+        caption="Group tour versus private tour features"
+        labelCol="What's included"
+        columns={[
+          {
+            name: 'Group tour',
+            sub: 'fixed dates',
+            cta: { label: 'Check upcoming dates', href: '/contact/', variant: 'btn--secondary' },
+          },
+          {
+            name: 'Private tour',
+            sub: 'your dates, your route',
+            featured: true,
+            badge: 'Most flexible',
+            cta: { label: 'Plan a private tour', href: '/contact/', variant: 'btn--primary' },
+          },
+        ]}
+        rows={[
+          { label: 'Trip length', values: [{ v: '5 days / 4 nights' }, { v: '3–7 days' }] },
+          { label: 'Group size', values: [{ v: '4–8 creators' }, { v: 'You, plus up to 4' }] },
+          { label: 'Filming permission', values: [true, true] },
+          {
+            label: 'Filming windows',
+            values: [{ v: 'Shared, scheduled per stop' }, { v: 'Built around your shot list' }],
+          },
+          {
+            label: 'Route control',
+            values: [{ v: 'Fixed, optimised for variety' }, { v: 'Chosen factory by factory' }],
+          },
+          {
+            label: 'Equipment handling',
+            values: [{ v: 'Shared transport' }, { v: 'Dedicated vehicle space' }],
+          },
+          { label: 'Interpreter with technical vocabulary', values: [true, true] },
+          { label: 'Second unit / local crew', values: [false, { v: 'On request' }] },
+          { label: 'Lead time needed', values: [{ v: '3 weeks' }, { v: '4 weeks' }] },
+          {
+            label: 'Trip fee per person',
+            values: [
+              { v: '$—', price: true, tbc: true },
+              { v: '$—', price: true, tbc: true },
+            ],
+          },
+        ]}
+        footnote="Prices are intentionally blank. We will publish the audited range rather than print a number we cannot stand behind — ask us and we will quote your dates directly."
+      />
+    </div>
+  </Section>
+
+  <!-- 4 · Itinerary -->
+  <Section>
+    <div class="container container--md">
+      <SectionHead
+        eyebrow="Sample structure"
+        title="Five days, arranged around light and production runs."
+        lead="This is a typical group-tour skeleton. It changes with your category, your shot list and which lines happen to be running that week."
+      />
+
+      <Timeline
+        media
+        exclude={['01', ...casePicks]}
+        items={[
+          {
+            day: 'DAY 1',
+            time: 'ARRIVAL',
+            title: 'Pick-up and briefing',
+            desc: 'Airport pick-up, hotel check-in, then a two-hour briefing: which factories cleared permission, what is off limits at each, and the shot order we recommend.',
+            slot: 'DAY1 · BRIEFING',
+          },
+          {
+            day: 'DAY 2',
+            time: 'MARKET',
+            title: 'Context day at the market',
+            desc: 'A full day in the wholesale market your category trades in — prices, MOQs and how the sourcing actually happens, before any factory visit.',
+            slot: 'DAY2 · MARKET',
+          },
+          {
+            day: 'DAY 3',
+            time: 'FACTORY A + B',
+            title: 'Two factories, one developed shoot',
+            desc: 'One factory shot for depth, one for volume. Production manager interview scheduled between the two, with a technical interpreter in the room.',
+            slot: 'DAY3 · LINE',
+          },
+          {
+            day: 'DAY 4',
+            time: 'DEEP VISIT',
+            title: 'Single-site deep dive',
+            desc: 'The factory that agreed to the most access. Raw material store, tooling room, QC bench and the packing line — with time to re-shoot.',
+            slot: 'DAY4 · TOOLING',
+          },
+          {
+            day: 'DAY 5',
+            time: 'WRAP',
+            title: 'Pick-up shots and departure',
+            desc: 'B-roll, street-level context around the industrial zone, quotes reviewed for accuracy, then transfer to the airport or station.',
+            slot: 'DAY5 · B-ROLL',
+          },
+        ]}
+      />
+    </div>
+  </Section>
+
+  <!-- 5 · Filming coordination included -->
+  <Section alternate>
+    <div class="container container--md">
+      <SectionHead eyebrow="Included in every tour" title="What we do before you get on the plane." />
+      <Checklist
+        title="Filming coordination"
+        numbered
+        items={[
+          'Written permission request to the factory owner, not only the sales contact',
+          'Shot restrictions confirmed per zone, in writing, before booking',
+          'Equipment list submitted ahead of time so security knows what is coming',
+          'A production calendar check — we do not visit during a shutdown week',
+          'Interpreter briefed on your technical questions, not just general Mandarin',
+          'Filming windows built into the itinerary instead of squeezed into it',
+        ]}
+      />
+      <p class="u-mt-6">
+        That permission work is the <a href="/services/on-site-support/filming-coordination/">filming coordination</a> service, available on its own too.
+      </p>
+    </div>
+  </Section>
+
+  <!-- 6 · Price -->
+  <Section>
+    <div class="container container--md">
+      <SectionHead eyebrow="Money" title="What the trip costs — and what is not included." />
+      <FactGrid
+        items={[
+          {
+            k: 'Trip fee (group)',
+            /* Blank on purpose — the "Why the price is blank" note below already
+               says so in visitor-facing words. No visible [ PRICE TBC ] tag. */
+            v: '$—',
+            note: 'Per person, covering hosting, interpreting, factory access and ground transport.',
+          },
+          {
+            k: 'Trip fee (private)',
+            v: '$—',
+            note: 'Per group, varying with day count, crew size and how much permission work is needed.',
+          },
+          {
+            k: 'Not included, and never marked up',
+            v: 'Flights · Hotel · Visa',
+            note: 'You book these yourself. We do not resell them and we do not add margin to them.',
+          },
+        ]}
+      />
+      <NoteStrip label="Why the price is blank"
+        >We would rather quote your specific dates than publish a range that does not survive
+        contact with real factories. Ask and you will get a number, a scope, and the conditions
+        attached to it.</NoteStrip
+      >
+    </div>
+  </Section>
+
+  <!-- 7 · What you can shoot -->
+  <Section alternate>
+    <div class="container container--md">
+      <SectionHead
+        eyebrow="Usable output"
+        title="What has been cleared on past trips."
+        lead="This list is what factories have typically agreed to. It is an expectation to plan around, never a promise for your specific shoot."
+      />
+      <ul class="chip-list u-mb-6">
+        <li><span class="chip-tag">Assembly line running</span></li>
+        <li><span class="chip-tag">Worker close-ups</span></li>
+        <li><span class="chip-tag">Raw material store</span></li>
+        <li><span class="chip-tag">Tooling room</span></li>
+        <li><span class="chip-tag">QC bench</span></li>
+        <li><span class="chip-tag">Warehouse &amp; loading</span></li>
+        <li><span class="chip-tag">Sample room</span></li>
+        <li><span class="chip-tag">Owner interview</span></li>
+        <li><span class="chip-tag">Production manager interview</span></li>
+        <li><span class="chip-tag">Dormitory / canteen (rare)</span></li>
+        <li><span class="chip-tag">Street-level industrial zone</span></li>
+        <li><span class="chip-tag">Price negotiation on camera (rare)</span></li>
+      </ul>
+      <Caveat
+        title="Where camera access stops"
+        body="Some requests fail more often than creators expect. Knowing them in advance means you can design a story that does not depend on them."
+        items={[
+          'Factories running a foreign-brand order under NDA — usually a flat refusal, sometimes only a denial that the line exists',
+          'Restricted processes (coating, plating, some clean rooms) for hygiene or safety reasons',
+          'Live screen content showing customer names or unshipped designs',
+          'Filming staff who have not agreed to appear, including dormitory areas',
+          'Same-day permission requests — we do not pretend these usually work',
+        ]}
+      />
+      <p class="u-mt-6">
+        The whole package is spelled out for <a href="/who-we-help/creators/">creators</a> — permissions, footage ownership and the equipment limits.
+      </p>
+    </div>
+  </Section>
+
+  <!-- 8 · Cases -->
+  <Section>
+    <div class="container">
+      <SectionHead
+        eyebrow="Proof"
+        title="Creator trips we have hosted."
+        lead="Structured placeholders until each client confirms they can be named."
+      />
+      <div class="case-grid">
+        <CaseCard
+          href="/case-studies/sample-creator-yiwu/"
+          type="creator"
+          destination="yiwu"
+          photo="CASE · YIWU AISLE"
+          id={casePicks[0]}
+          category="Small commodities"
+          place="Yiwu"
+          title="Six factory visits and one market day in five days"
+          result="<span class=&quot;num&quot;>6</span> factories filmed · <span class=&quot;num&quot;>2</span> rejected on site"
+          info="Creator · <span class=&quot;num&quot;>1</span> host · <span class=&quot;num&quot;>5</span> days"
+        />
+        <CaseCard
+          href="/case-studies/"
+          type="creator"
+          destination="shenzhen"
+          photo="CASE · SZX SMT LINE"
+          id={casePicks[1]}
+          category="Consumer electronics"
+          place="Shenzhen"
+          title="Filming an SMT line without stopping production"
+          result="Permission granted in <span class=&quot;num&quot;>9</span> working days"
+          info="Creator · crew of <span class=&quot;num&quot;>2</span> · <span class=&quot;num&quot;>4</span> days"
+        />
+        <CaseCard
+          href="/case-studies/"
+          type="creator"
+          destination="guangzhou-dongguan"
+          photo="CASE · DG FILLING LINE"
+          id={casePicks[2]}
+          category="Beauty packaging"
+          place="Dongguan"
+          title="Inside a cosmetics filling line from raw tank to carton"
+          result="5 zones cleared, <span class=&quot;num&quot;>1</span> zone refused in writing"
+          info="Creator · <span class=&quot;num&quot;>1</span> host · <span class=&quot;num&quot;>3</span> days"
+        />
+      </div>
+    </div>
+  </Section>
+
+  <!-- 9 · FAQ -->
+  <Section alternate>
+    <div class="container container--md">
+      <SectionHead eyebrow="Before you book" title="Questions creators ask us most." />
+      <FAQ
+        items={[
+          {
+            q: 'Can I really film inside the factory?',
+            a: [
+              'In most cases yes. Filming permission is requested in writing, addressed to the factory owner rather than the sales contact, and confirmed before you book anything. Where a plant refuses, we tell you before you pay for a flight rather than at the gate.',
+            ],
+          },
+          {
+            q: 'How early do I need to book?',
+            a: [
+              `Three weeks for a group tour, four for a private route that needs per-factory permission work. Under ${FILMING_LEAD_TIME}, expect refusals and fewer choices.`,
+            ],
+          },
+          {
+            q: 'Who owns the footage?',
+            a: [
+              'You do. Some factories ask to review what you publish; that condition is agreed in writing up front, and we tell you when it applies. We do not take a cut of anything your content earns.',
+            ],
+          },
+          {
+            q: 'Can I bring a drone?',
+            a: [
+              'Assume no unless we clear it in writing. Drone use around Chinese industrial zones involves registration and local restrictions that most visitors underestimate.',
+            ],
+          },
+          {
+            q: 'What happens if permission falls through at the last minute?',
+            a: [
+              'We build a substitute factory into every itinerary for exactly this reason. You will still have a shooting day. What we will not do is tell you everything is fine when it is not.',
+            ],
+          },
+          {
+            q: 'Do you work with first-time visitors?',
+            a: [
+              'Often. We handle visa invitation letters, hotel near the industrial zone, SIM card, payment apps and the parts of China that quietly trip people up.',
+            ],
+          },
+          {
+            q: 'Do you take commission from the factories?',
+            a: [
+              'No. Our fee comes from you. That is the only way we can tell you to walk away from a factory on the day.',
+            ],
+          },
+        ]}
+      />
+    </div>
+  </Section>
+</BaseLayout>

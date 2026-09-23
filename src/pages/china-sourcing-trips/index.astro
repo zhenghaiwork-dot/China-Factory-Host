@@ -1,0 +1,217 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Section from '../../components/Section.astro';
+import SectionHead from '../../components/SectionHead.astro';
+import PhotoSlot from '../../components/PhotoSlot.astro';
+import OnsitePhoto from '../../components/OnsitePhoto.astro';
+import Icon from '../../components/Icon.astro';
+import Checklist from '../../components/Checklist.astro';
+import FAQ from '../../components/FAQ.astro';
+import { waLink } from '../../data/site.ts';
+
+const title = 'China sourcing trips — find, verify, visit and follow up in one trip';
+const description =
+  'Multi-day sourcing trips to China, built around your product and the industrial clusters that make it. Market, factory and trade-fair routes, with verification before you fly.';
+
+const wa = waLink('Hi, I would like to plan a sourcing trip to China.');
+
+const models = [
+  {
+    icon: 'factory',
+    title: 'Factory-first',
+    desc: 'You have a product and suppliers in mind. We verify each one, then run the visits in the right cluster.',
+    href: '/services/brand-sourcing-visit/',
+    cta: 'Verify and visit',
+  },
+  {
+    icon: 'route',
+    title: 'Market-first',
+    desc: 'A wide SKU assortment starts at the market — Yiwu, for example — then moves to the factories behind the stalls.',
+    href: '/destinations/yiwu/',
+    cta: 'See the market route',
+  },
+  {
+    icon: 'calendar',
+    title: 'Fair-first',
+    desc: 'Build a shortlist at a trade fair, then verify it on the floor before you commit to anything.',
+    href: '/contact/',
+    cta: 'Plan around a fair',
+  },
+];
+
+const lengths = [
+  { k: '3 days', v: 'One cluster, two or three suppliers, a market day if it fits.' },
+  { k: '5 days', v: 'One region done properly — market plus factories, or two adjacent clusters.' },
+  { k: '7 days', v: 'Two regions, or one region plus a trade fair you are already attending.' },
+  { k: '10 days', v: 'Multi-city: market, factories and fair, sequenced so you are not backtracking.' },
+];
+
+const includes = [
+  'Supplier pre-screening before you arrive, so the shortlist survives a registration check',
+  'A route built around industrial clusters, not tourist itineraries',
+  'Appointments made with the decision-maker at each stop',
+  'Transport, interpreting and on-the-ground support for the whole trip',
+  'A written report covering every factory visited and rejected',
+];
+
+const faqs = [
+  {
+    q: 'How is a sourcing trip different from a factory visit?',
+    a: [
+      'A factory visit is a single appointment. A sourcing trip is the whole chain — deciding the region, shortlisting suppliers, visiting them, and turning what you saw into samples, quotes and a decision. One is a meeting; the other is the reason for the meeting.',
+    ],
+  },
+  {
+    q: 'How many days do I need?',
+    a: [
+      'Three days works for one cluster. Five days covers one region properly. Seven to ten days is worth it when you are combining a market, factories and a trade fair. We will tell you how many days your actual plan deserves — including when the answer is fewer than you expected.',
+    ],
+  },
+  {
+    q: 'Can you combine a trade fair with factory visits?',
+    a: [
+      'Yes, and it is one of the most efficient versions of the trip: collect names at the fair, then verify the promising ones on the floor before you sign anything. The sequence matters — we plan the fair days and the factory days so neither wastes the other.',
+    ],
+  },
+  {
+    q: 'What does a sourcing trip cost?',
+    a: [
+      'Our pricing is two visible lines: a hosting and coordination fee, and an optional sourcing commission that we disclose in writing. We do not take hidden factory commissions, and we will show you the structure before you pay anything.',
+    ],
+  },
+  {
+    q: 'When should I not come?',
+    a: [
+      'Chinese New Year and National Day shut most factories for one to three weeks. We plan around the holiday calendar, and we will tell you plainly if your dates are bad before you book a flight.',
+    ],
+  },
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  active=""
+  crumbs={[]}
+  current="China sourcing trips"
+  cta={{
+    eyebrow: 'Next step',
+    title: 'Build a route around your product.',
+    lead: 'Tell us the category, the cities you are considering and roughly when. You get a realistic day-by-day plan.',
+    primary: { label: 'Build my route', href: '/contact/' },
+    secondary: { label: 'Ask on WhatsApp', href: wa, external: true },
+  }}
+>
+  <section class="hero">
+    <div class="container">
+      <div class="split-7-5">
+        <div>
+          <p class="eyebrow">China sourcing trips</p>
+          <h1>Find, verify, visit and follow up — in one trip, not five guesses.</h1>
+          <p class="lead hero__lead">
+            A sourcing trip is the whole chain: the region, the shortlist, the visits, and the
+            follow-through. We run it around your product, not around a tourist itinerary — a single
+            appointment is a <a href="/factory-visits/">factory visit</a>.
+          </p>
+          <div class="btn-row">
+            <a class="btn btn--primary" href="/contact/">Build my route</a>
+            <a class="btn btn--secondary" href="/factory-visits/">See factory visits</a>
+          </div>
+        </div>
+        <div class="hero__media">
+          <PhotoSlot name="SOURCING · THE ROUTE" variant="media">
+            <OnsitePhoto id="08" />
+          </PhotoSlot>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Section>
+    <div class="container container--md">
+      <SectionHead
+        eyebrow="The idea"
+        title="A sourcing trip is a decision with travel attached."
+      />
+      <div class="prose stack">
+        <p>
+          Most trips go wrong before the plane lands: the wrong <a href="/destinations/">region</a>, a shortlist that never got
+          checked, or a schedule that treats factories like sights. The fix is to run it backwards —
+          start from the product and the decision, then build the travel around it.
+        </p>
+        <p>
+          That is the whole point of a hosted trip. The visiting is the easy part once the region is
+          right and the suppliers are real — the sequence is <a href="/how-it-works/">the process</a>.
+        </p>
+      </div>
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container">
+      <SectionHead
+        eyebrow="Three routes"
+        title="Start with the kind of trip you actually need."
+      />
+      <div class="grid--3">
+        {
+          models.map((m) => (
+            <article class="split-card">
+              <span class="split-card__icon"><Icon name={m.icon} size={32} /></span>
+              <h3 class="split-card__title">{m.title}</h3>
+              <p class="split-card__desc">{m.desc}</p>
+              <p class="split-card__cta">
+                <a class="link-arrow" href={m.href}>
+                  {m.cta}
+                  <Icon name="arrow" size={14} />
+                </a>
+              </p>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </Section>
+
+  <Section>
+    <div class="container container--md">
+      <SectionHead
+        eyebrow="How long"
+        title="Four example lengths, sequenced around clusters."
+        lead="Example structures, not a promise about any specific factory's availability."
+      />
+      <ul class="spec-list clean">
+        {
+          lengths.map((l) => (
+            <li>
+              <span class="spec-list__k">{l.k}</span><span class="spec-list__v">{l.v}</span>
+            </li>
+          ))
+        }
+      </ul>
+      <p class="u-mt-6">
+        The route itself is <a href="/services/factory-visit-planning/">visit planning</a>; a fair-first trip runs through <a href="/trade-shows/">trade shows</a>.
+      </p>
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container container--md">
+      <SectionHead
+        eyebrow="What is included"
+        title="What the trip includes end to end."
+      />
+      <Checklist title="On a hosted sourcing trip" numbered items={includes} />
+      <p class="u-mt-6">
+        The pre-screening is the <a href="/about/how-we-vet-factories/">five vetting checks</a>.
+      </p>
+    </div>
+  </Section>
+
+  <Section tight>
+    <div class="container">
+      <SectionHead title="Questions people ask before booking a trip." />
+      <FAQ items={faqs} />
+    </div>
+  </Section>
+</BaseLayout>

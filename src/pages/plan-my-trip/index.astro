@@ -1,0 +1,137 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Section from '../../components/Section.astro';
+import SectionHead from '../../components/SectionHead.astro';
+import Checklist from '../../components/Checklist.astro';
+import ProcessSteps from '../../components/ProcessSteps.astro';
+import FAQ from '../../components/FAQ.astro';
+import InquiryForm from '../../components/InquiryForm.astro';
+import { waLink, REPLY_TIME, REPLY_TIME_PROMISE } from '../../data/site.ts';
+
+const title = 'Plan my trip — tell us what you need to see on the floor';
+const description =
+  'Send the category, the city and roughly when. We return a realistic day-by-day plan, including where we think it is a bad idea.';
+
+const wa = waLink('Hi, I would like to plan a factory trip to China.');
+
+const include = [
+  'Your product or category, and roughly how much you expect to order',
+  'Whether you already have a supplier list, or need us to build one',
+  'The cities you are considering — or that you are not sure which ones',
+  'Your dates, or the window you are looking at',
+  'Team size, languages, and whether you need filming, transport or an interpreter',
+];
+
+const brief = [
+  { k: 'A thin brief', v: '"I want to visit some factories in China." — tells us nothing about what you make, so we cannot say which cluster, and the answer has to be another question.' },
+  { k: 'A brief we can build from', v: '"<a href="/industries/beauty-packaging/">Beauty packaging</a> — 30ml serum bottles with pumps, private label, first order around 5,000 units, <a href="/destinations/guangzhou-dongguan/">Guangzhou or Dongguan</a>, April, two people, need a filling plant and a packaging supplier." — we can name the cluster, the supplier types and the days.' },
+];
+
+const steps = [
+  { n: '01', title: 'We read it', body: 'A person, not an autoresponder. We read what you wrote and figure out what we still need to ask.' },
+  { n: '02', title: 'We run the pre-screening', body: 'Before promising anything, we check that the category, the cluster and the dates line up — including whether the dates fall on a holiday shutdown.' },
+  { n: '03', title: 'You get a plan or a straight answer', body: REPLY_TIME_PROMISE + ', China Time. Either a realistic day-by-day plan, or a plain explanation of why the trip is a bad idea as described.' },
+];
+
+const faqs = [
+  { q: 'What happens after I submit the form?', a: ['A person reads it — not an autoresponder. If the brief is thin, the reply is a short list of what we still need. If it is complete, you get a plan or a straight answer.'] },
+  { q: 'How fast do you reply?', a: ['We reply ' + REPLY_TIME + ', China Time (GMT+8), Monday to Friday. If it is urgent, WhatsApp is faster.'] },
+  { q: 'Do I pay before I see the plan?', a: ['No. The plan and the feasibility answer are free. You pay only when you book a trip, and the structure is on the pricing page.'] },
+  { q: 'What if you cannot help?', a: ['We say so, and we say why — wrong category, wrong dates, or a request that a cheaper remote service would serve better. We would rather lose an inquiry than sell a trip we cannot deliver.'] },
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  active=""
+  crumbs={[]}
+  current="Plan my trip"
+  cta={false}
+>
+  <section class="hero">
+    <div class="container">
+      <div class="split-7-5">
+        <div>
+          <p class="eyebrow">Plan my trip</p>
+          <h1>Tell us what you need to see on the floor.</h1>
+          <p class="lead hero__lead">
+            One message with the essentials is enough. We return a realistic day-by-day plan — the
+            route, the shortlist and the days — including the parts we think are a bad idea. This is
+            <a href="/how-it-works/">how the process works</a>, from message to report.
+          </p>
+          <div class="btn-row">
+            <a class="btn btn--secondary" href="/how-it-works/">See the process first</a>
+          </div>
+        </div>
+        <div class="hero__media">
+          <div class="hero__panel">
+            <p class="u-mb-0 u-secondary u-sm">
+              What happens next: we read it, run the pre-screening, and reply {REPLY_TIME} with a
+              plan or a straight answer about why not.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Section tight>
+    <div class="container container--md">
+      <SectionHead
+        eyebrow="What to include"
+        title="The six things that let us build a route."
+        lead="More detail gets you a more specific plan. Missing detail just means we ask."
+      />
+      <Checklist items={include} />
+      <p class="u-mt-6">
+        Not sure which of these fits you? The <a href="/who-we-help/">who we help</a> pages split it by role, and the <a href="/guides/">guides</a> cover the preparation.
+      </p>
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container container--md">
+      <SectionHead
+        eyebrow="Good brief, thin brief"
+        title="The difference is in the specifics."
+        lead="The brief decides whether the answer is a plan or another question."
+      />
+      <ul class="spec-list clean">
+        {brief.map((b) => (
+          <li>
+            <span class="spec-list__k">{b.k}</span><span class="spec-list__v" set:html={b.v} />
+          </li>
+        ))}
+      </ul>
+    </div>
+  </Section>
+
+  <Section>
+    <div class="container container--md">
+      <SectionHead eyebrow="After you send" title="What happens next." />
+      <ProcessSteps items={steps} />
+      <p class="u-mt-6">
+        The plan is free, and the <a href="/pricing/">pricing</a> is two visible lines — nothing is folded into your unit price.
+      </p>
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container container--md">
+      <SectionHead eyebrow="Before you send" title="The questions people ask first." />
+      <FAQ items={faqs} />
+    </div>
+  </Section>
+
+  <Section>
+    <div class="container container--md">
+      <InquiryForm
+        title="Build my route"
+        lead="Six fields, one mandatory choice. We reply with a plan or a straight answer."
+        variant="full"
+        submitLabel="Send my trip details"
+      />
+    </div>
+  </Section>
+</BaseLayout>

@@ -1,0 +1,44 @@
+---
+/* FAQAccordion — §5.11. Native <details>: works with JavaScript switched off.
+
+   FAQPage JSON-LD is emitted here, next to the questions themselves, rather
+   than in <head>: both are built from the same `items` array, so the visible
+   answer and the machine-readable answer cannot drift apart. JSON-LD is valid
+   in <body> as well as <head>.
+
+   Pass schema={false} on a page that publishes its own combined FAQPage —
+   see src/pages/faq/index.astro, which renders four FAQ groups and has to
+   publish them as one graph rather than four competing ones. */
+interface Item { q: string; a: string[]; }
+interface Props { items: Item[]; schema?: boolean; }
+const { items, schema = true } = Astro.props;
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: items.map((it) => ({
+    '@type': 'Question',
+    name: it.q,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: it.a.join(' '),
+    },
+  })),
+};
+---
+{schema && <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />}
+<div class="faq">
+  {
+    items.map((it) => (
+      <details class="faq-item" name="faq">
+        <summary class="faq-item__q">
+          {it.q}
+          <span class="faq-item__icon" aria-hidden="true"></span>
+        </summary>
+        <div class="faq-item__a">
+          {it.a.map((p) => <p>{p}</p>)}
+        </div>
+      </details>
+    ))
+  }
+</div>

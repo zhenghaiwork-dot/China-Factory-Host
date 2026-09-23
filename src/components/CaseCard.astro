@@ -1,0 +1,56 @@
+---
+import PhotoSlot from './PhotoSlot.astro';
+import OnsitePhoto from './OnsitePhoto.astro';
+import { pickPhoto, type PhotoId } from '../data/onsite-photos.ts';
+import Icon from './Icon.astro';
+/* CaseCard — §5.10. Carries data-type / data-destination for the client-side
+   filter on /case-studies/. Every card is an illustrative entry until we hold a
+   real case with written permission — that is carried by the machine-readable
+   marker below, never by visible copy (critique round-2 N1). */
+interface Props {
+  href: string;
+  type: 'creator' | 'buyer';
+  destination: string;
+  /** photo slot code — NOT `slot`: that attribute is reserved by Astro */
+  photo: string;
+  category: string;
+  place: string;
+  title: string;
+  result: string;
+  info: string;
+  /** page-coordinated pick: when given, it overrides the seed-based pick so a
+      page can keep its cards distinct from the hero and each other */
+  id?: PhotoId;
+}
+const { href, type, destination, photo, category, place, title, result, info, id } = Astro.props;
+---
+<a
+  class="case-card"
+  href={href}
+  data-type={type}
+  data-destination={destination}
+  data-placeholder="case"
+>
+  <span class:list={['case-card__type', 'badge', type === 'creator' ? 'badge--creator' : 'badge--buyer']}>
+    {type === 'creator' ? 'Creator' : 'Brand buyer'}
+  </span>
+  {/* Marker is namespaced like every other placeholder: "case" = an
+      illustrative case study awaiting a real, permissioned one. It lives on the
+      <a> as an attribute, so a pre-launch grep still finds every card while no
+      visitor ever reads the word "Placeholder" (critique round-2 N1). The
+      visible .badge--placeholder flag and the generic "true" value are gone. */}
+  <span class="case-card__media">
+    <PhotoSlot name={photo} variant="card">
+      <OnsitePhoto id={id ?? pickPhoto(photo)} />
+    </PhotoSlot>
+  </span>
+  <div class="case-card__body">
+    <p class="case-card__meta">{category} · {place}</p>
+    <h3 class="case-card__title">{title}</h3>
+    <p class="case-card__result">
+      <Icon name="target" size={14} />
+      <span set:html={result}></span>
+    </p>
+    <p class="case-card__info" set:html={info}></p>
+  </div>
+</a>

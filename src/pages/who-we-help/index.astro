@@ -1,0 +1,159 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Section from '../../components/Section.astro';
+import SectionHead from '../../components/SectionHead.astro';
+import PhotoSlot from '../../components/PhotoSlot.astro';
+import OnsitePhoto from '../../components/OnsitePhoto.astro';
+import { waLink, REPLY_TIME } from '../../data/site.ts';
+
+const title = 'Who we help — first-time buyers, brand founders, procurement teams, creators';
+const description =
+  'The trip is different depending on what you are there to do: a first sourcing trip, private label and small batch, standardized supplier comparisons, or filming inside real factories.';
+
+const wa = waLink('Hi, I am not sure whether you can help someone in my situation.');
+
+/* Precomputed in frontmatter: Astro 7's Rust compiler rejects template literals
+   inside inline attribute/tag expressions. */
+const replyLine = 'If none of these sounds like you, send the details anyway — we reply ' + REPLY_TIME + ' and say plainly which one applies, or that none does.';
+
+const audiences = [
+  { k: 'First-time buyers', t: 'Your first China sourcing trip — cluster, payment setup and a real checklist', href: '/who-we-help/first-time-buyers/' },
+  { k: 'Brand founders', t: 'Private label and small batch — MOQ, tooling ownership, representative samples', href: '/who-we-help/brand-founders/' },
+  { k: 'Procurement teams', t: 'Standardized visits and a written report per supplier, built for internal review', href: '/who-we-help/procurement-teams/' },
+  { k: 'Creators', t: 'Film inside real factories — permission in writing, route built around the shot list', href: '/who-we-help/creators/' },
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  active=""
+  crumbs={[]}
+  current="Who we help"
+  cta={{
+    eyebrow: 'Next step',
+    title: 'Still not sure you fit?',
+    lead: 'Describe what you are trying to do and what is worrying you about it. You get a straight answer about whether we are the right people.',
+    primary: { label: 'Tell us your situation', href: '/contact/' },
+    secondary: { label: 'Ask on WhatsApp', href: wa, external: true },
+  }}
+>
+  <section class="hero">
+    <div class="container">
+      <div class="split-7-5">
+        <div>
+          <p class="eyebrow">Who we help</p>
+          <h1>Same country, four completely different jobs.</h1>
+          <p class="lead hero__lead">
+            A first-time buyer needs the right cluster and a payment method that actually works. A
+            brand founder needs MOQ and tooling ownership settled before money moves. A procurement
+            team needs ten suppliers compared on one sheet. A creator needs permission to point a
+            camera at the line. Pick the page that sounds like your problem — the trip we build
+            around it is not the same trip.
+          </p>
+          <div class="btn-row">
+            <a class="btn btn--primary" href="/contact/">Tell us what you are trying to do</a>
+          </div>
+        </div>
+        <div class="hero__media">
+          <PhotoSlot name="WHO WE HELP · FOUR JOBS" variant="media">
+            <OnsitePhoto id="03" eager />
+          </PhotoSlot>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Section tight>
+    <div class="container">
+      <SectionHead
+        title="Four audiences, four different trips"
+        lead="Each page describes the work itself: what changes when you use us, what we can commit to, and what we cannot."
+      />
+      <div class="related-nav" role="navigation" aria-label="Who we help">
+        {
+          audiences.map((d) => (
+            <a href={d.href}>
+              <span class="related-nav__k">{d.k}</span>
+              <span class="related-nav__t">{d.t}</span>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container">
+      <SectionHead
+        title="How these pages differ from the service pages"
+        lead="A service page describes what you buy. These pages describe what your problem looks like from the inside — including the parts we cannot fix for you."
+      />
+      <ul class="spec-list">
+        <li>
+          <span class="spec-list__k">Work, not a persona</span>
+          <span>These are four kinds of job, not four marketing segments. Each page lists what concretely changes, from the shortlist through to what gets written down afterwards.</span>
+        </li>
+        <li>
+          <span class="spec-list__k">The limits are on the page</span>
+          <span>We do not guarantee entry to a specific named factory, and filming permission is the factory's to give, not ours. Every page here states what we can commit to and what stays outside our control.</span>
+        </li>
+        <li>
+          <span class="spec-list__k">They overlap on purpose</span>
+          <span>A founder on their first trip should read two of them. A procurement team that also needs footage should read the creators page as well. Nothing here is exclusive.</span>
+        </li>
+        <li>
+          <span class="spec-list__k">If none of them fits</span>
+          <span>{replyLine}</span>
+        </li>
+      </ul>
+    </div>
+  </Section>
+  <Section>
+    <div class="container container--md">
+      <SectionHead
+        eyebrow="Choosing a page"
+        title="Read the one matching your problem, then the one matching your situation."
+        lead="These four overlap deliberately. Most people are two of them at once, and reading only the louder one is how trips get planned wrong."
+      />
+      <ul class="spec-list">
+        <li>
+          <span class="spec-list__k">Founder on a first trip</span>
+          <span
+            >Read both. First-time buyers covers mechanics you have never met — payment rails, what a
+            realistic day actually holds. Brand founders covers the things that cost you money later:
+            MOQ floors, who owns the tooling, and whether the sample you approved is the one they
+            will run.</span
+          >
+        </li>
+        <li>
+          <span class="spec-list__k">Procurement team that also needs footage</span>
+          <span
+            >Read the creators page as well. Filming permission has its own lead time and its own
+            refusal reasons, and it cannot be bolted onto a verification visit once you are already
+            on the plane.</span
+          >
+        </li>
+        <li>
+          <span class="spec-list__k">Buyer who already has suppliers</span>
+          <span
+            >First-time buyers is the wrong page for you even if this is your first time using us. The
+            job is checking someone you already pay, not finding someone new, and those need a
+            different document at the end of them.</span
+          >
+        </li>
+      </ul>
+      <p class="u-mt-6">
+        These four pages describe the problem; <a href="/services/">the service pages</a> describe what
+        we actually do about it, and the two are not one-to-one — a single trip often draws on several,
+        and checking suppliers you already pay is its own job, which is where
+        <a href="/services/existing-supplier-visits/">existing supplier visits</a> comes in. If you
+        would rather understand the whole process before picking anything,
+        <a href="/how-it-works/">how it works</a> is the shortest route. And if you are still deciding
+        whether China is the right move this year,
+        <a href="/tools/china-manufacturing-hub-finder/">the hub finder</a> is a cheaper first step
+        than a flight.
+      </p>
+    </div>
+  </Section>
+</BaseLayout>

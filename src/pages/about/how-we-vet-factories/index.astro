@@ -1,0 +1,373 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Section from '../../../components/Section.astro';
+import SectionHead from '../../../components/SectionHead.astro';
+import TrustBar from '../../../components/TrustBar.astro';
+import ProcessSteps from '../../../components/ProcessSteps.astro';
+import ComparisonTable from '../../../components/ComparisonTable.astro';
+import RedFlags from '../../../components/RedFlags.astro';
+import Caveat from '../../../components/Caveat.astro';
+import PhotoSlot from '../../../components/PhotoSlot.astro';
+import OnsitePhoto from '../../../components/OnsitePhoto.astro';
+import DownloadGate from '../../../components/DownloadGate.astro';
+import FAQ from '../../../components/FAQ.astro';
+import RelatedNav from '../../../components/RelatedNav.astro';
+import { waLink } from '../../../data/site.ts';
+
+const title = 'How we vet factories — five documented checks before you commit';
+const description =
+  'The single most expensive mistake in China sourcing is paying a company that does not make anything. Here are the five checks we run, in order, and what each is allowed to conclude.';
+
+const wa = waLink('Hi, I would like to check whether a Chinese supplier is a real factory.');
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  track="buyer"
+  active="vet"
+  crumbs={[{ href: '/about/', label: 'About' }]}
+  current="How we vet factories"
+  cta={{
+    /* Long-form / vetting areas must not use dark bands — design system §4.1.8 */
+    variant: 'plain',
+    eyebrow: 'Next step',
+    title: 'Send us the company name. We will tell you which checks it survives.',
+    lead: 'One registered name is enough to start the first two steps.',
+    primary: { label: 'Book a vetting call', href: '/contact/' },
+    secondary: { label: 'Ask on WhatsApp', href: wa, external: true },
+  }}
+>
+  <!-- 1 · Hero -->
+  <section class="hero">
+    <div class="container">
+      <div class="split-7-5">
+        <div>
+          <p class="eyebrow">Vetting method</p>
+          <h1>Is this a real factory — or a trading company?</h1>
+          <p class="lead hero__lead">
+            The single most expensive mistake in China sourcing is paying a company that does not
+            make anything — a <a href="/guides/factory-vs-trading-company-china/">trading company</a> wearing a factory's name. Below is exactly what
+            we check, in order, and what each check is allowed to conclude.
+          </p>
+          <div class="btn-row">
+            <a class="btn btn--primary" href="#checklist-download">Get the factory vetting checklist</a>
+            <a class="btn btn--secondary" href="/contact/">Book a vetting call</a>
+          </div>
+          {/* Intent routing. This page is buyer-facing by nature, but nothing on
+              the first screen said so — creators searching for factory filming
+              land here and read five steps that do not apply to them. */}
+          <p class="u-sm u-secondary">
+            Written for brand buyers vetting a supplier before money moves. Filming instead?
+            <a href="/services/creator-factory-tour/">Start with the creator factory tour</a>.
+          </p>
+        </div>
+        <div class="hero__media">
+          <PhotoSlot name="VETTING · ON THE FLOOR" variant="media">
+            <OnsitePhoto id="03" />
+          </PhotoSlot>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2 · TrustBar — counts of steps, not marketing claims -->
+  <TrustBar
+    light
+    class="section--tight"
+    items={[
+      { figure: '05', label: 'Checks per factory' },
+      { figure: '20', unit: '+', label: 'Documents & signals reviewed' },
+      { figure: '00', label: 'Commission taken from suppliers' },
+    ]}
+    foot="These three are counts of steps, not marketing claims — you can read every one of them on this page. We deliberately do not publish “factories verified” totals we cannot audit."
+  />
+
+  <!-- 3 · The five checks -->
+  <Section>
+    <div class="container container--md">
+      <SectionHead
+        eyebrow="The method"
+        title="Five checks, in this order."
+        lead="We run them in the same sequence every time, because each one decides whether it is worth running the next."
+      />
+      <ProcessSteps
+        items={[
+          {
+            n: '01',
+            code: 'VET-01',
+            title: 'Business licence and legal status',
+            body: 'Before anything else we pull the company’s registration record and read the fields that matter, not just the licence photo they send you.',
+            evidence: [
+              'Unified Social Credit Code checked against the national enterprise credit register',
+              'Registered capital, establishment date and operating status — whether the entity is still active',
+              'Legal representative name, and whether the person you are talking to is that person',
+              'Whether the legal entity name would match the beneficiary name on a bank transfer later',
+            ],
+          },
+          {
+            n: '02',
+            code: 'VET-02',
+            title: 'Registered scope versus registered address',
+            body: 'A company can be legally real and still not manufacture anything. The gap between what it says it makes and where it says it makes it is where most trading companies show up.',
+            evidence: [
+              'Registered business scope — does it list production and manufacturing, or only wholesale and retail?',
+              'Registered address compared with the address they want to take you to',
+              'Whether the address resolves to an industrial plot or to an office floor in a commercial building',
+              'Whether multiple “factories” they offer share one registered address',
+            ],
+          },
+          {
+            n: '03',
+            code: 'VET-03',
+            title: 'Capacity and equipment, arithmetically',
+            body: 'Claimed output is easy to say and easy to test. We check whether the floor, the headcount and the machine list can physically produce what they quoted.',
+            evidence: [
+              'Machine list with counts, and whether those machines are the ones that make your product',
+              'Shift pattern and working days per month, multiplied against per-unit cycle time',
+              'Floor area against stated output — a surprisingly reliable smell test',
+              'Recent production evidence: order book, utility records, or a line actually running during the visit',
+            ],
+          },
+          {
+            n: '04',
+            code: 'VET-04',
+            title: 'Walking the floor',
+            body: 'This step only exists because it is easy to be polite and be fooled. We look for the specific things that separate a plant from a showroom with a good speaker.',
+            evidence: [
+              'The tooling and mould store — a real maker keeps its own tooling, marked and traceable',
+              'Raw material and work-in-progress inventory, not only finished samples',
+              'Worker count and line activity at the hour we arrive, not at the hour they prefer',
+              'Incoming goods labelling, which often reveals who actually made the parts',
+            ],
+          },
+          {
+            n: '05',
+            code: 'VET-05',
+            title: 'Somebody who can say yes',
+            body: 'A visit without a decision-maker produces photos and no quotes. We treat “the boss is travelling” as a failed visit and say so in the report.',
+            evidence: [
+              'Production manager or owner physically present for the meeting, not only a sales representative',
+              'Can they quote tooling lead time and MOQ without calling someone else?',
+              'Do they know their own tolerances, defects rates and scrap handling?',
+              'Written confirmation of who signs the contract and who receives payment',
+            ],
+          },
+        ]}
+      />
+      <p class="u-mt-6">
+        The signals behind these checks are in the <a href="/guides/factory-vs-trading-company-china/">factory versus trading company</a> guide,
+        and the same checks feed the <a href="/tools/factory-visit-scorecard/">factory visit scorecard</a>.
+      </p>
+    </div>
+  </Section>
+
+  <!-- 4 · Factory vs trading company signals -->
+  <Section alternate>
+    <div class="container">
+      <SectionHead
+        eyebrow="Pattern recognition"
+        title="What the difference actually looks like."
+        lead="None of these signals proves anything alone. Three or four together is usually enough to decide whether to spend a day visiting."
+      />
+      <ComparisonTable
+        caption="Typical signals of a real factory versus a trading company"
+        labelCol="Signal"
+        columns={[
+          { name: 'Real factory', sub: 'what we expect to see' },
+          { name: 'Trading company', sub: 'what usually shows instead' },
+        ]}
+        rows={[
+          {
+            label: 'Live video walk-through request',
+            values: ['Arranged within a day or two', 'Excuses, delays, or a pre-recorded clip'],
+          },
+          {
+            label: 'Registered business scope',
+            values: [
+              'Includes production and manufacturing',
+              'Only wholesale, retail or import/export',
+            ],
+          },
+          {
+            label: 'Registered address',
+            values: [
+              'Matches the production site',
+              'Office address, or several “factories” share one',
+            ],
+          },
+          {
+            label: 'Tooling and mould store',
+            values: [
+              'Exists, labelled, traceable to customers',
+              'Cannot be shown, or “kept at a partner plant”',
+            ],
+          },
+          {
+            label: 'Equipment photos',
+            values: [
+              'Floor and machines, dated and specific',
+              'Catalogue rooms and product close-ups only',
+            ],
+          },
+          {
+            label: 'Price against peers',
+            values: [
+              'Explainable by process or material choice',
+              'Far below peers for identical specification',
+            ],
+          },
+          {
+            label: 'Who receives payment',
+            values: [
+              'The legal entity on the licence',
+              'A personal account, or a different company name',
+            ],
+          },
+          {
+            label: 'Technical answers',
+            values: [
+              'Answered by the production manager',
+              'Every question needs “checking with the factory”',
+            ],
+          },
+        ]}
+        footnote="These are patterns observed on visits, not a certification. We publish them because teaching you to spot them costs us nothing and makes our actual on-site work easier to trust."
+      />
+      <p class="u-mt-6">
+        A vetting pass is a visit-level check, not <a href="/guides/factory-visit-vs-audit-vs-inspection/">an audit or an inspection</a> — the three answer different questions.
+      </p>
+    </div>
+  </Section>
+
+  <!-- 5 · Red flags -->
+  <Section>
+    <div class="container container--md">
+      <SectionHead
+        eyebrow="Walk-away list"
+        title="Red flags we treat as the end of the conversation."
+      />
+      <RedFlags
+        items={[
+          '<b>Refuses any live or unedited video of the floor</b> before you commit to a visit',
+          '<b>The registered address is not where they want to take you</b>, and the explanation keeps changing',
+          '<b>No production equipment in any photo, ever</b> — only showroom and catalogue images',
+          '<b>Quoted far below comparable suppliers</b> for a specification described as identical',
+          '<b>Payment details do not match the licence entity</b>, or a personal account is requested',
+          '<b>Scope of business lists trading only</b> while they describe themselves as the manufacturer',
+          '<b>Pressure to place the deposit now</b> to “lock the line”, before any visit has happened',
+        ]}
+        foot={{
+          href: '/services/brand-sourcing-visit/',
+          label: 'See how this fits into a sourcing visit',
+        }}
+      />
+      <p class="u-mt-6">
+        If the supplier is one you already hold on a list, this is what an <a href="/services/existing-supplier-visits/">existing-supplier visit</a> runs.
+      </p>
+    </div>
+  </Section>
+
+  <!-- 6 · Caveat -->
+  <Section alternate>
+    <div class="container container--md">
+      <Caveat
+        title="What this method cannot tell you"
+        body="A vetting pass is a snapshot taken on one day, by people who are trying hard but who are not auditors. Saying this plainly is cheaper than pretending otherwise."
+        items={[
+          'We cannot promise a factory is problem-free. We can report exactly which five checks it passed and failed.',
+          'We do not audit financial health, full labour compliance, or whether a certificate is honoured in practice.',
+          'We are not a certification body. We issue no certificates and none of our reports are a substitute for one.',
+          'We cannot know what a factory does after we leave. Repeat visits exist for that reason.',
+          'Steps 03 to 05 need somebody physically present. Anyone offering a full factory verification purely remotely is guessing.',
+          'If a supplier refuses two of the five steps, we report it — we do not quietly drop the issue to keep the trip moving.',
+        ]}
+      />
+      <p class="u-mt-6">
+        The method travels to whichever <a href="/destinations/">cluster</a> your supplier sits in.
+      </p>
+    </div>
+  </Section>
+
+  <!-- 7 · Download gate.
+       The section owns the #checklist-download anchor (the page's "Get the
+       checklist" button jumps here); DownloadGate defaults to the same id, so it
+       is given its own — two elements sharing an id is invalid HTML and makes
+       the anchor target ambiguous. -->
+  <Section id="checklist-download">
+    <div class="container container--md">
+      <SectionHead
+        eyebrow="Take it with you"
+        title="The checklist, in the order we run it."
+        lead="The five steps and their twenty evidence checks, the eight factory-versus-trading signals, and the walk-away list — written so you can use them even if you never book us."
+      />
+      <DownloadGate id="checklist-download-form" />
+    </div>
+  </Section>
+
+  <!-- 8 · FAQ -->
+  <Section alternate>
+    <div class="container container--md">
+      <SectionHead eyebrow="Practical questions" title="How people use this page." />
+      <FAQ
+        items={[
+          {
+            q: 'How long does a vetting pass take?',
+            a: [
+              'Steps 01 and 02 take one to two working days if the company details are clear. The full five-step check including the site visit usually adds two to three days. We tell you which parts are done before you decide anything.',
+            ],
+          },
+          {
+            q: 'Can you vet a supplier without going there?',
+            a: [
+              'Partly. Registration checks, scope and address comparison can be run remotely and catch a large share of trading companies. Equipment, floor activity and the decision-maker cannot be confirmed without being there, and we will not claim they were.',
+            ],
+          },
+          {
+            q: 'Do you take commission from factories?',
+            a: [
+              'Never. That is the point of the service. If we could earn more by steering you into a factory, nothing else on this page would be worth reading.',
+            ],
+          },
+          {
+            q: 'What happens when a supplier fails?',
+            a: [
+              'You get the failed step named, the evidence we saw, and — where we can — alternative suppliers in the same cluster that we have walked ourselves.',
+            ],
+          },
+          {
+            q: 'Can you verify ISO or BSCI certificates?',
+            a: [
+              'We can check a certificate number against the issuing registry and confirm the entity name matches. That is not the same as a compliant production line, and we will say so rather than let a certificate stand in for due diligence.',
+            ],
+          },
+          {
+            q: 'Will you vet a factory I found myself?',
+            a: [
+              'Yes, and it is one of the more useful things we do. Send the company name and anything they have sent you.',
+            ],
+          },
+        ]}
+      />
+    </div>
+  </Section>
+
+  <!-- 9 · Related -->
+  <Section>
+    <div class="container">
+      <SectionHead eyebrow="Where to next" title="Apply the method somewhere specific." />
+      <RelatedNav
+        items={[
+          { k: 'Destinations', t: 'Yiwu', href: '/destinations/yiwu/' },
+          { k: 'Destinations', t: 'Shenzhen', href: '/destinations/shenzhen/' },
+          {
+            k: 'Destinations',
+            t: 'Guangzhou / Dongguan',
+            href: '/destinations/guangzhou-dongguan/',
+          },
+          { k: 'Service', t: 'Brand sourcing visit', href: '/services/brand-sourcing-visit/' },
+        ]}
+      />
+    </div>
+  </Section>
+</BaseLayout>

@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630" role="img" aria-labelledby="cfh-og-title cfh-og-desc">
+  <title id="cfh-og-title">ChinaFactoryHost — verified factory visits in China</title>
+  <desc id="cfh-og-desc">On-the-ground factory visits, filming coordination and supplier verification. Based in Zhejiang, reachable nationwide.</desc>
+
+  <rect width="1200" height="630" fill="#171613"/>
+  <!-- Blueprint grid (24px), very low opacity — industrial drawing substrate -->
+  <g stroke="#F4F1EB" stroke-opacity="0.05" stroke-width="1">
+    <path d="M0,24 H1200 M0,48 H1200 M0,72 H1200 M0,96 H1200 M0,120 H1200 M0,144 H1200 M0,168 H1200 M0,192 H1200 M0,216 H1200 M0,240 H1200 M0,264 H1200 M0,288 H1200 M0,312 H1200 M0,336 H1200 M0,360 H1200 M0,384 H1200 M0,408 H1200 M0,432 H1200 M0,456 H1200 M0,480 H1200 M0,504 H1200 M0,528 H1200 M0,552 H1200 M0,576 H1200 M0,600 H1200"/>
+    <path d="M24,0 V630 M48,0 V630 M72,0 V630 M96,0 V630 M120,0 V630 M144,0 V630 M168,0 V630 M192,0 V630 M216,0 V630 M240,0 V630 M264,0 V630 M288,0 V630 M312,0 V630 M336,0 V630 M360,0 V630 M384,0 V630 M408,0 V630 M432,0 V630 M456,0 V630 M480,0 V630 M504,0 V630 M528,0 V630 M552,0 V630 M576,0 V630 M600,0 V630 M624,0 V630 M648,0 V630 M672,0 V630 M696,0 V630 M720,0 V630 M744,0 V630 M768,0 V630 M792,0 V630 M816,0 V630 M840,0 V630 M864,0 V630 M888,0 V630 M912,0 V630 M936,0 V630 M960,0 V630 M984,0 V630 M1008,0 V630 M1032,0 V630 M1056,0 V630 M1080,0 V630 M1104,0 V630 M1128,0 V630 M1152,0 V630 M1176,0 V630"/>
+  </g>
+
+  <!-- Oversized watermark of the mark, teal outline -->
+  <g transform="translate(880,180) scale(7)" fill="none" stroke="#0E6A7B" stroke-opacity="0.35" stroke-width="1.4" stroke-linejoin="miter" stroke-linecap="butt">
+    <path d="M4,26 V19 L11,13 V19 L18,13 V19 L25,13 V26 H22 V20 H13 V26 H4 Z"/>
+  </g>
+
+  <!-- Accent rule -->
+  <rect x="96" y="176" width="72" height="4" fill="#0E6A7B"/>
+
+  <text x="96" y="300" font-family="Archivo, 'Archivo Variable', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="76" font-weight="700" letter-spacing="-2.4" fill="#FFFFFF">Real factory floors,</text>
+  <text x="96" y="384" font-family="Archivo, 'Archivo Variable', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="76" font-weight="700" letter-spacing="-2.4" fill="#FFFFFF">verified before you fly.</text>
+
+  <text x="96" y="452" font-family="Inter, 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="30" font-weight="400" fill="#B3ADA2">Factory visits, filming coordination and supplier checks.</text>
+  <text x="96" y="494" font-family="Inter, 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="30" font-weight="400" fill="#B3ADA2">Hosted from Zhejiang, reachable across China.</text>
+
+  <!-- Wordmark lockup -->
+  <svg x="96" y="536" width="34" height="34" viewBox="0 0 32 32">
+    <g fill="none" stroke="#FFFFFF" stroke-width="2.4" stroke-linejoin="miter" stroke-linecap="butt">
+      <path d="M4,26 V19 L11,13 V19 L18,13 V19 L25,13 V26 H22 V20 H13 V26 H4 Z"/>
+      <path d="M22,20 L27,15"/>
+    </g>
+  </svg>
+  <text x="140" y="562" font-family="Archivo, 'Archivo Variable', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="24" font-weight="600" letter-spacing="-0.36" fill="#FFFFFF">ChinaFactory<tspan font-weight="700" fill="#3FA9BC">Host</tspan></text>
+</svg>

@@ -1,0 +1,146 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Section from '../../../components/Section.astro';
+import SectionHead from '../../../components/SectionHead.astro';
+import PhotoSlot from '../../../components/PhotoSlot.astro';
+import OnsitePhoto from '../../../components/OnsitePhoto.astro';
+import Caveat from '../../../components/Caveat.astro';
+import RelatedNav from '../../../components/RelatedNav.astro';
+import { waLink } from '../../../data/site.ts';
+
+const title = 'China manufacturing hub finder — which region makes your product';
+const description =
+  'A product-to-region matching logic: category, material, quantity and customization lead to a recommended cluster and a candidate route.';
+
+const wa = waLink('Hi, I would like to know which region makes my product.');
+
+const questions = [
+  { k: 'What you make', v: 'The category decides the cluster. A kitchen gadget, a cosmetic and a PCB do not live in the same city.' },
+  { k: 'What it is made of', v: 'Material is the second filter. Plastic parts point to injection clusters; fabric points to textile clusters; wood points to furniture clusters.' },
+  { k: 'How many you will order', v: 'Quantity separates market cities from manufacturing cities. A few hundred units is a Yiwu order; a few thousand with tooling is a Ningbo or Dongguan order.' },
+  { k: 'Stock or custom', v: 'Customisation changes everything. A stock shape you can buy is a market order; a custom mould is a tooling order, and the tooling cluster matters more than the market.' },
+];
+
+const clusters = [
+  { k: 'Small commodities & gifts', v: '<a href="/destinations/yiwu/">Yiwu</a> — the market plus the manufacturing hinterland. Best for stock shapes, low MOQ and wide SKU assortments.' },
+  { k: 'Appliances, hardware, textiles', v: '<a href="/destinations/ningbo-hangzhou/">Ningbo / Hangzhou</a> — large plants with tooling departments. Best for tooling-led parts and defined production programmes.' },
+  { k: 'Electronics & smart hardware', v: '<a href="/destinations/shenzhen/">Shenzhen</a> — PCB, SMT and assembly within one radius. Best when the process control, not the enclosure, is the product.' },
+  { k: 'OEM & private label', v: '<a href="/destinations/guangzhou-dongguan/">Guangzhou / Dongguan</a> — cosmetics, garments, homeware, toys. Best when formulation, packaging and assembly need to sit close together.' },
+  { k: 'Furniture & home appliances', v: '<a href="/destinations/foshan-shunde/">Foshan / Shunde</a> — furniture, ceramics and the motor-and-heating heart of appliances.' },
+  { k: 'Textiles & fabrics', v: '<a href="/destinations/shaoxing-keqiao/">Shaoxing / Keqiao</a> — the fabric market and the mills. Best when the cloth itself is the product, not a finished good.' },
+  { k: 'The home province', v: '<a href="/destinations/zhejiang/">Zhejiang</a> — several clusters in one working radius; the trip where a market day and a plant visit are the same week, not two flights.' },
+];
+
+const examples = [
+  { k: 'A 30ml serum bottle, private label, first order around 5,000', v: 'Guangzhou / Dongguan. The packaging supplier and the filling plant are two different companies there, and the cluster puts them close together.' },
+  { k: 'A custom injection-moulded toy, 10,000 units', v: 'Dongguan or Shantou. The tooling and the injection capacity sit in the toy cluster, and the MOQ is set by the mould, not the market.' },
+  { k: 'Five hundred units of a stock kitchen gadget', v: 'Yiwu. A stock shape at low quantity is a market order, and Yiwu is built around that — Ningbo would not be interested at that volume.' },
+  { k: 'Fabric for a home-textile line, bought by the roll', v: 'Shaoxing / Keqiao. The market shows the range, the mills behind it make the cloth, and colour is judged on the floor, not from a swatch.' },
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  active=""
+  crumbs={[]}
+  current="Manufacturing hub finder"
+  cta={{
+    eyebrow: 'Next step',
+    title: 'Not sure which region fits your product?',
+    lead: 'Tell us the category and the quantity. We will name the cluster and explain why.',
+    primary: { label: 'Find my region', href: '/contact/' },
+    secondary: { label: 'Ask on WhatsApp', href: wa, external: true },
+  }}
+>
+  <section class="hero">
+    <div class="container">
+      <div class="split-7-5">
+        <div>
+          <p class="eyebrow">Tool</p>
+          <h1>Which region makes your product?</h1>
+          <p class="lead hero__lead">
+            China is not one place — it is a set of specialised clusters. Work through four questions
+            and the region falls out the other side.
+          </p>
+        </div>
+        <div class="hero__media">
+          <PhotoSlot name="TOOL · HUB FINDER" variant="media">
+            <OnsitePhoto id="05" eager />
+          </PhotoSlot>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Section>
+    <div class="container container--md">
+      <SectionHead eyebrow="How it works" title="Four questions, in order." />
+      <ul class="spec-list clean">
+        {questions.map((q) => (
+          <li>
+            <span class="spec-list__k">{q.k}</span><span class="spec-list__v">{q.v}</span>
+          </li>
+        ))}
+      </ul>
+      <p class="u-mt-6">
+        Once you have a region, we can turn it into a shortlist — see <a href="/services/factory-matching/">factory matching</a>.
+        If you are weighing two categories, the <a href="/industries/">industry pages</a> explain what to check in each.
+      </p>
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container container--md">
+      <SectionHead eyebrow="The table" title="Category to cluster, with the reasoning." />
+      <ul class="spec-list clean">
+        {clusters.map((c) => (
+          <li>
+            <span class="spec-list__k">{c.k}</span><span class="spec-list__v" set:html={c.v} />
+          </li>
+        ))}
+      </ul>
+    </div>
+  </Section>
+
+  <Section>
+    <div class="container container--md">
+      <SectionHead eyebrow="Worked through" title="Four products, four answers." />
+      <ul class="spec-list clean">
+        {examples.map((e) => (
+          <li>
+            <span class="spec-list__k">{e.k}</span><span class="spec-list__v">{e.v}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container container--md">
+      <Caveat
+        title="When a product does not fit one cluster"
+        body="Some products span two clusters — a lamp is a lighting product in one city and a metal part in another. The finder gives you the primary region; the route is where the two halves meet."
+        items={[
+          'A product that mixes electronics and furniture may need two stops, not one.',
+          'The material usually decides the second stop — follow the component, not the brand.',
+          'When in doubt, ask. A wrong region costs two travel days; the question costs one message.',
+        ]}
+      />
+    </div>
+  </Section>
+
+  <Section>
+    <div class="container">
+      <SectionHead eyebrow="Go deeper" title="Related pages." />
+      <RelatedNav
+        items={[
+          { k: 'Page', t: 'All destinations', href: '/destinations/' },
+          { k: 'Page', t: 'All industries', href: '/industries/' },
+          { k: 'Service', t: 'Factory matching', href: '/services/factory-matching/' },
+          { k: 'Guide', t: 'How to plan a visit', href: '/guides/how-to-plan-a-china-factory-visit/' },
+        ]}
+      />
+    </div>
+  </Section>
+</BaseLayout>

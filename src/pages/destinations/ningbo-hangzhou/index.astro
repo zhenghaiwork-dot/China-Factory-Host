@@ -1,0 +1,238 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import DestinationPage from '../../../components/DestinationPage.astro';
+import Section from '../../../components/Section.astro';
+import SectionHead from '../../../components/SectionHead.astro';
+
+const title = 'Ningbo & Hangzhou factory visits — large-plant manufacturing';
+const description =
+  'Appliances, hardware, new-energy components and textiles. Hosted visits to large, compliance-heavy plants around Ningbo and Hangzhou.';
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  track="buyer"
+  active="destinations"
+  crumbs={[{ href: '/destinations/', label: 'Destinations' }]}
+  current="Ningbo / Hangzhou"
+  cta={{
+    /* Buyer path must not use dark bands — design system §4.1.8 */
+    variant: 'plain',
+    eyebrow: 'Next step',
+    title: 'Plan a Ningbo & Hangzhou visit with enough lead time.',
+    lead: 'Send your part, process and target volumes. We will tell you which plants can genuinely make it.',
+    /* No secondary: the primary already points at /contact/, and a second
+       button to the same page is a false choice (director's round-2 ruling). */
+    primary: { label: 'Plan my trip to Ningbo', href: '/contact/' },
+    form: { destination: 'Ningbo / Hangzhou' },
+  }}
+>
+  <DestinationPage
+    region="Zhejiang"
+    cityShort="Ningbo"
+    track="buyer"
+    slotName="NGB PLANT EXTERIOR"
+    h1="Ningbo & Hangzhou: large plants, real compliance, slower answers."
+    lead="This is where Chinese manufacturing looks most like the version in your head — big sites, documented processes and exports to brand-name customers. It is also the cluster where requests take longest to route."
+    audience="Best for: brand buyers verifying large OEM plants, tooling and export compliance."
+    micro={[
+      'Large-plant, export-oriented manufacturing',
+      'Compliance-heavy — permission takes longer',
+      'Best for defined production programmes',
+    ]}
+    facts={[
+      {
+        k: 'Typical factory size',
+        v: 'Large',
+        note: 'Multi-building sites with their own tooling departments are normal here.',
+      },
+      {
+        k: 'MOQ posture',
+        v: 'Higher',
+        note: 'Programme-oriented rather than small-batch, especially for tooling-led parts.',
+      },
+      {
+        k: 'Filming notice',
+        v: '4–6 weeks',
+        note: 'Requests usually route through a compliance contact rather than the owner.',
+      },
+    ]}
+    why={[
+      'Ningbo and its surrounding belt specialise in the categories that need presses, tooling and documented process control: appliances, hardware, automotive and new-energy components, and <a href="/industries/textiles-fabrics/">industrial textiles</a>.',
+      'Hangzhou adds a different layer — electronics assembly, textile finishing and a growing design and engineering services scene that is useful if you are developing something rather than copying something.',
+      'The reason to come here is certainty. These plants are used to export audits, third-party inspection and written specifications. If your number one requirement is whether this will survive your customer audit, this is the cluster.',
+      'The reason not to come here is small quantities. If you want 300 units of a decorated product, Ningbo will not be interested and <a href="/destinations/yiwu/">Yiwu</a> will.',
+    ]}
+    markets={[
+      {
+        k: 'Small & large appliances',
+        v: 'Kitchen <a href="/industries/small-home-appliances/">appliances</a>, cleaning devices, water treatment units — often sold from a product catalogue of existing tooling.',
+      },
+      {
+        k: 'Hardware & tools',
+        v: 'Fasteners, hand tools, locks, metal fabrication — deep supply chains with their own plating and heat-treat partners.',
+      },
+      {
+        k: 'New-energy components',
+        v: 'Battery packs, connectors, thermal management parts — among the fastest-moving and most IP-sensitive lines.',
+      },
+      {
+        k: 'Automotive parts',
+        v: 'Tier-two and tier-three suppliers, frequently already shipping to international manufacturers.',
+      },
+      {
+        k: 'Textiles & home textile',
+        v: 'Weaving, dyeing and finishing around <a href="/destinations/shaoxing-keqiao/">Shaoxing</a> and Hangzhou, with export-established mills.',
+      },
+      {
+        k: 'Plastics & injection tooling',
+        v: 'Strong tooling capability — one of the reasons this cluster handles complex parts well.',
+      },
+    ]}
+    itinTitle="Three to five days, deliberately not packed."
+    itinLead="Large plants do not do eight visits a day. Two substantive visits with technical depth beats six showroom stops."
+    itinerary={[
+      {
+        day: 'DAY 1',
+        time: 'ARRIVAL',
+        title: 'Shortlist and document review',
+        desc: 'Registration and scope checks on your shortlist, plus a review of any specifications you plan to send ahead.',
+      },
+      {
+        day: 'DAY 2',
+        time: 'PLANT A',
+        title: 'Full-site visit',
+        desc: 'Receiving, tooling store, production lines, QC lab and packing. Half a day minimum, often more.',
+      },
+      {
+        day: 'DAY 3',
+        time: 'PLANT B',
+        title: 'Second site, comparison structure',
+        desc: 'Same visit structure so the two can be compared rather than remembered differently.',
+      },
+      {
+        day: 'DAY 4',
+        time: 'ENGINEERING',
+        title: 'Technical session',
+        desc: 'Tolerances, tooling ownership, change control and failure modes — with whoever will actually engineer it.',
+      },
+      {
+        day: 'DAY 5',
+        time: 'WRAP',
+        title: 'Debrief and written report',
+        desc: 'Every visited plant documented, including which checks each one failed.',
+      },
+    ]}
+    filmLead="The least improvisational cluster for camera access. It works, but it does not work quickly."
+    film={{
+      answer: 'Often yes, after routing through a compliance contact — expect formality rather than hostility.',
+      lead: 'Four to six weeks. Anything under three and the honest expectation is a refusal.',
+      refused: 'Any line running work under a customer NDA, plus clean rooms and certain finishing processes.',
+      note: 'These plants often ask to review published material. Agreed in writing beforehand, not negotiated afterwards.',
+    }}
+    seasons={[
+      'Best months: April–June and September–November.',
+      'Chinese New Year (usually January or February) closes plants for one to three weeks, with a slow ramp-up afterwards.',
+      'October National Day holiday — the first week is a hard shutdown for most plants.',
+      'Summer is workable but production planning is often focused on year-end export Shipping deadlines from August onward.',
+    ]}
+    timingWarnings={[
+      '<b>Arriving with less than three weeks notice for filming.</b> This is the cluster where that most often fails.',
+      '<b>Expecting flexibility on small quantities.</b> Tooling economics here assume volume.',
+      '<b>Bringing a specification that is still undefined.</b> These plants will quote it anyway, and the quote will not mean what you think.',
+    ]}
+    vetDesc="Large plants pass registration checks easily and fail on the questions that matter — who really holds capacity, and whether your programme will be subcontracted."
+    related={[
+      {
+        k: 'Destination',
+        t: 'Guangzhou / Dongguan',
+        href: '/destinations/guangzhou-dongguan/',
+      },
+      { k: 'Destination', t: 'Yiwu', href: '/destinations/yiwu/' },
+      { k: 'Destination', t: 'Shenzhen', href: '/destinations/shenzhen/' },
+      { k: 'Industry', t: 'Beauty & packaging', href: '/industries/beauty-packaging/' },
+    ]}
+  />
+
+  <!-- Ningbo export hall.
+       Same treatment as the Yiwu Fair section: a sibling section rather than a
+       new prop on DestinationPage.astro, which drives seven city pages and is
+       being edited by the other agent in parallel. Additive and reversible.
+       One deliberate difference from Yiwu: this fair is NOT annual, and saying
+       so is the single most useful thing on the page. Third-party sites list
+       three mutually exclusive dates for it; only the organiser's own site is
+       treated as a source here. -->
+  <Section alternate>
+    <div class="container">
+      <SectionHead
+        eyebrow="Not every year"
+        title="The Ningbo export hall: a fair that mirrors the factories."
+        lead="The export hall of the China–CEEC Expo & International Consumer Goods Fair runs in Ningbo, and its categories read almost exactly like a list of what this cluster makes. It is the easiest fair in China to turn into factory days — with one catch worth knowing before you plan."
+      />
+      <ul class="spec-list">
+        <li>
+          <span class="spec-list__k">The catch</span>
+          <span class="spec-list__v"
+            >It is not annual. The last edition ran 22–25 May 2025 and the organisers list the next
+            for May 2027. Do not build a sourcing calendar around it.</span
+          >
+        </li>
+        <li>
+          <span class="spec-list__k">Where</span>
+          <span
+            >Ningbo International Conference and Exhibition Center — the export hall, not the
+            separate China–CEEC hall on Dongqian Lake. Confirm which one your badge covers.</span
+          >
+        </li>
+        <li>
+          <span class="spec-list__k">Scale</span>
+          <span
+            >Around 1,028 exhibitors over 60,000 m² at the last edition, with overseas buyers from 72
+            countries. Smaller than Canton Fair, which is the point: you can actually work the
+            floor.</span
+          >
+        </li>
+        <li>
+          <span class="spec-list__k">Categories</span>
+          <span
+            >Household goods, gifts and crafts, appliances, home textiles and garments, stationery,
+            outdoor and kitchen-and-bath. The overlap with local production is why the days after
+            tend to be productive.</span
+          >
+        </li>
+        <li>
+          <span class="spec-list__k">Why pair it with factories</span>
+          <span
+            >This cluster is large plants with documented processes, not market stalls. A booth
+            conversation gets you a catalogue; the plant visit gets you the tooling shop, the QC lab
+            and a straight answer on whether your volume is interesting to them.</span
+          >
+        </li>
+        <li>
+          <span class="spec-list__k">If the edition misses your window</span>
+          <span
+            >Come anyway. A normal Ningbo week works in any month except Chinese New Year and the
+            first week of October — the fair is a bonus, not the reason the factories are worth a
+            visit.</span
+          >
+        </li>
+        <li>
+          <span class="spec-list__k">What we do not do</span>
+          <span
+            >We do not sell booth space, register you as an exhibitor, or take commission from the
+            factory. Edition numbers and dates belong to the organisers.</span
+          >
+        </li>
+      </ul>
+      <p class="u-mt-6">
+        Edition numbers, halls and exact dates belong to the organisers — confirm the current one on
+        <a href="https://www.cceecexpo.org" target="_blank" rel="noopener">cceecexpo.org</a> before
+        booking flights.
+      </p>
+      <p>
+        <a class="link-arrow" href="/trade-shows/">How we combine a trade show with factory visits</a>
+      </p>
+    </div>
+  </Section>
+</BaseLayout>

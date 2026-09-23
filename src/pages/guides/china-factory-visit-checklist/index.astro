@@ -1,0 +1,158 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Section from '../../../components/Section.astro';
+import SectionHead from '../../../components/SectionHead.astro';
+import PhotoSlot from '../../../components/PhotoSlot.astro';
+import OnsitePhoto from '../../../components/OnsitePhoto.astro';
+import Checklist from '../../../components/Checklist.astro';
+import Caveat from '../../../components/Caveat.astro';
+import RelatedNav from '../../../components/RelatedNav.astro';
+import { waLink } from '../../../data/site.ts';
+
+const title = 'China factory visit checklist — what to check on the floor';
+const description =
+  'A checklist for what to verify during a China factory visit: the licence, the floor, the equipment, the quality control and the decision-maker.';
+
+const wa = waLink('Hi, I would like a factory visit checklist.');
+
+const before = [
+  'The business licence and registered scope, matched to what they claim to make.',
+  'The registered address — does it match where they actually want to take you?',
+  'The scope of what is made — does the licence cover your category, or just wholesale and retail?',
+  'A sample in hand before the visit — the visit is to verify the factory, not to discover the product.',
+];
+
+const onFloor = [
+  'Walk the production floor itself, not the showroom or the conference room.',
+  'The line for your product — is it running, or is the "line" a photo from last year?',
+  'Capacity and equipment, arithmetically — machine counts and cycle time against your volume.',
+  'The quality control bench — how failures are caught, recorded and what happens to them.',
+  'The tooling store — labelled and traceable, or a mystery kept "at a partner plant"?',
+  'The warehouse and incoming-goods labels, which often reveal who really made the parts.',
+  'The decision-maker in the room — a visit with no one who can say yes is a wasted visit.',
+];
+
+const questions = [
+  { k: 'Who makes the parts we cannot see?', v: 'Every factory outsources something. The question is whether they say so. An answer that is evasive here is a warning everywhere else.' },
+  { k: 'What is the real MOQ, and why?', v: 'The reason behind the number — setup waste, material minimum or a number they like saying — tells you what is negotiable.' },
+  { k: 'What is the current defect rate, and where do defects go?', v: 'A factory that cannot answer has no process. A factory that says "no defects" has no measurement.' },
+  { k: 'Who handles my order after I leave?', v: 'The person who signs the sample is rarely the person who runs the order. Know the handoff.' },
+  { k: 'What does the sample actually prove?', v: 'A sample proves the factory can make one good unit. The visit proves it can make your volume. Do not confuse the two.' },
+];
+
+const redFlags = [
+  'Refusing a live walk-through of the floor before you commit.',
+  'The registered address is not where they want to take you, and the explanation changes.',
+  'No production equipment in any photo, ever — only showroom and catalogue images.',
+  'Payment details that do not match the licence entity.',
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  active=""
+  crumbs={[]}
+  current="China factory visit checklist"
+  cta={{
+    eyebrow: 'Next step',
+    title: 'Run the checklist with someone on the ground.',
+    lead: 'Tell us the category and the shortlist. We will walk the floor with you.',
+    primary: { label: 'Plan my visit', href: '/contact/' },
+    secondary: { label: 'Ask on WhatsApp', href: wa, external: true },
+  }}
+>
+  <section class="hero">
+    <div class="container">
+      <div class="split-7-5">
+        <div>
+          <p class="eyebrow">Guide</p>
+          <h1>The checklist that separates a factory from a showroom.</h1>
+          <p class="lead hero__lead">
+            A factory visit is only as good as what you verify on the floor. These are the checks
+            that separate a real manufacturer from a well-presented <a href="/guides/factory-vs-trading-company-china/">trading company</a>.
+          </p>
+        </div>
+        <div class="hero__media">
+          <PhotoSlot name="GUIDE · CHECKLIST" variant="media">
+            <OnsitePhoto id="04" eager />
+          </PhotoSlot>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Section>
+    <div class="container container--md">
+      <SectionHead eyebrow="Before you arrive" title="What to verify before you set foot in the factory." />
+      <Checklist title="Remote checks" items={before} />
+      <p class="u-mt-6">
+        The licence, scope and address are the first two of <a href="/about/how-we-vet-factories/">the five vetting checks</a> we run before a factory stays on an itinerary.
+      </p>
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container container--md">
+      <SectionHead eyebrow="On the floor" title="What to verify during the visit." />
+      <Checklist title="The walk-through" numbered items={onFloor} />
+      <p class="u-mt-6">
+        These checks map onto the <a href="/tools/factory-visit-scorecard/">factory visit scorecard</a> — the checklist is what you look for, the scorecard is how you record it.
+      </p>
+    </div>
+  </Section>
+
+  <Section>
+    <div class="container container--md">
+      <SectionHead eyebrow="Questions" title="Four questions to ask the production manager." />
+      <ul class="spec-list clean">
+        {questions.map((q) => (
+          <li>
+            <span class="spec-list__k">{q.k}</span><span class="spec-list__v">{q.v}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container container--md">
+      <SectionHead eyebrow="Red flags" title="The signs that end the conversation." />
+      <p class="u-mb-6">
+        A visit is not an <a href="/guides/factory-visit-vs-audit-vs-inspection/">audit or an inspection</a> — those answer different questions, and we keep the three roles separate.
+      </p>
+      <Checklist title="Walk away if you see these" items={redFlags} refusal plain />
+      <p class="u-mt-6">
+        These are the same signals we check for on every <a href="/services/existing-supplier-visits/">existing-supplier visit</a>.
+      </p>
+    </div>
+  </Section>
+
+  <Section>
+    <div class="container container--md">
+      <Caveat
+        title="When to bring someone who has done this before"
+        body="The checklist is a start, not a substitute for an experienced set of eyes. Some things only become visible after you have walked a hundred floors."
+        items={[
+          'Judging whether a line is really running your product, or a dressed-up set.',
+          'Reading the difference between a real QC bench and a staged one.',
+          'Knowing when a polite refusal is actually the factory saying it cannot make your part.',
+        ]}
+      />
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container">
+      <SectionHead eyebrow="Go deeper" title="Related pages." />
+      <RelatedNav
+        items={[
+          { k: 'Guide', t: 'Factory vs trading company', href: '/guides/factory-vs-trading-company-china/' },
+          { k: 'Guide', t: 'Visit vs audit vs inspection', href: '/guides/factory-visit-vs-audit-vs-inspection/' },
+          { k: 'Tool', t: 'Factory visit scorecard', href: '/tools/factory-visit-scorecard/' },
+          { k: 'Service', t: 'Visit existing suppliers', href: '/services/existing-supplier-visits/' },
+        ]}
+      />
+    </div>
+  </Section>
+</BaseLayout>

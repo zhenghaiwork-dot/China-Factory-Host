@@ -1,0 +1,251 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Section from '../../components/Section.astro';
+import SectionHead from '../../components/SectionHead.astro';
+import PhotoSlot from '../../components/PhotoSlot.astro';
+import OnsitePhoto from '../../components/OnsitePhoto.astro';
+import Checklist from '../../components/Checklist.astro';
+import CoverageMap from '../../components/CoverageMap.astro';
+import Caveat from '../../components/Caveat.astro';
+import NoteStrip from '../../components/NoteStrip.astro';
+import VetLink from '../../components/VetLink.astro';
+import RelatedNav from '../../components/RelatedNav.astro';
+import { waLink, HOST_NAME } from '../../data/site.ts';
+
+const title = 'About — a small team on the ground in Zhejiang';
+const description =
+  'ChinaFactoryHost is hosted by a tight team in Zhejiang with a second footprint in the Pearl River Delta. Not a marketplace, not a sourcing agency, not a travel agency.';
+
+const wa = waLink('Hi, I have a question about your team and how the trips work.');
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  track="neutral"
+  active="about"
+  current="About"
+  cta={{
+    eyebrow: 'Next step',
+    title: 'Talk to our team.',
+    lead: 'Ask anything on this page.',
+    primary: { label: 'Talk to our team', href: '/contact/' },
+    secondary: { label: 'Ask on WhatsApp', href: wa, external: true },
+  }}
+>
+  <section class="hero">
+    <div class="container">
+      <div class="split-7-5">
+        <div>
+          <p class="eyebrow">About</p>
+          <h1>We are on the ground in China — so you're never alone in a factory.</h1>
+          <p class="lead hero__lead">
+            A small team based in <a href="/destinations/zhejiang/">Zhejiang</a>. We host creators and buyers inside real factories, and
+            we publish <a href="/about/how-we-vet-factories/">our method</a> because that is the only part of this worth trusting.
+          </p>
+          <div class="btn-row">
+            <a class="btn btn--primary" href="/contact/">Talk to our team</a>
+            <a class="btn btn--secondary" href="/about/how-we-vet-factories/"
+              >Read the vetting method</a
+            >
+          </div>
+        </div>
+        <div class="hero__media">
+          <PhotoSlot name="TEAM · ZHEJIANG HQ" variant="media">
+            <OnsitePhoto id="08" eager />
+          </PhotoSlot>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Who we are -->
+  <Section>
+    <div class="container container--md">
+      <SectionHead eyebrow="Who you are dealing with" title="A small team, not a marketplace." />
+      <div class="prose">
+        <p>
+          ChinaFactoryHost is hosted by a tight team in Zhejiang, with a second footprint in the
+          Pearl River Delta. We are not a platform, and there is no network of freelance agents
+          being dispatched under our name. When you book us, the people you meet are the people who
+          did the preparation.
+        </p>
+        <p>
+          We are deliberately small because the work does not survive being handed off. Somebody has
+          to know which factories said yes, which ones we argued with, and which ones we will not
+          take you back to. That knowledge does not transfer through a booking form.
+        </p>
+        <p>
+          The person who reads your first message, prepares the itinerary and stands beside you on the
+          floor goes by <strong>{HOST_NAME}</strong> — one consistent point of contact from
+          “can you help?” to “we're home”. You will not be handed between anonymous inboxes.
+        </p>
+      </div>
+      <div class="grid--3 u-mt-8">
+        <div class="pillar">
+          <p class="pillar__n">TEAM SIZE</p>
+          <p class="pillar__t">Single-digit, intentionally</p>
+          <p class="pillar__d">
+            Every trip is run by somebody who prepared it — no dispatched subcontractors under our
+            name.
+          </p>
+        </div>
+        <div class="pillar">
+          <p class="pillar__n">HEADQUARTERS</p>
+          <p class="pillar__t">Zhejiang</p>
+          <p class="pillar__d">
+            Close to Yiwu, Ningbo and Hangzhou, with a resident team in Shenzhen, Dongguan and
+            Guangzhou.
+          </p>
+        </div>
+        <div class="pillar">
+          <p class="pillar__n">LANGUAGES</p>
+          <p class="pillar__t">English · Mandarin</p>
+          <p class="pillar__d">
+            Plus site-level dialect help when a conversation needs to happen with someone who
+            prefers it.
+          </p>
+        </div>
+      </div>
+      <div class="u-mt-6">
+        {/* Label was "Placeholder" — a note about our own draft status. The body
+            is visitor-facing and stays; the marker moves to an attribute. */}
+        <NoteStrip label="Team bios" marker="case"
+          >Team names, roles and photographs are pending written sign-off from everyone involved. We
+          are not publishing bios until they have read them.</NoteStrip
+        >
+      </div>
+    </div>
+  </Section>
+
+  <!-- Why we do this -->
+  <Section alternate>
+    <div class="container container--md">
+      <SectionHead eyebrow="Why this exists" title="The premise is simple and slightly unfair." />
+      <div class="prose stack">
+        <p>
+          Every factory in China is easy to find online and hard to trust from abroad. A listing, a
+          catalogue and a friendly salesperson look identical whether you are dealing with a maker
+          or with a <a href="/guides/factory-vs-trading-company-china/">trading company</a> renting an office above them. The difference only becomes
+          visible once somebody is physically standing on the floor.
+        </p>
+        <p>
+          We started hosting after watching people fly twenty hours to discover this in the wrong
+          order — first for friends who wanted to film inside factories, then for buyers who wanted
+          to stop guessing. The service is not complicated: we are already close enough to check
+          first.
+        </p>
+        <p>
+          The part we are sticky about is <a href="/pricing/">who pays us</a>. Our fee comes from you and never from a
+          factory, because anything else quietly rearranges our judgement. Every other decision on
+          this site flows from that one.
+        </p>
+      </div>
+    </div>
+  </Section>
+
+  <!-- Language & culture -->
+  <Section>
+    <div class="container container--md">
+      <SectionHead
+        eyebrow="Language advantage"
+        title="Two things get lost in translation."
+        lead="Neither is vocabulary. Both cost money."
+      />
+      <Checklist
+        title="What we bridge"
+        numbered
+        items={[
+          'Technical specifics — tolerances, surface finish, defect acceptance — stated as numbers instead of adjectives',
+          'Politeness codes interpreted honestly: “maybe” and “it is difficult” are usually refusals, and we say so',
+          'The difference between a price that is negotiable and a price that has already absorbed the discount',
+          'Why a factory may say yes in the room and no in writing, and how to get the real answer on paper',
+          'Holiday and shutdown timing that quietly rewrites your lead-time assumptions',
+        ]}
+      />
+    </div>
+  </Section>
+
+  <!-- Coverage -->
+  <Section alternate>
+    <div class="container container--md">
+      <SectionHead
+        eyebrow="Where we are based"
+        title="Home base, resident team, and the rest."
+        lead="We do not claim the same depth everywhere. Tier 1 is home, Tier 2 is staffed, Tier 3 is reachable with notice."
+      />
+      <CoverageMap />
+      <p class="u-mt-6">
+        The depth we claim in each region is written on the <a href="/destinations/">destination pages</a>, tier by tier.
+      </p>
+    </div>
+  </Section>
+
+  <!-- What we don't do -->
+  <Section>
+    <div class="container container--md">
+      <SectionHead
+        eyebrow="Straight talking"
+        title="What we don't do."
+        lead="Listed here rather than left for you to discover halfway through."
+      />
+      <div class="stack">
+        <Caveat
+          title="We are not sourcing agents"
+          body="We will take you to factories, negotiate beside you and tell you what we would do. We do not build supplier lists from a desk and email quotes to people we have never met."
+          items={[
+            'No factory-spreadsheet services delivered remotely for a flat fee',
+            'No drop-shipping setup or store management',
+            'No acting as your legal representative or contracting party',
+            'No holding or forwarding your supplier payments',
+          ]}
+        />
+        <Caveat
+          title="We are not inspectors or certifiers"
+          body="We can check a certificate number against the issuing registry and flag what we see on the floor. We are not a testing laboratory, a certification body or a social-compliance auditor."
+          items={[
+            'No issued certificates — none of our reports substitute for one',
+            'No full audits of labour practice, financial health or environmental compliance',
+            'No guaranteed outcomes for production runs we were not present for',
+          ]}
+        />
+        <Caveat
+          title="We are not a travel agency"
+          body="We do not resell flights, hotels or packaged tourism, and we add no margin to them."
+          items={[
+            'You book your own flights, hotels and visa',
+            'No sightseeing itineraries — though we will plan transport if you want a free day',
+            'No leisure group tours with shopping stops',
+          ]}
+        />
+      </div>
+      <p class="u-mt-6">
+        What we do run, rather than not, is on the <a href="/services/">services page</a>.
+      </p>
+    </div>
+  </Section>
+
+  <!-- Trust cross-link -->
+  <Section alternate>
+    <div class="container container--md">
+      <VetLink
+        desc="Five documented checks before any factory goes on an itinerary, including the signals that make us walk away and the limits of what a visit can prove."
+      />
+    </div>
+  </Section>
+
+  <!-- Related -->
+  <Section>
+    <div class="container">
+      <SectionHead eyebrow="Where to next" title="Read the method, or see where we run it." />
+      <RelatedNav
+        items={[
+          { k: 'Method', t: 'How we vet factories', href: '/about/how-we-vet-factories/' },
+          { k: 'Services', t: 'What we run today', href: '/services/' },
+          { k: 'Destinations', t: 'Where we host visits', href: '/destinations/' },
+          { k: 'Contact', t: 'Ask us something specific', href: '/contact/' },
+        ]}
+      />
+    </div>
+  </Section>
+</BaseLayout>

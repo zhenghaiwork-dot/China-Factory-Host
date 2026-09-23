@@ -1,0 +1,130 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import IndustryPage from '../../../components/IndustryPage.astro';
+import { waLink } from '../../../data/site.ts';
+
+const title = 'Toys, gifts & commodities — China factory visits and safety standards';
+const description =
+  'EN71, ASTM F963 and CPSIA basics for Chinese toy suppliers, Christmas-order seasonality, and what to check on a toys factory visit.';
+
+const wa = waLink('Hi, I am sourcing toys or gifts in China and would like to check suppliers on site.');
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  track="buyer"
+  active="industries"
+  crumbs={[{ href: '/services/', label: 'Services' }]}
+  current="Toys, gifts & commodities"
+  cta={{
+    /* Buyer path must not use dark bands — design system §4.1.8 */
+    variant: 'plain',
+    eyebrow: 'Next step',
+    title: 'Plan a toys & gifts visit before the quote decides it for you.',
+    lead: 'Tell us your product and destination market. We will check what exists on the floor, not what exists in a PDF.',
+    primary: { label: 'Plan a toys & gifts factory visit', href: '/contact/' },
+    form: { destination: 'Toys, gifts & commodities' },
+    secondary: { label: 'Ask on WhatsApp', href: wa, external: true },
+  }}
+>
+  <IndustryPage
+    strip
+    slotName="TOYS INJECTION FLOOR"
+    h1="Toys, gifts & commodities: the safety-standard trap."
+    lead="This is the category where a very cheap quote most often hides a very expensive problem. Toy safety standards are mandatory, testable, and frequently misunderstood by first-time buyers."
+    audience="For buyers: the highest-liability category most first-time importers touch — an emailed certificate satisfies none of the mandatory standards. For creators: the clusters are organised and film well."
+    micro={[
+      'EN71 / ASTM F963 / CPSIA basics',
+      'Strong Christmas-order seasonality',
+      'Yiwu + Dongguan supply split',
+    ]}
+    ctaLabel="Plan a toys & gifts factory visit"
+    why={[
+      'Toys are the highest-liability consumer category most buyers touch. Your target market has mandatory requirements, and none of them are satisfied by a PDF a supplier emails you.',
+      'Two things make this category hard from abroad. First, a <a href="/guides/factory-vs-trading-company-china/">trading company</a> can produce a certificate that belongs to someone else. Second, a certificate tells you about a sample that was submitted — not about the hundred thousand units currently being packed.',
+      'Commodity gift categories carry the same <a href="/who-we-help/brand-founders/">licensing</a> trap: a plush toy in a recognisable shape, or packaging carrying artwork nobody has the rights to.',
+      'The upside is that Chinese toy clusters are excellent and well-organised. Shantou and <a href="/destinations/guangzhou-dongguan/">Dongguan</a> produce for most of the world. Problems come from picking suppliers remotely, not from the country.',
+    ]}
+    chainLead="Toys are usually more fragmented than buyers expect — know which supplier does which step."
+    chain={[
+      {
+        k: 'Plastic toy factories',
+        v: 'Injection moulding, painting and assembly — Dongguan and Shantou dominate.',
+      },
+      {
+        k: 'Plush manufacturers',
+        v: 'Cutting, sewing, stuffing and needle detection. Testing requirements differ sharply for items aimed at younger children.',
+      },
+      {
+        k: 'Wooden toys',
+        v: 'A smaller regional cluster with different coating and finish restrictions.',
+      },
+      {
+        k: 'Printing & packaging',
+        v: 'Colour separation, cartons and manuals — age grading and warnings are printed here and are part of compliance.',
+      },
+      {
+        k: 'Testing laboratories',
+        v: 'Independent third-party labs perform the actual <a href="/guides/factory-visit-vs-audit-vs-inspection/">EN71 / ASTM testing</a>. A supplier-supplied report and an independent lab report are not the same thing.',
+      },
+    ]}
+    checks={[
+      'Does the factory have recent third-party test reports for the specific product — not a catalogue certificate from a different item?',
+      'Is the report dated within the window your retailer or regulator expects?',
+      'Age grading stated, with small-parts and sharp-point considerations addressed for that age band.',
+      'Needle-detection and metal-detection equipment present and running, for plush especially.',
+      'Paint and coating processes checked for what is actually being applied, not what the specification says.',
+      'Whether any part is subcontracted — outsourced painting is common and is where coating compliance usually breaks.',
+      'Licensing paperwork present if designs use third-party characters or artwork.',
+    ]}
+    numbers={[
+      {
+        k: 'Typical MOQ',
+        v: 'Varies widely — often several hundred to a few thousand, driven by tooling for new shapes and print setup for packaging.',
+      },
+      {
+        k: 'New tooling',
+        v: 'A new injection tool is a separate, significant cost. Stock shapes avoid it entirely.',
+      },
+      {
+        k: 'Sampling',
+        v: 'Expect a pre-production sample, then a production sample, then testing on that sample — a <a href="/services/brand-sourcing-visit/">visit</a> keeps each stage honest.',
+      },
+      {
+        k: 'Testing lead time',
+        v: 'Third-party testing adds weeks, and it cannot start until the final sample exists.',
+      },
+      {
+        k: 'Christmas production',
+        v: 'Peak build typically July–September for the Western season — the same calendar as the <a href="/destinations/yiwu/">Yiwu</a> Christmas rush. Visiting in that window means busy floors and poor access.',
+      },
+    ]}
+    numberNote="Treat every figure here as a starting question rather than an answer. Toy MOQs move with tooling, print setup and packaging complexity far more than with unit economics."
+    complianceTitle="Mandatory standards by destination market"
+    compliance={[
+      'European Union: EN71 series covering mechanical and physical properties, flammability and migration of certain elements, plus REACH obligations and CE marking.',
+      'United States: ASTM F963 covering mechanical hazards and heavy metals in substrates and coatings, plus CPSIA requirements including tracking labels and third-party testing by an accredited laboratory.',
+      'United Kingdom: UKCA marking with substantially retained EN71-based requirements.',
+      'Packaging and labelling: age warnings, material content and traceability markings differ by market and are part of what gets inspected.',
+      'Electrical toys add their own requirements on top of the toy standard.',
+    ]}
+    complianceCaveatBody="We check whether reports exist, whether they are recent, whether they name the right product and whether the lab is credibly independent. We are not a testing laboratory and we do not interpret standards."
+    complianceCaveatItems={[
+      'We do not certify toys. Nothing we issue substitutes for accredited third-party testing.',
+      'We cannot tell you that a product passes a standard — only a lab can.',
+      'We will not rely on a supplier-provided certificate alone, and we will say so rather than let it close the question.',
+      'Requirements change and differ by market. Confirm current obligations with a qualified adviser for your destination.',
+    ]}
+    related={[
+      { k: 'Destination', t: 'Yiwu', href: '/destinations/yiwu/' },
+      {
+        k: 'Destination',
+        t: 'Guangzhou / Dongguan',
+        href: '/destinations/guangzhou-dongguan/',
+      },
+      { k: 'Industry', t: 'Beauty & packaging', href: '/industries/beauty-packaging/' },
+      { k: 'Trust', t: 'How we vet factories', href: '/about/how-we-vet-factories/' },
+    ]}
+  />
+</BaseLayout>

@@ -1,0 +1,222 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Section from '../../../components/Section.astro';
+import SectionHead from '../../../components/SectionHead.astro';
+import PhotoSlot from '../../../components/PhotoSlot.astro';
+import OnsitePhoto from '../../../components/OnsitePhoto.astro';
+import Checklist from '../../../components/Checklist.astro';
+import Timeline from '../../../components/Timeline.astro';
+import ProcessSteps from '../../../components/ProcessSteps.astro';
+import Caveat from '../../../components/Caveat.astro';
+import FAQ from '../../../components/FAQ.astro';
+import Icon from '../../../components/Icon.astro';
+import RelatedNav from '../../../components/RelatedNav.astro';
+import { waLink } from '../../../data/site.ts';
+
+const title = 'Factory visit planning — a route built around clusters, not airports';
+const description =
+  'Sequencing, transport and appointments built around production schedules and industrial clusters, so you cover ground instead of wasting days backtracking.';
+
+const wa = waLink('Hi, I would like help planning a factory visit itinerary.');
+
+const includes = [
+  'A cluster-by-cluster itinerary, not a list of addresses in the order you found them',
+  'Appointments confirmed with the decision-maker at each stop',
+  'A realistic number of visits per day — density that respects the depth of each one',
+  'Transport between factories and a hotel placed near the industrial zone',
+  'Buffer for the things that always slip, and a same-day rebuild when one does',
+];
+
+const day = [
+  { day: 'DAY', time: '08:30', title: 'Pick-up at the hotel', desc: 'A driver who knows the industrial parks, not a map app guessing at a postcode.' },
+  { day: 'DAY', time: '10:00', title: 'Factory A', desc: 'The walk-through with the production manager. The interpreter carries the technical questions.' },
+  { day: 'DAY', time: '12:30', title: 'Working lunch', desc: 'Near the industrial zone, used to review the morning and adjust the afternoon order.' },
+  { day: 'DAY', time: '14:00', title: 'Factory B', desc: 'The second visit — the comparison, run on the same structure as the first.' },
+  { day: 'DAY', time: '17:00', title: 'Same-day notes', desc: 'Written while fresh, so nothing depends on remembering it three days later.' },
+  { day: 'DAY', time: '18:00', title: 'Debrief', desc: 'Thirty minutes on what we saw, what we distrust and what the next day should change.' },
+];
+
+const slippage = [
+  { k: 'A factory reschedules', v: 'The plan holds a substitute, and the day is rebuilt around it rather than collapsing.' },
+  { k: 'A visit runs long', v: 'The buffer absorbs it. The schedule is a sequence of priorities, not a minute-by-minute prison.' },
+  { k: 'A transfer is slower than planned', v: 'The route is built around shift times and rush hour, so the surprise is small when it comes.' },
+];
+
+const faqs = [
+  { q: 'How many factories can I fit in a day?', a: ['Two focused visits in one cluster is realistic. Three usually means cutting a walk-through short. We plan around the cluster and will tell you when your wish list is too full.'] },
+  { q: 'Can you combine cities?', a: ['Yes, when they are adjacent clusters and the transfer respects shift times. Crossing half a province between appointments is how trips lose two days, so we will say plainly when a multi-city plan is not worth it.'] },
+  { q: 'Do you book hotels and flights?', a: ['We do not resell travel, but we will tell you which hotel area to pick so you are near the factories, not the tourist centre.'] },
+  { q: 'What if a factory cancels on the day?', a: ['The plan holds a substitute, and the day is rebuilt around it. A cancellation costs you a location, not a day.'] },
+  { q: 'How far ahead do I need to plan?', a: ['Enough that appointments can be confirmed with the decision-maker — and if filming is involved, the lead time is longer. Tell us your window and we will say what is realistic.'] },
+  { q: 'Do you plan around production schedules?', a: ['Yes — visits are built around when lines are actually running, not just when the sales team is free. A shutdown week is a wasted week, and we will tell you if your dates land on one.'] },
+  { q: 'What if my dates fall on a holiday?', a: ['We will say so and suggest different dates before you book anything. Flying twenty hours to a shutdown is the mistake the planning exists to prevent.'] },
+  { q: 'Do you plan around trade fairs?', a: ['Yes — the fair and the factory visits are sequenced so neither wastes the other. Build the shortlist at the fair, then verify it on the floor.'] },
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  active="services"
+  crumbs={[{ href: '/services/', label: 'Services' }]}
+  current="Factory visit planning"
+  cta={{
+    eyebrow: 'Next step',
+    title: 'Build a route that covers ground.',
+    lead: 'Tell us the category and the cities. We return a day-by-day plan.',
+    primary: { label: 'Build my route', href: '/contact/' },
+    secondary: { label: 'Ask on WhatsApp', href: wa, external: true },
+  }}
+>
+  <section class="hero">
+    <div class="container">
+      <div class="split-7-5">
+        <div>
+          <p class="eyebrow">Factory visit planning</p>
+          <h1>A route built around clusters, not airports.</h1>
+          <p class="lead hero__lead">
+            The difference between a productive trip and an expensive one is sequencing: the right
+            factories, in the right order, with the right buffer when a meeting slips.
+          </p>
+          <div class="btn-row">
+            <a class="btn btn--primary" href="/contact/">Build my route</a>
+            <a class="btn btn--secondary" href="/how-it-works/">See the process</a>
+          </div>
+        </div>
+        <div class="hero__media">
+          <PhotoSlot name="PLANNING · THE ROUTE" variant="media">
+            <OnsitePhoto id="02" eager />
+          </PhotoSlot>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Section>
+    <div class="container container--md">
+      <SectionHead
+        eyebrow="Why it matters"
+        title="Sequencing is where trips are won or lost."
+        lead="The order of the visits changes the quotes you get, and the travel between them changes the days you lose."
+      />
+      <div class="prose stack">
+        <p>
+          The second quote you receive is only as good as the first one it is compared against. If
+          you visit the cheap factory before the honest one, the honest one looks expensive. If you
+          visit them in the right order — the same idea as the <a href="/guides/how-to-plan-a-china-factory-visit/">planning guide</a> —
+          the price difference becomes a question you can ask, not a feeling you are left with.
+        </p>
+        <p>
+          And the travel matters as much as the visits. Factories sit in industrial zones outside the
+          cities, and <a href="/destinations/">two clusters</a> can be a few hours apart. A route that ignores that burns a day on
+          backtracking — a route that respects it turns the transfer into part of the plan.
+        </p>
+      </div>
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container container--md">
+      <SectionHead eyebrow="What this covers" title="What the plan actually contains." />
+      <Checklist title="Included" numbered items={includes} />
+      <p class="u-mt-6">
+        This is the planning half of <a href="/how-it-works/">the process</a> — the visit half is the floor walk.
+      </p>
+    </div>
+  </Section>
+
+  <Section>
+    <div class="container container--md">
+      <SectionHead eyebrow="A day" title="A planned day, hour by hour." />
+      <Timeline items={day} />
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container container--md">
+      <SectionHead eyebrow="When it slips" title="What the plan does when reality intervenes." />
+      <ul class="spec-list clean">
+        {slippage.map((s) => (
+          <li>
+            <span class="spec-list__k">{s.k}</span><span class="spec-list__v">{s.v}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </Section>
+
+  <Section>
+    <div class="container container--md">
+      <SectionHead eyebrow="How it is built" title="How the route actually comes together." />
+      <ProcessSteps
+        items={[
+          { n: '01', title: 'Cluster first', body: 'Your suppliers get grouped by cluster, not by the order you found them. Two factories in the same industrial zone are one morning; two across a province are a lost day.' },
+          { n: '02', title: 'Sequence by comparison', body: 'The order is set so each quote is informed by the last. The cheap factory before the honest one makes the honest one look expensive.' },
+          { n: '03', title: 'Lock appointments', body: 'With the decision-maker, not the sales rep. A confirmed meeting with the wrong person is not a confirmed visit.' },
+          { n: '04', title: 'Buffer in', body: 'Time for the things that always slip — a long walk-through, a slow transfer, a reschedule.' },
+          { n: '05', title: 'Place the hotel', body: 'Near the industrial zone, not the tourist centre. The wrong hotel adds an hour to every morning.' },
+        ]}
+      />
+      <p class="u-mt-6">
+        The region-first step is the same logic as the <a href="/tools/china-manufacturing-hub-finder/">manufacturing hub finder</a>.
+      </p>
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container container--md">
+      <SectionHead eyebrow="Multi-city" title="How cities combine into one route." />
+      <ul class="spec-list clean">
+        <li><span class="spec-list__k">Yiwu + Ningbo</span><span class="spec-list__v">A market day in <a href="/destinations/yiwu/">Yiwu</a>, then a plant visit in <a href="/destinations/ningbo-hangzhou/">Ningbo</a> — one transfer, one week, two different answers.</span></li>
+        <li><span class="spec-list__k">Guangzhou + Dongguan + Foshan</span><span class="spec-list__v">Packaging, injection and furniture across <a href="/destinations/guangzhou-dongguan/">Guangzhou / Dongguan</a> and <a href="/destinations/foshan-shunde/">Foshan / Shunde</a> — one working radius.</span></li>
+        <li><span class="spec-list__k">The rule</span><span class="spec-list__v">Adjacent clusters combine; distant clusters cost a day each. We will say plainly which side your plan falls on.</span></li>
+      </ul>
+    </div>
+  </Section>
+
+  <Section>
+    <div class="container container--md">
+      <SectionHead eyebrow="One or several" title="How many regions a trip can hold." />
+      <ul class="spec-list clean">
+        <li><span class="spec-list__k">One region</span><span class="spec-list__v">The deepest visit — two or three days, no transfer days, the comparison that matters.</span></li>
+        <li><span class="spec-list__k">Two regions</span><span class="spec-list__v">Breadth, at the cost of one transfer day. Worth it when the product spans clusters.</span></li>
+        <li><span class="spec-list__k">Three or more</span><span class="spec-list__v">Only on a long trip. Each extra region adds travel and makes each visit shallower.</span></li>
+      </ul>
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container container--md">
+      <Caveat
+        title="What planning does not guarantee"
+        body="A plan is a plan. Factories still reschedule, and we build for that."
+        items={[
+          'We cannot guarantee a factory is available on any specific date — we confirm appointments, and we hold substitutes.',
+          'We do not overpack the day to make the plan look full. Two good visits beat six rushed ones.',
+          'We do not plan sightseeing into factory days; if you want a free day, we plan the transport and leave the day alone.',
+        ]}
+      />
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container">
+      <SectionHead title="Questions about planning a visit." />
+      <FAQ items={faqs} />
+    </div>
+  </Section>
+
+  <Section>
+    <div class="container">
+      <SectionHead eyebrow="Where next" title="Related pages." />
+      <RelatedNav
+        items={[
+          { k: 'Guide', t: 'How to plan a visit', href: '/guides/how-to-plan-a-china-factory-visit/' },
+          { k: 'Service', t: 'Visit existing suppliers', href: '/services/existing-supplier-visits/' },
+          { k: 'Page', t: 'All destinations', href: '/destinations/' },
+          { k: 'Plan', t: 'Plan my trip', href: '/plan-my-trip/' },
+        ]}
+      />
+    </div>
+  </Section>
+</BaseLayout>

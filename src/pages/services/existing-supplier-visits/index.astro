@@ -1,0 +1,211 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Section from '../../../components/Section.astro';
+import SectionHead from '../../../components/SectionHead.astro';
+import PhotoSlot from '../../../components/PhotoSlot.astro';
+import OnsitePhoto from '../../../components/OnsitePhoto.astro';
+import Checklist from '../../../components/Checklist.astro';
+import ProcessSteps from '../../../components/ProcessSteps.astro';
+import Caveat from '../../../components/Caveat.astro';
+import FAQ from '../../../components/FAQ.astro';
+import Icon from '../../../components/Icon.astro';
+import RelatedNav from '../../../components/RelatedNav.astro';
+import { waLink } from '../../../data/site.ts';
+
+const title = 'Visit your existing suppliers in China — verify them before you commit';
+const description =
+  'You already have a supplier list. We verify each one, arrange the visits, and run them so you meet the production manager instead of a sales rep.';
+
+const wa = waLink('Hi, I already have suppliers in China and would like to visit them.');
+
+const steps = [
+  { n: '01', title: 'Organise the list', body: 'Names, addresses, links, screenshots — whatever you have gets turned into one list with one format. Duplicates and dead entries fall out here.', evidence: ['One list, one format', 'Duplicates and dead links removed'] },
+  { n: '02', title: 'Run the five checks', body: 'Registration, scope, capacity and the floor, before anyone books a flight. A list of ten often becomes a shortlist of five.', evidence: ['Licence and scope checked', 'Address verified against the registry', 'Failures recorded, not quietly dropped'] },
+  { n: '03', title: 'Shortlist the survivors', body: 'The ones worth visiting, grouped by cluster so the route does not backtrack. Each survivor is tied to the check that passed.', evidence: ['Grouped by cluster', 'Each entry tied to a passed check'] },
+  { n: '04', title: 'Run the visits', body: 'Appointments with the decision-maker, the interpreter on the floor, and the same visit structure for every supplier so they compare.', evidence: ['Decision-maker confirmed present', 'One structure across suppliers'] },
+  { n: '05', title: 'Written report', body: 'Every supplier visited and rejected, with the check that removed each one — including the ones you liked but we did not.', evidence: ['Visited and rejected documented', 'The removing check named for each'] },
+];
+
+const includes = [
+  'Registration and scope checks on your existing list before booking',
+  'Appointments made with the decision-maker, not only the sales contact',
+  'A route that groups your suppliers by cluster, so you do not backtrack',
+  'Interpreting with the technical vocabulary your product actually uses',
+  'A written report covering every supplier visited and rejected',
+];
+
+const onFailure = [
+  { k: 'Trading company revealed', v: 'The five checks exist to separate a real factory from a well-presented one. We tell you before you waste a day on it, and the report records which check removed them.' },
+  { k: 'Capacity does not hold', v: 'The equipment count does not support your volume. We say so, rather than letting you find out after the deposit.' },
+  { k: 'Decision-maker missing', v: 'A visit with no one who can say yes is recorded as a failed visit, not quietly marked as "completed".' },
+];
+
+const faqs = [
+  { q: 'I found my suppliers on Alibaba. Can you visit them?', a: ['Yes, and bringing your existing shortlist is one of the most useful versions of the trip — including when the result is telling you to drop half of it.'] },
+  { q: 'What if one of my suppliers turns out to be a trading company?', a: ['We tell you before you waste a day on it. The five checks exist exactly to separate a real factory from a well-presented one, and the report records which check removed them.'] },
+  { q: 'Do you need my full list up front?', a: ['Send whatever you have — names, addresses, links, a screenshot. We will organise it, run the checks and tell you which are worth visiting in person.'] },
+  { q: 'Will you tell my supplier who you are?', a: ['We are clear about who we are and who we are working for. We are there to verify, not to negotiate behind your back — the supplier knows you sent us.'] },
+  { q: 'What if I want to keep some suppliers private?', a: ['Send what you want checked. We will not contact anyone you have not asked us to check, and the list does not leave your trip.'] },
+  { q: 'What do I get after the visits?', a: ['A written report, one entry per supplier, with what was verified on the floor and what failed. It is the evidence you take back to whoever signed off the trip.'] },
+  { q: 'What if my list is only one supplier?', a: ['We check it just as carefully, and we usually add a comparison — a single supplier is a single point of failure, and a second option is what makes the first one negotiable.'] },
+  { q: 'Can you check a supplier without visiting?', a: ['The registration checks can be done remotely; the floor check cannot. We will tell you what each one gives you, and what you are giving up by skipping the visit.'] },
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  active="services"
+  crumbs={[{ href: '/services/', label: 'Services' }]}
+  current="Visit existing suppliers"
+  cta={{
+    eyebrow: 'Next step',
+    title: 'Send your supplier list.',
+    lead: 'We will check who is real and who is worth a visit, before you book a flight.',
+    primary: { label: 'Send my supplier list', href: '/contact/' },
+    secondary: { label: 'Ask on WhatsApp', href: wa, external: true },
+  }}
+>
+  <section class="hero">
+    <div class="container">
+      <div class="split-7-5">
+        <div>
+          <p class="eyebrow">Visit existing suppliers</p>
+          <h1>You have a list. We find out which ones are real.</h1>
+          <p class="lead hero__lead">
+            A supplier you found online is a hypothesis, not a factory. We verify each one, then run
+            the visits so you meet the production manager instead of a sales rep.
+          </p>
+          <div class="btn-row">
+            <a class="btn btn--primary" href="/contact/">Send my supplier list</a>
+            <a class="btn btn--secondary" href="/about/how-we-vet-factories/">See the five checks</a>
+          </div>
+        </div>
+        <div class="hero__media">
+          <PhotoSlot name="VISIT · YOUR SUPPLIERS" variant="media">
+            <OnsitePhoto id="10" />
+          </PhotoSlot>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Section>
+    <div class="container container--md">
+      <SectionHead
+        eyebrow="The process"
+        title="What we do with your list."
+        lead="A list of ten names on a screen is not a plan. It is raw material — the work is turning it into a shortlist you can act on."
+      />
+      <ProcessSteps items={steps} />
+      <p class="u-mt-6">
+        The five checks are the same as <a href="/about/how-we-vet-factories/">the vetting method</a> — the page spells them out step by step.
+      </p>
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container container--md">
+      <SectionHead eyebrow="What this covers" title="Your shortlist, verified and visited." />
+      <Checklist title="Included" numbered items={includes} />
+      <p class="u-mt-6">
+        The walk-through itself follows the <a href="/guides/china-factory-visit-checklist/">on-the-floor checklist</a>.
+      </p>
+    </div>
+  </Section>
+
+  <Section>
+    <div class="container container--md">
+      <SectionHead eyebrow="When it fails" title="What happens when a supplier does not pass." />
+      <ul class="spec-list clean">
+        {onFailure.map((f) => (
+          <li>
+            <span class="spec-list__k">{f.k}</span><span class="spec-list__v">{f.v}</span>
+          </li>
+        ))}
+      </ul>
+      <p class="u-mt-6">
+        <a class="link-arrow" href="/guides/factory-vs-trading-company-china/">
+          How to tell a factory from a trading company
+          <Icon name="arrow" size={14} />
+        </a>
+      </p>
+    </div>
+  </Section>
+
+  <Section>
+    <div class="container container--md">
+      <SectionHead eyebrow="A sample day" title="One day visiting your own suppliers." />
+      <ProcessSteps
+        items={[
+          { n: '01', title: '08:30 · Pick-up', body: 'A driver who knows the industrial parks, heading to the first supplier on your list.' },
+          { n: '02', title: '10:00 · Supplier A', body: 'The walk-through. This is where the catalogue photo either matches the floor or it does not.' },
+          { n: '03', title: '12:30 · Working lunch', body: 'Near the industrial zone, reviewing the morning and adjusting the afternoon.' },
+          { n: '04', title: '14:00 · Supplier B', body: 'The second visit, run on the same structure so the two compare.' },
+          { n: '05', title: '17:00 · Same-day notes', body: 'Written while fresh, so nothing depends on memory three days later.' },
+          { n: '06', title: '18:00 · Debrief', body: 'Thirty minutes on what we saw, what we distrust and what the next day should change.' },
+        ]}
+      />
+      <p class="u-mt-6">
+        That day runs in whichever <a href="/destinations/">cluster</a> your suppliers sit in.
+      </p>
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container container--md">
+      <SectionHead eyebrow="Before and after" title="What happens to the list." />
+      <ul class="spec-list clean">
+        <li><span class="spec-list__k">The list you send</span><span class="spec-list__v">A dozen names from Alibaba — a mix of real factories, trading companies and outdated listings.</span></li>
+        <li><span class="spec-list__k">After the checks</span><span class="spec-list__v">Five worth visiting, the rest removed with a named reason — the same <a href="/about/how-we-vet-factories/">five checks</a> that remove a bad supplier from any list.</span></li>
+        <li><span class="spec-list__k">After the visit</span><span class="spec-list__v">Two or three you can actually move forward with, plus a written record of the others and why.</span></li>
+      </ul>
+    </div>
+  </Section>
+
+  <Section>
+    <div class="container container--md">
+      <SectionHead eyebrow="The difference" title="How this is different from factory matching." />
+      <ul class="spec-list clean">
+        <li><span class="spec-list__k">You already know who</span><span class="spec-list__v"><a href="/services/factory-matching/">Matching</a> is about finding; this is about verifying. The list is the starting point, not the output.</span></li>
+        <li><span class="spec-list__k">The list is your asset</span><span class="spec-list__v">We organise and check it, not replace it. The names you bring are the names we work with.</span></li>
+        <li><span class="spec-list__k">The report is the point</span><span class="spec-list__v">What you take back to whoever signed off the trip — evidence, not impressions.</span></li>
+      </ul>
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container container--md">
+      <Caveat
+        title="What we will not do"
+        body="We verify and host the visit. We do not invent a relationship that is not there."
+        items={[
+          'We do not sign contracts or move money on your behalf.',
+          'We do not pass a casual visit off as a formal audit — if you need one, we coordinate the right specialist.',
+          'We do not guarantee a supplier performs six months later; we tell you what we saw on the day.',
+        ]}
+      />
+    </div>
+  </Section>
+
+  <Section>
+    <div class="container">
+      <SectionHead title="Questions about visiting your own suppliers." />
+      <FAQ items={faqs} />
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container">
+      <SectionHead eyebrow="Where next" title="Related pages." />
+      <RelatedNav
+        items={[
+          { k: 'Trust', t: 'How we vet factories', href: '/about/how-we-vet-factories/' },
+          { k: 'Guide', t: 'Factory vs trading company', href: '/guides/factory-vs-trading-company-china/' },
+          { k: 'Service', t: 'Factory matching', href: '/services/factory-matching/' },
+          { k: 'Plan', t: 'Plan my trip', href: '/plan-my-trip/' },
+        ]}
+      />
+    </div>
+  </Section>
+</BaseLayout>

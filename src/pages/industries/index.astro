@@ -1,0 +1,148 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Section from '../../components/Section.astro';
+import SectionHead from '../../components/SectionHead.astro';
+import PhotoSlot from '../../components/PhotoSlot.astro';
+import OnsitePhoto from '../../components/OnsitePhoto.astro';
+import RelatedNav from '../../components/RelatedNav.astro';
+import { waLink } from '../../data/site.ts';
+
+const title = 'Industries — the categories we know how to vet';
+const description =
+  'The categories we vet on the ground: beauty and personal-care packaging, toys, gifts and small commodities, electronics, small appliances, textiles and furniture. Each has its own checks.';
+
+const wa = waLink('Hi, I am not sure whether my product category fits what you do.');
+
+const industries = [
+  { k: 'Beauty & packaging', t: 'Formula plants vs packaging plants', href: '/industries/beauty-packaging/' },
+  { k: 'Toys, gifts & commodities', t: 'Safety standards, market + factory', href: '/industries/toys-gifts-commodities/' },
+  { k: 'Electronics & smart hardware', t: 'PCB, SMT, assembly, testing', href: '/industries/electronics-smart-hardware/' },
+  { k: 'Small home appliances', t: 'Motors, heating, safety testing', href: '/industries/small-home-appliances/' },
+  { k: 'Textiles & fabrics', t: 'Weaving, dyeing, finishing', href: '/industries/textiles-fabrics/' },
+  { k: 'Furniture & home furnishing', t: 'Materials, structure, packaging', href: '/industries/furniture-home-furnishing/' },
+];
+
+const whatItGives = [
+  { k: 'Where it is actually made', v: 'The cluster that really produces it, not the city with the best airport. <a href="/industries/toys-gifts-commodities/">Toys</a> are Shantou and Dongguan; the market floor is <a href="/destinations/yiwu/">Yiwu</a>.' },
+  { k: 'The checks that matter here', v: 'Safety standards for toys, formula-versus-packaging for <a href="/industries/beauty-packaging/">beauty</a> — the specific questions that catch a bad supplier in this category.' },
+  { k: 'What to expect on the floor', v: 'MOQ ranges, sampling lead times, and the production steps you should see with your own eyes rather than accept on a PDF.' },
+];
+
+const stages = [
+  { k: 'At prototype', v: 'You check engineering support and iteration speed — how fast a change becomes a new sample. Volume and yield do not matter yet; responsiveness does.' },
+  { k: 'At industrialization', v: 'You check DFM, tooling and test fixtures — whether the design can be made repeatably, and what breaks when it scales.' },
+  { k: 'At volume', v: 'You check yield, repeatability and QC — the process control that turns a good sample into a consistent run.' },
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  active="industries"
+  crumbs={[]}
+  current="Industries"
+  cta={{
+    eyebrow: 'Next step',
+    title: 'Not sure your category fits?',
+    lead: 'Tell us the product and the quantity. We will say whether we can vet it properly, or point you at who can.',
+    primary: { label: 'Plan my visit', href: '/contact/' },
+    secondary: { label: 'Ask on WhatsApp', href: wa, external: true },
+  }}
+>
+  <section class="hero">
+    <div class="container">
+      <div class="split-7-5">
+        <div>
+          <p class="eyebrow">Industries</p>
+          <h1>We vet a few categories deeply, not every category shallowly.</h1>
+          <p class="lead hero__lead">
+            Every category has a different way of being faked. <a href="/industries/toys-gifts-commodities/">Toys</a> fail on a safety standard;
+            <a href="/industries/beauty-packaging/">beauty packaging</a> fails when the "factory" is really a trading office. We only publish the
+            categories we actually know how to check on the floor.
+          </p>
+          <div class="btn-row">
+            <a class="btn btn--primary" href="/contact/">Tell us your product — we'll say if we can vet it</a>
+          </div>
+        </div>
+        <div class="hero__media">
+          <PhotoSlot name="INDUSTRIES · THE CHECKS" variant="media">
+            <OnsitePhoto id="03" />
+          </PhotoSlot>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Section tight>
+    <div class="container">
+      <SectionHead
+        title="Six categories, each with its own checks"
+        lead="Each page is written from the ground: what the category actually is, where it is made, and what to verify before you commit."
+      />
+      <div class="related-nav" role="navigation" aria-label="Industries">
+        {
+          industries.map((d) => (
+            <a href={d.href}>
+              <span class="related-nav__k">{d.k}</span>
+              <span class="related-nav__t">{d.t}</span>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container container--md">
+      <SectionHead
+        title="What an industry page gives you"
+        lead="An industry page is not an encyclopedia. It answers one question: what would go wrong if you bought this category from the wrong supplier."
+      />
+      <ul class="spec-list clean">
+        {whatItGives.map((w) => (
+          <li>
+            <span class="spec-list__k">{w.k}</span><span class="spec-list__v" set:html={w.v} />
+          </li>
+        ))}
+      </ul>
+      <p class="u-mt-6">
+        Each industry page links back to the <a href="/destinations/">region</a> where that category is made, so the industry and the cluster stay connected.
+      </p>
+    </div>
+  </Section>
+
+  <Section>
+    <div class="container container--md">
+      <SectionHead
+        eyebrow="By project stage"
+        title="What to check changes with where you are."
+        lead="The same category is a different trip at prototype, industrialization and volume. Read the industry page against the stage you are actually at."
+      />
+      <ul class="spec-list clean">
+        {stages.map((s) => (
+          <li>
+            <span class="spec-list__k">{s.k}</span><span class="spec-list__v">{s.v}</span>
+          </li>
+        ))}
+      </ul>
+      <p class="u-mt-6">
+        If your category is not listed, tell us what you make — <a href="/services/factory-matching/">factory matching</a> still names the cluster,
+        and the <a href="/tools/china-manufacturing-hub-finder/">manufacturing hub finder</a> covers the regions by product.
+      </p>
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container">
+      <SectionHead eyebrow="Where next" title="Related pages." />
+      <RelatedNav
+        items={[
+          { k: 'Tool', t: 'Manufacturing hub finder', href: '/tools/china-manufacturing-hub-finder/' },
+          { k: 'Page', t: 'All destinations', href: '/destinations/' },
+          { k: 'Service', t: 'Factory matching', href: '/services/factory-matching/' },
+          { k: 'Guide', t: 'Factory visit checklist', href: '/guides/china-factory-visit-checklist/' },
+        ]}
+      />
+    </div>
+  </Section>
+</BaseLayout>

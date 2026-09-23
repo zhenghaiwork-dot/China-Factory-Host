@@ -1,0 +1,45 @@
+# Dependencies
+node_modules/
+
+# Astro build output and generated types
+dist/
+.astro/
+
+# Cloudflare / wrangler
+.wrangler/
+.dev.vars
+.mf/
+
+# Local screenshot + measurement scratch used during design review
+_shots/
+.shots/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.log
+
+# Secrets / environment — never commit API keys or sender config
+.env
+.env.*
+!.env.example
+
+# Build / type artifacts
+*.tsbuildinfo
+
+# Audit & design-review scratch left in the repo ROOT by prior sessions.
+# Every helper file we dropped during the spacing-audit / photo-fill work is
+# _-prefixed; root-anchored (leading /) so nested source dirs are untouched.
+/_*
+/.chrome-audit-profile/
+/.chrome-v2-profile/
+/.chrome-verify-profile/
+/alive.txt
+/routes.txt
+/scripts-list.txt
+/sitemap-check.txt
+/browser.txt
+/shots.txt
+/regress*.txt
+/build-*.txt
+/preview-*.txt

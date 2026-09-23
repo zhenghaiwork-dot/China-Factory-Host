@@ -1,0 +1,32 @@
+---
+import Icon from './Icon.astro';
+interface Props {
+  title?: string;
+  items: string[];
+  foot?: { href: string; label: string };
+}
+const { title = 'Red flags — walk away if you see these', items, foot } = Astro.props;
+---
+<div class="redflags">
+  <p class="redflags__title">{title}</p>
+  <ul class="redflags__list">
+    {
+      items.map((it) => (
+        <li>
+          <Icon name="warn" size={18} />
+          <span class="redflags__text" set:html={it}></span>
+        </li>
+      ))
+    }
+  </ul>
+  {
+    foot && (
+      <p class="redflags__foot redflags__note">
+        <a class="link-arrow" href={foot.href}>
+          {foot.label}
+          <Icon name="arrow" size={14} />
+        </a>
+      </p>
+    )
+  }
+</div>

@@ -1,0 +1,142 @@
+---
+import Logo from './Logo.astro';
+import Icon from './Icon.astro';
+import {
+  FOOTER_SERVICES,
+  FOOTER_DESTINATIONS,
+  FOOTER_RESOURCES,
+  FOOTER_TRUST,
+  REPLY_TIME_SHORT,
+  CONTACT_EMAIL,
+  SITE,
+  isWaConfigured,
+  waLink,
+} from '../data/site.ts';
+
+/* ---------- Contact-facts column (§1.1 #8) ----------
+   The reference site's fourth widget is a row of social icons. We have no public
+   profiles, and a row of grey icons we cannot back is the cheapest possible
+   broker signal, so that slot holds verifiable contact facts instead.
+
+   Every value below is either verifiable or a commitment we control:
+     · WhatsApp        — WA_NUMBER in site.ts is empty until the real number is
+                         provisioned; until then this slot points at /contact/
+                         and carries data-placeholder="wa-number" so a pre-launch
+                         grep finds it. It never renders a wa.me URL (critique M3)
+     · Email           — CONTACT_EMAIL (support@chinafactoryhost.com), a real
+                         monitored inbox; reaches the same team as the form
+     · China Time      — verifiable
+     · Reply time      — REPLY_TIME_SHORT, the same constant the rail and the
+                         closing CTA use
+     · Base            — Zhejiang, China
+   There is deliberately no street address (unconfirmed) and no social row. */
+const waHref = waLink('Hi, I have a question about a factory visit in China.');
+const waTarget = isWaConfigured ? waHref : '/contact/';
+---
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer__grid">
+      <div>
+        <a class="brand" href="/" aria-label={SITE + ' — home'}>
+          <Logo />
+          <span class="brand__word"
+            ><span class="brand__geo">China</span><span class="brand__core">Factory</span><span
+              class="brand__host">Host</span
+            ></span
+          >
+        </a>
+        <p class="footer__blurb">
+          On-the-ground factory visits, filming coordination and supplier verification for overseas
+          creators and buyers. Hosted from Zhejiang.
+        </p>
+      </div>
+
+      {/* Column titles stay <h2>: 04-requirements-delta imports the reference
+          site's "footer as a nav map with H2 column titles" as approved
+          interface language, so the spec wins over the outline-aesthetics
+          objection (critique S2). The heading level is right for a top-level
+          site region; the label-vs-level mismatch is fixed on the reading side
+          by tying each list to its heading with aria-labelledby, so a screen
+          reader announces the group by name instead of by position. */}
+      <div>
+        <h2 class="footer__col-title" id="footer-col-services">Services</h2>
+        <ul class="footer__nav" aria-labelledby="footer-col-services">
+          {FOOTER_SERVICES.map((i) => <li><a href={i.href}>{i.label}</a></li>)}
+        </ul>
+      </div>
+
+      <div>
+        <h2 class="footer__col-title" id="footer-col-destinations">Destinations</h2>
+        <ul class="footer__nav" aria-labelledby="footer-col-destinations">
+          {FOOTER_DESTINATIONS.map((i) => <li><a href={i.href}>{i.label}</a></li>)}
+        </ul>
+      </div>
+
+      <div>
+        <h2 class="footer__col-title" id="footer-col-resources">Resources</h2>
+        <ul class="footer__nav" aria-labelledby="footer-col-resources">
+          {FOOTER_RESOURCES.map((i) => <li><a href={i.href}>{i.label}</a></li>)}
+        </ul>
+      </div>
+
+      <div>
+        <h2 class="footer__col-title" id="footer-col-trust">Trust &amp; company</h2>
+        <ul class="footer__nav" aria-labelledby="footer-col-trust">
+          {FOOTER_TRUST.map((i) => <li><a href={i.href}>{i.label}</a></li>)}
+          <li><a href="/contact/">Contact &amp; booking</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h2 class="footer__col-title" id="footer-col-contact">Contact</h2>
+        <dl class="footer__facts" aria-labelledby="footer-col-contact">
+          <div>
+            <dt class="footer__fact-k">WhatsApp</dt>
+            <dd class="footer__fact-v">
+              <span class="footer__wa">
+                <Icon name="wa" size={16} />
+                <a
+                  href={waTarget}
+                  target={isWaConfigured ? '_blank' : undefined}
+                  rel={isWaConfigured ? 'noopener' : undefined}
+                  data-placeholder={isWaConfigured ? undefined : 'wa-number'}
+                >{isWaConfigured ? 'Message us' : 'Ask us for our number'}</a>
+              </span>
+            </dd>
+          </div>
+          <div>
+            <dt class="footer__fact-k">Email</dt>
+            <dd class="footer__fact-v">
+              <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
+            </dd>
+          </div>
+          <div>
+            <dt class="footer__fact-k">China time</dt>
+            <dd class="footer__fact-v">GMT+8</dd>
+          </div>
+          <div>
+            <dt class="footer__fact-k">Reply time</dt>
+            <dd class="footer__fact-v">{REPLY_TIME_SHORT}</dd>
+          </div>
+          <div>
+            <dt class="footer__fact-k">Based in</dt>
+            <dd class="footer__fact-v">Zhejiang, China — working nationwide</dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+
+    <div class="footer__bottom">
+      <p class="footer__copy">© <span class="num">2026</span> {SITE} · Based in Zhejiang, China · Working nationwide</p>
+      <ul class="footer__legal">
+        <li><a href="/about/">About</a></li>
+        <li><a href="/about/how-we-vet-factories/">Vetting method</a></li>
+        <li><a href="/contact/">Contact</a></li>
+        {/* Real route as of 2026-09-18: src/pages/privacy/index.astro. The link
+            was deliberately absent until then — a link promising a policy that
+            lands on the homepage is worse than no link. */}
+        <li><a href="/privacy/">Privacy &amp; disclaimer</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>

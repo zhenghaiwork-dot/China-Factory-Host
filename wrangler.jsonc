@@ -1,0 +1,39 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+
+  /* Cloudflare Workers configuration for chinafactoryhost.com.
+     Generated for Astro's static output + one server route (/api/inquiry/).
+
+     Compatibility: `nodejs_compat` is on because Astro's server bundle expects a
+     handful of Node globals. `nodejs_compat_populate_process_env` is NOT enabled
+     on purpose — secrets must come from bindings (vars/secrets), never from
+     process.env, so that no key is ever baked into the build. */
+  "name": "chinafactoryhost",
+  /* No `main` on purpose: @astrojs/cloudflare resolves the Worker entry itself
+     (it writes dist/_worker.js/index.js for this static+one-function setup), and
+     a hardcoded `main` breaks the build — the Vite plugin validates the path at
+     config time, before the server bundle has been emitted. */
+  "compatibility_date": "2026-09-18",
+  "compatibility_flags": ["nodejs_compat"],
+
+  /* Static pages are served as assets; anything not matched falls through to
+     the Worker, which is how POST /api/inquiry/ is reached. */
+  "assets": {
+    "directory": "dist/client",
+    "binding": "ASSETS"
+  },
+
+  "observability": {
+    "enabled": true
+  },
+
+  /* Public, non-secret values. Real secrets are set with:
+       npx wrangler secret put RESEND_API_KEY
+       npx wrangler secret put INQUIRY_TO
+       npx wrangler secret put INQUIRY_FROM
+     …or in the Cloudflare dashboard under Workers → Settings → Variables.
+     Locally the same three names go in .dev.vars (never committed). */
+  "vars": {
+    "SITE_HOST": "chinafactoryhost.com"
+  }
+}

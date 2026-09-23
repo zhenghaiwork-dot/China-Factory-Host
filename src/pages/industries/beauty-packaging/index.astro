@@ -1,0 +1,131 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import IndustryPage from '../../../components/IndustryPage.astro';
+import { waLink } from '../../../data/site.ts';
+
+const title = 'Beauty & personal-care packaging — China factory visits';
+const description =
+  'Why the formula plant and the packaging plant are two different suppliers, what to check on a filling line, and typical MOQs for private-label beauty in China.';
+
+const wa = waLink('Hi, I am sourcing beauty packaging in China and would like to visit suppliers.');
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  track="neutral"
+  active="industries"
+  crumbs={[{ href: '/services/', label: 'Services' }]}
+  current="Beauty & packaging"
+  cta={{
+    eyebrow: 'Next step',
+    title: 'Plan a beauty & packaging visit that prices both halves.',
+    lead: 'Tell us your product and target market. We will identify which supplier is really setting your MOQ.',
+    primary: { label: 'Plan a beauty & packaging factory visit', href: '/contact/' },
+    form: { destination: 'Beauty & personal-care packaging' },
+    secondary: { label: 'Ask on WhatsApp', href: wa, external: true },
+  }}
+>
+  <IndustryPage
+    slotName="BEAUTY FILLING LINE"
+    h1="Beauty & personal-care packaging: two factories, not one."
+    lead="Almost every newcomer to this category makes the same expensive assumption — that the company quoting your serum also makes the bottle it goes in. They usually do not, and the separation changes everything about MOQ and lead time."
+    audience="For creators: the most filmable private-label category in China. For buyers: the two-supplier structure is where the expensive mistakes happen."
+    micro={[
+      'Formula plant ≠ packaging plant',
+      'Cosmetics-specific registration context',
+      'A common creator private-label path',
+    ]}
+    ctaLabel="Plan a beauty & packaging factory visit"
+    why={[
+      'In Chinese <a href="/destinations/guangzhou-dongguan/">cosmetics manufacturing</a>, “the factory” is usually at least two companies: one that makes the formulation and fills it, and one or more that supply bottles, closures, pumps and cartons. They quote separately, ship separately and have different economic drivers.',
+      'This matters for three practical reasons. Your MOQ is normally set by the packaging component, not by the formula. Your lead time is gated by whichever of the two has the longest queue. And your defect risk concentrates at the interface — a closure that does not seal is not a formulation problem.',
+      'For <a href="/who-we-help/creators/">creators</a> this is one of the most accessible private-label categories in China: low unit costs, high perceived value, and genuinely interesting footage on a filling line.',
+      'For buyers it is the category where getting the <a href="/who-we-help/brand-founders/">two-supplier structure</a> wrong produces the most expensive surprise, usually discovered a week before launch.',
+    ]}
+    chainLead="Which supplier does what, and where packaging decisions actually get made."
+    chain={[
+      {
+        k: 'Formula plant',
+        v: 'Develops or adapts the formulation, holds raw materials, runs mixing and filling, does microbiological testing. Registers products where required.',
+      },
+      {
+        k: 'Packaging supplier',
+        v: 'Makes or decorates bottles, jars, tubes, pumps, caps. Often several suppliers per product, each with its own MOQ.',
+      },
+      {
+        k: 'Printing & decoration',
+        v: 'Silk screening, hot stamping, labelling, cartons. Frequently a third company.',
+      },
+      {
+        k: 'Secondary assembly',
+        v: 'Sometimes the formula plant, sometimes a contractor — kits, gift sets and multi-item packs often get assembled elsewhere.',
+      },
+      {
+        k: 'Testing & registration',
+        v: 'Stability, compatibility and microbiological <a href="/guides/factory-visit-vs-audit-vs-inspection/">testing</a>, plus whatever registration your target market requires. Usually arranged by the formula plant.',
+      },
+    ]}
+    checks={[
+      'Ask to see both the mixing vessels and the filling line — a plant that only fills is still a real supplier, but it is a different one.',
+      'Raw material store: check who holds the actives, and whether any are claimed but not present.',
+      'Clean room classification and whether visitors are genuinely allowed near the filling point.',
+      'Batch records and traceability — you want to see how a batch number connects back to raw materials.',
+      'Compatibility testing between your specific formulation and your specific closure, in writing.',
+      'Separate the packaging MOQ from the formula MOQ in the quote, and ask which one is driving the number.',
+      'Tooling ownership for a custom bottle or mould, stated in writing before payment.',
+    ]}
+    numbers={[
+      {
+        k: 'Formula MOQ',
+        v: 'Often quoted from the low thousands downward for filling, depending on vessel size and line setup.',
+      },
+      {
+        k: 'Packaging MOQ',
+        v: 'Frequently the higher number — stock components start far lower than custom tooling.',
+      },
+      {
+        k: 'Custom tooling',
+        v: 'A new bottle mould is a separate cost with its own lead time, <a href="/about/how-we-vet-factories/">owned by whoever paid for it</a>.',
+      },
+      {
+        k: 'Sampling',
+        v: 'Expect multiple rounds: formulation adjustment, then compatibility, then stability — the <a href="/services/brand-sourcing-visit/">sourcing visit</a> runs each round.',
+      },
+      {
+        k: 'Lead time',
+        v: 'Usually dictated by the slowest of the three suppliers in the chain, not by the filling plant.',
+      },
+    ]}
+    numberNote="These are ranges we see regularly, not quotes. Get every number attached to a specific component and a specific plant — “MOQ 5,000” means nothing without knowing which part set it."
+    complianceTitle="What your target market will require"
+    compliance={[
+      'Ingredient compliance for your destination market — several ingredients common in China are restricted or prohibited in the EU and the US.',
+      'Labelling requirements, including INCI naming conventions and responsible-person details where applicable.',
+      'Registration or notification routes: China has its own cosmetics registration regime for domestic sale, separate from EU CPNP or US MoCRA requirements.',
+      'Microbiological and stability testing appropriate to the formulation and the container.',
+      'Claim substantiation — “dermatologically tested” needs an actual test behind it.',
+    ]}
+    complianceCaveatBody="We can check that testing reports exist, that certificate numbers resolve, and that the plant does what it says. None of that makes us a regulatory adviser."
+    complianceCaveatItems={[
+      'We do not prepare or submit regulatory filings in any market.',
+      'We cannot confirm that a formula meets a specific regional regulation — that requires a qualified regulatory chemist.',
+      'We are not a laboratory. Test reports are checked for existence and coherence, not for scientific validity.',
+      'Registration timelines and requirements change. Verify against current rules for your own market before committing.',
+    ]}
+    related={[
+      {
+        k: 'Destination',
+        t: 'Guangzhou / Dongguan',
+        href: '/destinations/guangzhou-dongguan/',
+      },
+      { k: 'Destination', t: 'Shenzhen', href: '/destinations/shenzhen/' },
+      {
+        k: 'Industry',
+        t: 'Toys, gifts & commodities',
+        href: '/industries/toys-gifts-commodities/',
+      },
+      { k: 'Service', t: 'Brand sourcing visit', href: '/services/brand-sourcing-visit/' },
+    ]}
+  />
+</BaseLayout>

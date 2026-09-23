@@ -1,0 +1,160 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Section from '../../components/Section.astro';
+import SectionHead from '../../components/SectionHead.astro';
+import PhotoSlot from '../../components/PhotoSlot.astro';
+import OnsitePhoto from '../../components/OnsitePhoto.astro';
+import { waLink, FILMING_LEAD_TIME } from '../../data/site.ts';
+
+const title = 'Guides — planning, vetting and filming a China factory visit';
+const description =
+  'Practical guides on planning a China factory visit: what to check on the floor, how to tell a factory from a trading company, when a visit is the wrong tool, and what filming permission really involves.';
+
+const wa = waLink('Hi, I have a question about visiting a factory in China.');
+
+/* Precomputed in frontmatter: Astro 7's Rust compiler rejects template literals
+   inside inline attribute/tag expressions. */
+const filmingWindow =
+  'Permission is requested in writing and routed through the factory owner. Under ' +
+  FILMING_LEAD_TIME +
+  ' the honest expectation is often a refusal.';
+
+const guides = [
+  { k: 'Before you go', t: 'How to plan a China factory visit — the cluster first, then the route', href: '/guides/how-to-plan-a-china-factory-visit/' },
+  { k: 'On the floor', t: 'The factory visit checklist — licence, floor, equipment, decision-maker', href: '/guides/china-factory-visit-checklist/' },
+  { k: 'Choosing the supplier', t: 'Factory vs trading company — the signals that separate them', href: '/guides/factory-vs-trading-company-china/' },
+  { k: 'Choosing the supplier', t: 'Factory visit vs audit vs inspection — which question you are asking', href: '/guides/factory-visit-vs-audit-vs-inspection/' },
+  { k: 'Filming', t: 'Can you film inside a Chinese factory? What is approved, what is refused', href: '/guides/can-you-film-inside-a-chinese-factory/' },
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  active=""
+  crumbs={[]}
+  current="Guides"
+  cta={{
+    eyebrow: 'Next step',
+    title: 'Not sure which of these applies to you?',
+    lead: 'Tell us the product, the city and roughly when. We will say which guide is the right starting point — or that none of them is.',
+    primary: { label: 'Ask us', href: '/contact/' },
+    secondary: { label: 'Ask on WhatsApp', href: wa, external: true },
+  }}
+>
+  <section class="hero">
+    <div class="container">
+      <div class="split-7-5">
+        <div>
+          <p class="eyebrow">Guides</p>
+          <h1>Five guides, in the order a real trip needs them.</h1>
+          <p class="lead hero__lead">
+            These are the questions buyers ask before anyone books a flight: how to plan the trip
+            around the product rather than the airport, what to check once you are standing on the
+            floor, how to tell a real factory from a trading office, when a visit is simply the
+            wrong tool, and what filming permission actually takes. Each one is written to be used,
+            not skimmed.
+          </p>
+          <div class="btn-row">
+            <a class="btn btn--primary" href="/guides/how-to-plan-a-china-factory-visit/">Start with planning the trip</a>
+          </div>
+        </div>
+        <div class="hero__media">
+          <PhotoSlot name="GUIDES · THE FLOOR" variant="media">
+            <OnsitePhoto id="01" />
+          </PhotoSlot>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Section tight>
+    <div class="container">
+      <SectionHead
+        title="What is in each guide"
+        lead="Grouped by the stage of the trip you are at. Two of them sit in the same cluster on purpose — supplier choice is the question people get wrong most often."
+      />
+      <div class="related-nav" role="navigation" aria-label="Guides">
+        {
+          guides.map((d) => (
+            <a href={d.href}>
+              <span class="related-nav__k">{d.k}</span>
+              <span class="related-nav__t">{d.t}</span>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container">
+      <SectionHead
+        title="How a guide differs from the rest of the site"
+        lead="A guide explains how to think about a problem. It does not become a service page halfway down, and it does not pretend every question has a clean answer."
+      />
+      <ul class="spec-list">
+        <li>
+          <span class="spec-list__k">Written from the floor, not a desk</span>
+          <span>The checks listed are the ones that have actually caught a problem on a visit — a licence that does not match the address, a tooling store that does not exist — rather than a generic supplier checklist.</span>
+        </li>
+        <li>
+          <span class="spec-list__k">They say when the answer is no</span>
+          <span>We do not guarantee entry to a specific named factory, and filming permission belongs to the factory, not to us. Where the honest answer is "maybe", the guide says "maybe".</span>
+        </li>
+        <li>
+          <span class="spec-list__k">Filming has a real lead time</span>
+          <span>{filmingWindow}</span>
+        </li>
+        <li>
+          <span class="spec-list__k">They stop where the work starts</span>
+          <span>A guide tells you what to look at. If you would rather have someone walk the floor and document it, that is a hosted visit — linked from every page, never sold inside the guide itself.</span>
+        </li>
+      </ul>
+    </div>
+  </Section>
+  <Section>
+    <div class="container container--md">
+      <SectionHead
+        eyebrow="Order"
+        title="Read them in the order the problems arrive."
+        lead="The guides are ordered by stage, not by importance. Skipping ahead is fine once you know which stage you are really at — most people think they are further along than they are."
+      />
+      <ul class="spec-list">
+        <li>
+          <span class="spec-list__k">Start with planning if nothing is booked</span>
+          <span
+            >Cluster first, route second, meetings third. Nearly every wasted trip described to us
+            went wrong at step one: someone flew to a city because it had a good airport, then found
+            out their product is made two provinces away.</span
+          >
+        </li>
+        <li>
+          <span class="spec-list__k">Start with factory vs trading company if you already have quotes</span>
+          <span
+            >Quotes tell you very little until you know who wrote them. This one is short, and it
+            changes how you read everything else sitting in your inbox.</span
+          >
+        </li>
+        <li>
+          <span class="spec-list__k">Start with visit vs audit vs inspection if something has gone wrong</span>
+          <span
+            >The three get used interchangeably and are not interchangeable. Which one you need
+            depends on the question you are actually asking, and booking the wrong one wastes the
+            money either way.</span
+          >
+        </li>
+      </ul>
+      <p class="u-mt-6">
+        Guides explain; they do not do the job for you. When the checking itself is what you need,
+        that is a hosted visit — <a href="/services/">the service pages</a> break that down by task —
+        and when it is footage you want rather than evidence, it is
+        <a href="/services/on-site-support/filming-coordination/">filming coordination</a>. The two
+        pages most people open side by side are the
+        <a href="/guides/china-factory-visit-checklist/">visit checklist</a> and the
+        <a href="/tools/factory-visit-scorecard/">scorecard</a>: one tells you what to look at, the
+        other gives you somewhere to write it down before you forget.
+      </p>
+    </div>
+  </Section>
+</BaseLayout>

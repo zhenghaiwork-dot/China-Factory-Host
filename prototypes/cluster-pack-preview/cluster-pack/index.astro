@@ -1,0 +1,255 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Section from '../../../components/Section.astro';
+import SectionHead from '../../../components/SectionHead.astro';
+import Icon from '../../../components/Icon.astro';
+import PhotoSlot from '../../../components/PhotoSlot.astro';
+
+/* PROTOTYPE — /preview/cluster-pack/
+   Adapts the competitor's gated-directory mechanic for this site's constraints.
+   What is borrowed: the gate (an email buys a compiled asset).
+   What is NOT borrowed: invented counts. The competitor's page advertises
+   "264 locked supplier profiles" — a hard data claim we cannot substantiate,
+   so this version sells the *compilation* of content we already publish openly.
+
+   Two states are rendered side by side so the flow can be reviewed in one go:
+     State A (below, dark band) — what a visitor sees before unlocking
+     State B (below, light band) — what they get afterwards
+   The button is a demo toggle: it does NOT post anywhere. */
+---
+<BaseLayout
+  title="Preview · cluster intel pack — ChinaFactoryHost"
+  description="Prototype of the gated 'cluster intel pack' concept, shown in both the locked and unlocked states."
+  track="neutral"
+  crumbs={[{ href: '/', label: 'Home' }]}
+  current="Preview · cluster pack"
+  cta={false}
+>
+  <section class="hero">
+    <div class="container">
+      <div class="split-7-5">
+      <div>
+      <p class="eyebrow">Prototype · not wired to any endpoint</p>
+      <h1>The cluster intel pack — locked and unlocked, side by side.</h1>
+      <p class="lead hero__lead">
+        The competitor's furniture page gate: an interactive supplier directory with every profile
+        locked behind a contact form. The mechanic is sound and worth borrowing. The specific asset is not —
+        “264 locked profiles” is a data claim we cannot substantiate, which would break the one rule this
+        site actually trades on.
+      </p>
+      <ul class="hero__micro">
+        <li>Borrowed: the gate. One email buys a compiled, printable asset.</li>
+        <li>Replaced: the contents. Everything here already exists on this site, assembled instead of withheld.</li>
+        <li>Kept: no numbers we cannot stand behind. No supplier database we do not have.</li>
+      </ul>
+      </div>
+      {/* The site's hero grammar is a 7/5 split with a media slot on the right.
+          Leaving it out is what made the top of this page read as one long
+          left-hugging column — the right half was simply empty. */}
+      <div class="hero__media">
+        <PhotoSlot name="PROTOTYPE · PACK COVER" variant="media" />
+      </div>
+      </div>
+    </div>
+  </section>
+
+  <Section>
+    <div class="container container--prose">
+      <SectionHead
+        eyebrow="State A · what the visitor sees first"
+        title="Before you book flights."
+        lead="Dark band, same closing-band language as the rest of the site. Copy on the left, the gate card on the right. Red appears once — on the button."
+      />
+      <div class="proto-stack">
+        <a class="btn btn--secondary" href="/destinations/yiwu/">Compare against the live Yiwu closing band</a>
+      </div>
+    </div>
+  </Section>
+
+  {/* ── State A — the gate ─────────────────────────────────────────────── */}
+  <Section inverse>
+    <div class="container container--md">
+      <div class="proto-split">
+        <div class="proto-copy">
+          <p class="eyebrow">Before you book flights</p>
+          <h2>The Yiwu planning pack, in one printable file.</h2>
+          <p class="lead">
+            Everything on this page, plus the district-by-district market map and the holiday
+            windows calendar — compiled so you can brief your team offline.
+          </p>
+          <p class="proto-micro">
+            No invented supplier counts. Everything in the pack is already published on this site —
+            you are paying with an email for the compiled version, not for answers we withhold.
+          </p>
+        </div>
+
+        <div class="proto-card">
+          <p class="proto-card__title">Get the Yiwu pack</p>
+          <p class="proto-card__lead">One email. We send the PDF and nothing else.</p>
+          <form class="proto-form" id="proto-gate">
+            <div class="field">
+              <label class="field__label" for="proto-email">Email</label>
+              <input id="proto-email" name="email" type="email" required placeholder="you@domain.com" />
+            </div>
+            <fieldset class="field" style="border:0;padding:0;margin:0">
+              <legend class="field__label">Which one are you?</legend>
+              <div class="radio-group" role="radiogroup" aria-label="Which one are you?">
+                <label class="radio-chip"><input type="radio" name="role" value="creator" checked /><span>Creator</span></label>
+                <label class="radio-chip"><input type="radio" name="role" value="brand-buyer" /><span>Brand buyer</span></label>
+                <label class="radio-chip"><input type="radio" name="role" value="not-sure" /><span>Not sure yet</span></label>
+              </div>
+            </fieldset>
+            <button class="btn btn--primary btn--block" type="submit">Send me the pack</button>
+            <p class="proto-card__micro">China time GMT+8 · reply within 1 business day</p>
+          </form>
+          <p class="proto-card__demo">Demo only — this form posts nowhere. Press it to reveal State B.</p>
+        </div>
+      </div>
+    </div>
+  </Section>
+
+  {/* ── State B — what they get ─────────────────────────────────────────── */}
+  <Section alternate id="state-b">
+    <div class="container container--prose">
+      <SectionHead
+        eyebrow="State B · after they unlock"
+        title="What lands in the inbox."
+        lead="Reusing the existing download-block pattern, already used for the factory vetting checklist. Replaced State A below when you pressed the button."
+      />
+      <div class="download">
+        <div>
+          <div class="download__thumb"><span class="proto-docicon"><Icon name="clipboard" size={28} /></span></div>
+          <h3>Yiwu planning pack</h3>
+          <p class="lead u-mt-0">
+            District map, two-day itinerary, 2027 holiday windows and the five verification checks —
+            compiled into one PDF.
+          </p>
+          <ul class="spec-list clean">
+            <li><span class="spec-list__k">District map</span><span class="spec-list__v">Which hall sells what, and where the traders sit between you and the factory.</span></li>
+            <li><span class="spec-list__k">Itinerary</span><span class="spec-list__v">Two days with realistic day lengths — what you can actually cover, not what fits on a slide.</span></li>
+            <li><span class="spec-list__k">Holiday windows</span><span class="spec-list__v">Chinese New Year, National Day, Canton Fair — when the city is genuinely closed.</span></li>
+            <li><span class="spec-list__k">The five checks</span><span class="spec-list__v">Licence, scope, capacity, floor, decision-maker — plus the 12 signals that make us walk away.</span></li>
+          </ul>
+          <p class="download__meta">4 sections · 6 pages · PDF</p>
+        </div>
+        <div class="download__form-wrap">
+          <div class="proto-unlocked">
+            <Icon name="checkBig" size={24} />
+            <span>Unlocked — the pack is in your inbox.</span>
+          </div>
+          <p><a class="btn btn--primary btn--block" href="#state-b">Download the PDF</a></p>
+          <p class="download__micro">No spam. Unsubscribe anytime.</p>
+        </div>
+      </div>
+    </div>
+  </Section>
+
+  <Section>
+    <div class="container container--prose">
+      <SectionHead
+        eyebrow="Open questions for you"
+        title="Three things this needs before it is real."
+      />
+      <ul class="spec-list clean">
+        <li>
+          <span class="spec-list__k">The PDF has to exist</span>
+          <span>The only real asset on the site today is zero — there is no PDF anywhere in <code>public/</code>. The pack can be generated straight from content already published on each destination page, so nothing new has to be invented.</span>
+        </li>
+        <li>
+          <span class="spec-list__k">Delivery</span>
+          <span>The inquiry endpoint currently mails a notification to <em>us</em>. Sending the file to the visitor needs an attachment path in the mail call, otherwise “check your inbox” is a promise we do not keep.</span>
+        </li>
+        <li>
+          <span class="spec-list__k">Existing bug</span>
+          <span>The vetting-checklist download gate only collects an email, which the current endpoint rejects with 400 because it requires name and goal. Any real version of this has to fix that first.</span>
+        </li>
+      </ul>
+      <div class="proto-stack">
+        <a class="btn btn--secondary" href="/destinations/yiwu/">See the live Yiwu page</a>
+        <a class="btn btn--secondary" href="/contact/">See the live full form</a>
+      </div>
+    </div>
+  </Section>
+</BaseLayout>
+
+<style>
+  /* Ragged right edge — the thing that read as "skewed".
+     .section-head is capped at 62ch (base.css:221) while the content block
+     under it fills the container, so the right edge zig-zags 654 / 890 / 654
+     / 890 down the page. Fix: give every prose block the SAME cap, so narrow
+     prose and the two full-width "moments" (the dark band, the pack card) read
+     as deliberate rhythm instead of misalignment. */
+  .section-head, :global(.spec-list), .proto-stack { max-width: 62ch; }
+
+  /* .download goes 7fr/5fr + vertical centring at desktop width. Inside the
+     narrow prose column that strands a short right column beside a very tall
+     left one, so here it stacks: contents, then the CTA. */
+  :global(.download) { grid-template-columns: 1fr; align-items: start; }
+  :global(.download__form-wrap) { margin-top: var(--space-6); }
+
+  .proto-split { display: grid; gap: var(--space-8); align-items: start; }
+  @media (min-width: 1024px) {
+    .proto-split { grid-template-columns: minmax(0, 1fr) minmax(0, 380px); column-gap: var(--space-12); }
+  }
+  .proto-copy { min-width: 0; text-align: left; }
+  .proto-micro { margin-top: var(--space-6); font-size: var(--fs-caption); color: var(--color-text-inverse-3); max-width: 52ch; }
+  .proto-card {
+    min-width: 0;
+    background: var(--color-surface);
+    border-radius: var(--radius-md);
+    padding: var(--space-6);
+    /* Same pin the shipped closing band uses. .section--inverse remaps
+       --color-text etc. to light on-inverse values, and — critically — paints
+       .btn--primary WHITE (components.css §24b), which is invisible on a white
+       card. Inherited `color` is not a variable, so the card must also set it
+       explicitly or the title stays light-on-white. */
+    color: var(--text-primary);
+    --color-text: var(--text-primary);
+    --color-text-secondary: var(--text-secondary);
+    --color-text-muted: var(--text-muted);
+    --color-accent: var(--accent-600);
+  }
+  .proto-card .btn--primary {
+    background: var(--action-bg);
+    color: var(--action-text);
+    border-color: var(--action-bg);
+  }
+  .proto-card .btn--primary:hover {
+    background: var(--action-bg-hover);
+    border-color: var(--action-bg-hover);
+    color: var(--action-text);
+  }
+  .proto-card__title { font-family: var(--font-display); font-size: var(--fs-h4); font-weight: var(--fw-semibold); color: var(--text-primary); margin: 0 0 var(--space-2); }
+  .proto-card__lead { font-size: var(--fs-caption); color: var(--color-text-secondary); margin: 0 0 var(--space-5); }
+  .proto-form { display: grid; gap: var(--space-4); }
+  .proto-card__micro { margin: var(--space-4) 0 0; font-size: var(--fs-micro); color: var(--color-text-muted); text-align: center; }
+  .proto-card__demo { margin: var(--space-4) 0 0; font-size: var(--fs-micro); color: var(--color-text-inverse-3); }
+  .proto-docicon {
+    display: flex; align-items: center; justify-content: center;
+    width: 120px; height: 150px;
+    background: var(--color-surface-muted);
+    border: var(--border-default);
+    border-radius: var(--radius-sm);
+    color: var(--ink-500);
+  }
+  .proto-unlocked {
+    display: flex; align-items: center; gap: var(--space-3);
+    padding: var(--space-4); margin-bottom: var(--space-4);
+    background: var(--success-bg);
+    border: 1px solid var(--color-success);
+    border-radius: var(--radius-md);
+    color: var(--color-success);
+    font-size: var(--fs-body);
+  }
+  .proto-stack { display: flex; flex-wrap: wrap; gap: var(--space-3); margin-top: var(--space-6); }
+</style>
+
+<script>
+  const gate = document.getElementById('proto-gate');
+  if (gate) {
+    gate.addEventListener('submit', (e) => {
+      e.preventDefault();
+      window.location.hash = '#state-b';
+    });
+  }
+</script>

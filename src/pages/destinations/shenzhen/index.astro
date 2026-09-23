@@ -1,0 +1,165 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import DestinationPage from '../../../components/DestinationPage.astro';
+/* Single source of truth for the filming lead time — the same figure appears on
+   the creator tour and filming coordination pages, so it is imported, not retyped. */
+import { FILMING_LEAD_TIME } from '../../../data/site.ts';
+
+const title = 'Shenzhen factory visits — electronics, drones and Huaqiangbei';
+const description =
+  'Hosted electronics factory visits in Shenzhen and the surrounding Pearl River Delta, with filming coordination for creators.';
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  track="creator"
+  active="destinations"
+  crumbs={[{ href: '/destinations/', label: 'Destinations' }]}
+  current="Shenzhen"
+  cta={{
+    eyebrow: 'Next step',
+    title: 'Plan a Shenzhen trip that gets past the markets.',
+    lead: 'Tell us what you want to film or build. We will tell you which floors can realistically host you.',
+    /* No secondary: the primary already points at /contact/, and a second
+       button to the same page is a false choice (director's round-2 ruling). */
+    primary: { label: 'Plan my trip to Shenzhen', href: '/contact/' },
+    form: { destination: 'Shenzhen' },
+  }}
+>
+  <DestinationPage
+    region="Guangdong"
+    cityShort="Shenzhen"
+    track="creator"
+    slotName="SZX ELECTRONICS LINE"
+    h1="Shenzhen: where electronics gets designed, made and resold within four streets."
+    lead="Two layers in one city — the component markets everyone films, and the actual factories an hour outside them doing SMT, assembly and tooling. Most visitors only see the first layer."
+    audience="Best for: creators filming electronics and hardware supply chains, and buyers sourcing components or tooling."
+    micro={[
+      'Consumer electronics and drones',
+      'Prototype-to-production speed',
+      'Creator favourite — with conditions',
+    ]}
+    facts={[
+      {
+        k: 'Iteration speed',
+        v: 'Very high',
+        note: 'Component availability and local engineering make short development cycles realistic.',
+      },
+      {
+        k: 'Typical MOQ',
+        v: 'Mid',
+        note: 'Higher than Yiwu, lower than heavy manufacturing — driven by line setup rather than tooling.',
+      },
+      {
+        k: 'Filming notice',
+        v: '3–4 weeks',
+        note: 'Usually agrees; restrictions tend to be specific rather than blanket.',
+      },
+    ]}
+    why={[
+      'Shenzhen compresses the <a href="/industries/electronics-smart-hardware/">electronics supply chain</a> into one metro area: component sourcing, PCB fabrication, SMT assembly, enclosures, tooling and firmware contractors, all reachable in a day of driving.',
+      'For <a href="/who-we-help/creators/">creators</a> it is visually the most interesting cluster in China and arguably the most watched. A factory floor here reads immediately to an audience that has seen a hundred Yiwu market videos.',
+      'For buyers it is where iteration speed is a genuine advantage — not just for prototypes, but for revisions after the first production run has already shipped.',
+      'The catch is the same every year: plenty of “factories” here are assembly rooms subcontracting the interesting parts. Whether anything is actually being made on site is <a href="/about/how-we-vet-factories/">verified on the floor</a>, not in a meeting room.',
+    ]}
+    markets={[
+      {
+        k: 'Consumer electronics',
+        v: 'Audio, chargers, power banks, wearables — mature <a href="/industries/electronics-smart-hardware/">electronics</a> component ecosystems with short lead times.',
+      },
+      {
+        k: 'Drones & RC',
+        v: 'Airframes, flight controllers, camera gimbals — a genuinely specialised local supply chain.',
+      },
+      {
+        k: 'PCB & PCBA',
+        v: 'Fabrication and assembly often within the same industrial district, sometimes under one roof.',
+      },
+      {
+        k: 'Enclosures & tooling',
+        v: 'Injection tooling and CNC machining in <a href="/destinations/guangzhou-dongguan/">Dongguan</a>, roughly an hour away.',
+      },
+      {
+        k: 'Displays & optics',
+        v: 'Panels, lenses, camera modules — with adjacent supply in Dongguan and Huizhou.',
+      },
+      {
+        k: 'Component markets',
+        v: 'Where prototypes are actually built. Useful context for creators, and honest about being trade rather than manufacture.',
+      },
+    ]}
+    itinTitle="Four days: one layer at a time."
+    itinLead="Component markets and real factories serve different purposes. Doing them in the right order changes what you learn from both."
+    itinerary={[
+      {
+        day: 'DAY 1',
+        time: 'MARKET',
+        title: 'Component floor context',
+        desc: 'Understanding what is commodity and what is proprietary before discussing your product with anyone.',
+        slot: 'SZX · COMPONENT FLOOR',
+      },
+      {
+        day: 'DAY 2',
+        time: 'PCBA',
+        title: 'Board fabrication and assembly',
+        desc: 'A real SMT line: paste printing, pick-and-place, reflow, AOI. Filming usually permitted once you ask properly.',
+        slot: 'SZX · SMT LINE',
+      },
+      {
+        day: 'DAY 3',
+        time: 'FINAL ASSEMBLY',
+        title: 'Enclosure, assembly and test',
+        desc: 'Where the board becomes a product — including the parts most visitors never see being made.',
+        slot: 'SZX · FINAL ASSEMBLY',
+      },
+      {
+        day: 'DAY 4',
+        time: 'TOOLING',
+        title: 'Tooling visit in Dongguan',
+        desc: 'An hour out, worth the trip. Tooling rooms tell you whether a supplier makes things or only assembles them.',
+        slot: 'SZX · DG TOOLING',
+      },
+      {
+        day: 'DAY 4',
+        time: 'WRAP',
+        title: 'Pick-ups and debrief',
+        desc: 'B-roll around the industrial zone, then a structured recap of everything seen.',
+        slot: 'SZX · INDUSTRIAL ZONE',
+      },
+    ]}
+    filmLead="Popular with creators for good reasons — and the restrictions are more specific here than visitors expect."
+    film={{
+      answer: 'Usually yes for assembly and test; board-level lines often agree too, with conditions.',
+      lead: 'Three to four weeks, longer for anything involving branded or NDA-covered work.',
+      refused: 'Screens bearing customer names, unshipped designs on monitors, and any line under a brand NDA.',
+      note: 'EMI-sensitive and testing areas are common restrictions — worth asking for explicitly rather than assuming.',
+    }}
+    seasons={[
+      'Best months: March–May and September–November.',
+      'Chinese New Year is the hard closure; Shenzhen empties noticeably and recovery is slow.',
+      'Product launch cycles drive secrecy — if a client sees a competitor filming during a launch period, expect refusals.',
+      'Peak production before Western holidays runs roughly August–October, when floors are least available for visitors.',
+    ]}
+    timingWarnings={[
+      `<b>Booking an electronics visit inside ${FILMING_LEAD_TIME}.</b> Permission odds fall sharply.`,
+      '<b>Assuming the brand on the box is the manufacturer.</b> Often it is not, which is check number two.',
+      '<b>Filming screens and monitors without asking.</b> The fastest way to lose access mid-day.',
+    ]}
+    vetDesc="Electronics suppliers frequently assemble rather than manufacture. Two of the five checks exist specifically to catch that difference on site."
+    related={[
+      {
+        k: 'Destination',
+        t: 'Guangzhou / Dongguan',
+        href: '/destinations/guangzhou-dongguan/',
+      },
+      { k: 'Destination', t: 'Yiwu', href: '/destinations/yiwu/' },
+      {
+        k: 'Service',
+        t: 'Filming coordination',
+        href: '/services/on-site-support/filming-coordination/',
+      },
+      { k: 'Service', t: 'Creator factory tour', href: '/services/creator-factory-tour/' },
+    ]}
+  />
+</BaseLayout>

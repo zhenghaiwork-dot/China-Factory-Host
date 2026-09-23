@@ -1,0 +1,157 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Section from '../../../components/Section.astro';
+import SectionHead from '../../../components/SectionHead.astro';
+import PhotoSlot from '../../../components/PhotoSlot.astro';
+import OnsitePhoto from '../../../components/OnsitePhoto.astro';
+import ComparisonTable from '../../../components/ComparisonTable.astro';
+import Caveat from '../../../components/Caveat.astro';
+import RelatedNav from '../../../components/RelatedNav.astro';
+import { waLink } from '../../../data/site.ts';
+
+const title = 'Factory visit vs audit vs inspection — the difference';
+const description =
+  'A factory visit, a factory audit and a product inspection answer three different questions. Mixing them up is how buyers overpay or get promised a standard nobody certified.';
+
+const wa = waLink('Hi, I am not sure whether I need a visit, an audit or an inspection.');
+
+const whichOne = [
+  { k: 'You need a visit', v: 'When you are choosing a supplier or checking one you already have. The <a href="/about/how-we-vet-factories/">five vetting checks</a> and the floor walk tell you whether the partner is real and can hold your volume.' },
+  { k: 'You need an audit', v: 'When a written standard is the requirement — a retailer programme, a compliance scheme or a certification that has to be verified by someone who is not us. We coordinate the auditor; we do not pretend to be one.' },
+  { k: 'You need an inspection', v: 'When one batch is shipping and you need to know it meets spec before it leaves the loading dock. That is a different skill from judging a factory.' },
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  active=""
+  crumbs={[]}
+  current="Visit vs audit vs inspection"
+  cta={{
+    eyebrow: 'Next step',
+    title: 'Not sure which one you need?',
+    lead: 'Describe the problem and we will say which applies — or that none does.',
+    primary: { label: 'Ask us', href: '/contact/' },
+    secondary: { label: 'Ask on WhatsApp', href: wa, external: true },
+  }}
+>
+  <section class="hero">
+    <div class="container">
+      <div class="split-7-5">
+        <div>
+          <p class="eyebrow">Guide</p>
+          <h1>Three different questions. Do not pay for the wrong answer.</h1>
+          <p class="lead hero__lead">
+            A <a href="/factory-visits/">visit</a> asks whether this is the right partner. An audit asks whether the
+            factory meets a standard. An inspection asks whether one batch meets a spec. They are not
+            interchangeable.
+          </p>
+        </div>
+        <div class="hero__media">
+          <PhotoSlot name="GUIDE · THREE TERMS" variant="media">
+            <OnsitePhoto id="05" eager />
+          </PhotoSlot>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Section>
+    <div class="container container--md">
+      <SectionHead eyebrow="Why it matters" title="Mixing them up is a known way to overpay." />
+      <div class="prose stack">
+        <p>
+          A buyer who pays for an audit when they only needed to meet the production manager has
+          overspent. A buyer who thinks a friendly visit is a compliance certificate has bought
+          something that will not survive a retailer's review. The three words are not synonyms, and
+          the price, the deliverable and the person who does the work are all different.
+        </p>
+        <p>
+          The one we run ourselves is the visit — the floor walk, the five checks, and the written
+          report. For an audit or an inspection we coordinate the right specialist and keep our own
+          role explicit, which is what <a href="/who-we-help/procurement-teams/">procurement teams</a> need
+          when a standard is on the line.
+        </p>
+      </div>
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container">
+      <SectionHead eyebrow="The difference" title="Three terms, side by side." />
+      <ComparisonTable
+        caption="Factory visit versus factory audit versus product inspection"
+        labelCol="Dimension"
+        columns={[
+          { name: 'Factory visit', sub: 'what we run', featured: true },
+          { name: 'Factory audit', sub: 'coordinated with specialists' },
+          { name: 'Product inspection', sub: 'a separate discipline' },
+        ]}
+        rows={[
+          { label: 'Core question', values: ['Is this the right partner?', 'Does the factory meet a standard?', 'Does this batch meet the spec?'] },
+          { label: 'What gets checked', values: ['Licence, scope, floor, capacity, decision-maker', 'Systems, records, compliance evidence', 'The units in one specific order'] },
+          { label: 'Who does the work', values: ['Our team, on the ground', 'Certified auditors we coordinate', 'Independent QC inspectors'] },
+          { label: 'Deliverable', values: ['A written visit report', 'A formal audit report', 'An inspection report'] },
+          { label: 'What ChinaFactoryHost provides', values: ['Yes — this is our core', 'Coordination only', 'Coordination only'] },
+        ]}
+        footnote="A visit is not an audit and neither is an inspection. We do not pass a casual visit off as a formal audit; when you need one, we coordinate the right specialist and keep our own role explicit."
+      />
+    </div>
+  </Section>
+
+  <Section>
+    <div class="container container--md">
+      <SectionHead eyebrow="Deciding" title="Which one you actually need." />
+      <ul class="spec-list clean">
+        {whichOne.map((w) => (
+          <li>
+            <span class="spec-list__k">{w.k}</span><span class="spec-list__v" set:html={w.v} />
+          </li>
+        ))}
+      </ul>
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container container--md">
+      <SectionHead eyebrow="Turning it into evidence" title="A visit is only as good as how you score it." />
+      <div class="prose stack">
+        <p>
+          When it is a visit you need, the question becomes how to compare what you saw across
+          factories. The <a href="/tools/factory-visit-scorecard/">factory visit scorecard</a> runs the same six
+          dimensions on every visit, and the <a href="/guides/china-factory-visit-checklist/">on-the-floor checklist</a>
+          is what each dimension checks against.
+        </p>
+      </div>
+    </div>
+  </Section>
+
+  <Section>
+    <div class="container container--md">
+      <Caveat
+        title="What we will not do here"
+        body="We keep the three roles separate, and we will say which one applies rather than let the wrong one be sold."
+        items={[
+          'We will not present a casual visit as a formal audit, even when a buyer would rather not pay for the audit.',
+          'We will not issue a certificate or a compliance mark — we are not a laboratory or a certification body.',
+          'We will not pretend a visit can guarantee a future production run.',
+        ]}
+      />
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container">
+      <SectionHead eyebrow="Go deeper" title="Related pages." />
+      <RelatedNav
+        items={[
+          { k: 'Guide', t: 'Factory visit checklist', href: '/guides/china-factory-visit-checklist/' },
+          { k: 'Trust', t: 'How we vet factories', href: '/about/how-we-vet-factories/' },
+          { k: 'Page', t: 'Factory visits', href: '/factory-visits/' },
+          { k: 'Service', t: 'Visit existing suppliers', href: '/services/existing-supplier-visits/' },
+        ]}
+      />
+    </div>
+  </Section>
+</BaseLayout>

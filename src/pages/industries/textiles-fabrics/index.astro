@@ -1,0 +1,89 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import IndustryPage from '../../../components/IndustryPage.astro';
+import { waLink } from '../../../data/site.ts';
+
+const title = 'Textiles & fabrics — China factory visits';
+const description =
+  'Woven and finished fabrics from the Keqiao and Nantong clusters. Weaving, dyeing and finishing, MOQ drivers, and what to check in a mill.';
+
+const wa = waLink('Hi, I am sourcing fabric in China and would like to visit mills.');
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  track="buyer"
+  active="industries"
+  crumbs={[{ href: '/services/', label: 'Services' }]}
+  current="Textiles & fabrics"
+  cta={{
+    variant: 'plain',
+    eyebrow: 'Next step',
+    title: 'Plan a fabric visit that traces the mill, not just the stall.',
+    lead: 'Tell us the fabric and the weight. We will route you to the mills that actually run it.',
+    primary: { label: 'Plan a textile factory visit', href: '/contact/' },
+    form: { destination: 'Textiles & fabrics' },
+    secondary: { label: 'Ask on WhatsApp', href: wa, external: true },
+  }}
+>
+  <IndustryPage
+    slotName="TEXTILE MILL"
+    h1="Textiles & fabrics: buy the mill, not the swatch."
+    lead="Fabric is the product where a market swatch can look nothing like a production run. Colour and finish do not survive being described — they have to be seen, against each other, on the floor where they are made."
+    micro={[
+      'Keqiao + Nantong clusters',
+      'Weaving, dyeing, finishing',
+      'Fabric-led MOQs',
+    ]}
+    ctaLabel="Plan a textile factory visit"
+    why={[
+      'Textiles concentrate in two clusters: Keqiao in Zhejiang and Nantong in Jiangsu. Keqiao is the market-plus-mill hub; Nantong is strong in home textiles.',
+      'The risk in fabric is the gap between the swatch and the run. Dyeing and finishing change the hand feel, the colour and the shrink behaviour — and the swatch is usually the best the mill ever produced.',
+      'MOQ in fabric is usually set by the grey cloth or by the finishing line, and the two are different numbers. A buyer who does not separate them over-commits on one and under-buys the other.',
+      'Colour and finish are the reasons to visit in person: you can only judge a fabric by comparing it to its neighbours, under the same light, at the mill.',
+    ]}
+    chainLead="Which step sets the MOQ, and where quality actually changes."
+    chain={[
+      { k: 'Grey fabric', v: 'Woven base cloth, sold by the roll before dyeing and finishing.' },
+      { k: 'Dyeing', v: 'Colour applied to the cloth — the step that most changes the fabric and its consistency.' },
+      { k: 'Finishing', v: 'Coating, brushing, water-repellent and handle treatments.' },
+      { k: 'Printing', v: 'Pattern and graphic work, with its own colour-matching discipline.' },
+      { k: 'Testing', v: 'Colourfastness, shrinkage, strength and any destination-market compliance.' },
+    ]}
+    checks={[
+      'Ask whether the stall is the mill or an agent — the five checks tell you which.',
+      'See the dyeing and finishing floor, not just the showroom of finished cloth.',
+      'Colour consistency across a run — how they control shade from batch to batch.',
+      'Shrinkage and colourfastness test records, for your specific fabric and weight.',
+      'Minimum per colour and per design, separated from the total MOQ.',
+      'Who holds the greige — a mill that does not control the base cloth is not fully in control of the fabric.',
+    ]}
+    numbers={[
+      { k: 'Grey fabric MOQ', v: 'Often the larger number — the mill wants a full run on the loom.' },
+      { k: 'Finishing MOQ', v: 'Sometimes lower, but colour runs have their own minimums per shade.' },
+      { k: 'Sampling', v: 'Lab dips, then a handloom or strike-off, then a pre-production yardage.' },
+      { k: 'Lead time', v: 'Usually the dyeing and finishing queue, not the weaving.' },
+    ]}
+    numberNote="These are ranges we see, not quotes. In fabric, separate the per-colour minimum from the total — the two numbers drive different costs."
+    complianceTitle="Destination-market requirements"
+    compliance={[
+      'Colourfastness and shrinkage to the standard your market expects.',
+      'Flammability where it applies — bedding, children’s products and upholstery have specific rules.',
+      'Chemical compliance such as OEKO-TEX for restricted substances.',
+      'Fibre content and care labelling that matches what you are actually buying.',
+    ]}
+    complianceCaveatBody="We check that test reports exist and that they match the fabric and weight you are buying. We do not interpret standards."
+    complianceCaveatItems={[
+      'We do not certify fabric or issue compliance marks.',
+      'We cannot confirm a fabric meets a specific standard — only a lab can.',
+      'Requirements vary by market and product. Confirm current rules before committing.',
+    ]}
+    related={[
+      { k: 'Destination', t: 'Shaoxing / Keqiao', href: '/destinations/shaoxing-keqiao/' },
+      { k: 'Destination', t: 'Ningbo / Hangzhou', href: '/destinations/ningbo-hangzhou/' },
+      { k: 'Destination', t: 'Zhejiang', href: '/destinations/zhejiang/' },
+      { k: 'Trust', t: 'How we vet factories', href: '/about/how-we-vet-factories/' },
+    ]}
+  />
+</BaseLayout>

@@ -1,0 +1,245 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Section from '../../../components/Section.astro';
+import SectionHead from '../../../components/SectionHead.astro';
+import PhotoSlot from '../../../components/PhotoSlot.astro';
+import OnsitePhoto from '../../../components/OnsitePhoto.astro';
+import ServiceCard from '../../../components/ServiceCard.astro';
+import ProcessSteps from '../../../components/ProcessSteps.astro';
+import CoverageMap from '../../../components/CoverageMap.astro';
+import Caveat from '../../../components/Caveat.astro';
+import VetLink from '../../../components/VetLink.astro';
+import { waLink } from '../../../data/site.ts';
+
+const title = 'On-site support in China — interpreting, transport and logistics after you land';
+const description =
+  'Pick the pieces, not a package. Filming coordination is available now; technical interpreting, industrial-zone transport and itinerary control are being prepared. Tier 1 and Tier 2 clusters.';
+
+const wa = waLink('Hi, I would like to add on-site support to my factory visit.');
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  track="neutral"
+  active="services"
+  crumbs={[{ href: '/services/', label: 'Services' }]}
+  current="On-site support"
+  cta={{
+    eyebrow: 'Next step',
+    title: 'Add on-site support to your trip.',
+    lead: 'Tell us where you are going and what you need covered. We will tell you what we can take off your hands.',
+    primary: { label: 'Ask what we can cover', href: '/contact/' },
+    form: { destination: 'On-site support' },
+    secondary: { label: 'Ask on WhatsApp', href: wa, external: true },
+  }}
+>
+  <section class="hero">
+    <div class="container">
+      <div class="split-7-5">
+        <div>
+          <p class="eyebrow">On-site support</p>
+          <h1>On-site support in China, from the moment you land.</h1>
+          <p class="lead hero__lead">
+            Most of what goes wrong on a China trip happens in the first six hours and has nothing
+            to do with factories: the wrong hotel district, no working payment method, a driver who
+            has never heard of the industrial zone.
+          </p>
+          <p class="u-sm u-secondary">
+            For creators and brand buyers who already have dates — add only the pieces you need.
+          </p>
+          <div class="btn-row">
+            <a class="btn btn--primary" href="/contact/">Ask what we can cover</a>
+            <a class="btn btn--secondary" href="/services/on-site-support/filming-coordination/"
+              >Jump to filming coordination</a
+            >
+          </div>
+        </div>
+        <div class="hero__media">
+          <PhotoSlot name="SUPPORT · FACTORY FLOOR" variant="media">
+            <OnsitePhoto id="05" />
+          </PhotoSlot>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Available now -->
+  <Section>
+    <div class="container container--md">
+      <SectionHead
+        eyebrow="Available now"
+        title="One module you can book today."
+        lead="This is the only piece of on-site support we are running properly right now. The rest are listed below as planned, because listing them as available would be a promise we cannot keep."
+      />
+      <ServiceCard
+        icon="film"
+        title="Filming coordination"
+        desc="Permission requests, restricted-zone agreements, equipment declaration and filming windows built into the itinerary."
+        list={[
+          'Available now (P1)',
+          'Written permission before you fly',
+          'Substitute location held for refusals',
+        ]}
+        cta="See filming coordination"
+        href="/services/on-site-support/filming-coordination/"
+      />
+      <p class="u-mt-6">
+        The permission mechanics are spelled out in the <a href="/guides/can-you-film-inside-a-chinese-factory/">filming guide</a>.
+      </p>
+    </div>
+  </Section>
+
+  <!-- Planned modules — listed, not sold -->
+  <Section tight>
+    <div class="container">
+      <SectionHead
+        eyebrow="Planned"
+        title="Being prepared. Not bookable yet."
+        lead="These are the other pieces clients ask for. We are honest about the state of each one rather than dressing it up as live — ask us and we will tell you where it stands."
+      />
+      <div class="grid--2">
+        <ServiceCard
+          soon
+          icon="translate"
+          title="Interpreting & technical translation"
+          desc="Not conversation Mandarin. Someone who can carry tolerances, tooling terms and payment conditions both ways without softening them."
+          cta="Ask when interpreting is available"
+          href="/contact/"
+        />
+        <ServiceCard
+          soon
+          icon="car"
+          title="Transport & arrival logistics"
+          desc="Airport or station pick-up, movement between industrial zones, and a hotel placed near the factories you are actually visiting."
+          cta="Ask when transport is available"
+          href="/contact/"
+        />
+        <ServiceCard
+          soon
+          icon="route"
+          title="Itinerary control"
+          desc="Sequencing, buffer for the things that always slip, and rebuilding the day when something does."
+          cta="Ask when itinerary control is available"
+          href="/contact/"
+        />
+        <ServiceCard
+          soon
+          icon="pin"
+          title="Visa invitation letters"
+          desc="Currently handled case by case while we formalise the process. We will tell you honestly whether your case is straightforward."
+          href="/contact/"
+          cta="Ask about visa support"
+        />
+        <ServiceCard
+          soon
+          icon="clock"
+          title="After-hours troubleshooting"
+          desc="A reachable number for the evening problems: lost equipment, pharmacy runs, a restaurant that only takes a payment app you do not have."
+          href="/contact/"
+          cta="Ask what we cover"
+        />
+      </div>
+      <p class="u-mt-6">
+        The interpreting role in particular has its own page — see <a href="/services/factory-visit-interpreter/">the interpreter</a>.
+      </p>
+    </div>
+  </Section>
+
+  <!-- One day, hour by hour -->
+  <Section alternate>
+    <div class="container container--md">
+      <SectionHead
+        eyebrow="A day on the ground"
+        title="08:30 to 18:00, with the boring parts included."
+        lead="This is what a normal working day looks like. The unglamorous rows are where trips usually fail."
+      />
+      <ProcessSteps
+        items={[
+          {
+            n: '01',
+            code: 'DAY-AM',
+            title: '08:30 — Pick-up',
+            body: 'Driver meets you at the hotel. We use the same drivers repeatedly in a cluster because industrial-park addresses are poorly served by map apps.',
+          },
+          {
+            n: '02',
+            code: 'DAY-AM',
+            title: '10:00 — Factory A',
+            body: 'Walk-through with the production manager. Interpreter handles tolerances and tooling specifics rather than pleasantries.',
+          },
+          {
+            n: '03',
+            code: 'DAY-MID',
+            title: '12:30 — Working lunch',
+            body: 'Near the industrial zone, not across town. Used to review the morning and adjust the afternoon order.',
+          },
+          {
+            n: '04',
+            code: 'DAY-PM',
+            title: '14:00 — Factory B',
+            body: 'Second visit, or the substitute factory if the morning one fell through. Usually the deeper technical conversation.',
+          },
+          {
+            n: '05',
+            code: 'DAY-PM',
+            title: '17:00 — Same-day notes',
+            body: 'Written notes sent while it is fresh, so nothing depends on remembering it three days later.',
+          },
+          {
+            n: '06',
+            code: 'DAY-PM',
+            title: '18:00 — Debrief',
+            body: 'Thirty minutes on what we saw, what we distrust, and what the next day should do differently.',
+          },
+        ]}
+      />
+      <p class="u-mt-6">
+        The floor part follows the <a href="/guides/china-factory-visit-checklist/">on-the-floor checklist</a>.
+      </p>
+    </div>
+  </Section>
+
+  <!-- Coverage -->
+  <Section>
+    <div class="container container--md">
+      <SectionHead
+        eyebrow="Coverage"
+        title="Tier 1 we run daily. Tier 2 we staff. Tier 3 needs notice."
+      />
+      <CoverageMap />
+      <p class="u-mt-6">
+        The tiers map to the <a href="/destinations/">destination pages</a>, region by region.
+      </p>
+    </div>
+  </Section>
+
+  <!-- What we do not do -->
+  <Section alternate>
+    <div class="container container--md">
+      <Caveat
+        title="What on-site support is not"
+        body="We are hosting ground support, not a concierge service and not a substitute for your own judgement."
+        items={[
+          'We do not book your flights or hotels, and we take no margin on them.',
+          'We do not offer leisure sightseeing programmes — if a client wants a free day, we plan the transport and leave the day alone.',
+          'We do not carry cash advances or handle your payments to suppliers.',
+          'We are not a licensed tour operator for packaged tourism, and we do not present ourselves as one.',
+          'We will not sign anything on your behalf, ever.',
+        ]}
+      />
+      <p class="u-mt-6">
+        This support sits under a <a href="/services/brand-sourcing-visit/">brand sourcing visit</a> or a creator trip.
+      </p>
+    </div>
+  </Section>
+
+  <!-- Trust cross-link -->
+  <Section>
+    <div class="container container--md">
+      <VetLink
+        desc="Every factory we take you into has been through the five checks. Here they are, step by step, along with the signals that make us walk away."
+      />
+    </div>
+  </Section>
+</BaseLayout>

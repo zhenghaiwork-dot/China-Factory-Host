@@ -1,0 +1,112 @@
+---
+/* CoverageMap — design system §5.9 (V2).
+   Deliberately NOT a geographic basemap: zero map-compliance risk
+   (Taiwan / South China Sea / Zangnan / Aksai Chin elements simply do not exist
+   in a schematic). Node ORDER still follows real longitude/latitude so the
+   relative arrangement reads correctly to anyone who knows the region.
+
+   Tier 1  YIW 120.07E/29.31N · HGH 120.16E/30.27N (HQ) · NGB 121.55E/29.87N
+   Tier 2  CAN 113.26E/23.13N · DGM 113.75E/23.02N · SZX 114.06E/22.54N
+   Tier 3  SJW 114.51E/38.04N (Hebei) · NKG 118.80E/32.06N (Jiangsu) · TAO 120.38E/36.07N (Shandong)
+
+   Node structure is identical across tiers — circle + 3-letter IATA code inside
+   + full name centred below. Hierarchy is carried by fill, not by size.
+   Radii come from --map-tier{1,2,3}-r (12 / 11 / 11). */
+type Node = { x: number; y: number; code: string; name: string };
+const R = { t1: 12, t2: 11, t3: 11 };
+
+const regions = [
+  { x: 20, y: 80, w: 270, h: 270, cls: 'map-region-t1', label: 'Tier 1 · home base', lcls: 'map-label--t1', lx: 32, ly: 102 },
+  { x: 340, y: 30, w: 350, h: 150, cls: 'map-region-t3', label: 'Tier 3 · reachable', lcls: 'map-label--t3', lx: 352, ly: 52 },
+  { x: 340, y: 215, w: 350, h: 165, cls: 'map-region-t2', label: 'Tier 2 · resident team', lcls: 'map-label--t2', lx: 352, ly: 237 },
+];
+
+const t1: Node[] = [
+  { x: 105, y: 150, code: 'HGH', name: 'Hangzhou' },
+  { x: 85, y: 250, code: 'YIW', name: 'Yiwu' },
+  { x: 215, y: 215, code: 'NGB', name: 'Ningbo' },
+];
+const t2: Node[] = [
+  { x: 400, y: 258, code: 'CAN', name: 'Guangzhou' },
+  { x: 520, y: 282, code: 'DGM', name: 'Dongguan' },
+  { x: 645, y: 334, code: 'SZX', name: 'Shenzhen' },
+];
+const t3: Node[] = [
+  { x: 400, y: 72, code: 'SJW', name: 'Shijiazhuang' },
+  { x: 600, y: 100, code: 'TAO', name: 'Qingdao' },
+  { x: 480, y: 146, code: 'NKG', name: 'Nanjing' },
+];
+const hq = t1[0];
+const spokes = [...t2, ...t3];
+---
+<div class="coverage">
+  <div class="coverage__desktop">
+    /* The four corner crop ticks were removed along with the PhotoSlot's own
+       ticks — they were the same "engineering drawing" grammar (§9.3). Either
+       both survive or neither does; leaving one would let the blueprint-id look
+       back in through the map. */
+    <div class="coverage__canvas">
+      <svg class="coverage__svg" viewBox="0 0 720 420" role="img" aria-labelledby="map-t map-d">
+        <title id="map-t">Abstract diagram of ChinaFactoryHost coverage network</title>
+        <desc id="map-d">Three coverage tiers, arranged roughly west to east and north to south. Tier 1 home base: Zhejiang and the Yangtze Delta — Hangzhou (HQ), Ningbo, Yiwu. Tier 2 resident team: the Pearl River Delta — Guangzhou, Dongguan, Shenzhen. Tier 3 reachable: Shijiazhuang (Hebei), Qingdao (Shandong), Nanjing (Jiangsu). This is a schematic diagram, not a geographic map.</desc>
+
+        {regions.map((r) => (
+          <rect class={r.cls} x={r.x} y={r.y} width={r.w} height={r.h} rx="6" />
+        ))}
+        {regions.map((r) => (
+          <text class={`map-label ${r.lcls}`} x={r.lx} y={r.ly}>{r.label}</text>
+        ))}
+
+        {spokes.map((n) => (
+          <line class="map-link" x1={hq.x} y1={hq.y} x2={n.x} y2={n.y} />
+        ))}
+
+        <rect class="map-hq-box" x={hq.x - 17} y={hq.y - 17} width="34" height="34" />
+        <text class="map-hq-label" x={hq.x + 22} y={hq.y - 12}>HQ</text>
+
+        {t1.map((n) => (
+          <circle class="map-node-t1" cx={n.x} cy={n.y} r={R.t1} />
+          <text class="map-node-inside map-node-inside--t1" x={n.x} y={n.y + 3.9}>{n.code}</text>
+          <text class="map-node-name map-node-name--t1" x={n.x} y={n.y + R.t1 + 15}>{n.name.toUpperCase()}</text>
+        ))}
+        {t2.map((n) => (
+          <circle class="map-node-t2" cx={n.x} cy={n.y} r={R.t2} />
+          <text class="map-node-inside map-node-inside--t2" x={n.x} y={n.y + 3.9}>{n.code}</text>
+          <text class="map-node-name map-node-name--t2" x={n.x} y={n.y + R.t2 + 15}>{n.name.toUpperCase()}</text>
+        ))}
+        {t3.map((n) => (
+          <circle class="map-node-t3" cx={n.x} cy={n.y} r={R.t3} />
+          <text class="map-node-inside map-node-inside--t3" x={n.x} y={n.y + 3.9}>{n.code}</text>
+          <text class="map-node-name map-node-name--t3" x={n.x} y={n.y + R.t3 + 15}>{n.name.toUpperCase()}</text>
+        ))}
+      </svg>
+    </div>
+    <ul class="legend clean">
+      <li class="legend__item"><span class="legend__dot legend__dot--t1" aria-hidden="true"></span>Home base — Zhejiang / Yangtze Delta</li>
+      <li class="legend__item"><span class="legend__dot legend__dot--t2" aria-hidden="true"></span>Resident team — Pearl River Delta</li>
+      <li class="legend__item"><span class="legend__dot legend__dot--t3" aria-hidden="true"></span>Reachable — Shandong, Hebei, Jiangsu</li>
+    </ul>
+  </div>
+
+  <div class="coverage__mobile">
+    <div class="tier-cards">
+      <div class="tier-card">
+        <p class="tier-card__title"><span class="legend__dot legend__dot--t1" aria-hidden="true"></span>Tier 1 · home base</p>
+        <ul class="tier-card__cities"><li>Hangzhou (HQ)</li><li>Yiwu</li><li>Ningbo</li><li>Shaoxing</li><li>Jinhua</li></ul>
+      </div>
+      <div class="tier-card">
+        <p class="tier-card__title"><span class="legend__dot legend__dot--t2" aria-hidden="true"></span>Tier 2 · resident team</p>
+        <ul class="tier-card__cities"><li>Shenzhen</li><li>Dongguan</li><li>Guangzhou</li><li>Foshan</li><li>Zhongshan</li></ul>
+      </div>
+      <div class="tier-card">
+        <p class="tier-card__title"><span class="legend__dot legend__dot--t3" aria-hidden="true"></span>Tier 3 · reachable</p>
+        <ul class="tier-card__cities"><li>Qingdao</li><li>Nanjing</li><li>Shijiazhuang</li><li>Xiamen</li><li>Chengdu</li></ul>
+      </div>
+    </div>
+  </div>
+
+  <p class="note-strip">
+    <span class="note-strip__mono">Diagram note</span>
+    This is a schematic coverage diagram, deliberately not a geographic map. Node order follows the real west-to-east and north-to-south arrangement of each cluster; exact placement carries no coordinate meaning.
+  </p>
+</div>

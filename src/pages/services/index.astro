@@ -1,0 +1,248 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Section from '../../components/Section.astro';
+import SectionHead from '../../components/SectionHead.astro';
+import PhotoSlot from '../../components/PhotoSlot.astro';
+import OnsitePhoto from '../../components/OnsitePhoto.astro';
+import Icon from '../../components/Icon.astro';
+import ServiceCard from '../../components/ServiceCard.astro';
+import VetLink from '../../components/VetLink.astro';
+import RelatedNav from '../../components/RelatedNav.astro';
+import { waLink, VET_STEPS } from '../../data/site.ts';
+
+const title = 'Services — creator tours, sourcing visits, filming coordination, on-site support';
+const description =
+  'Two kinds of visitors, one China ground team: get you into the factory, prove what you are looking at is real, and stay with you while it happens. Pick your path, or ask us which fits.';
+
+const wa = waLink('Hi, I am not sure which service fits my situation.');
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  track="neutral"
+  active="services"
+  crumbs={[]}
+  current="Services"
+  cta={{
+    eyebrow: 'Next step',
+    title: 'Not sure which you need? Talk to us.',
+    lead: 'One short message is enough. We will say which service fits, or tell you plainly that none does.',
+    primary: { label: 'Talk to us', href: '/contact/' },
+    secondary: { label: 'Ask on WhatsApp', href: wa, external: true },
+  }}
+>
+  <section class="hero">
+    <div class="container">
+      <div class="split-7-5">
+        <div>
+          <p class="eyebrow">Services</p>
+          <h1>Two kinds of visitors. One ground team.</h1>
+          <p class="lead hero__lead">
+            We host on-the-ground visits to China factories — factory tours, sourcing visits and the
+            filming permission that makes either one possible. Same three capabilities either way:
+            get you in the door, prove what you are looking at is real, and stay with you while it
+            happens. What changes is the evidence each path needs.
+          </p>
+        </div>
+        <div class="hero__media">
+          <PhotoSlot name="SERVICES · ON THE GROUND" variant="media">
+            <OnsitePhoto id="10" eager />
+          </PhotoSlot>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Dual funnel, Creator first -->
+  <Section tight>
+    <div class="container">
+      <div class="splitter">
+        <p class="splitter__q">Start where you are</p>
+        <div class="splitter__grid">
+          <div class="split-card split-card--creator" data-track="creator">
+            <span class="split-card__icon"><Icon name="camera" size={32} /></span>
+            <h2 class="split-card__title">For creators</h2>
+            <p class="split-card__desc">
+              You need shots nobody else can get, and you need them taken inside places that
+              normally say no.
+            </p>
+            <ul class="split-card__bullets">
+              <li>
+                <Icon name="check" size={16} />
+                <span
+                  ><a href="/services/creator-factory-tour/">Creator factory tour</a> — group or
+                  private</span
+                >
+              </li>
+              <li>
+                <Icon name="check" size={16} />
+                <span
+                  ><a href="/services/on-site-support/filming-coordination/"
+                    >Filming coordination</a
+                  > — permission and scheduling</span
+                >
+              </li>
+              <li>
+                <Icon name="check" size={16} />
+                <span
+                  ><a href="/services/on-site-support/">On-site support</a> — interpreting, transport,
+                  logistics</span
+                >
+              </li>
+            </ul>
+            <p class="split-card__evidence">
+              <Icon name="check" size={14} />Filming permit: pre-arranged
+            </p>
+            <p class="split-card__cta">
+              <a class="btn btn--primary" href="/services/creator-factory-tour/">I'm a Creator</a>
+            </p>
+          </div>
+
+          <div class="split-card split-card--buyer" data-track="buyer">
+            <span class="split-card__icon"><Icon name="clipboard" size={32} /></span>
+            <h2 class="split-card__title">For brand buyers</h2>
+            <p class="split-card__desc">
+              You need to confirm the factory is real, meet someone who can agree terms, and leave
+              with numbers you can quote.
+            </p>
+            <ul class="split-card__bullets">
+              <li>
+                <Icon name="check" size={16} />
+                <span
+                  ><a href="/services/brand-sourcing-visit/">Brand sourcing visit</a> — verify and
+                  negotiate</span
+                >
+              </li>
+              <li>
+                <Icon name="check" size={16} />
+                <span
+                  ><a href="/about/how-we-vet-factories/">How we vet factories</a> — the five
+                  checks</span
+                >
+              </li>
+              <li>
+                <Icon name="check" size={16} />
+                <span
+                  ><a href="/services/on-site-support/">On-site support</a> — logistics and
+                  negotiation</span
+                >
+              </li>
+            </ul>
+            <p class="split-card__evidence">
+              <Icon name="check" size={14} />{VET_STEPS.length}-step vet: on every factory
+            </p>
+            <p class="split-card__cta">
+              <a class="btn btn--second" href="/services/brand-sourcing-visit/"
+                >I'm a Brand Buyer</a
+              >
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </Section>
+
+  <!-- Task-based entry points.
+       The dual funnel above splits by WHO you are (creator / brand). These four
+       split by WHAT you already have — a shortlist, no shortlist, a route to
+       plan, or a language gap. Two cuts over the same service set, because a
+       returning buyer with a supplier list does not recognise themselves in
+       "creator tour" and bounces.
+       They lived only in the header menu until now, which made them orphans:
+       zero inbound links from any page on the site. -->
+  <Section>
+    <div class="container">
+      <SectionHead
+        eyebrow="By what you already have"
+        title="Four ways a visit usually starts."
+        lead="You do not need to know which service name applies. Pick the situation that matches and the page will tell you what we do, what we need from you, and what we will not promise."
+      />
+      <RelatedNav
+        items={[
+          { k: 'You have a shortlist', t: 'Visit existing suppliers', href: '/services/existing-supplier-visits/' },
+          { k: 'You have nothing yet', t: 'Factory matching', href: '/services/factory-matching/' },
+          { k: 'You have dates', t: 'Visit planning', href: '/services/factory-visit-planning/' },
+          { k: 'You have a language gap', t: 'Interpreter', href: '/services/factory-visit-interpreter/' },
+        ]}
+      />
+    </div>
+  </Section>
+
+  <!-- Planned next — no dead links.
+       The four live-service cards that used to sit here were removed: they
+       repeated the six cards on the homepage card for card. The dual funnel
+       above and this planned list are what is actually unique to /services/. -->
+  <Section alternate>
+    <div class="container">
+      <SectionHead
+        eyebrow="Planned next"
+        title="What we are building, and what we are not pretending to offer."
+        lead="These are things clients have asked for. We list them because pretending they do not exist is worse than admitting they are not ready. Each one links to contact rather than to an empty page."
+      />
+      <div class="grid--3">
+        <ServiceCard
+          soon
+          icon="doc"
+          title="Factory pre-screening (remote)"
+          desc="Licence, scope and address checks run before you commit to a trip. Partially available today — we will tell you how far it goes."
+          href="/contact/"
+          cta="Ask about remote screening"
+        />
+        <ServiceCard
+          soon
+          icon="pin"
+          title="Remote verification visits"
+          desc="A walk-through on your behalf with photos, video and a written report, for suppliers you cannot visit yet."
+          href="/contact/"
+          cta="Ask about remote verification"
+        />
+        <ServiceCard
+          soon
+          icon="clock"
+          title="Sample & production follow-up"
+          desc="Chasing samples, confirming tolerances and holding suppliers to agreed lead times after the trip ends."
+          href="/contact/"
+          cta="Ask about follow-up"
+        />
+        <ServiceCard
+          soon
+          icon="mail"
+          title="Visa invitation support"
+          desc="Formalising the invitation-letter process so it stops being a case-by-case scramble."
+          href="/contact/"
+          cta="Ask about visa support"
+        />
+      </div>
+    </div>
+  </Section>
+
+  <!-- Not sure -->
+  <Section>
+    <div class="container container--md">
+      <SectionHead
+        eyebrow="Still deciding"
+        title="Not sure which service you need?"
+        lead="Describe what you are trying to achieve and we will say which of these applies — or that none of them do."
+      />
+      <VetLink
+        desc="Whatever you book, every factory goes through the same five documented checks. Read them before you commit to anything."
+      />
+    </div>
+  </Section>
+
+  <!-- Related -->
+  <Section alternate>
+    <div class="container">
+      <SectionHead eyebrow="Where to next" title="Pick a service, or start with the method." />
+      <RelatedNav
+        items={[
+          { k: 'Method', t: 'How we vet factories', href: '/about/how-we-vet-factories/' },
+          { k: 'Service', t: 'Creator factory tour', href: '/services/creator-factory-tour/' },
+          { k: 'Service', t: 'Brand sourcing visit', href: '/services/brand-sourcing-visit/' },
+          { k: 'Destinations', t: 'Where we host visits', href: '/destinations/' },
+        ]}
+      />
+    </div>
+  </Section>
+</BaseLayout>

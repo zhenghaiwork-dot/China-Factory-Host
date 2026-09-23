@@ -1,0 +1,131 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Section from '../../../components/Section.astro';
+import SectionHead from '../../../components/SectionHead.astro';
+import PhotoSlot from '../../../components/PhotoSlot.astro';
+import OnsitePhoto from '../../../components/OnsitePhoto.astro';
+import Checklist from '../../../components/Checklist.astro';
+import RelatedNav from '../../../components/RelatedNav.astro';
+import { waLink } from '../../../data/site.ts';
+
+const title = 'Factory visit scorecard — compare suppliers on evidence';
+const description =
+  'Score every factory you visit on the same six dimensions, with a pass / flag / fail for each, so the shortlist is decided on evidence rather than impressions.';
+
+const wa = waLink('Hi, I would like a factory visit scorecard.');
+
+const dimensions = [
+  { k: 'Licence and scope', v: 'Does the registered business actually make this product? Pass: <a href="/about/how-we-vet-factories/">the licence</a> lists manufacturing and the scope matches. Flag: the scope is broad but not specific to your category. Fail: the licence says wholesale or retail, or belongs to a different entity.' },
+  { k: 'Floor and equipment', v: 'Can the line hold your volume, and is it theirs? Pass: the line for your product exists and is running. Flag: the right equipment is present but not running your product. Fail: no equipment — a showroom, a catalogue and a sample table. See the <a href="/guides/china-factory-visit-checklist/">on-the-floor checklist</a>.' },
+  { k: 'Quality control', v: 'How are failures caught, and what happens to them? Pass: a real QC bench, in-line checks and a record of defects. Flag: QC exists but nothing is written down. Fail: no QC, or "we never have defects", which is the same thing.' },
+  { k: 'Decision-maker', v: 'Is someone in the room who can agree terms? Pass: the production manager or owner answers directly. Flag: a sales rep answers but defers on numbers. Fail: "the boss is travelling", which we record as a failed visit.' },
+  { k: 'Subcontracting', v: 'Which steps are outsourced, and to whom? Pass: key processes are in-house and stated. Flag: some steps outsourced but disclosed. Fail: a step you were told is in-house turns out to be subcontracted — the classic <a href="/guides/factory-vs-trading-company-china/">trading-company</a> tell.' },
+  { k: 'Commercial fit', v: 'MOQ, lead time and tooling ownership in writing? Pass: all three stated, with the tooling ownership explicit. Flag: agreed verbally only. Fail: evasive on MOQ, or the payment entity does not match the licence.' },
+];
+
+const reading = [
+  'Any fail means fix it before you commit — a licence fail or a decision-maker fail is not a negotiation problem, it is a walk-away.',
+  'Flags are follow-up questions, not rejections. One flag is normal; three flags is a pattern.',
+  'Score all six for every factory, even the one you already like — the point is the comparison, not the favourite.',
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  active=""
+  crumbs={[]}
+  current="Factory visit scorecard"
+  cta={{
+    eyebrow: 'Next step',
+    title: 'Score your shortlist with someone on the ground.',
+    lead: 'Tell us the category and the shortlist. We will run the visits and the scoring.',
+    primary: { label: 'Plan my visits', href: '/contact/' },
+    secondary: { label: 'Ask on WhatsApp', href: wa, external: true },
+  }}
+>
+  <section class="hero">
+    <div class="container">
+      <div class="split-7-5">
+        <div>
+          <p class="eyebrow">Tool</p>
+          <h1>Score every factory the same way.</h1>
+          <p class="lead hero__lead">
+            The failure mode in a multi-factory trip is that each visit gets remembered differently.
+            Six dimensions, scored pass / flag / fail, turns impressions into a comparison you can act
+            on.
+          </p>
+        </div>
+        <div class="hero__media">
+          <PhotoSlot name="TOOL · SCORECARD" variant="media">
+            <OnsitePhoto id="06" />
+          </PhotoSlot>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Section>
+    <div class="container container--md">
+      <SectionHead
+        eyebrow="How to score"
+        title="Three levels, not a number out of ten."
+        lead="A numeric score implies precision the visit does not have. Pass / flag / fail is enough to make the decision, and harder to game."
+      />
+      <div class="prose stack">
+        <p>
+          Pass means the evidence is there and you saw it. Flag means something is missing or
+          conditional and needs a follow-up. Fail means the evidence contradicts what you were told.
+          Most factories land somewhere in the middle — the scorecard's job is to make the pattern
+          visible, not to produce a single comforting number.
+        </p>
+        <p>
+          It is the same distinction as <a href="/guides/factory-visit-vs-audit-vs-inspection/">a factory visit,
+          an audit and an inspection</a> — three different questions, and only one of them is what we run.
+        </p>
+      </div>
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container container--md">
+      <SectionHead eyebrow="The six dimensions" title="What to check, and what counts as each level." />
+      <ul class="spec-list clean">
+        {dimensions.map((d) => (
+          <li>
+            <span class="spec-list__k">{d.k}</span><span class="spec-list__v" set:html={d.v} />
+          </li>
+        ))}
+      </ul>
+      <p class="u-mt-6">
+        This is the same scoring we run on an <a href="/services/existing-supplier-visits/">existing-supplier visit</a> —
+        the six dimensions travel with you, so every factory gets measured the same way.
+      </p>
+    </div>
+  </Section>
+
+  <Section>
+    <div class="container container--md">
+      <SectionHead eyebrow="Reading the result" title="What the scores actually mean." />
+      <Checklist title="How to read it" items={reading} />
+      <p class="u-mt-6">
+        The licence and scope dimensions mirror <a href="/about/how-we-vet-factories/">the five checks</a> we run
+        before a factory stays on an itinerary, so the scorecard and the vetting method agree rather than duplicate.
+      </p>
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container">
+      <SectionHead eyebrow="Go deeper" title="Related pages." />
+      <RelatedNav
+        items={[
+          { k: 'Guide', t: 'Factory visit checklist', href: '/guides/china-factory-visit-checklist/' },
+          { k: 'Guide', t: 'Visit vs audit vs inspection', href: '/guides/factory-visit-vs-audit-vs-inspection/' },
+          { k: 'Service', t: 'Visit existing suppliers', href: '/services/existing-supplier-visits/' },
+          { k: 'Trust', t: 'How we vet factories', href: '/about/how-we-vet-factories/' },
+        ]}
+      />
+    </div>
+  </Section>
+</BaseLayout>

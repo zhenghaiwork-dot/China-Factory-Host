@@ -1,0 +1,19 @@
+# Local secrets for `astro dev` / `wrangler dev`.
+#
+# Copy this file to `.dev.vars` and fill it in. `.dev.vars` is git-ignored —
+# never commit a filled-in copy.
+#
+# On Cloudflare these same three names are set as Worker secrets, not as
+# build-time variables. Either:
+#   npx wrangler secret put RESEND_API_KEY
+# or paste them into Cloudflare dashboard → Workers → chinafactoryhost →
+# Settings → Variables and Secrets.
+#
+# RESEND_API_KEY — transactional mail API key from https://resend.com/api-keys
+#                  Workers cannot open SMTP sockets, so mail goes over HTTPS.
+# INQUIRY_TO     — mailbox that receives inquiries
+# INQUIRY_FROM   — From address. Must be on a domain verified in Resend,
+#                  otherwise Resend rejects the send with 403.
+RESEND_API_KEY=
+INQUIRY_TO=
+INQUIRY_FROM=

@@ -1,0 +1,161 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Section from '../../../components/Section.astro';
+import SectionHead from '../../../components/SectionHead.astro';
+import PhotoSlot from '../../../components/PhotoSlot.astro';
+import OnsitePhoto from '../../../components/OnsitePhoto.astro';
+import Checklist from '../../../components/Checklist.astro';
+import Caveat from '../../../components/Caveat.astro';
+import ProcessSteps from '../../../components/ProcessSteps.astro';
+import RelatedNav from '../../../components/RelatedNav.astro';
+import { waLink } from '../../../data/site.ts';
+
+const title = 'Brand founders — private label, samples and small-batch in China';
+const description =
+  'Private-label and small-batch sourcing for brand founders: the two-supplier structure, MOQ drivers, packaging and the samples that come before the run.';
+
+const wa = waLink('Hi, I am building a brand and would like to source in China.');
+
+const gates = [
+  { k: 'The product MOQ', v: 'Set by the process, not the product. Stock shapes can start low; anything with a mould starts where the mould is worth running. Ask which part sets the minimum.' },
+  { k: 'The mould or tooling', v: 'A separate, up-front cost for a custom shape, with its own lead time and its own ownership question. Whoever pays for it should own it, in writing.' },
+  { k: 'The packaging MOQ', v: 'Usually the number that surprises founders. A bottle, a cap and a carton each have their own minimum, and the packaging supplier is often a different company from the product factory.' },
+];
+
+const stages = [
+  { n: '01', title: 'Brief and specification', body: 'You fix the product, the material and the target market. This is where a vague spec turns into a quote that does not mean what you think.' },
+  { n: '02', title: 'First sample', body: 'The factory makes one or a few. It is usually wrong in a useful way — the point is to find the wrongness cheaply.' },
+  { n: '03', title: 'Tooling, if the shape is custom', body: 'The mould gets cut here. This is the longest single wait, and the point where the schedule most often slips.' },
+  { n: '04', title: 'Pre-production sample', body: 'Made on the real tooling and the real line. This is the sample that must match the run — it is the one that matters.' },
+  { n: '05', title: 'Production and shipping sample', body: 'The run, plus a sample pulled from the line so what ships is what you approved.' },
+];
+
+const pitfalls = [
+  'Assuming the packaging factory is the product factory — they are usually two companies, quoted and shipped separately.',
+  'Skipping the trademark and filing step until after the tooling is paid for — a name that does not clear is a mould you cannot use.',
+  'Treating the first sample as a finished product — it is a draft, and the pre-production sample is the real approval gate.',
+  'Agreeing a price without a validity date, then discovering the number has moved.',
+];
+
+const smallBatch = [
+  { k: 'Where small batches work', v: 'Market categories — Yiwu-style small commodities, stock packaging, print-on-demand. Here "small" is a normal order, not a favour.' },
+  { k: 'Where they do not', v: 'Tooling-led categories. The mould is the same cost whether you run 500 or 5,000, so 500 carries the whole tool cost. Sometimes the honest answer is to buy a stock shape first.' },
+  { k: 'The boundary', v: 'A "trial order" is realistic when it is the factory’s normal minimum. It is not realistic when it is a tenth of the minimum and a favour — that order gets deprioritised, and quality drifts with it.' },
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  active=""
+  crumbs={[]}
+  current="Brand founders"
+  cta={{
+    eyebrow: 'Next step',
+    title: 'Source your first run without the usual surprises.',
+    lead: 'Tell us the product and the destination market. We will find the suppliers and the samples.',
+    primary: { label: 'Plan my sourcing', href: '/plan-my-trip/' },
+    secondary: { label: 'Ask on WhatsApp', href: wa, external: true },
+  }}
+>
+  <section class="hero">
+    <div class="container">
+      <div class="split-7-5">
+        <div>
+          <p class="eyebrow">Brand founders</p>
+          <h1>Private label, without the expensive surprises.</h1>
+          <p class="lead hero__lead">
+            A brand is built on margins and consistency. The two ways a first production run quietly
+            fails are a <a href="/industries/beauty-packaging/">packaging MOQ</a> you did not see coming, and a sample
+            that does not match the run. We stop both.
+          </p>
+        </div>
+        <div class="hero__media">
+          <PhotoSlot name="FOUNDERS · PRIVATE LABEL" variant="media">
+            <OnsitePhoto id="05" />
+          </PhotoSlot>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Section>
+    <div class="container container--md">
+      <SectionHead eyebrow="The thresholds" title="Three numbers that gate a private label." />
+      <ul class="spec-list clean">
+        {gates.map((g) => (
+          <li>
+            <span class="spec-list__k">{g.k}</span><span class="spec-list__v">{g.v}</span>
+          </li>
+        ))}
+      </ul>
+      <p class="u-mt-6">
+        The two-supplier structure — formula in one factory, packaging in another — is spelled out on the <a href="/industries/beauty-packaging/">beauty &amp; packaging</a> page.
+      </p>
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container container--md">
+      <SectionHead eyebrow="The timeline" title="From first sample to production run." />
+      <ProcessSteps items={stages} />
+      <p class="u-mt-6">
+        Running the samples and the visits is exactly what a <a href="/services/brand-sourcing-visit/">brand sourcing visit</a> does.
+      </p>
+    </div>
+  </Section>
+
+  <Section>
+    <div class="container container--md">
+      <SectionHead eyebrow="The pitfalls" title="The mistakes that quietly kill a first run." />
+      <Checklist title="Watch for these" items={pitfalls} refusal />
+      <p class="u-mt-6">
+        "Packaging factory or product factory" is the same question as <a href="/guides/factory-vs-trading-company-china/">factory versus trading company</a>, asked about two plants instead of one.
+      </p>
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container container--md">
+      <SectionHead eyebrow="Small batch" title="Can you actually do a small trial order?" />
+      <ul class="spec-list clean">
+        {smallBatch.map((s) => (
+          <li>
+            <span class="spec-list__k">{s.k}</span><span class="spec-list__v">{s.v}</span>
+          </li>
+        ))}
+      </ul>
+      <p class="u-mt-6">
+        Stock shapes and low quantities are what <a href="/destinations/yiwu/">Yiwu</a> is built around — the market is the small-batch side of the same equation.
+      </p>
+    </div>
+  </Section>
+
+  <Section>
+    <div class="container container--md">
+      <Caveat
+        title="What we do, and what we will not do"
+        body="We find the suppliers, run the samples and sit beside you in the negotiations. The decisions stay yours."
+        items={[
+          'We do not design your product or choose your positioning — we tell you what is makeable and what it will cost to find out.',
+          'We do not prepare or file trademark or regulatory paperwork; we flag when it is missing and point you to who does it.',
+          'We do not guarantee a run ships on time; we surface the risks early so they are decisions, not surprises.',
+        ]}
+      />
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container">
+      <SectionHead eyebrow="Where to start" title="The pages founders usually need." />
+      <RelatedNav
+        items={[
+          { k: 'Industry', t: 'Beauty & packaging', href: '/industries/beauty-packaging/' },
+          { k: 'Industry', t: 'Toys, gifts & commodities', href: '/industries/toys-gifts-commodities/' },
+          { k: 'Service', t: 'Brand sourcing visit', href: '/services/brand-sourcing-visit/' },
+          { k: 'Region', t: 'Guangzhou / Dongguan', href: '/destinations/guangzhou-dongguan/' },
+        ]}
+      />
+    </div>
+  </Section>
+</BaseLayout>

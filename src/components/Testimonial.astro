@@ -1,0 +1,40 @@
+---
+import Icon from './Icon.astro';
+/* TestimonialBlock — §5.12. Until we hold written permission, every instance
+   renders the honest empty state. No invented quotes. */
+interface Props {
+  empty?: boolean;
+  href?: string;
+  quote?: string;
+  initials?: string;
+  name?: string;
+  role?: string;
+}
+const { empty = true, href = '/contact/', quote, initials, name, role } = Astro.props;
+---
+{
+  empty ? (
+    <blockquote class="testimonial testimonial--empty">
+      <p class="testimonial__quote">
+        We're collecting published client feedback. Ask us and we'll connect you with a past client
+        directly.
+      </p>
+      <p><a class="btn btn--secondary" href={href}>Request a Client Reference</a></p>
+    </blockquote>
+  ) : (
+    <blockquote class="testimonial">
+      <p class="testimonial__quote">“{quote}”</p>
+      <footer class="testimonial__by">
+        <span class="testimonial__initial" aria-hidden="true">{initials}</span>
+        <span>
+          <span class="testimonial__name">{name}</span><br />
+          <span class="testimonial__role">{role}</span><br />
+          <span class="testimonial__verified">
+            <Icon name="check" size={12} />
+            Verified client
+          </span>
+        </span>
+      </footer>
+    </blockquote>
+  )
+}

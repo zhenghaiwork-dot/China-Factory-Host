@@ -1,0 +1,33 @@
+---
+import Icon from './Icon.astro';
+import { REPLY_TIME_PROMISE, isWaConfigured, waLink } from '../data/site.ts';
+const href = waLink('Hi, I would like to plan a factory visit in China.');
+---
+{/* The note used to read "Usually replies in <1h" — an invented figure that
+    contradicted the rail, the footer and the closing CTA on the same screen.
+    It now reads the site-wide constant, so there is exactly one promise. */}
+<div class="wa-bar">
+  <p class="wa-bar__note u-mb-0">{REPLY_TIME_PROMISE}</p>
+  <div class="wa-bar__actions">
+    <a class="btn btn--secondary" href="/contact/">Plan visit</a>
+    {
+      isWaConfigured && (
+        <a class="btn btn--whatsapp" href={href} target="_blank" rel="noopener" data-placeholder="wa-number">
+          <Icon name="wa" size={20} />
+          WhatsApp
+        </a>
+      )
+    }
+  </div>
+</div>
+
+{
+  /* No FAB while the number is unconfigured: a floating "WhatsApp us" button has
+     to lead somewhere real (critique M3). */
+  isWaConfigured && (
+    <a class="wa-fab" href={href} target="_blank" rel="noopener" data-placeholder="wa-number" aria-label="Message us on WhatsApp">
+      <Icon name="wa" size={24} />
+      <span class="wa-fab__label">WhatsApp us</span>
+    </a>
+  )
+}

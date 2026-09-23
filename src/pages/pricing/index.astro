@@ -1,0 +1,156 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Section from '../../components/Section.astro';
+import SectionHead from '../../components/SectionHead.astro';
+import PhotoSlot from '../../components/PhotoSlot.astro';
+import OnsitePhoto from '../../components/OnsitePhoto.astro';
+import Icon from '../../components/Icon.astro';
+import Checklist from '../../components/Checklist.astro';
+import Caveat from '../../components/Caveat.astro';
+import FAQ from '../../components/FAQ.astro';
+import { waLink } from '../../data/site.ts';
+
+const title = 'Pricing — two visible lines, no hidden commissions';
+const description =
+  'How ChinaFactoryHost is paid: a hosting and coordination fee, and an optional sourcing commission disclosed in writing. We do not take factory commissions.';
+
+const wa = waLink('Hi, I would like to understand your pricing.');
+
+const included = [
+  'Pre-screening and the five vetting checks before a factory stays on the itinerary',
+  'Appointments, transport coordination and interpreting on the ground',
+  'The written report after the trip',
+];
+
+const notIncluded = [
+  'Flights, hotels and visa — you book them, and we take no margin',
+  'A formal factory audit or a product inspection — those are coordinated with specialists, not bundled',
+  'Any success outcome — we cannot sell a guarantee we cannot keep',
+];
+
+const faqs = [
+  {
+    q: 'How much does a factory visit cost?',
+    a: [
+      'It depends on the category, the cluster, the number of days and how much permission work is involved. We would rather quote your specific dates than publish a range that does not survive contact with real factories. Ask and you will get a number, a scope and the conditions attached to it.',
+    ],
+  },
+  {
+    q: 'Do you take commission from the factories?',
+    a: [
+      'No. Our fee comes from you. That is the only way we can tell you to walk away from a factory on the day, and mean it.',
+    ],
+  },
+  {
+    q: 'What are the two visible lines?',
+    a: [
+      'A hosting and coordination fee for the trip itself, and — only if you later ask us to help place an order — an optional sourcing commission that we disclose in writing before it applies. Nothing is folded into your unit price silently.',
+    ],
+  },
+  {
+    q: 'Who pays for flights and hotels?',
+    a: [
+      'You do, and you book them yourself. We do not resell travel and we add no margin to it. We will tell you which hotel area to choose so you are near the factories, not the tourist centre.',
+    ],
+  },
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  active=""
+  crumbs={[]}
+  current="Pricing"
+  cta={{
+    eyebrow: 'Next step',
+    title: 'Get a number for your dates.',
+    lead: 'Send the category, the city and roughly when. You get a scope and a price, not a brochure.',
+    primary: { label: 'Ask for a quote', href: '/contact/' },
+    secondary: { label: 'Ask on WhatsApp', href: wa, external: true },
+  }}
+>
+  <section class="hero">
+    <div class="container">
+      <div class="split-7-5">
+        <div>
+          <p class="eyebrow">Pricing</p>
+          <h1>Two visible lines. No hidden commissions.</h1>
+          <p class="lead hero__lead">
+            We publish the structure rather than a fake price list. You always know who is paying
+            whom, which is the only part of this worth trusting — the same logic as <a href="/how-it-works/">the process</a>.
+          </p>
+        </div>
+        <div class="hero__media">
+          <PhotoSlot name="PRICING · THE STRUCTURE" variant="media">
+            <OnsitePhoto id="03" eager />
+          </PhotoSlot>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Section>
+    <div class="container">
+      <SectionHead
+        eyebrow="How we are paid"
+        title="The two lines, stated plainly."
+      />
+      <div class="grid--2">
+        <article class="split-card">
+          <span class="split-card__icon"><Icon name="shield" size={32} /></span>
+          <h3 class="split-card__title">Hosting &amp; coordination fee</h3>
+          <p class="split-card__desc">
+            A stated day rate or trip fee for the visit itself: <a href="/about/how-we-vet-factories/">pre-screening</a>, appointments,
+            transport coordination, interpreting and the written report.
+          </p>
+        </article>
+        <article class="split-card">
+          <span class="split-card__icon"><Icon name="doc" size={32} /></span>
+          <h3 class="split-card__title">Optional sourcing commission</h3>
+          <p class="split-card__desc">
+            Only if you ask us to help <a href="/services/brand-sourcing-visit/">place an order</a> afterwards. Quoted separately and agreed in
+            writing before it applies — never folded into your unit price.
+          </p>
+        </article>
+      </div>
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container container--md">
+      <SectionHead eyebrow="What is covered" title="Included, and not included." />
+      <Checklist title="Included" items={included} />
+      <div class="u-mt-6">
+        <Checklist title="Not included — and never marked up" items={notIncluded} refusal plain />
+      </div>
+      <p class="u-mt-6">
+        What the fee covers on the ground is <a href="/services/factory-visit-planning/">visit planning</a> plus the interpreter and the report.
+      </p>
+    </div>
+  </Section>
+
+  <Section>
+    <div class="container container--md">
+      <Caveat
+        title="Why we do not publish a price list"
+        body="A fixed price list would be fiction. The honest answer is a number attached to a scope — your category, your cluster, your dates. Ask, and that is what you get."
+        items={[
+          'Tooling-led categories cost differently from market-floor categories.',
+          'Filming permission work has its own lead time and its own effort.',
+          'Two cities in one trip cost less than two cities in two trips — density matters.',
+        ]}
+      />
+      <p class="u-mt-6">
+        More on how it works is in the <a href="/faq/">FAQ</a>, and who it is for is under <a href="/who-we-help/">who we help</a>.
+      </p>
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container">
+      <SectionHead title="Questions about how we are paid." />
+      <FAQ items={faqs} />
+    </div>
+  </Section>
+</BaseLayout>

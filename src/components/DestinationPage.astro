@@ -1,0 +1,169 @@
+---
+import Section from './Section.astro';
+import SectionHead from './SectionHead.astro';
+import PhotoSlot from './PhotoSlot.astro';
+import OnsitePhoto from './OnsitePhoto.astro';
+import { pickPhoto } from '../data/onsite-photos.ts';
+import Icon from './Icon.astro';
+import FactGrid from './FactGrid.astro';
+import Timeline from './Timeline.astro';
+import Checklist from './Checklist.astro';
+import RedFlags from './RedFlags.astro';
+import VetLink from './VetLink.astro';
+import RelatedNav from './RelatedNav.astro';
+import { VET_STEPS_INLINE } from './../data/site.ts';
+
+/* DestinationPage — the shared skeleton for /destinations/*.
+   One template, four data objects: the four city pages can never drift apart.
+   `track` decides energy: creator gets the dark hero + media slot, buyer gets a
+   plain hero + narrow strip and is never given a dark closing band (§4.1.8). */
+export interface Fact { k: string; v: string; note?: string; }
+export interface Spec { k: string; v: string; }
+export interface Tl { day: string; time: string; title: string; desc: string; slot?: string; }
+export interface Rel { k: string; t: string; href: string; }
+
+interface Props {
+  region: string;
+  cityShort: string;
+  slotName: string;
+  h1: string;
+  lead: string;
+  /* Who this page is for, on the FIRST screen. The four city pages used to
+     carry no audience signal at all, so a creator landing on a buyer-leaning
+     page (Ningbo) had to scroll to the second screen to find out. */
+  audience?: string;
+  micro: string[];
+  facts: Fact[];
+  why: string[];
+  markets: Spec[];
+  itinTitle: string;
+  itinLead: string;
+  itinerary: Tl[];
+  filmLead: string;
+  film: { answer: string; lead: string; refused: string; note: string };
+  seasons: string[];
+  timingWarnings: string[];
+  vetDesc?: string;
+  related: Rel[];
+  track?: 'creator' | 'buyer' | 'neutral';
+}
+const c = Astro.props;
+const creator = c.track === 'creator';
+const buyer = c.track === 'buyer';
+/* The hero photograph is picked once here and handed to the itinerary timeline
+   as `exclude`, so a destination page never shows the same frame twice. */
+const heroPick = pickPhoto(c.slotName);
+---
+<section class:list={['hero', { 'hero--inverse': creator }]}>
+  <div class="container">
+    <div class="split-7-5">
+      <div>
+        <p class="eyebrow">Destination · {c.region}</p>
+        <h1 class={creator ? 'display-xl' : undefined}>{c.h1}</h1>
+        <p class="lead hero__lead">{c.lead}</p>
+        {c.audience && <p class="u-sm u-secondary">{c.audience}</p>}
+        {/* One button, not a pair going to the same page: two buttons both
+            landing on /contact/ is a false choice (director's round-2 ruling).
+            The closing CTA band repeats this action, so the hero keeps it once
+            and drops the duplicate "ask about filming" half. */}
+        <div class="btn-row btn-row--stack">
+          <a class="btn btn--primary" href="/contact/">Plan my trip to {c.cityShort}</a>
+        </div>
+        <ul class="hero__micro">
+          {c.micro.map((m) => <li>{m}</li>)}
+        </ul>
+      </div>
+      <div class="hero__media">
+        <PhotoSlot name={`DEST · ${c.slotName}`} variant={buyer ? 'strip' : 'media'}>
+          <OnsitePhoto id={heroPick} eager />
+        </PhotoSlot>
+      </div>
+    </div>
+  </div>
+</section>
+
+<Section>
+  <div class="container container--md">
+    <SectionHead
+      eyebrow="Why this cluster"
+      title={`Why ${c.cityShort}, rather than somewhere bigger.`}
+    />
+    <div class="prose stack">
+      {c.why.map((p) => <p set:html={p} />)}
+    </div>
+    <div class="u-mt-8"><FactGrid items={c.facts} /></div>
+  </div>
+</Section>
+
+<Section alternate>
+  <div class="container container--md">
+    <SectionHead
+      eyebrow="Categories & markets"
+      title="What is actually made here."
+      lead="Categories first, then where inside the cluster each one trades."
+    />
+    <ul class="spec-list clean spec-list--split">
+      {
+        c.markets.map((m) => (
+          <li>
+            <span class="spec-list__k">{m.k}</span><span class="spec-list__v" set:html={m.v}></span>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</Section>
+
+<Section>
+  <div class="container container--md">
+    <SectionHead eyebrow="Sample structure" title={c.itinTitle} lead={c.itinLead} />
+    <Timeline items={c.itinerary} media={creator} exclude={[heroPick]} />
+  </div>
+</Section>
+
+<Section alternate>
+  <div class="container container--md">
+    <SectionHead
+      eyebrow="Filming feasibility"
+      title={`Camera access in ${c.cityShort}.`}
+      lead={c.filmLead}
+    />
+    <ul class="spec-list clean spec-list--split">
+      <li><span class="spec-list__k">Typical answer</span><span class="spec-list__v">{c.film.answer}</span></li>
+      <li><span class="spec-list__k">Ask this early</span><span class="spec-list__v">{c.film.lead}</span></li>
+      <li><span class="spec-list__k">What gets refused</span><span class="spec-list__v">{c.film.refused}</span></li>
+      <li><span class="spec-list__k">Practical note</span><span class="spec-list__v">{c.film.note}</span></li>
+    </ul>
+    <p class="u-mt-6">
+      <a class="link-arrow" href="/services/on-site-support/filming-coordination/"
+        >How we arrange filming permission<Icon name="arrow" size={14} /></a
+      >
+    </p>
+  </div>
+</Section>
+
+<Section>
+  <div class="container container--md">
+    <SectionHead eyebrow="Timing" title="Best time to come — and when to stay away." />
+    <Checklist title="Seasonal windows" numbered items={c.seasons} />
+    <RedFlags title="When a visit wastes your money" items={c.timingWarnings} />
+  </div>
+</Section>
+
+<Section alternate>
+  <div class="container container--md">
+    <VetLink
+      desc={
+        c.vetDesc ||
+        `Whatever you shortlist here goes through the same five documented checks — ${VET_STEPS_INLINE}.`
+      }
+    />
+  </div>
+</Section>
+
+<Section>
+  <div class="container">
+    <SectionHead eyebrow="Keep going" title="Other clusters and related categories." />
+    <RelatedNav items={c.related} />
+  </div>
+</Section>

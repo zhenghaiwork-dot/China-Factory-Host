@@ -1,0 +1,166 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Section from '../../../components/Section.astro';
+import SectionHead from '../../../components/SectionHead.astro';
+import PhotoSlot from '../../../components/PhotoSlot.astro';
+import OnsitePhoto from '../../../components/OnsitePhoto.astro';
+import Checklist from '../../../components/Checklist.astro';
+import Caveat from '../../../components/Caveat.astro';
+import RelatedNav from '../../../components/RelatedNav.astro';
+import { waLink } from '../../../data/site.ts';
+
+const title = 'Factory vs trading company in China — how to tell them apart';
+const description =
+  'The signals that separate a real Chinese factory from a trading company: licence scope, registered address, tooling store, equipment photos and who receives payment.';
+
+const wa = waLink('Hi, I want to make sure my supplier is a real factory, not a trading company.');
+
+const signals = [
+  { k: 'Registered business scope', v: 'A factory lists production and manufacturing; a trading company lists wholesale, retail or import/export.' },
+  { k: 'Registered address', v: 'A factory matches the production site; a trading company uses an office address, or shares one with several "factories".' },
+  { k: 'Tooling and mould store', v: 'A factory has one, labelled and traceable; a trading company cannot show it.' },
+  { k: 'Live video walk-through', v: 'A factory arranges it within a day or two; a trading company gives excuses, delays or a pre-recorded clip.' },
+  { k: 'Equipment photos', v: 'A factory shows dated, specific floor photos; a trading company shows catalogue rooms and product close-ups.' },
+  { k: 'Who receives payment', v: 'A factory takes payment to the legal entity on the licence; a trading company asks for a personal or different-company account.' },
+  { k: 'Technical answers', v: 'A factory answers from the production manager; a trading company needs to "check with the factory".' },
+  { k: 'Price against peers', v: 'A factory can explain its price; a trading company is far below peers for an identical spec.' },
+];
+
+const ranking = [
+  { k: 'Strongest: licence scope + address + tooling', v: 'These three are hard to fake. A licence that says manufacturing at the site you visit, with a tooling store on the floor, is almost always a real factory.' },
+  { k: 'Strong: live video + technical answers', v: 'A real production manager can talk about tolerances on the spot. A middleman has to go ask someone — and the pause shows.' },
+  { k: 'Weakest: price and photos', v: 'A low price proves nothing except that someone is quoting low. Catalogue photos prove nothing at all.' },
+];
+
+const actions = [
+  'Decide whether it actually matters — a trader who handles your logistics and small orders honestly may be fine for what you need.',
+  'Ask to visit the maker anyway — a trading company with nothing to hide will arrange it.',
+  'Verify the maker with the same checks you would use on anyone else.',
+  'If the answer is evasive, treat the supplier as a trader and price the risk accordingly.',
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  active=""
+  crumbs={[]}
+  current="Factory vs trading company"
+  cta={{
+    eyebrow: 'Next step',
+    title: 'Check whether your supplier is real.',
+    lead: 'Send the licence, the address and whatever you have. We will run the checks.',
+    primary: { label: 'Check my supplier', href: '/contact/' },
+    secondary: { label: 'Ask on WhatsApp', href: wa, external: true },
+  }}
+>
+  <section class="hero">
+    <div class="container">
+      <div class="split-7-5">
+        <div>
+          <p class="eyebrow">Guide</p>
+          <h1>A factory and a trading company look identical until you check.</h1>
+          <p class="lead hero__lead">
+            No single signal proves anything. Three or four together is usually enough to decide
+            whether a supplier is worth a visit.
+          </p>
+        </div>
+        <div class="hero__media">
+          <PhotoSlot name="GUIDE · REAL VS TRADING" variant="media">
+            <OnsitePhoto id="04" />
+          </PhotoSlot>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Section>
+    <div class="container container--md">
+      <SectionHead eyebrow="The signals" title="What to check, and what each one reveals." />
+      <ul class="spec-list clean">
+        {signals.map((s) => (
+          <li>
+            <span class="spec-list__k">{s.k}</span><span class="spec-list__v">{s.v}</span>
+          </li>
+        ))}
+      </ul>
+      <p class="u-mt-6">
+        These are the same checks in <a href="/about/how-we-vet-factories/">the five-step vetting method</a>, with the
+        strongest three ranked below.
+      </p>
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container container--md">
+      <SectionHead eyebrow="The ranking" title="Which signals matter most." />
+      <ul class="spec-list clean">
+        {ranking.map((r) => (
+          <li>
+            <span class="spec-list__k">{r.k}</span><span class="spec-list__v">{r.v}</span>
+          </li>
+        ))}
+      </ul>
+      <p class="u-mt-6">
+        Once you have seen the signals, record them on the <a href="/tools/factory-visit-scorecard/">factory visit scorecard</a> so one supplier is not remembered differently from the next.
+      </p>
+    </div>
+  </Section>
+
+  <Section>
+    <div class="container container--md">
+      <SectionHead eyebrow="The nuance" title="A trading company is not always the villain." />
+      <div class="prose stack">
+        <p>
+          In some clusters — <a href="/destinations/yiwu/">Yiwu</a> above all — trading companies are a normal, useful
+          part of how the market works. They aggregate small orders, handle logistics and know which
+          factory makes what. The problem is not that they exist; it is that you do not know you are
+          dealing with one.
+        </p>
+        <p>
+          The whole point of <a href="/about/how-we-vet-factories/">these checks</a> is not to avoid traders on principle.
+          It is to make sure the price you pay, the quality you accept and the lead time you are
+          promised are based on what is actually happening — not on a business card that says "factory"
+          when the factory is an hour away.
+        </p>
+      </div>
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container container--md">
+      <SectionHead eyebrow="What to do" title="When you find out it is a trader." />
+      <Checklist title="Four steps" numbered items={actions} />
+      <p class="u-mt-6">
+        The report that records which check removed each supplier is what you get from an <a href="/services/existing-supplier-visits/">existing-supplier visit</a>.
+      </p>
+    </div>
+  </Section>
+
+  <Section>
+    <div class="container container--md">
+      <Caveat
+        title="When to get it verified properly"
+        body="A screenshot and a guess are not a check. When the order is large enough that getting it wrong hurts, get the licence and the floor looked at by someone on the ground."
+        items={[
+          'The licence scope and address are the two fields that settle most cases, and they need to be read against the registry, not the supplier’s own PDF.',
+          'A live walk-through is the fastest single test, and it costs the supplier almost nothing if they are real.',
+        ]}
+      />
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container">
+      <SectionHead eyebrow="Go deeper" title="Related pages." />
+      <RelatedNav
+        items={[
+          { k: 'Trust', t: 'The five checks in full', href: '/about/how-we-vet-factories/' },
+          { k: 'Guide', t: 'Factory visit checklist', href: '/guides/china-factory-visit-checklist/' },
+          { k: 'Service', t: 'Visit existing suppliers', href: '/services/existing-supplier-visits/' },
+          { k: 'Region', t: 'Yiwu', href: '/destinations/yiwu/' },
+        ]}
+      />
+    </div>
+  </Section>
+</BaseLayout>

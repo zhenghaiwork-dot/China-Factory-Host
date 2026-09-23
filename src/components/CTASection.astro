@@ -1,0 +1,105 @@
+---
+/* CTASection — §5.13. Two variants:
+   inverse  dark closing band (max 2 dark bands per page; forbidden on the
+            Buyer path and inside long-form / vetting areas — §4.1.8)
+   plain    light mid-page CTA that does not interrupt reading */
+import InquiryForm from './InquiryForm.astro';
+
+interface Btn { label: string; href: string; external?: boolean; }
+interface Props {
+  eyebrow?: string;
+  title: string;
+  lead?: string;
+  primary: Btn;
+  secondary?: Btn;
+  micro?: string;
+  variant?: 'inverse' | 'plain';
+  /* Split mode — decision pages. The band becomes copy-left / compact-form-right
+     and the button group is dropped: the form IS the action, so a second
+     "Plan my trip" button next to it would be the same false choice the
+     `sec` rules above exist to prevent. */
+  form?: { destination?: string; submitLabel?: string };
+}
+const {
+  eyebrow,
+  title,
+  lead,
+  primary,
+  secondary,
+  micro,
+  variant = 'inverse',
+  form,
+} = Astro.props;
+const inv = variant === 'inverse';
+
+/* An empty href means "the channel behind this button is not configured yet" —
+   waLink() returns '' while WA_NUMBER is unset. Three rules apply (critique M3
+   + the round-2 director's ruling on false choices):
+     · never emit the anchor, so no wa.me URL reaches the build;
+     · fall back to /contact/ so the action group does not lose its second slot —
+       unless the primary already points there, because two buttons to one page
+       is a false choice, not a fallback;
+     · drop an explicit secondary that points at the same href as the primary,
+       for the same reason. Four /destinations/* pages used to pass their own
+       secondary with href="/contact/" and slipped past the first two rules. */
+const sameTarget = !!secondary && !!secondary.href && secondary.href === primary.href;
+const sec: Btn | null = sameTarget
+  ? null
+  : !secondary || !secondary.href
+    ? secondary && primary.href !== '/contact/'
+      ? { label: 'Contact us', href: '/contact/' }
+      : null
+    : secondary;
+---
+<section class:list={['cta', inv ? 'cta--inverse' : 'cta--plain']}>
+  <div class="container">
+    <div class:list={['cta__inner', form && 'cta__inner--split']}>
+      {
+        form ? (
+          <>
+            <div class="cta__copy">
+              {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+              <h2>{title}</h2>
+              {lead && <p class="lead">{lead}</p>}
+              {/* micro lives INSIDE the copy column in split mode. Rendered as a
+                  full-width grid row it would start below the taller form card,
+                  leaving a stranded sentence floating in the dark band. */}
+              {micro && <p class="cta__micro">{micro}</p>}
+            </div>
+            <div class="cta__form">
+              <InquiryForm
+                variant="compact"
+                destination={form.destination}
+                submitLabel={form.submitLabel}
+              />
+            </div>
+          </>
+        ) : (
+          <>
+            {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+            <h2>{title}</h2>
+            {lead && <p class="lead">{lead}</p>}
+            <div class="cta__actions">
+              <a class="btn btn--primary" href={primary.href}>{primary.label}</a>
+              {
+                sec && (
+                  <a
+                    class="btn btn--secondary"
+                    href={sec.href}
+                    target={sec.external ? '_blank' : undefined}
+                    rel={sec.external ? 'noopener' : undefined}
+                    data-placeholder={sec.external ? 'wa-number' : undefined}
+                  >
+                    {sec.label}
+                  </a>
+                )
+              }
+            </div>
+          </>
+        )
+      }
+      {/* Split mode renders micro inside .cta__copy (see above), so guard here. */}
+      {!form && micro && <p class="cta__micro">{micro}</p>}
+    </div>
+  </div>
+</section>

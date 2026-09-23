@@ -1,0 +1,17 @@
+---
+/* Brand mark — design system §3.2, Option A "Open Bay / 开着门的锯齿厂房".
+   The door gap (x 13 → 22) is the semantic core: an open bay you can walk into.
+   Inlined, not linked: keeps the site at zero external requests and lets the
+   mark inherit currentColor. */
+interface Props {
+  size?: number;
+  class?: string;
+}
+const { size = 28, class: cls } = Astro.props;
+---
+<svg class:list={['brand__mark', cls]} width={size} height={size} viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+  <g fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="miter" stroke-linecap="butt">
+    <path d="M4,26 V19 L11,13 V19 L18,13 V19 L25,13 V26 H22 V20 H13 V26 H4 Z" />
+    <path d="M22,20 L27,15" />
+  </g>
+</svg>

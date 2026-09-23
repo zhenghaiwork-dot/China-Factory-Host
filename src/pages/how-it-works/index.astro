@@ -1,0 +1,167 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Section from '../../components/Section.astro';
+import SectionHead from '../../components/SectionHead.astro';
+import PhotoSlot from '../../components/PhotoSlot.astro';
+import OnsitePhoto from '../../components/OnsitePhoto.astro';
+import ProcessSteps from '../../components/ProcessSteps.astro';
+import Checklist from '../../components/Checklist.astro';
+import Caveat from '../../components/Caveat.astro';
+import VetLink from '../../components/VetLink.astro';
+import FAQ from '../../components/FAQ.astro';
+import RelatedNav from '../../components/RelatedNav.astro';
+import { waLink, REPLY_TIME, REPORT_TURNAROUND } from '../../data/site.ts';
+
+const title = 'How it works — from inquiry to written report';
+const description =
+  'The process from your first message to the written report: pre-screening, route planning, the visit itself, and the follow-through.';
+
+const wa = waLink('Hi, I would like to understand how your process works.');
+
+const steps = [
+  { n: '01', title: 'Tell us your goal', body: 'What are you sourcing or filming, in which category, and roughly when? One message is enough — we will ask for whatever is missing.' },
+  { n: '02', title: 'We shortlist and pre-screen', body: 'Vetted matches in the right cluster. The five checks run before a factory stays on the itinerary, and the ones that fail are recorded, not quietly dropped.' },
+  { n: '03', title: 'We plan the route', body: 'Cluster-by-cluster itinerary, transport, interpreter and appointments locked in. The order is deliberate — the second quote you get should be informed by the first.' },
+  { n: '04', title: 'You walk the floor', body: 'Meet the production manager, with the interpreter carrying the technical questions. We handle everything around you so the day is about the factory, not the logistics.' },
+  { n: '05', title: 'Written report', body: 'A structured report covering every factory visited and rejected, delivered ' + REPORT_TURNAROUND + ', with the check that removed each rejection.' },
+];
+
+const provide = [
+  'Your product or category, and roughly how much you expect to order',
+  'Whether you already have a supplier list, or need us to build one',
+  'Your dates, or the window you are considering',
+  'Team size and languages',
+  'Anything that changes the trip — filming, a trade fair, a compliance requirement',
+];
+
+const whenNo = [
+  { k: 'We say no', v: 'We will tell you plainly if the trip is a bad idea — wrong category, wrong dates, or a request a cheaper remote service would serve better.' },
+  { k: 'We say why', v: 'Not a form rejection. The specific reason, so you can act on it even if it is with someone else.' },
+  { k: 'We point elsewhere', v: 'If the right answer is a different kind of provider, we say who, instead of taking a fee for work we cannot deliver.' },
+];
+
+const faqs = [
+  { q: 'How fast do you reply?', a: ['We reply ' + REPLY_TIME + ', China Time (GMT+8), Monday to Friday. If it is urgent, WhatsApp is faster.'] },
+  { q: 'Do I pay before I see the plan?', a: ['No. The plan and the feasibility answer are free. You pay only when you book a trip, and the structure is on the pricing page.'] },
+  { q: 'When do I get the report?', a: ['A written report ' + REPORT_TURNAROUND + ', covering every factory visited and rejected.'] },
+  { q: 'What if you cannot help?', a: ['We say so, we say why, and we point you at who can. We would rather lose an inquiry than sell a trip we cannot deliver.'] },
+  { q: 'What does the report contain?', a: ['One entry per factory, the five checks recorded against each, what was verified on the floor, and what was rejected — with the check that removed each one.'] },
+  { q: 'Is the process the same for creators and buyers?', a: ['The steps are the same; the details differ. Creators add filming permission and a shot list; buyers add the RFQ and the verification. The skeleton does not change.'] },
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  active=""
+  crumbs={[]}
+  current="How it works"
+  cta={{
+    eyebrow: 'Next step',
+    title: 'Start with one message.',
+    lead: 'Tell us the category and roughly when. You get a straight answer about what is realistic.',
+    primary: { label: 'Start the conversation', href: '/contact/' },
+    secondary: { label: 'Ask on WhatsApp', href: wa, external: true },
+  }}
+>
+  <section class="hero">
+    <div class="container">
+      <div class="split-7-5">
+        <div>
+          <p class="eyebrow">How it works</p>
+          <h1>Five steps, no mystery between them.</h1>
+          <p class="lead hero__lead">
+            The same process for every client — shortlist, check, route, floor, report. Nothing is
+            subcontracted, and you always know what happens next. The <a href="/guides/how-to-plan-a-china-factory-visit/">planning guide</a>
+            runs the same steps from the buyer's side.
+          </p>
+        </div>
+        <div class="hero__media">
+          <PhotoSlot name="PROCESS · THE STEPS" variant="media">
+            <OnsitePhoto id="10" />
+          </PhotoSlot>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Section>
+    <div class="container container--md">
+      <SectionHead eyebrow="The process" title="From inquiry to written report." />
+      <ProcessSteps items={steps} />
+      <p class="u-mt-6">
+        Step four is where the <a href="/guides/china-factory-visit-checklist/">on-the-floor checklist</a> runs.
+      </p>
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container container--md">
+      <SectionHead eyebrow="What you bring" title="What we need from you." />
+      <Checklist title="Send whatever you have — we will ask for the rest" items={provide} />
+      <p class="u-mt-6">
+        If you already have suppliers, that is an <a href="/services/existing-supplier-visits/">existing-supplier visit</a>;
+        if not, <a href="/services/factory-matching/">factory matching</a> builds the list.
+      </p>
+    </div>
+  </Section>
+
+  <Section>
+    <div class="container container--md">
+      <SectionHead eyebrow="When the answer is no" title="What happens when we say no." />
+      <ul class="spec-list clean">
+        {whenNo.map((w) => (
+          <li>
+            <span class="spec-list__k">{w.k}</span><span class="spec-list__v">{w.v}</span>
+          </li>
+        ))}
+      </ul>
+      <p class="u-mt-6">
+        Either way the <a href="/pricing/">pricing</a> is two visible lines, and the <a href="/faq/">FAQ</a> covers the rest.
+      </p>
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container container--md">
+      <Caveat
+        title="What the process does not promise"
+        body="A clear process is not a guarantee of an outcome. Here is where it stops."
+        items={[
+          'We cannot promise entry to a named brand factory — we check feasibility and arrange a comparable alternative.',
+          'We do not guarantee that a production run ships on time, or that a supplier performs six months later.',
+          'We do not substitute for a formal audit or a product inspection, and we will not present one as the other.',
+        ]}
+      />
+    </div>
+  </Section>
+
+  <Section>
+    <div class="container container--md">
+      <VetLink
+        desc="Step two is where the risk leaves the plan. Here is the vetting method in full, including the signals that make us walk away."
+      />
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container">
+      <SectionHead eyebrow="Questions" title="What people ask about the process." />
+      <FAQ items={faqs} />
+    </div>
+  </Section>
+
+  <Section>
+    <div class="container">
+      <SectionHead eyebrow="Where next" title="Related pages." />
+      <RelatedNav
+        items={[
+          { k: 'Plan', t: 'Plan my trip', href: '/plan-my-trip/' },
+          { k: 'Page', t: 'Pricing', href: '/pricing/' },
+          { k: 'Page', t: 'FAQ', href: '/faq/' },
+          { k: 'Trust', t: 'How we vet factories', href: '/about/how-we-vet-factories/' },
+        ]}
+      />
+    </div>
+  </Section>
+</BaseLayout>

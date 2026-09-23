@@ -1,0 +1,445 @@
+---
+/* ChinaFactoryHost — homepage.
+
+   Rebuilt from scratch on BaseLayout + the V3 component set. The previous file
+   was a second, contradictory design system: its own <html>/<head>, its own hex
+   palette, six gradient icon tints, 999px pill buttons, gradient text and a
+   gradient CTA block. It was patched onto nothing and shared nothing. V3 could
+   not ship while the homepage spoke a different language, so this page is
+   content-migration only — every string below is the same claim the old page
+   made, moved into the right container.
+
+   Section rhythm follows §5.4 and alternates surfaces (white → tint → white …).
+   Dark bands: the hero (a photograph) and the closing CTA — exactly two, and
+   never adjacent (§3.4).
+
+   No numbers appear anywhere on this page. We cannot source a single figure yet,
+   and inventing statistics about factory access would destroy the only asset
+   this site actually has: being the one source that does not overclaim. */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Section from '../components/Section.astro';
+import SectionHead from '../components/SectionHead.astro';
+import ServiceCard from '../components/ServiceCard.astro';
+import ProcessSteps from '../components/ProcessSteps.astro';
+import Checklist from '../components/Checklist.astro';
+import FAQ from '../components/FAQ.astro';
+import Icon from '../components/Icon.astro';
+import { REPLY_TIME_MICRO } from '../data/site.ts';
+
+const creatorPoints = [
+  'Film inside real factories, not trade-company showrooms',
+  'Bilingual fixer handles permits, access and interviews',
+  'A shared route or a private crew, your call',
+];
+
+const buyerPoints = [
+  'Verify the factory before you fly 20 hours',
+  'Meet the production manager, not a sales rep',
+  'Structured visit plan, plain-English reporting',
+];
+
+/* Hero claims. Qualitative on purpose — see the file header. */
+const heroClaims = [
+  'Factory verification, step by step',
+  'English-speaking escorts on site',
+  'No hidden commissions',
+];
+
+const services = [
+  {
+    title: 'Creator factory tours',
+    desc: 'Join a group departure or book a private crew route. Filming is coordinated end to end.',
+    icon: 'camera',
+    href: '/services/creator-factory-tour/',
+    cta: 'See the creator route',
+  },
+  {
+    title: 'Brand sourcing visits',
+    desc: 'Custom itineraries for Amazon sellers, DTC founders and procurement teams.',
+    icon: 'clipboard',
+    href: '/services/brand-sourcing-visit/',
+    cta: 'See the buyer route',
+  },
+  {
+    title: 'Factory verification',
+    desc: 'Business licence, registered scope, capacity and the production floor itself, checked before you commit.',
+    icon: 'shield',
+    href: '/about/how-we-vet-factories/',
+    cta: 'Read the method',
+  },
+  {
+    title: 'Filming coordination',
+    desc: 'Permits, access, interviews and safe handling of your gear on the floor.',
+    icon: 'film',
+    href: '/services/on-site-support/filming-coordination/',
+    cta: 'How filming works',
+  },
+  {
+    title: 'Translation and escort',
+    desc: 'Bilingual escorts who know the technical vocabulary, not just the small talk.',
+    icon: 'translate',
+    href: '/services/on-site-support/',
+    cta: 'What is on site',
+  },
+  {
+    title: 'Transport and logistics',
+    desc: 'City-to-city and factory-to-factory routing that respects shift times.',
+    icon: 'car',
+    href: '/services/on-site-support/',
+    cta: 'How routing works',
+  },
+];
+
+const steps = [
+  {
+    n: '01',
+    title: 'Tell us your goal',
+    body: 'What are you sourcing or filming, and in which category?',
+  },
+  {
+    n: '02',
+    title: 'We shortlist factories',
+    body: 'Vetted matches in the right industrial cluster, never trade companies.',
+  },
+  {
+    n: '03',
+    title: 'We plan the route',
+    body: 'Cluster-by-cluster itinerary, transport and interpreter locked in.',
+  },
+  {
+    n: '04',
+    title: 'You walk the floor',
+    body: 'Meet the production manager. We handle everything around you.',
+  },
+];
+
+/* §1.1 #6 / requirements §10: four reasons, and each one links to the page that
+   carries its evidence. A claim with no landing page does not belong here. */
+const whyUs = [
+  {
+    icon: 'shield',
+    title: 'Vetted before you book',
+    desc: 'Every shortlist starts from a checked business licence, a registered scope and a production floor we have walked.',
+    href: '/about/how-we-vet-factories/',
+    cta: 'See the vetting steps',
+  },
+  {
+    icon: 'film',
+    title: 'Filming access confirmed first',
+    desc: 'We find out what is actually shootable, factory by factory and category by category, before you book a flight.',
+    href: '/services/on-site-support/filming-coordination/',
+    cta: 'Filming coordination',
+  },
+  {
+    icon: 'route',
+    title: 'Routing that respects shift times',
+    desc: 'Itineraries are built around production schedules and industrial clusters, not around tourist itineraries.',
+    href: '/services/on-site-support/',
+    cta: 'On-site support',
+  },
+  {
+    icon: 'target',
+    title: 'One team, shortlist to floor',
+    desc: 'The people who vet the factory are the people standing next to you on the visit. Nothing is subcontracted.',
+    href: '/services/brand-sourcing-visit/',
+    cta: 'Brand sourcing visits',
+  },
+];
+
+const destinations = [
+  { k: 'Small commodities and gifts', t: 'Yiwu', href: '/destinations/yiwu/' },
+  { k: 'Appliances, hardware, textiles', t: 'Ningbo / Hangzhou', href: '/destinations/ningbo-hangzhou/' },
+  { k: 'Electronics and drones', t: 'Shenzhen', href: '/destinations/shenzhen/' },
+  { k: 'OEM and private label', t: 'Guangzhou / Dongguan', href: '/destinations/guangzhou-dongguan/' },
+];
+
+/* Stated as commitments, not as claims about anyone else. Rendered with the
+   refusal marker: a check mark beside a refusal reads as "confirmed: we do not
+   do this", which is the exact opposite of the meaning (§3.4, redundant
+   encoding — critique M6). */
+const refusals = [
+  'We do not take undisclosed factory commissions.',
+  'We do not promise filming access we have not confirmed.',
+  'We do not route you to trade companies posing as factories.',
+];
+
+const faqs = [
+  {
+    q: 'Can I actually film inside a Chinese factory?',
+    a: [
+      'Often yes, but it depends on the factory, the category and the city. Some factories welcome creators, some allow filming only with approval, and a few decline. We confirm what is realistic before you book a flight — we do not sell a route we cannot film.',
+    ],
+  },
+  {
+    q: 'How do I know the factory is real and not a trade company?',
+    a: [
+      'We check the business licence and registered scope, match it to what they claim to make, and confirm the production floor exists. Our verification process is documented step by step so you can see exactly what was checked.',
+    ],
+  },
+  {
+    q: 'Do you take hidden commissions from factories?',
+    a: [
+      'No. Our pricing is two visible lines: an escort and coordination fee, and an optional sourcing commission that we disclose in writing. We will show you the structure before you pay anything.',
+    ],
+  },
+  {
+    q: 'When should I avoid travelling to China for factory visits?',
+    a: [
+      'Chinese New Year and National Day week shut most factories for one to three weeks. We plan around the holiday calendar so you do not fly 20 hours to an empty floor.',
+    ],
+  },
+];
+
+/* FAQPage structured data — built from the SAME faqs array the visible list
+   renders, so the machine-readable answers can never drift from the page. */
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a.join(' ') },
+  })),
+};
+---
+<BaseLayout
+  title="Visit Real Chinese Factories — With Someone On The Ground | ChinaFactoryHost"
+  description="Factory tours for creators and verified sourcing visits for brands. We vet the factory, plan the route and stay with you on the floor."
+  active=""
+  bodyClass="over-hero"
+  cta={{
+    title: 'Tell us what you need to see on the floor.',
+    lead: 'We will tell you honestly whether it is realistic, what it costs and when to come, before you book anything.',
+    primary: { label: 'Start the conversation', href: '/contact/' },
+    micro: REPLY_TIME_MICRO,
+  }}
+>
+  {/* ── hero-full-bleed (§5.4) ───────────────────────────────────────────────
+      The only real photograph on the site. DOM order is img → .scrim → .content,
+      which is required for object-position to survive (§8.3) — a CSS
+      background-image would throw away alt, loading and width/height.
+      --over-hero is enabled only here, because this is the only page with a
+      full-bleed photograph. */}
+  <section class="hero-full">
+    <div class="hero-full__media" aria-hidden="true">
+      <img
+        src="/images/hero.jpg"
+        alt=""
+        width="1600"
+        height="1000"
+        loading="eager"
+        fetchpriority="high"
+        decoding="async"
+      />
+    </div>
+    <div class="hero-full__scrim" aria-hidden="true"></div>
+    <div class="hero-full__scrim-top" aria-hidden="true"></div>
+
+    <div class="hero-full__content">
+      <div class="container">
+        {/* Explicit break + non-breaking hyphen: the old line broke after
+            "trade-", which split the compound and read as a typo. */}
+        {/* "China" is load-bearing: without it a visitor arriving cold from search
+            or a shared link cannot tell what country this service is in. */}
+        <h1>Walk the real China factory floor.<br />Not a trade&#8209;company showroom.</h1>
+        <p class="hero-full__lead">
+          We vet the factory, plan the route and stay beside you on the floor. Filming for an
+          audience of millions, or signing your first production run.
+        </p>
+
+        {/* §6.6 hero budget: exactly one button and one text link. */}
+        <div class="hero-full__actions">
+          <a class="btn btn--second" href="/services/creator-factory-tour/">Plan my shoot</a>
+          <a class="link-arrow" href="/services/brand-sourcing-visit/">
+            Request a sourcing visit plan
+            <Icon name="arrow" size={14} />
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* ── claims strip ─────────────────────────────────────────────────────────
+      Moved OFF the photograph. At --fs-body-sm on the image these three read as
+      a footnote; as their own band they carry real weight and soften the hard
+      photo-to-surface edge. Still number-free on purpose. */}
+  <section class="claims-strip">
+    <div class="container">
+      <ul class="claims-strip__inner">
+        {
+          heroClaims.map((c) => (
+            <li class="claims-strip__item">
+              <Icon name="check" size={20} />
+              <span>{c}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  {/* ── audience splitter ──────────────────────────────────────────────────── */}
+  <Section>
+    <div class="container">
+      <SectionHead
+        title="Two ways to use us. One standard of proof."
+        lead="Both routes start in the same place: a factory we have actually checked, and a plan that says what happens on which day."
+      />
+      <div class="splitter__grid">
+        <article class="split-card split-card--creator" data-track="creator">
+          <span class="split-card__icon"><Icon name="camera" size={32} /></span>
+          <h3 class="split-card__title">Factory tours built for the camera</h3>
+          <p class="split-card__desc">
+            Join a group departure or run a private crew route through the clusters that matter to
+            your niche.
+          </p>
+          <ul class="split-card__bullets">
+            {
+              creatorPoints.map((p) => (
+                <li>
+                  <Icon name="check" size={16} />
+                  <span>{p}</span>
+                </li>
+              ))
+            }
+          </ul>
+          <p class="split-card__cta">
+            <a class="link-arrow" href="/services/creator-factory-tour/">
+              Check if your shoot is feasible
+              <Icon name="arrow" size={14} />
+            </a>
+          </p>
+        </article>
+
+        <article class="split-card split-card--buyer" data-track="buyer">
+          <span class="split-card__icon"><Icon name="clipboard" size={32} /></span>
+          <h3 class="split-card__title">Sourcing visits that respect your time</h3>
+          <p class="split-card__desc">
+            Custom itineraries for Amazon sellers, DTC founders and procurement teams flying in for
+            a week.
+          </p>
+          <ul class="split-card__bullets">
+            {
+              buyerPoints.map((p) => (
+                <li>
+                  <Icon name="check" size={16} />
+                  <span>{p}</span>
+                </li>
+              ))
+            }
+          </ul>
+          <p class="split-card__cta">
+            <a class="link-arrow" href="/services/brand-sourcing-visit/">
+              Request a sourcing visit plan
+              <Icon name="arrow" size={14} />
+            </a>
+          </p>
+        </article>
+      </div>
+    </div>
+  </Section>
+
+  {/* ── card-grid: what we do ──────────────────────────────────────────────── */}
+  <Section alternate>
+    <div class="container">
+      <SectionHead
+        title="One team, on the ground, end to end"
+        lead="Everything that happens between “I have an idea” and “I am standing on the production floor”."
+      />
+      <div class="grid--3">
+        {
+          services.map((s) => (
+            <ServiceCard
+              title={s.title}
+              desc={s.desc}
+              icon={s.icon}
+              href={s.href}
+              cta={s.cta}
+            />
+          ))
+        }
+      </div>
+    </div>
+  </Section>
+
+  {/* ── numbered process ───────────────────────────────────────────────────── */}
+  <Section>
+    <div class="container">
+      <SectionHead
+        title="Four steps from idea to factory floor"
+        lead="No mystery, and no “we'll figure it out when you land”. This is the same process for every client."
+      />
+      <ProcessSteps items={steps} layout="grid" />
+    </div>
+  </Section>
+
+  {/* ── why us: four claims, four landing pages (§1.1 #6) ──────────────────── */}
+  <Section alternate>
+    <div class="container">
+      <SectionHead
+        title="Why teams bring us onto the floor"
+        lead="Each of these is someone else's job to prove. Ours is to show you where we checked."
+      />
+      <div class="grid--2">
+        {
+          whyUs.map((w) => (
+            <article class="split-card">
+              <span class="split-card__icon"><Icon name={w.icon} size={32} /></span>
+              <h3 class="split-card__title">{w.title}</h3>
+              <p class="split-card__desc">{w.desc}</p>
+              <p class="split-card__cta">
+                <a class="link-arrow" href={w.href}>
+                  {w.cta}
+                  <Icon name="arrow" size={14} />
+                </a>
+              </p>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </Section>
+
+  {/* ── coverage ───────────────────────────────────────────────────────────── */}
+  <Section>
+    <div class="container">
+      <SectionHead
+        title="Coverage across China's industrial clusters"
+        lead="Based in Zhejiang, with a regular presence in the Pearl River Delta. Reachable almost everywhere else."
+      />
+      <div class="related-nav" role="navigation" aria-label="Destinations">
+        {
+          destinations.map((d) => (
+            <a href={d.href}>
+              <span class="related-nav__k">{d.k}</span>
+              <span class="related-nav__t">{d.t}</span>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </Section>
+
+  {/* ── what we will not do ────────────────────────────────────────────────── */}
+  <Section alternate>
+    <div class="container">
+      <div class="split-7-5">
+        <SectionHead
+          title="What we will not do"
+          lead="Straight talk, because you are about to spend real money and twenty hours on a plane."
+        />
+        <Checklist items={refusals} plain refusal />
+      </div>
+    </div>
+  </Section>
+
+  {/* ── FAQ ────────────────────────────────────────────────────────────────── */}
+  <Section tight>
+    <div class="container">
+      <SectionHead title="The questions everyone asks first" />
+      <FAQ items={faqs} />
+    </div>
+  </Section>
+
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+</BaseLayout>

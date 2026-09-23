@@ -1,0 +1,160 @@
+---
+import Icon from './Icon.astro';
+import { REPLY_TIME, isWaConfigured, waLink } from '../data/site.ts';
+
+/* InquiryForm — §5.14.
+   Two variants:
+     full    — /contact/. Five fields, the canonical inquiry.
+     compact — decision pages (services / destinations / industries). Four
+               fields, and `destination` is pre-filled from the page so the
+               visitor does not re-state what the page is already about.
+
+   Submits to POST /api/inquiry/ (src/pages/api/inquiry.ts). When mail is not
+   configured on the server the endpoint answers 503 and this form shows its
+   error state — it must never render "sent" for a message that did not go out.
+*/
+interface Props {
+  title?: string;
+  lead?: string;
+  variant?: 'full' | 'compact';
+  destination?: string;
+  submitLabel?: string;
+}
+const {
+  title,
+  lead,
+  variant = 'full',
+  destination = '',
+  submitLabel = 'Send inquiry',
+} = Astro.props;
+
+const compact = variant === 'compact';
+const uid = (compact ? 'c' : 'f') + (destination ? '-' + destination.replace(/[^a-z0-9]/gi, '') : '');
+const heading = title ?? (compact ? 'Ask about this' : 'Tell us what you are trying to do');
+const intro =
+  lead ??
+  (compact
+    ? 'Four fields. We read every one and reply with a straight answer, including when we are not the right people for the job.'
+    : 'Five fields. We read every one and reply with a straight answer — including when we are not the right people for the job.');
+
+/* Mail readiness can no longer be measured at build time. Since the Workers
+   move the mail key is a runtime binding, not a build-time env var, so there
+   is nothing here to read — the pre-launch check is now a runtime one:
+   POST the form on the deployed site and confirm it returns 200 rather than
+   503. See DEPLOYMENT.md → "Post-deploy checks". */
+---
+<div class:list={['form-shell', compact && 'form-shell--compact']}>
+  <h2 class="u-mt-0">{heading}</h2>
+  <p class="lead">{intro}</p>
+  <form
+    class:list={['form-grid', compact && 'form-grid--compact']}
+    data-form
+    data-endpoint="/api/inquiry/"
+    action="/api/inquiry/"
+    method="post"
+    novalidate
+  >
+    <fieldset class="field" style="border:0;padding:0;margin:0">
+      <legend class="field__label">Which one are you?</legend>
+      <div class="radio-group" role="radiogroup" aria-label="Which one are you?">
+        <label class="radio-chip"><input type="radio" name="role" value="creator" required /><span>Creator</span></label>
+        <label class="radio-chip"><input type="radio" name="role" value="brand-buyer" /><span>Brand buyer</span></label>
+        <label class="radio-chip"><input type="radio" name="role" value="not-sure" /><span>Not sure yet</span></label>
+      </div>
+    </fieldset>
+
+    <div class="form-grid form-grid--2">
+      <div class="field">
+        <label class="field__label" for={`in-name-${uid}`}>Name</label>
+        <input id={`in-name-${uid}`} name="name" type="text" autocomplete="name" required placeholder="Your name" />
+      </div>
+      <div class="field">
+        <label class="field__label" for={`in-email-${uid}`}>Email</label>
+        <input id={`in-email-${uid}`} name="email" type="email" autocomplete="email" required placeholder="you@domain.com" />
+      </div>
+      {
+        !compact && (
+          <div class="field">
+            <label class="field__label" for={`in-wa-${uid}`}>
+              WhatsApp <span class="u-secondary">(optional, fastest reply)</span>
+            </label>
+            <input id={`in-wa-${uid}`} name="whatsapp" type="tel" autocomplete="tel" placeholder="+1 555 000 0000" />
+            <p class="field__hint">Include your country code.</p>
+          </div>
+        )
+      }
+      {
+        !compact && (
+          <div class="field">
+            <label class="field__label" for={`in-dest-${uid}`}>Destination or industry</label>
+            <select id={`in-dest-${uid}`} name="destination">
+              <option value="">Select…</option>
+              <option value="yiwu">Yiwu</option>
+              <option value="ningbo-hangzhou">Ningbo / Hangzhou</option>
+              <option value="shenzhen">Shenzhen</option>
+              <option value="guangzhou-dongguan">Guangzhou / Dongguan</option>
+              <option value="beauty-packaging">Beauty &amp; personal-care packaging</option>
+              <option value="toys-gifts">Toys, gifts &amp; commodities</option>
+              <option value="other">Other / not decided</option>
+            </select>
+          </div>
+        )
+      }
+    </div>
+
+    <div class="field">
+      <label class="field__label" for={`in-goal-${uid}`}>What are you trying to do?</label>
+      <textarea
+        id={`in-goal-${uid}`}
+        name="goal"
+        rows={compact ? 3 : 5}
+        placeholder="Film inside a cosmetics filling line in Guangzhou, 8–10 days, two crew. Or: verify three shortlisted suppliers before placing a deposit."
+      ></textarea>
+    </div>
+
+    {/* Pre-filled from the page the form sits on — a destination or industry
+        page should not ask the visitor to repeat its own subject. */}
+    {destination && <input type="hidden" name="destination" value={destination} />}
+
+    {/* Honeypot — bots fill it, humans cannot see it. Server silently accepts. */}
+    <div hidden aria-hidden="true" style="display:none">
+      <label for={`in-site-${uid}`}>Website</label>
+      <input id={`in-site-${uid}`} name="website" type="text" tabindex="-1" autocomplete="off" />
+    </div>
+
+    <p><button class="btn btn--primary" type="submit" data-submit>{submitLabel}</button></p>
+    <p class="form-footnote">China time GMT+8 · we reply {REPLY_TIME}</p>
+  </form>
+
+  <div class="form-status form-status--ok" data-form-status="ok" hidden tabindex="-1">
+    <Icon name="checkBig" size={48} />
+    <p class="form-status__title">Got it — we'll reply {REPLY_TIME} (China Time).</p>
+    {isWaConfigured && <p class="form-status__note">If it is urgent, message us on WhatsApp instead.</p>}
+    {
+      isWaConfigured && (
+        <p>
+          <a class="btn btn--whatsapp" href={waLink('Hi, I just sent an inquiry through the site.')} target="_blank" rel="noopener">Message us on WhatsApp</a>
+        </p>
+      )
+    }
+  </div>
+  <div class="form-status form-status--err" data-form-status="err" hidden tabindex="-1">
+    <Icon name="alertBig" size={48} />
+    <p class="form-status__title">Something went wrong.</p>
+    <p class="form-status__note" data-form-error></p>
+    {
+      isWaConfigured ? (
+        <>
+          <p class="form-status__note">Please message us on WhatsApp instead — it reaches the same team.</p>
+          <p>
+            <a class="btn btn--whatsapp" href={waLink('Hi, my inquiry form failed to send.')} target="_blank" rel="noopener">Message us on WhatsApp</a>
+          </p>
+        </>
+      ) : (
+        <p class="form-status__note">
+          Please try again, or <a href="/contact/">use the contact page</a> — it reaches the same team.
+        </p>
+      )
+    }
+  </div>
+</div>

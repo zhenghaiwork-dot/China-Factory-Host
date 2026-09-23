@@ -1,0 +1,611 @@
+/* ============================================================
+   ChinaFactoryHost.com — Design Tokens V3
+   Theme: Editorial Industrial
+          warm paper page · Georgia display · oxblood wayfinding · near-black action
+   ------------------------------------------------------------
+   Source of truth: design/03-design-system-v3.md — Chapter 10
+   Load order: tokens.css  ->  base.css  ->  components.css
+   Zero web fonts. Zero external requests. 1rem = 18px.
+
+   Two deliberate, documented decisions that must NOT be "fixed":
+     1. --space-* stays in px. Spacing does not scale with the root font size,
+        so the scale does not reflow the whole site when the root changes (§2.4).
+     2. --header-h / --rail-h are px, not rem, for exactly the same reason —
+        at 112.5% a 4rem header would silently become 72px (§9.2).
+   ============================================================ */
+
+/* 1rem = 18px. Makes every rem token land on the reference scale — see §2.4. */
+html { font-size: 112.5%; }
+
+:root {
+  /* ---------- 1 · Font families (all system stacks · 0 KB · 0 requests) ----------
+     The Georgia serif was copied from chinatour.com. The user's actual
+     reference (chinatours.com, 8 screenshots) is a BOLD SANS site — heavy
+     geometric headings, no serif anywhere. Display is therefore the same
+     sans stack as body, differentiated by weight and size only. */
+  --font-display: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+                  'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
+  --font-body:    system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+                  'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
+  --font-mono:    ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas,
+                  'Roboto Mono', 'Liberation Mono', monospace;
+
+  /* ---------- 2 · Ink — neutral ramp (primitives) ----------
+     V4 craft fix 2026-09-17: the whole ramp was WARM SAND (#6B6560…#F7F4F1).
+     Warm greys on a cool white page are the single biggest source of the
+     "dated / cheap" read next to the Elementor reference, which uses neutral
+     #eaeaea-class greys throughout. Re-axed to a COOL neutral (B − R ≈ 15).
+     Every replacement was solved to keep contrast ≥ the value it replaces:
+       ink-600 5.74:1 → 5.76 · ink-500 3.60 → 3.61 · ink-400 2.52 → 2.53
+       ink-300 1.86 → 1.86 · ink-200 1.44 → 1.44 · ink-150 1.31 → 1.32
+       ink-100 1.19 → 1.20   (all measured on #FFFFFF) */
+  --ink-1000: #121110;
+  --ink-950:  #1A1917;   /* dark band · utility rail */
+  --ink-900:  #232120;   /* card sitting on a dark band */
+  --ink-800:  #33302C;
+  --ink-700:  #4A4642;
+  --ink-600:  #616670;
+  --ink-500:  #828791;
+  --ink-400:  #9EA3AD;
+  --ink-300:  #B9BEC8;
+  --ink-200:  #D2D7E1;
+  --ink-150:  #DBE0EA;
+  --ink-100:  #E6EBF5;
+  --ink-050:  #F4F6FA;
+  --white:    #FFFFFF;
+
+  /* ============================================================
+     3 · ACCENT FAMILY — the one swappable block.
+     ------------------------------------------------------------
+     Active candidate:  A · Oxblood (wayfinding only)
+
+     To switch to candidate B (Ochre) or C (Cool teal), replace ONLY
+     the seven --accent-* values in this banner. Nothing else in the
+     codebase hard-codes an accent hex — every other accent reference
+     resolves through --color-accent / --on-inverse-link / --map-*.
+
+     Candidate B would additionally require re-hueing the caution
+     status family (--ochre-600 / --ochre-300) — do not switch to B
+     without resolving that collision (spec §3.2).
+
+     Discipline that makes A safe (spec §3.2 risk table):
+       · accent never fills a large area — max fill is a badge
+       · the utility rail is near-black, not accent
+       · accent never shares a frame with a number
+       · ≤ 3 accent appearances per screen
+       · --color-accent is FORBIDDEN inside .section--inverse (1.40:1);
+         the dark band uses --on-inverse-link instead
+     ============================================================ */
+  /* ---------- 3 · Brand red — the reference is a BRIGHT signal red, not
+     oxblood. The whole oxblood family (V3) is retired: the user's screenshots
+     show a red navigation bar, red links, red pill buttons and red icon work.
+     #D0202A keeps white text at 5.40:1 (AA body) while still reading as the
+     same bright red. ======================================================== */
+  --accent-800: #8E141C;
+  --accent-700: #B01B24;   /* link / accent hover · white 6.7:1 */
+  --accent-600: #D0202A;   /* ★ = --color-accent. White on it 5.40:1 · AA */
+  --accent-500: #E7242C;   /* bright UI red — large UI only (≥3:1), never body text */
+  --accent-300: #F2A6A6;   /* links on the dark band · 8.9:1 on #1A1917 */
+  --accent-200: #F7CCCC;
+  --accent-100: #FBECEC;
+  --accent-050: #FDF6F6;
+
+  /* ---------- 3b · SECOND action colour — DEEP INK GREEN (was teal) ----------
+     2026-09-17 user decision: teal (#0F766E) is the reference site's colour, but
+     that reference is a TOUR operator — teal reads "island / resort / travel".
+     This site is industrial: factory floors, production lines, factory audits.
+     Deep ink green keeps the exact cold-complement relationship to the brand red
+     (same visual tension, same separation in a button pair) while carrying an
+     industrial / manufacturing meaning. It is also roomier: white on it is
+     7.13:1 vs teal's 5.47:1, so large text and lighter tints stay AA.
+     -------------------------------------------------------------------------- */
+  --green-800: #14532D;    /* hover / pressed · white on it ~9:1 */
+  --green-700: #166534;    /* ★ button fill · white on it 7.13:1 AA */
+  --green-600: #15803D;    /* large UI / icons · 4.1:1 on white */
+  --green-100: #DCFCE7;
+  --green-050: #F0FDF4;
+
+  /* ---------- 4 · Ochre — status/decor only. NEVER the accent. ---------- */
+  --ochre-700: #6B4400;
+  --ochre-600: #8A5A00;
+  --ochre-500: #B07500;
+  --ochre-300: #F0C264;
+  --ochre-100: #FBF3E2;
+  --ochre-050: #FDF9F0;
+
+  /* ---------- 5 · Surfaces — the reference is WHITE-first. Its footer, its
+     section bands and its card field are all white or near-white; there is no
+     large dark region anywhere except the photograph. The warm page tint and
+     warm header grey are retired. ---------- */
+  --surface:           #FFFFFF;
+  --surface-page:      #FFFFFF;   /* body background */
+  --surface-tint:      #F6F8FA;   /* .section--alternate — cool light grey step */
+  --surface-sunken:    #EFF2F4;
+  --surface-inverse:   #1A1917;
+  --surface-inverse-2: #232120;
+  --header-bg:         #FFFFFF;
+
+  /* V2 semantic names — values re-pointed, names kept */
+  --color-bg:              var(--surface-page);
+  --color-surface:         var(--surface);
+  --color-surface-subtle:  var(--surface-sunken);
+  --color-surface-muted:   var(--ink-150);
+  --color-surface-inverse: var(--surface-inverse);
+
+  /* ---------- 6 · Text ---------- */
+  --text-primary:   #1A1917;   /* 17.57:1 on #FFF · 16.03:1 on page */
+  --text-secondary: #4A4642;   /*  9.35:1 on #FFF ·  8.53:1 on page */
+  --text-muted:     #616670;   /*  5.76:1 on #FFF (was warm #6B6560 @5.74) */
+  --text-disabled:  #9C948C;   /*  2.99:1 — DISABLED STATE ONLY, never body copy */
+  --text-on-dark:   #F5F2EE;   /* 15.74:1 on --surface-inverse */
+  --text-on-dark-2: #B4B9C3;   /*  8.92:1 (was warm #BDB7B0 @8.84) */
+  --text-on-dark-3: #8A8F99;   /*  5.41:1 (was warm #948D85 @5.36) */
+
+  --color-text:           var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-muted:     var(--text-muted);
+  --color-text-disabled:  var(--text-disabled);
+  --color-text-inverse:   var(--text-on-dark);
+  --color-text-inverse-2: var(--text-on-dark-2);
+  --color-text-inverse-3: var(--text-on-dark-3);
+
+  /* ---------- 7 · Borders — four tiers, each with one job (§4.2) ----------
+     V4 craft fix 2026-09-17: the whole ramp was WARM SAND (#E5E0D9…), a leftover
+     from the warm-cream V3 surfaces. On the now pure-white page those warm greys
+     read as yellowed / cheap. Re-axed to NEUTRAL COOL grey (the reference site
+     and every Elementor kit uses #eaeaea-class neutrals on white). */
+  --border-hairline-color: #E9EBEE;  /* 1.16:1 — card frames, container edges  */
+  --border-divider-color:  #E2E5E9;  /* 1.22:1 — between peers (rows, columns) */
+  --border-strong-color:   #CDD2D8;  /* 1.50:1 — table head rules, hover edge  */
+  --border-control-color:  #868D96;  /* 3.42:1 — inputs/checks/outline btn · WCAG 1.4.11 PASS */
+  --border-ink-color:      #1A1917;
+  --border-accent-color:   #F2C9CB;  /* 1.52:1 — decorative only (new red tint) */
+  --border-on-dark-color:  #33302C;
+  --border-on-dark-subtle: rgba(245, 242, 238, 0.16);
+  --grid-color:            #EFF1F4;
+  /* Hover edge for cards — neutral, per "one red per screen". A red hover on
+     every card meant a grid of six spent six units of brand red at once. */
+  --border-hover-color:    #AEB6C2;   /* 2.0:1 on white — visible, not coloured */
+
+  --color-border:          var(--border-hairline-color);
+  --color-border-strong:   var(--border-strong-color);
+  --color-border-emphasis: var(--border-ink-color);
+  --color-border-accent:   var(--border-accent-color);
+  --color-border-control:  var(--border-control-color);
+  --color-grid:            var(--grid-color);
+
+  /* composite shorthands */
+  --border-hairline:     1px solid var(--border-hairline-color);
+  --border-divider:      1px solid var(--border-divider-color);
+  --border-default:      1px solid var(--border-hairline-color);
+  --border-strong:       1px solid var(--border-strong-color);
+  --border-control:      1px solid var(--border-control-color);
+  --border-emphasis:     2px solid var(--border-ink-color);
+  --border-accent:       1px solid var(--border-accent-color);
+  /* RETIRED 2026-09-19 — the "3px red left rule" was shared by four different
+     blocks (.checklist, .caveat, .testimonial, .vet-link), which is why every
+     content block on every page looked like the same component. Each block now
+     has its own grammar; see the note in components.css §13. Nothing else should
+     reintroduce these — if a new block needs emphasis, give it a grammar no
+     existing block already uses. */
+  --border-accent-left:  3px solid var(--color-accent);
+  --border-caveat-left:  3px solid var(--ochre-600);
+  --border-danger:       1px solid var(--stop-border);
+  --border-dashed:       1px dashed var(--ink-300);
+
+  /* ---------- 8 · Action & accent — the primary button is the brand RED pill
+     (the reference's non-hero CTAs are red pills). The hero CTA may take the
+     teal step via .btn--teal, matching the reference's teal hero button. ---- */
+  --action-bg:         var(--accent-600);   /* ★ #D0202A. White text = 5.40:1 AA */
+  --action-bg-hover:   var(--accent-700);   /*   #B01B24 · 6.7:1 */
+  --action-bg-pressed: var(--accent-800);   /*   #8E141C */
+  --action-text:       #FFFFFF;
+  --focus-ring:        var(--accent-600);   /* 5.40:1 on #FFF */
+  --focus-ring-inverse: var(--accent-300);
+
+  --color-accent:         var(--accent-600);   /* 12.59:1 on #FFF · AAA */
+  --color-accent-hover:   var(--accent-700);
+  --color-accent-pressed: var(--accent-800);
+  --color-accent-tint:    var(--accent-100);
+  --color-accent-tint-2:  var(--accent-200);
+  /* 2026-09-17 "one red per screen": links were red too, which meant a page
+     carried red in the top rail + the primary button + every link + every icon.
+     Links now sit on the neutral ramp (still clearly darker than body copy) and
+     pick up the SECOND colour on hover, so "clickable" is signalled without
+     spending another unit of brand red. */
+  --color-link:           var(--ink-700);      /* 9.35:1 on #FFF */
+  --color-link-hover:     var(--green-700);    /* 7.13:1 — the second colour */
+
+  /* ---------- 9 · On-inverse — the dark band (explicit opt-in only, §3.4) ----------
+     Two whites, deliberately. --on-inverse-text is warm cream and is the BODY
+     colour; --on-inverse-text-strong is pure white and is the HEADING / strong
+     colour. They are not interchangeable — collapsing them to one value flattens
+     the top of the three-step greyscale (17.57 / 8.92 / 5.41).
+     (audit-visual.md P1-1: these two used to be an undeclared split between a
+     literal #FFFFFF and a token, with no way to tell which was correct.) */
+  --on-inverse-text-strong:    #FFFFFF;   /* 17.57:1 on #1A1917 */
+  --on-inverse-text:           #F5F2EE;   /* 15.74:1 on #1A1917 */
+  --on-inverse-text-secondary: #B4B9C3;   /*  8.92:1 (was warm #BDB7B0) */
+  --on-inverse-text-muted:     #8A8F99;   /*  5.41:1 · on #232120 (was warm #948D85) */
+  --on-inverse-link:           #E39A94;   /*  7.79:1 · 7.11:1 on #232120 */
+  --on-inverse-link-hover:     #EFC0BC;   /* 10.82:1 */
+  --on-inverse-border:         #33302C;
+  --on-inverse-border-subtle:  rgba(245, 242, 238, 0.16);
+  --on-inverse-surface:        #232120;
+  --on-inverse-grid:           rgba(245, 242, 238, 0.06);
+  --on-inverse-action-bg:      #FFFFFF;   /* band-internal primary: 17.57:1 */
+  --on-inverse-action-text:    #1A1917;
+
+  /* ---------- 10 · Status — colour is never the only signal (§3.3) ---------- */
+  --color-verified: var(--green-700);   /* the seal — check glyphs, tick lists. Was oxblood #6E000B; green is the universal "verified" signal and does not spend brand red. */
+  --verified-bg:    var(--accent-100);   /* 10.79:1 */
+
+  --color-success: #0E6B41;   /* 6.57:1 on #FFF · 6.57:1 with white text as a fill */
+  --success-bg:    #EDF6F1;   /* 5.96:1 */
+  --color-caution: #8A5A00;   /* 5.93:1 on #FFF · 5.37:1 on its own tint */
+  --caution-bg:    #FBF3E2;
+  --color-stop:    #A81E17;   /* 7.33:1 on #FFF · filled only, never outlined */
+  --stop-bg:       #FBECEA;   /* 6.39:1 */
+  --stop-border:   #E6A8A3;
+
+  --status-success-on-dark: #5FD39A;   /* 9.43:1 on #1A1917 */
+  --status-caution-on-dark: #F0C264;   /* 10.55:1 */
+  --status-stop-on-dark:    #F08A80;   /*  7.24:1 */
+  --status-caution-fill-text: #1A1917; /* dark text when caution is used as a solid fill */
+
+  /* V2 names kept as aliases */
+  --color-warning:      var(--color-caution);
+  --color-warning-text: var(--color-caution);
+  --warning-bg:         var(--caution-bg);
+  --color-danger:       var(--color-stop);
+  --danger-bg:          var(--stop-bg);
+  --danger-border:      var(--stop-border);
+
+  /* ---------- 11 · Third-party functional (not brand colours) ---------- */
+  --color-whatsapp:       #0F7A63;   /* white on it 5.27:1 ✅ */
+  --color-whatsapp-hover: #0C634F;   /* white on it 7.21:1 ✅ */
+  --color-whatsapp-glyph: #25D366;   /* ≤16px glyph only · 8.86:1 on #1A1917 */
+  --whatsapp-on-dark:     #25D366;
+
+  /* ---------- 12 · Scrims — thresholds derived in §8.3 ---------- */
+  --scrim-aa-floor:  0.55;   /* ≥4.5:1 for #FFF over a pure-white pixel */
+  --scrim-aaa-floor: 0.65;   /* ≥7:1   */
+  --scrim:        rgba(12, 11, 10, 0.72);   /* 8.9:1  — safe floor */
+  --scrim-strong: rgba(12, 11, 10, 0.86);   /* 13.9:1 — hostile photo */
+  --scrim-soft:   rgba(12, 11, 10, 0.48);   /* DECORATIVE ONLY — never put text on this */
+  --scrim-hero: linear-gradient(100deg,
+                  rgba(12,11,10,0.82) 0%,
+                  rgba(12,11,10,0.68) 42%,
+                  rgba(12,11,10,0.30) 72%,
+                  rgba(12,11,10,0.10) 100%);   /* text zone 0–42% ≥ 0.68 → AAA */
+  --scrim-card: linear-gradient(to top,
+                  rgba(12,11,10,0.88) 0%,
+                  rgba(12,11,10,0.66) 46%,
+                  rgba(12,11,10,0) 78%);       /* caption zone 0–46% ≥ 0.66 → AAA */
+  --scrim-top:  linear-gradient(to bottom,
+                  rgba(12,11,10,0.80) 0%,
+                  rgba(12,11,10,0.66) 62%,
+                  rgba(12,11,10,0) 100%);      /* over-hero header zone ≥ 0.66 */
+  --scrim-glow: 0 1px 3px rgba(12, 11, 10, 0.45);
+
+  /* ---------- 13 · Type scale (px values measured @ 1rem = 18px) ---------- */
+  --fs-hero-xl:    clamp(2.75rem,   1.7rem  + 4.6vw, 4rem);        /* 49.5 → 72 */
+  --fs-hero:       clamp(2.5rem,    1.6rem  + 4vw,   3.5rem);      /* 45   → 63 */
+  --fs-display:    clamp(2rem,      1.45rem + 2.4vw, 2.6667rem);   /* 36   → 48 */
+  --fs-h2:         clamp(1.5rem,    1.25rem + 1.1vw, 1.9444rem);   /* 27   → 35 */
+  --fs-h3:         clamp(1.25rem,   1.15rem + 0.5vw, 1.3889rem);   /* 22.5 → 25 */
+  --fs-h4:         1.1667rem;                                      /* 21 */
+  --fs-h5:         1rem;                                           /* 18 */
+  --fs-h6:         0.8333rem;                                      /* 15 */
+  --fs-lead:       clamp(1.1667rem, 1.05rem + 0.5vw, 1.3333rem);   /* 21   → 24 */
+  --fs-body-lg:    1.0556rem;                                      /* 19 */
+  --fs-body:       1rem;                                           /* 18 — floor */
+  --fs-body-sm:    0.8889rem;                                      /* 16 — floor */
+  --fs-caption:    0.7778rem;                                      /* 14 */
+  --fs-label:      0.6667rem;                                      /* 12 — uppercase field labels */
+  --fs-micro:      0.6111rem;                                      /* 11 — plate names, codes */
+  --fs-data-xl:    clamp(2.5rem,    1.7rem  + 3.4vw, 3.5rem);      /* 45   → 63 */
+  --fs-data-lg:    clamp(1.5rem,    1.25rem + 1.1vw, 2rem);        /* 27   → 36 */
+  --fs-data:       1.3333rem;                                      /* 24 */
+
+  /* legacy alias — components.css still references it */
+  --fs-display-xl: var(--fs-hero-xl);
+
+  /* ---------- 14 · Typography metrics — serif ≠ sans tracking (§2.6) ---------- */
+  --lh-hero:    1.15;
+  --lh-display: 1.16;
+  --lh-h1:      1.18;
+  --lh-h2:      1.22;   /* reference uses 1.3 — deviation justified in §2.5 */
+  --lh-h3:      1.28;
+  --lh-h4:      1.32;
+  --lh-h5:      1.35;
+  --lh-lead:    1.55;
+  --lh-body:    1.65;   /* reference value — do not change */
+  --lh-sm:      1.55;
+  --lh-label:   1.30;
+
+  /* Tracking is calibrated for SANS display, not serif.
+     (Was: hero -0.004em with the comment "serif wants ~0" — that note described
+     an alphabet we no longer ship; tokens.css §1 has display on the same sans
+     stack as body since the V3 rework.)
+     At -0.004em a 63px h1 was tightened by 0.19px — indistinguishable from body
+     copy, so the biggest type on the page read LOOSER than the text under it.
+     Bold sans above ~40px wants roughly -0.015em to -0.03em:
+       h1 63px  -0.020em -> -1.26px      display-xl 72px -> -1.44px
+       h2 35px  -0.015em -> -0.53px
+       h3 25px  -0.010em -> -0.25px
+     Judgement values — tune by eye at 1440 if a heading ever looks cramped. */
+  --ls-hero:    -0.020em;
+  --ls-display: -0.020em;
+  --ls-h1:      -0.020em;
+  --ls-h2:      -0.015em;
+  --ls-h3:      -0.010em;
+  --ls-h4:       0;
+  --ls-lead:     0;
+  --ls-body:     0;
+  --ls-label:    0.09em;    /* uppercase micro-labels */
+  --ls-micro:    0.07em;    /* plate names */
+  --ls-mono-tag: 0.05em;
+  --ls-overline: 0.12em;    /* utility rail */
+
+  --fw-regular:  400;
+  --fw-medium:   500;
+  --fw-semibold: 600;
+  --fw-bold:     700;
+
+  --measure:      68ch;   /* ≈65–75 characters at 18px */
+  --measure-wide: 76ch;
+
+  /* ---------- 15 · Spacing — px on purpose; does NOT scale with the root (§2.4) ---------- */
+  --space-0:  0;
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-14: 56px;
+  --space-16: 64px;
+  --space-20: 80px;
+  --space-24: 96px;
+  --space-32: 128px;
+
+  /* ---------- 16 · Section rhythm — reference: 100 / 50 / 30 (§5.3) ---------- */
+  --section-py:       clamp(2.778rem, 1.6rem  + 5.5vw, 5.556rem);  /* 50  → 100 */
+  --section-py-tight: clamp(2rem,     1.2rem  + 3.4vw, 3.333rem);  /* 36  → 60  */
+  --section-py-hero:  clamp(3.333rem, 1.9rem  + 6vw,   6.667rem);  /* 60  → 120 */
+
+  /* ---------- 17 · Layout & grid ---------- */
+  --container-prose: 68ch;
+  /* Widened 960 → 1100 → 1200 to stop whole sections reading as thin ribbons on
+     wide screens. Text is still clamped to --measure (68ch), so this only widens
+     media, forms and grids — never a line of body copy. */
+  --container-md:    1200px;   /* narrow content column (destinations, industries) */
+  --container-lg:    1320px;   /* ★ default */
+  --container-px:    clamp(20px, 3.2vw, 35px);   /* reference 35px desktop */
+
+  --grid-cols:   4;
+  --grid-gap:    var(--space-4);
+  --header-h:    64px;    /* px, NOT rem — must not scale with the root (§9.2) */
+  --rail-h:      40px;    /* utility rail, mobile */
+  --bottombar-h: 64px;
+
+  /* Card media — one value per viewport ⇒ every card in a grid matches (§7.2) */
+  --card-media-h: clamp(160px, 20vw, 220px);
+  --card-padding: var(--space-6);
+
+  /* Media ratios */
+  --ratio-hero:   16 / 9;
+  --ratio-media:   4 / 3;
+  --ratio-card:   16 / 9;
+  --ratio-thumb:   3 / 2;
+  --ratio-avatar:  1 / 1;
+  --ratio-strip:  21 / 9;
+  --ratio-doc:     1 / 1.414;
+  --ratio-plate:  16 / 9;
+
+  /* Breakpoints — documentation only; media queries must hard-code these */
+  --bp-sm:  480px;
+  --bp-md:  768px;
+  --bp-lg:  1024px;
+  --bp-xl:  1280px;
+  --bp-2xl: 1440px;
+
+  /* ---------- 18 · Radius — the reference is a SOFT-ROUNDED site: card images
+     ≈ 10-12px, panels ≈ 12-14px, and every button is a full pill. The V3
+     "restrained 3/4/5" scale was copied from the wrong reference site. */
+  --radius-none:   0;
+  --radius-xs:     6px;     /* badges, tags, status pills */
+  --radius-sm:     10px;    /* inputs, chips */
+  --radius-md:     12px;    /* small cards, fact blocks, note strips */
+  --radius-lg:     14px;    /* cards, dropdown cards, form shells */
+  --radius-xl:     16px;    /* large panels, hero media frame */
+  --radius-2xl:    20px;    /* full-bleed hero media (desktop) */
+  --radius-circle: 50%;
+  --radius-pill:   999px;   /* EVERY button — the reference's signature control */
+
+  /* ---------- 19 · Shadows — reference values, tiered by MEANING (§4.4) ----------
+     V4 craft fix 2026-09-17. Two problems fixed:
+     (a) cards sat at --shadow-none (perfectly flat = cheap on white) and their
+         hover used the near-invisible --shadow-sm. Elementor/Astra cards carry a
+         SOFT TWO-LAYER shadow even at rest: a tight 1-2px contact shadow plus a
+         wide 16-40px ambient one. One layer alone always looks dirty or flat.
+     (b) --shadow-accent / --shadow-focus still used the dead oxblood
+         rgb(110,0,11). Re-pointed to the live brand red #D0202A. */
+  --shadow-none:   none;
+  --shadow-xs:     0 1px 2px rgba(16, 24, 40, 0.05);              /* at rest, tiny */
+  --shadow-card:   0 1px 2px rgba(16, 24, 40, 0.04),
+                   0 6px 16px rgba(16, 24, 40, 0.06);             /* ★ cards AT REST */
+  --shadow-sm:     0 2px 4px rgba(16, 24, 40, 0.05),
+                   0 8px 20px rgba(16, 24, 40, 0.06);             /* lifted (hover/focus) */
+  --shadow-card-hover:
+                   0 4px 8px rgba(16, 24, 40, 0.06),
+                   0 18px 40px rgba(16, 24, 40, 0.10);            /* ★ cards ON HOVER */
+  --shadow-md:     0 8px 12px rgba(51, 65, 80, 0.06),
+                   0 14px 44px rgba(51, 65, 80, 0.11);            /* floating layer */
+  --shadow-lg:     0 16px 48px rgba(0, 0, 0, 0.18);               /* modal / large media hover */
+  --shadow-sticky: 0 1px 0 rgba(26, 25, 23, 0.06),
+                   0 4px 16px rgba(26, 25, 23, 0.06);             /* header on scroll */
+  --shadow-accent: 0 2px 8px rgba(208, 32, 42, 0.30);             /* ≤1 per page */
+  --shadow-focus:  0 0 0 3px rgba(208, 32, 42, 0.26);             /* supplement, never a substitute */
+  /* The green counterpart to --shadow-accent, which never existed: the green
+     primary button wrote its hover halo inline twice, at 0.30 and 0.35 alpha for
+     what is the same button recoloured for the dark hero. Split the difference
+     and tokenise it so the two cannot drift again. (audit-visual.md P2-2)
+     --shadow-accent-red (below) is the 6/16 geometry used by the big CTAs; it
+     stays a literal on purpose because it is the one brand-red glow on the page
+     and is documented as such at components.css. */
+  --shadow-accent-green: 0 6px 16px rgba(22, 101, 52, 0.32);      /* --green-700 */
+
+  /* ---------- 20 · Motion ---------- */
+  --duration-instant: 80ms;
+  --duration-fast:    150ms;
+  --duration-base:    220ms;
+  --duration-slow:    360ms;
+  --duration-slower:  560ms;
+
+  /* V4 craft fix: (0.22,1,0.36,1) brakes too hard at the end — it reads as a
+     "snap". (0.16,1,0.3,1) is the softer expo-out that Elementor/modern kits
+     use; the extra --duration-media is for image scale, which must be SLOWER
+     than the box it sits in or the two motions fight each other. */
+  --ease-out:    cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-spring: cubic-bezier(0.34, 1.4, 0.64, 1);   /* FAB + success state only */
+  --duration-media: 600ms;
+
+  /* ---------- 21 · Z-index ---------- */
+  --z-base:     0;
+  --z-raised:   10;
+  --z-fab:      80;
+  --z-sticky:   100;
+  --z-dropdown: 200;
+  --z-overlay:  300;
+  --z-modal:    400;
+  --z-toast:    500;
+
+  /* ---------- 22 · CoverageMap — re-pointed to the oxblood ramp (§9.2) ---------- */
+  --map-grid-size:     24px;
+  --map-tier1-fill:    #6E000B;   /* white text inside: 12.59:1 ✅ */
+  --map-tier1-text:    #FFFFFF;
+  --map-tier1-r:       12;
+  --map-tier2-fill:    #F6EBEA;   /* #5C000A text inside: 12.33:1 ✅ */
+  --map-tier2-text:    #5C000A;
+  --map-tier2-stroke:  #EFC0BC;
+  --map-tier2-r:       11;
+  --map-tier3-fill:    #FFFFFF;   /* #1A1917 text inside: 17.57:1 ✅ */
+  --map-tier3-text:    #4A4642;
+  --map-tier3-stroke:  #B9BEC8;
+  --map-tier3-r:       11;
+  --map-code-size:     11px;
+  --map-name-size:     12px;
+  --map-region-t1-bg:     #F6EBEA;
+  --map-region-t1-border: #EFC0BC;
+  --map-region-t2-bg:     #E6EBF5;
+  --map-region-t2-border: #B9BEC8;
+  --map-link-stroke:      #B9BEC8;
+
+  /* ---------- 23 · Track energy — default = neutral ---------- */
+  /* V3: the energy split no longer rides on background colour (§5.3) */
+  --track-section-py:    1;
+  --track-media-ratio:   16 / 9;
+  --track-media-radius:  var(--radius-xl);
+  --track-radius-card:   var(--radius-lg);
+  --track-accent-fill:   0;
+  --track-display-scale: 1;
+  --track-motion-enter:  var(--duration-base);
+  --track-motion-shift:  0px;
+  --track-grid-gap:      var(--space-6);
+  --track-bg-alternate:  var(--surface-tint);
+}
+
+/* ============================================================
+   Breakpoints — media queries must hard-code the widths
+   ============================================================ */
+@media (min-width: 480px) {
+  :root { --rail-h: 36px; }
+}
+@media (min-width: 768px) {
+  :root {
+    --grid-cols: 8;
+    --grid-gap: var(--space-6);
+    --rail-h: 36px;
+    --card-padding: var(--space-6);
+  }
+}
+@media (min-width: 1024px) {
+  :root {
+    --grid-cols: 12;
+    --grid-gap: var(--space-8);
+    --header-h: 84px;   /* desktop primary bar height */
+  }
+}
+
+/* ============================================================
+   Track: CREATOR — higher energy, expressed through SPACE and MOTION,
+   not through turning the page dark. Dark bands stay opt-in (§3.4).
+   ============================================================ */
+[data-track="creator"] {
+  --track-section-py:    0.9;
+  --track-media-ratio:   4 / 3;
+  --track-media-radius:  var(--radius-2xl);
+  --track-radius-card:   var(--radius-xl);
+  --track-accent-fill:   1;
+  --track-display-scale: 1;
+  --track-motion-enter:  280ms;
+  --track-motion-shift:  8px;
+  --track-grid-gap:      var(--space-4);
+  --track-bg-alternate:  var(--surface-tint);
+}
+
+/* ============================================================
+   Track: BUYER — lower energy: more room, calmer motion, quieter media
+   ============================================================ */
+[data-track="buyer"] {
+  --track-section-py:    1.15;
+  --track-media-ratio:   21 / 9;
+  --track-media-radius:  var(--radius-sm);
+  --track-radius-card:   var(--radius-md);
+  --track-accent-fill:   0;
+  --track-display-scale: 0.88;
+  --track-motion-enter:  160ms;
+  --track-motion-shift:  0px;
+  --track-grid-gap:      var(--space-8);
+  --track-bg-alternate:  var(--surface-tint);
+}
+
+/* ============================================================
+   DEPRECATED — V2 primitive ramps, re-pointed to the V3 ramps.
+   Keeps ~60 direct references in components.css rendering correctly
+   while they are migrated selector by selector (§9.1).
+   DELETE when:  grep -c 'var(--graphite-\|var(--teal-\|var(--oxide-' src/styles/components.css  ==  0
+   ============================================================ */
+:root {
+  --graphite-950: var(--ink-1000);
+  --graphite-900: var(--ink-950);
+  --graphite-800: var(--ink-800);
+  --graphite-700: var(--ink-700);
+  --graphite-600: var(--ink-600);
+  --graphite-500: var(--ink-500);
+  --graphite-400: var(--ink-400);
+  --graphite-300: var(--ink-300);
+  --graphite-200: var(--ink-200);
+  --graphite-100: var(--ink-100);
+  --graphite-050: var(--ink-050);
+
+  /* --teal-* aliases REMOVED 2026-09-14: V3 now defines REAL teal values
+     (--teal-700/500/100/050 at §1). These aliases re-pointed teal to accent
+     (red) LATER in the cascade, silently overriding them — the bug that made
+     .btn--teal and .split-card--buyer icons render red. */
+
+  --oxide-700: var(--ochre-700);
+  --oxide-600: var(--ochre-600);
+  --oxide-200: var(--ochre-100);
+  --oxide-100: var(--ochre-050);
+}
+
+/* V3 does not ship a dark theme. [data-theme="dark"] is deliberately removed:
+   its 40+ values were a mirror of the V2 palette and would now render a
+   distorted, half-migrated theme. Re-derive from --ink-* / --accent-* if needed. */

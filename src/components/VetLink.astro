@@ -1,0 +1,31 @@
+---
+/* Mandatory vetting cross-link (brief §5.3 rule 1) — present on every page. */
+import Icon from './Icon.astro';
+import { VET_STEPS_INLINE } from '../data/site.ts';
+
+interface Props {
+  title?: string;
+  desc?: string;
+  href?: string;
+  label?: string;
+}
+const {
+  title = 'Before you book: how we verify a factory',
+  /* Built from VET_STEPS_INLINE so the step names cannot drift from
+     /about/how-we-vet-factories/ — see the note on VET_STEPS in site.ts. */
+  desc = `Five checks per factory, written out step by step — ${VET_STEPS_INLINE}.`,
+  href = '/about/how-we-vet-factories/',
+  label = 'See the vetting method',
+} = Astro.props;
+---
+<div class="vet-link">
+  {/* Circular badge, replacing the red left rule this block used to share with
+      the checklist, caveat and quote blocks. Verification wear s the house
+      check ink; the badge is the page's only round verification token. */}
+  <span class="vet-link__badge" aria-hidden="true"><Icon name="check" size={20} /></span>
+  <div class="vet-link__copy">
+    <p class="vet-link__title u-mb-0">{title}</p>
+    <p class="vet-link__desc">{desc}</p>
+  </div>
+  <p class="vet-link__action u-mb-0"><a class="btn btn--secondary" href={href}>{label}</a></p>
+</div>

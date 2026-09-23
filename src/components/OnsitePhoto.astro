@@ -1,0 +1,37 @@
+---
+/**
+ * OnsitePhoto — one of the real factory-visit photographs (public/images/onsite/).
+ *
+ * One line per call site; dimensions, srcset and default alt text all come from
+ * src/data/onsite-photos.ts, so no call site ever repeats a number.
+ *
+ * Files are pre-optimised (mozjpeg q78, 1400w master + 700w variant), so there
+ * is no build-time image pipeline: a plain <img> with explicit width/height,
+ * which is what keeps the plate from reflowing when the photo lands.
+ */
+import { ONSITE_PHOTOS, type PhotoId } from '../data/onsite-photos.ts';
+
+interface Props {
+  id: PhotoId;
+  /** Override only when the surrounding copy justifies a more specific alt. */
+  alt?: string;
+  /** Above-the-fold slots (heroes) only. */
+  eager?: boolean;
+}
+
+const { id, alt, eager = false } = Astro.props;
+const p = ONSITE_PHOTOS[id];
+const src700 = `/images/onsite/onsite-${id}@700.jpg`;
+const srcFull = `/images/onsite/onsite-${id}.jpg`;
+---
+
+<img
+  src={srcFull}
+  srcset={`${src700} 700w, ${srcFull} ${p.w}w`}
+  sizes="(max-width: 720px) 100vw, 45vw"
+  alt={alt ?? p.alt}
+  width={p.w}
+  height={p.h}
+  loading={eager ? 'eager' : 'lazy'}
+  decoding="async"
+/>

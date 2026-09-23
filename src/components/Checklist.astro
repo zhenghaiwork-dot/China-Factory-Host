@@ -1,0 +1,29 @@
+---
+import Icon from './Icon.astro';
+interface Props {
+  items: string[];
+  title?: string;
+  numbered?: boolean;
+  plain?: boolean;
+  /** A list of things we DECLINE to do. The oxblood check is the site's single
+      "verified" stamp, so ticking a refusal with it reads as "confirmed: we do
+      this" — refusals get a neutral rule in secondary ink instead (critique M6). */
+  refusal?: boolean;
+}
+const { items, title, numbered, plain, refusal } = Astro.props;
+---
+<div class:list={['checklist', { 'checklist--plain': plain, 'checklist--refusal': refusal }]}>
+  {title && <p class="checklist__title">{title}</p>}
+  <ul class="checklist__list">
+    {
+      items.map((it, i) => (
+        <li>
+          {numbered ? <span class="checklist__num">{String(i + 1).padStart(2, '0')}.</span> : null}
+          {!numbered && refusal && <span class="checklist__rule" aria-hidden="true"></span>}
+          {!numbered && !refusal && <Icon name="check" size={18} />}
+          <span>{it}</span>
+        </li>
+      ))
+    }
+  </ul>
+</div>

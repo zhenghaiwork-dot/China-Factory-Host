@@ -1,0 +1,209 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Section from '../../../components/Section.astro';
+import SectionHead from '../../../components/SectionHead.astro';
+import PhotoSlot from '../../../components/PhotoSlot.astro';
+import OnsitePhoto from '../../../components/OnsitePhoto.astro';
+import Checklist from '../../../components/Checklist.astro';
+import ProcessSteps from '../../../components/ProcessSteps.astro';
+import Caveat from '../../../components/Caveat.astro';
+import FAQ from '../../../components/FAQ.astro';
+import Icon from '../../../components/Icon.astro';
+import RelatedNav from '../../../components/RelatedNav.astro';
+import { waLink } from '../../../data/site.ts';
+
+const title = 'Factory matching — find the right manufacturers before you fly';
+const description =
+  'You know the product but not the region. We name the right cluster, build a candidate pool, pre-screen it, and hand you a shortlist worth visiting.';
+
+const wa = waLink('Hi, I need help finding factories for my product in China.');
+
+const steps = [
+  { n: '01', title: 'Define the spec', body: 'Product, material, quantity, target quality and the certifications your market requires. A spec that is vague produces a shortlist that is vague.', evidence: ['Product and material locked down', 'Quantity, annual and per order, stated', 'Certification requirements named'] },
+  { n: '02', title: 'Name the cluster', body: 'The region that actually makes your category — not the city with the best airport. This is where a category error becomes a two-day travel error.', evidence: ['Category matched to the right cluster', 'The reasoning explained, not just the name'] },
+  { n: '03', title: 'Build and pre-screen the pool', body: 'A candidate pool wider than what you need, cut down with the five checks. The shortlist is what survives the check, not what you started with.', evidence: ['Licence and scope checked', 'Address and capacity verified', 'The failures removed and documented'] },
+  { n: '04', title: 'Hand over the shortlist', body: 'The survivors, arranged for visiting, with the reason each one made it. Then the visit does the work the shortlist prepared for.', evidence: ['A shortlist worth visiting, not a spreadsheet', 'Each entry tied to the check that passed'] },
+];
+
+const needFromYou = [
+  { k: 'Product and material', v: 'What it is and what it is made of. Material is the second filter after category.' },
+  { k: 'Quantity', v: 'Annual and per order, stated separately — suppliers price them differently.' },
+  { k: 'Target price', v: 'A number, so the factory knows whether it is in the running.' },
+  { k: 'Destination market', v: 'Which market, because the certification requirements follow from it.' },
+  { k: 'Custom or stock', v: 'A stock shape you can buy is a market order; a custom mould is a tooling order.' },
+];
+
+const scoring = [
+  { k: 'Cluster fit', v: 'Is the factory in the cluster that makes your category, or is it a generalist claiming to?' },
+  { k: 'Capacity match', v: 'Can it hold your volume, or are you a rounding error in someone else’s plant?' },
+  { k: 'Certification match', v: 'Does it already hold the certificates your market requires?' },
+  { k: 'MOQ fit', v: 'Is your order its normal minimum, or a favour it will deprioritise?' },
+];
+
+const faqs = [
+  { q: 'I do not know which city makes my product.', a: ['That is the most common starting point. Tell us the category and quantity, and we name the cluster — and explain why it is that city and not the one with the better airport.'] },
+  { q: 'How is matching different from a visit?', a: ['Matching produces the shortlist. The visit is what you do with it. Most people want both, in that order.'] },
+  { q: 'Do you take a cut from the factories you recommend?', a: ['No. We are paid by you, so a factory gets onto the shortlist because it fits your spec, not because it pays us to be there.'] },
+  { q: 'How many factories will I end up with?', a: ['Enough to compare, not enough to waste a week. Usually three to five survivors, each tied to the check that passed — the number depends on your category, not a target we force.'] },
+  { q: 'What if my category is too small or too niche?', a: ['We will say so, and point you at who serves it better. Matching a category we do not know is how we would hand you a bad shortlist, and we would rather not.'] },
+  { q: 'Can you match me without me visiting?', a: ['We can build and pre-screen the shortlist remotely, but the verification is only as good as the floor. The shortlist prepares for the visit; it does not replace it.'] },
+  { q: 'What if a matched factory does not respond?', a: ['We move down the shortlist. That is why it has more entries than you need — a silence does not stall the whole trip.'] },
+  { q: 'Do you charge per factory matched?', a: ['No. We charge for the trip and the coordination, not per factory. The shortlist is not a lead list we sell; it is the plan for your visit.'] },
+  { q: 'What is the difference between matching and vetting?', a: ['Matching finds the factories; vetting checks them. Both happen before you fly, but they answer different questions — where to go, versus whether the name is real.'] },
+  { q: 'Do you work through agents or resellers?', a: ['We work for the buyer, directly. We do not take factory commissions, and we do not white-label our service through intermediaries.'] },
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  active="services"
+  crumbs={[{ href: '/services/', label: 'Services' }]}
+  current="Factory matching"
+  cta={{
+    eyebrow: 'Next step',
+    title: 'Tell us the product. We will name the cluster.',
+    lead: 'Category and quantity are enough to start. You get a shortlist worth visiting, not a spreadsheet of strangers.',
+    primary: { label: 'Find my factories', href: '/contact/' },
+    secondary: { label: 'Ask on WhatsApp', href: wa, external: true },
+  }}
+>
+  <section class="hero">
+    <div class="container">
+      <div class="split-7-5">
+        <div>
+          <p class="eyebrow">Factory matching</p>
+          <h1>Know the product, not the region? Start here.</h1>
+          <p class="lead hero__lead">
+            China is not one place — it is a set of specialised clusters. The wrong city costs you
+            two travel days and shows you factories that were never going to make your product.
+          </p>
+          <div class="btn-row">
+            <a class="btn btn--primary" href="/contact/">Find my factories</a>
+            <a class="btn btn--secondary" href="/destinations/">See the clusters</a>
+          </div>
+        </div>
+        <div class="hero__media">
+          <PhotoSlot name="MATCH · THE SHORTLIST" variant="media">
+            <OnsitePhoto id="04" />
+          </PhotoSlot>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Section>
+    <div class="container container--md">
+      <SectionHead
+        eyebrow="The process"
+        title="From spec to shortlist."
+        lead="Matching is not a desk search with a nicer name. It is a spec turned into a cluster, a cluster turned into candidates, and candidates cut down by the checks."
+      />
+      <ProcessSteps items={steps} />
+      <p class="u-mt-6">
+        The cluster is named by the <a href="/tools/china-manufacturing-hub-finder/">manufacturing hub finder</a>, and the checks are the same
+        <a href="/about/how-we-vet-factories/">five vetting checks</a> run on every factory.
+      </p>
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container container--md">
+      <SectionHead eyebrow="What we need" title="The inputs that make the shortlist real." />
+      <ul class="spec-list clean">
+        {needFromYou.map((n) => (
+          <li>
+            <span class="spec-list__k">{n.k}</span><span class="spec-list__v">{n.v}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </Section>
+
+  <Section>
+    <div class="container container--md">
+      <SectionHead eyebrow="How we score" title="What puts a factory on the shortlist." />
+      <ul class="spec-list clean">
+        {scoring.map((s) => (
+          <li>
+            <span class="spec-list__k">{s.k}</span><span class="spec-list__v">{s.v}</span>
+          </li>
+        ))}
+      </ul>
+      <p class="u-mt-6">
+        <a class="link-arrow" href="/tools/factory-visit-scorecard/">
+          See the full six-dimension scorecard
+          <Icon name="arrow" size={14} />
+        </a>
+      </p>
+    </div>
+  </Section>
+
+  <Section>
+    <div class="container container--md">
+      <SectionHead eyebrow="Worked through" title="Three products, three matches." />
+      <ul class="spec-list clean">
+        <li><span class="spec-list__k">A 30ml serum bottle, private label, 5,000 units</span><span class="spec-list__v"><a href="/destinations/guangzhou-dongguan/">Guangzhou / Dongguan</a>. The packaging supplier and the filling plant are two companies there, and the cluster puts them close together.</span></li>
+        <li><span class="spec-list__k">A custom injection-moulded toy, 10,000 units</span><span class="spec-list__v"><a href="/destinations/guangzhou-dongguan/">Dongguan</a> or Shantou. The tooling and the injection capacity sit in the toy cluster, and the MOQ is set by the mould.</span></li>
+        <li><span class="spec-list__k">Five hundred stock kitchen gadgets</span><span class="spec-list__v"><a href="/destinations/yiwu/">Yiwu</a>. A stock shape at low quantity is a market order, and Yiwu is built around that.</span></li>
+      </ul>
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container container--md">
+      <SectionHead eyebrow="The three stages" title="Matching, a visit and a full trip are different things." />
+      <ul class="spec-list clean">
+        <li><span class="spec-list__k">Matching</span><span class="spec-list__v">Produces the shortlist — spec-driven and largely remote.</span></li>
+        <li><span class="spec-list__k">A visit</span><span class="spec-list__v">Verifies the shortlist on the floor, as in an <a href="/services/existing-supplier-visits/">existing-supplier visit</a>.</span></li>
+        <li><span class="spec-list__k">A full trip</span><span class="spec-list__v">Matching plus visiting plus <a href="/china-sourcing-trips/">the follow-through</a>, in one booking.</span></li>
+      </ul>
+    </div>
+  </Section>
+
+  <Section>
+    <div class="container container--md">
+      <SectionHead eyebrow="How long" title="How long matching takes." />
+      <ul class="spec-list clean">
+        <li><span class="spec-list__k">It depends on the category</span><span class="spec-list__v">A well-documented category moves faster than an unusual one.</span></li>
+        <li><span class="spec-list__k">It depends on the checks</span><span class="spec-list__v">Registration checks are quick; capacity and floor checks need a visit.</span></li>
+        <li><span class="spec-list__k">We will give you a window</span><span class="spec-list__v">Not a promise we cannot keep — a realistic window for your specific category.</span></li>
+      </ul>
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container container--md">
+      <Caveat
+        title="What matching does not do"
+        body="We shortlist and verify. We do not pretend a desk search is a factory visit."
+        items={[
+          'We do not hand you an un-vetted spreadsheet and call it a shortlist.',
+          'We do not guarantee a factory will accept your order — we get you to the right doors, then the visit does the work.',
+          'We do not build remote supplier lists for a flat fee and call it sourcing. Matching is the front half of a trip, not a substitute for one.',
+        ]}
+      />
+    </div>
+  </Section>
+
+  <Section>
+    <div class="container">
+      <SectionHead title="Questions about finding factories." />
+      <FAQ items={faqs} />
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container">
+      <SectionHead eyebrow="Where next" title="Related pages." />
+      <RelatedNav
+        items={[
+          { k: 'Tool', t: 'Manufacturing hub finder', href: '/tools/china-manufacturing-hub-finder/' },
+          { k: 'Page', t: 'All destinations', href: '/destinations/' },
+          { k: 'Service', t: 'Visit existing suppliers', href: '/services/existing-supplier-visits/' },
+          { k: 'Plan', t: 'Plan my trip', href: '/plan-my-trip/' },
+        ]}
+      />
+    </div>
+  </Section>
+</BaseLayout>

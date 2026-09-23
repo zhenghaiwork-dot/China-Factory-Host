@@ -1,0 +1,85 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import DestinationPage from '../../../components/DestinationPage.astro';
+
+const title = 'Zhejiang factory visits — the home cluster';
+const description =
+  'Zhejiang is our home base: Yiwu small commodities, Ningbo hardware and appliances, Hangzhou electronics and textiles, Shaoxing fabrics. Hosted visits across the province.';
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  track="neutral"
+  active="destinations"
+  crumbs={[{ href: '/destinations/', label: 'Destinations' }]}
+  current="Zhejiang"
+  cta={{
+    eyebrow: 'Next step',
+    title: 'Plan a Zhejiang trip across the clusters you actually need.',
+    lead: 'Tell us the category. We will say which cities in the province deserve your days.',
+    primary: { label: 'Plan my Zhejiang trip', href: '/contact/' },
+    form: { destination: 'Zhejiang' },
+  }}
+>
+  <DestinationPage
+    region="Zhejiang"
+    cityShort="Zhejiang"
+    slotName="ZJ CLUSTER MAP"
+    h1="Zhejiang: the province where most shortlists start."
+    lead="This is home. Yiwu, Ningbo, Hangzhou and Shaoxing sit within a working radius of each other, which means a trip here can combine a market, large plants and textile mills without losing days to travel."
+    micro={[
+      'Yiwu small commodities',
+      'Ningbo hardware, appliances, new-energy',
+      'Hangzhou electronics & textiles',
+    ]}
+    facts={[
+      { k: 'Presence', v: 'Home base', note: 'Our daily ground. The clusters here are where we run most shortlists.' },
+      { k: 'Cluster variety', v: 'High', note: 'Market, large-plant and textile clusters all within reach.' },
+      { k: 'Travel between', v: 'Short', note: 'Adjacent cities, so a multi-city route is genuinely efficient here.' },
+    ]}
+    why={[
+      'Zhejiang is not one industry — it is several tight clusters side by side. Yiwu trades small commodities, Ningbo makes hardware and appliances, Hangzhou does electronics and textiles, and Shaoxing/Keqiao is the fabric hub.',
+      'The practical win is density: you can see a product sold in Yiwu and made in Ningbo within the same trip, because the two are a short transfer apart rather than a flight.',
+      'Because it is our home base, the vetting is deepest here. We have walked these floors repeatedly, and the shortlists come from people we have actually met.',
+      'The trade-off is that Zhejiang is not where you go for electronics of the Shenzhen kind, or for the very highest private-label density of Guangdong. Different clusters, different trips.',
+    ]}
+    markets={[
+      { k: 'Small commodities', v: 'Yiwu — the market plus the manufacturing hinterland behind it.' },
+      { k: 'Hardware & appliances', v: 'Ningbo and its belt — presses, tooling, documented process control.' },
+      { k: 'Electronics & textiles', v: 'Hangzhou — assembly and finishing, with a growing engineering scene.' },
+      { k: 'Fabrics', v: 'Shaoxing / Keqiao — the textile market and the mills behind it.' },
+    ]}
+    itinTitle="Three to five days, two clusters."
+    itinLead="A typical Zhejiang trip combines a market day with two or three factory days, without a transfer day in between."
+    itinerary={[
+      { day: 'DAY 1', time: 'YIWU', title: 'Market day', desc: 'The districts relevant to your category, collecting prices and MOQs in a structured list.', slot: 'YIW · MARKET' },
+      { day: 'DAY 2', time: 'YIWU', title: 'Factory behind the market', desc: 'Out to the manufacturing towns to meet the suppliers behind the stalls.', slot: 'YIW · FACTORY' },
+      { day: 'DAY 3', time: 'NINGBO', title: 'Large plant', desc: 'A full-site visit for the tooling-led part of your product.', slot: 'NGB · PLANT' },
+      { day: 'DAY 4', time: 'HANGZHOU', title: 'Assembly or textile', desc: 'Depending on category, an electronics or textile visit.', slot: 'HGH · FLOOR' },
+    ]}
+    filmLead="Home advantage — the clusters we know best are the ones where we can be most accurate about what will get filmed."
+    film={{
+      answer: 'Usually yes, with lead time varying by cluster — Yiwu is fast, Ningbo large plants are slow.',
+      lead: 'Two to four weeks depending on the cluster.',
+      refused: 'NDA lines, clean rooms and anything running a foreign-brand order.',
+      note: 'The answer depends on the cluster, not just the category — we will be specific for your route.',
+    }}
+    seasons={[
+      'Best months: March–June and September–November.',
+      'Chinese New Year shuts the province for one to three weeks.',
+      'The October National Day week is a hard shutdown for most plants.',
+    ]}
+    timingWarnings={[
+      '<b>Treating Zhejiang as one city.</b> The clusters are close, but a Yiwu market day and a Ningbo plant visit are different days.',
+      '<b>Expecting Yiwu pricing in Ningbo.</b> Market-floor economics and tooling-led economics are not the same thing.',
+    ]}
+    vetDesc="Home base means the vetting here is the deepest on the site — but it also means we know exactly where the intermediaries hide."
+    related={[
+      { k: 'Destination', t: 'Yiwu', href: '/destinations/yiwu/' },
+      { k: 'Destination', t: 'Ningbo / Hangzhou', href: '/destinations/ningbo-hangzhou/' },
+      { k: 'Destination', t: 'Guangzhou / Dongguan', href: '/destinations/guangzhou-dongguan/' },
+      { k: 'Industry', t: 'Toys, gifts & commodities', href: '/industries/toys-gifts-commodities/' },
+    ]}
+  />
+</BaseLayout>

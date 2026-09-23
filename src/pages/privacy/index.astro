@@ -1,0 +1,135 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Section from '../../components/Section.astro';
+import SectionHead from '../../components/SectionHead.astro';
+import Checklist from '../../components/Checklist.astro';
+import Caveat from '../../components/Caveat.astro';
+
+/* Privacy & disclaimer. Every sentence here is a description of what the code
+   actually does — verified by grepping src/ for analytics, cookies, localStorage
+   and third-party embeds (all absent). Nothing on this page is boilerplate: if
+   the site ever starts tracking visitors or storing inquiries in a database,
+   this page has to be rewritten in the same commit. */
+
+const title = 'Privacy & disclaimer — what we do with what you send us';
+const description =
+  'The site collects the details you type into a form and emails them to our own inbox. No analytics, no cookies, no pixels, and we do not pass your details to anyone.';
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  track="neutral"
+  current="Privacy & disclaimer"
+  cta={{
+    /* Long-form / legal pages must not use dark bands — design system §4.1.8 */
+    variant: 'plain',
+    title: 'Questions about any of this?',
+    lead: 'Ask us directly. If you want your details deleted, say so in one line and we will do it.',
+    primary: { label: 'Contact us', href: '/contact/' },
+  }}
+>
+  <section class="hero">
+    <div class="container container--md">
+      <p class="eyebrow">Privacy</p>
+      <h1>What happens to what you send us.</h1>
+      <p class="lead hero__lead">
+        This site collects one thing — the details you type into a form — and sends them to one
+        place: our own inbox. There is no analytics script, no advertising pixel and no cookie on
+        any page.
+      </p>
+    </div>
+  </section>
+
+  <!-- 1 · What we collect -->
+  <Section>
+    <div class="container container--md">
+      <SectionHead
+        eyebrow="The short version"
+        title="What we collect."
+        lead="Only what the form asks for, plus two things that are added automatically."
+      />
+      <Checklist
+        items={[
+          'Your name and your email address',
+          'Your WhatsApp number — only if you choose to fill the field, it is optional',
+          'What you are trying to do, in your own words',
+          'Which page you sent the form from, so we know what you were reading',
+          'Your IP address, used for nothing except slowing down automated abuse',
+        ]}
+      />
+    </div>
+  </Section>
+
+  <!-- 2 · Where it goes -->
+  <Section alternate>
+    <div class="container container--md">
+      <SectionHead
+        eyebrow="Handling"
+        title="Where it goes, and how long it stays."
+      />
+      <p>
+        A submission is delivered as an ordinary email to our own mailbox. We do not run a customer
+        database on this site — the email <em>is</em> the record.
+      </p>
+      <p>
+        We keep it for as long as we need to answer you and, if a trip comes out of it, to run that
+        trip. If you want it gone, ask us on the contact page and we will delete it. There is no
+        retention schedule more complicated than that, and we would rather say so than publish one
+        we do not follow.
+      </p>
+    </div>
+  </Section>
+
+  <!-- 3 · What we do not do -->
+  <Section>
+    <div class="container container--md">
+      <SectionHead
+        eyebrow="Refusals"
+        title="What we do not do."
+        lead="Listed as refusals rather than promises, because these are things we have chosen not to build."
+      />
+      <Checklist
+        refusal
+        items={[
+          'No analytics or visitor-tracking script on any page',
+          'No cookies, and no localStorage or session storage either',
+          'No advertising or remarketing pixel',
+          'No third-party social embed',
+          'We do not sell, rent or hand your details to anyone',
+          'We do not add you to a mailing list — we do not run one',
+        ]}
+      />
+    </div>
+  </Section>
+
+  <!-- 4 · The download -->
+  <Section alternate>
+    <div class="container container--md">
+      <SectionHead
+        eyebrow="The checklist"
+        title="What the download costs you."
+      />
+      <p>
+        If you ask for the factory vetting checklist, we receive the email address you typed. That is
+        the whole price. The file opens straight in the browser once the request goes through — we do
+        not email it to you, and we do not follow up on it, unless you ask us to.
+      </p>
+    </div>
+  </Section>
+
+  <!-- 5 · Disclaimer -->
+  <Section>
+    <div class="container container--md">
+      <Caveat
+        title="What this site is not"
+        body="Two things on this site are easy to misread, so they are stated here as plainly as we can manage."
+        items={[
+          'The vetting method we publish is a documented process, not a certification. We are not a certification body and issue no certificates.',
+          'The write-ups under Case studies are samples. They show the structure and level of detail of the report you receive — they are not records of trips we have already run.',
+          'Nothing on this site is legal advice, and describing how we handle your details here is not a substitute for a policy written by a lawyer.',
+        ]}
+      />
+    </div>
+  </Section>
+</BaseLayout>

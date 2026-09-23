@@ -1,0 +1,27 @@
+---
+/* Section wrapper.
+   Rhythm is driven by the track tokens (--track-section-py), so a section only
+   has to choose its surface: default, --alternate (light), or --inverse (dark).
+   .section--inverse is explicit opt-in only — design system §4.1.8. */
+interface Props {
+  alternate?: boolean;
+  inverse?: boolean;
+  tight?: boolean;
+  id?: string;
+  /** optional per-section energy override: creator | buyer | neutral */
+  track?: string;
+  class?: string;
+}
+const { alternate, inverse, tight, id, track, class: cls } = Astro.props;
+---
+<section
+  class:list={[
+    'section',
+    { 'section--alternate': alternate, 'section--inverse': inverse, 'section--tight': tight },
+    cls,
+  ]}
+  id={id}
+  data-track={track}
+>
+  <slot />
+</section>

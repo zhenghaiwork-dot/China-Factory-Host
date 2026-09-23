@@ -1,0 +1,183 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Section from '../../../components/Section.astro';
+import SectionHead from '../../../components/SectionHead.astro';
+import PhotoSlot from '../../../components/PhotoSlot.astro';
+import OnsitePhoto from '../../../components/OnsitePhoto.astro';
+import Checklist from '../../../components/Checklist.astro';
+import RelatedNav from '../../../components/RelatedNav.astro';
+import Icon from '../../../components/Icon.astro';
+import { waLink, VET_STEPS_INLINE } from '../../../data/site.ts';
+
+const title = 'Procurement teams — standardized visits, comparable suppliers';
+const description =
+  'For procurement teams: standardized RFQs, a factory visit scorecard, compliance checks and management meetings so multiple suppliers can be compared fairly.';
+
+const wa = waLink('Hi, my team needs to evaluate several suppliers in China.');
+
+const rfqFields = [
+  { k: 'Product specification', v: 'Material, dimensions, finish, and any tolerances — in numbers, not adjectives. A "good finish" is not a spec.' },
+  { k: 'Quantity', v: 'Annual volume and per-order volume, stated separately. Suppliers price them differently.' },
+  { k: 'Target price', v: 'Give one, so the factory knows whether it is even in the running, instead of quoting blind.' },
+  { k: 'Delivery terms', v: 'Incoterm, port and target delivery window. "FOB Shenzhen" and "DDP to your door" are different quotes.' },
+  { k: 'Payment terms', v: 'Deposit, balance and what triggers each stage. Vague payment terms is how a quote gets quietly more expensive.' },
+  { k: 'Quality standard', v: 'AQL or defect acceptance, stated. Without it, every factory assumes a different standard.' },
+  { k: 'Certification', v: 'The certificates your market requires, and whether the supplier must hold them or just obtain them.' },
+  { k: 'Tooling ownership', v: 'Who pays for the mould and who owns it, in writing. This is the field most RFQs leave out.' },
+  { k: 'Packaging', v: 'Retail or bulk, and who supplies the packaging. It is a separate supplier with its own MOQ.' },
+  { k: 'MOQ and lead time', v: 'Ask for both, and ask which part sets the minimum. The answer changes what is negotiable.' },
+  { k: 'Validity', v: 'A date on the quote. Material prices move, and an undated quote is a starting point, not a promise.' },
+];
+
+const weighting = [
+  { k: 'Safety-critical categories', v: 'Toys, electrical, anything for children — compliance and certification dominate, because a recall wipes out every price saving.' },
+  { k: 'Tooling-led categories', v: 'Injection moulding, die-casting — tooling ownership and engineering capability outweigh price, because the mould is a multi-year asset.' },
+  { k: 'Commodity categories', v: 'Stock hardware, packaging, textiles — price and lead time carry more weight, and the compliance bar is lower.' },
+];
+
+const deliverables = [
+  'One structured report per supplier, using the same fields so the rows line up across factories',
+  'The five checks recorded against each: ' + VET_STEPS_INLINE,
+  'The scorecard per supplier, so the comparison is a table rather than a memory',
+  'Rejected suppliers documented, with the check that removed them',
+  'The decision-maker confirmed present, and what they actually agreed',
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  active=""
+  crumbs={[]}
+  current="Procurement teams"
+  cta={{
+    eyebrow: 'Next step',
+    title: 'Run a supplier evaluation your team can act on.',
+    lead: 'Tell us the category and the shortlist. We will standardise the visits and the reporting.',
+    primary: { label: 'Plan an evaluation', href: '/plan-my-trip/' },
+    secondary: { label: 'Ask on WhatsApp', href: wa, external: true },
+  }}
+>
+  <section class="hero">
+    <div class="container">
+      <div class="split-7-5">
+        <div>
+          <p class="eyebrow">Procurement teams</p>
+          <h1>Standardized visits, so the comparison is real.</h1>
+          <p class="lead hero__lead">
+            The failure mode in multi-supplier evaluation is that each visit is remembered
+            differently. We run one structure across every supplier, so the shortlist is decided on
+            evidence, not impressions.
+          </p>
+        </div>
+        <div class="hero__media">
+          <PhotoSlot name="PROCUREMENT · THE SCORECARD" variant="media">
+            <OnsitePhoto id="06" />
+          </PhotoSlot>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Section>
+    <div class="container container--md">
+      <SectionHead
+        eyebrow="The RFQ"
+        title="A comparable RFQ, field by field."
+        lead="A vague RFQ returns quotes that cannot be compared. These are the fields that make three suppliers land on the same page."
+      />
+      <ul class="spec-list clean">
+        {rfqFields.map((f) => (
+          <li>
+            <span class="spec-list__k">{f.k}</span><span class="spec-list__v">{f.v}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container container--md">
+      <SectionHead eyebrow="The weights" title="How to weight the scorecard, by category." />
+      <ul class="spec-list clean">
+        {weighting.map((w) => (
+          <li>
+            <span class="spec-list__k">{w.k}</span><span class="spec-list__v">{w.v}</span>
+          </li>
+        ))}
+      </ul>
+      <p class="u-mt-6">
+        The weights follow from the industry pages — <a href="/industries/toys-gifts-commodities/">toys</a> weight safety above price, and that is not a preference, it is a recall.
+      </p>
+    </div>
+  </Section>
+
+  <Section>
+    <div class="container container--md">
+      <SectionHead
+        eyebrow="The schedule"
+        title="Two factories a day, and the management meeting on day two."
+        lead="The management meeting should come after the floor walk, not before it — otherwise it is a PowerPoint, not a conversation about what you actually saw."
+      />
+      <div class="prose stack">
+        <p>
+          Two focused visits a day is the realistic pace for a procurement team: the walk-through,
+          the QC bench, the tooling store and the meeting with the production manager each take
+          real time. The management meeting is scheduled for day two or three, once there is a floor
+          visit to talk about. A meeting on day one, before anyone has walked the line, is a
+          sales presentation with the word "management" on it — and an <a href="/services/factory-visit-interpreter/">interpreter</a> keeps the numbers exact in the room.
+        </p>
+      </div>
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container container--md">
+      <SectionHead eyebrow="The boundary" title="What we check, versus a formal audit." />
+      <div class="prose stack">
+        <p>
+          Our <a href="/about/how-we-vet-factories/">five checks</a> — {VET_STEPS_INLINE} — tell you whether a factory is real and whether it
+          can hold your volume. They are a visit-level check, not a social-compliance audit. A formal
+          audit measures the factory against a written standard and is done by certified auditors;
+          we coordinate that rather than perform it.
+        </p>
+        <p>
+          <a class="link-arrow" href="/guides/factory-visit-vs-audit-vs-inspection/">
+            Read the difference in full
+            <Icon name="arrow" size={14} />
+          </a>
+        </p>
+      </div>
+    </div>
+  </Section>
+
+  <Section>
+    <div class="container container--md">
+      <SectionHead eyebrow="The report" title="What the report actually contains." />
+      <Checklist title="Deliverables" items={deliverables} />
+      <p class="u-mt-6">
+        <a class="link-arrow" href="/tools/factory-visit-scorecard/">
+          See the six scoring dimensions
+          <Icon name="arrow" size={14} />
+        </a>
+      </p>
+      <p class="u-mt-6">
+        The same report structure is what a <a href="/services/brand-sourcing-visit/">brand sourcing visit</a> produces, written for internal review.
+      </p>
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container">
+      <SectionHead eyebrow="Where to start" title="The pages procurement teams usually need." />
+      <RelatedNav
+        items={[
+          { k: 'Service', t: 'Visit existing suppliers', href: '/services/existing-supplier-visits/' },
+          { k: 'Service', t: 'Factory visit planning', href: '/services/factory-visit-planning/' },
+          { k: 'Tool', t: 'Factory visit scorecard', href: '/tools/factory-visit-scorecard/' },
+          { k: 'Trust', t: 'How we vet factories', href: '/about/how-we-vet-factories/' },
+        ]}
+      />
+    </div>
+  </Section>
+</BaseLayout>

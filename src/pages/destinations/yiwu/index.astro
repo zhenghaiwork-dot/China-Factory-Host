@@ -1,0 +1,235 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import DestinationPage from '../../../components/DestinationPage.astro';
+import Section from '../../../components/Section.astro';
+import SectionHead from '../../../components/SectionHead.astro';
+
+const title = 'Yiwu factory visits — the small-commodity market and the factories behind it';
+const description =
+  'Hosted factory and market visits in Yiwu: what each district of the International Trade Market sells, a two-day sample itinerary, filming notes and the holidays to avoid.';
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  track="neutral"
+  active="destinations"
+  crumbs={[{ href: '/destinations/', label: 'Destinations' }]}
+  current="Yiwu"
+  cta={{
+    eyebrow: 'Next step',
+    title: 'Plan a Yiwu trip that covers ground instead of wandering a market.',
+    lead: 'Tell us your categories and roughly when. We will tell you how many days Yiwu actually deserves in your plan.',
+    /* No secondary: the primary already points at /contact/, and a second
+       button to the same page is a false choice (director's round-2 ruling). */
+    primary: { label: 'Plan my trip to Yiwu', href: '/contact/' },
+    form: { destination: 'Yiwu' },
+  }}
+>
+  <DestinationPage
+    region="Zhejiang"
+    cityShort="Yiwu"
+    slotName="YIWU MARKET AISLE"
+    h1="Yiwu: the small-commodity market and the factories that supply it."
+    lead="Yiwu is where the small-commodity world is physically located — the market, the factories behind it and the trade infrastructure around it, all inside one city you can cross in thirty minutes."
+    audience="Best for: creators filming dense market aisles, and buyers assembling wide low-MOQ assortments."
+    micro={[
+      'Yiwu International Trade Market — widely described as the world’s largest small-commodity market',
+      'Extremely broad, low-MOQ categories',
+      'Comparatively filming-friendly',
+    ]}
+    facts={[
+      {
+        k: 'Typical MOQ',
+        v: 'Low',
+        note: 'Many stalls and factories here will quote hundreds rather than thousands for stock items.',
+      },
+      {
+        k: 'Category breadth',
+        v: 'Very high',
+        note: 'Hundreds of thousands of product lines across the districts of the International Trade Market.',
+      },
+      {
+        k: 'Factory density',
+        v: 'High',
+        note: 'Factories sit in the surrounding towns, usually 30–60 minutes off.',
+      },
+    ]}
+    why={[
+      'Yiwu is not one market — it is a market plus a manufacturing hinterland. That combination is what makes a five-day trip here unusually productive: you can see a product being sold upstairs and see it being made the same afternoon.',
+      'For creators it is one of the most <a href="/guides/can-you-film-inside-a-chinese-factory/">filmable</a> clusters we work in. Market aisles are public, visually dense and almost always open to being filmed with permission from the individual stall.',
+      'For buyers it is where wide, low-quantity assortments are realistic. If your product strategy is “many SKUs, small volumes”, this is the one Chinese city built around that idea.',
+      'The trade-off is real too: plenty of businesses here are trading companies. That is a normal part of the Yiwu model, and it is exactly why we run <a href="/about/how-we-vet-factories/">the five checks</a> rather than trusting a business card.',
+    ]}
+    markets={[
+      {
+        k: 'Small commodities',
+        v: 'Household goods, kitchenware, storage, seasonal decorations — the core of the <a href="/industries/toys-gifts-commodities/">small-commodities</a> market.',
+      },
+      {
+        k: 'Gifts & stationery',
+        v: 'Packaging-driven categories where dozens of suppliers sell near-identical products.',
+      },
+      {
+        k: 'Jewellery & accessories',
+        v: 'Costume jewellery, hair accessories, watches — dense clusters within dedicated market districts.',
+      },
+      {
+        k: 'Toys',
+        v: 'Both market stalls and dedicated <a href="/industries/toys-gifts-commodities/">toy manufacturers</a> in surrounding Jinhua and Shantou.',
+      },
+      {
+        k: 'Home & storage',
+        v: 'Plastics, textiles and simple assembly — often the easiest category to film end to end.',
+      },
+      {
+        k: 'Promotional goods',
+        v: 'Printing, lanyards, badges, packaging — print-led rather than tooling-led.',
+      },
+    ]}
+    itinTitle="Two days, sequenced: market first, then factories."
+    itinLead="Yiwu rewards sequencing. See the market first, then take what you learned into the factories."
+    itinerary={[
+      {
+        day: 'DAY 1',
+        time: 'MARKET',
+        title: 'Targeted market sweep',
+        desc: 'Not a browse. We move through the districts relevant to your categories, collecting prices, MOQs and stall numbers in a structured list.',
+        slot: 'YIW · DISTRICT 2',
+      },
+      {
+        day: 'DAY 1',
+        time: 'EVENING',
+        title: 'Shortlist triage',
+        desc: 'Same-day sorting of what you saw into visit / photograph / drop, while everything is still fresh.',
+        slot: 'YIW · EVENING DESK',
+      },
+      {
+        day: 'DAY 2',
+        time: 'FACTORY A',
+        title: 'First real factory',
+        desc: 'Out of the market into the manufacturing towns. Same product, different economics, camera usually welcome.',
+        slot: 'YIW · ASSEMBLY',
+      },
+      {
+        day: 'DAY 2',
+        time: 'FACTORY B',
+        title: 'Second factory, comparison terms',
+        desc: 'The point of two visits in one day is that the second quote arrives informed by the first.',
+        slot: 'YIW · PACKING',
+      },
+      {
+        day: 'DAY 2',
+        time: 'WRAP',
+        title: 'Quotes and follow-up list',
+        desc: 'Every quote normalised to one specification before anyone leaves the table.',
+        slot: 'YIW · QUOTE DESK',
+      },
+    ]}
+    filmLead="One of the most camera-friendly clusters in China, with the caveat that individual stalls set their own rules."
+    film={{
+      answer: 'Market aisles are generally filmable; factories usually agree with two weeks of notice.',
+      lead: 'Two to three weeks. Individual stalls can often be asked the same day.',
+      refused: 'Some brand-name stalls decline, and any line producing under a foreign-brand NDA.',
+      note: 'Expect a lot of ambient noise and mixed lighting — plan for it rather than discovering it on day one.',
+    }}
+    seasons={[
+      'Best months: March–June and September–November, before and after the summer heat.',
+      'Peak order building for Western Christmas runs roughly July–October — floors are busy and slower to host.',
+      'January–February: Chinese New Year shuts most suppliers for one to three weeks, with slow recovery either side.',
+      'Canton Fair months (April and October) pull many Yiwu suppliers to Guangzhou — plan around it if you need to meet them here.',
+    ]}
+    timingWarnings={[
+      '<b>Visiting in the two weeks around Chinese New Year.</b> Very little is actually running.',
+      '<b>Assuming market stalls are the manufacturers.</b> Many are traders, which is fine — as long as you know which you are dealing with.',
+      '<b>Trying to cover multiple unrelated categories in one trip.</b> Yiwu will let you, and the results will be shallow.',
+    ]}
+    vetDesc="Yiwu has a higher share of trading companies than most clusters. The five checks are not optional here — they are the main reason to bring us."
+    related={[
+      { k: 'Destination', t: 'Shenzhen', href: '/destinations/shenzhen/' },
+      { k: 'Destination', t: 'Guangzhou / Dongguan', href: '/destinations/guangzhou-dongguan/' },
+      { k: 'Destination', t: 'Ningbo / Hangzhou', href: '/destinations/ningbo-hangzhou/' },
+      {
+        k: 'Industry',
+        t: 'Toys, gifts & commodities',
+        href: '/industries/toys-gifts-commodities/',
+      },
+    ]}
+  />
+
+  <!-- Yiwu Fair.
+       Added as a sibling section rather than a new prop on DestinationPage.astro:
+       that component drives seven city pages, and the other agent is still writing
+       content into them mid-build — changing shared props would touch all seven at
+       once, with no git to fall back on. This is additive and reversible.
+       Every date and figure below is from the organiser's own site (yiwufair.com),
+       and the date is explicitly deferential to it: fair dates move, and a wrong
+       date on a booking page is worse than no date. -->
+  <Section alternate>
+    <div class="container">
+      <SectionHead
+        eyebrow="Once a year"
+        title="Yiwu Fair: the week the whole market fits under one roof."
+        lead="Every October the market's breadth is compressed into a floor you can walk in a day. It is the single best week of the year to come to Yiwu — provided you follow it with factory days rather than flying home with a bag of samples."
+      />
+      <ul class="spec-list">
+        <li>
+          <span class="spec-list__k">When</span>
+          <span class="spec-list__v"
+            >Every October. The 32nd edition runs 21–24 October 2026 at the Yiwu International
+            Expo Centre.</span
+          >
+        </li>
+        <li>
+          <span class="spec-list__k">Scale</span>
+          <span
+            >Around 3,000 exhibitors over 110,000 m². The preceding edition recorded 186,000
+            buyer visits, roughly 30,200 of them from outside China.</span
+          >
+        </li>
+        <li>
+          <span class="spec-list__k">Why pair it with factories</span>
+          <span
+            >A fair shows you samples and salespeople. A factory shows you the line, the tooling
+            and the real capacity. Doing both in one trip is the point — shortlist on the floor,
+            verify the next morning, 30–60 minutes away.</span
+          >
+        </li>
+        <li>
+          <span class="spec-list__k">What we handle</span>
+          <span
+            >A target list before you land, routing by category on the floor, and one or two
+            factory days immediately after. The market itself stays open throughout.</span
+          >
+        </li>
+        <li>
+          <span class="spec-list__k">Plan around</span>
+          <span
+            >Fair week is also peak Christmas order season, and Yiwu hotels and drivers are
+            booked solid. Fix dates early or the factory days will not fit.</span
+          >
+        </li>
+        <li>
+          <span class="spec-list__k">What we do not do</span>
+          <span
+            >We do not sell booth space, register you as an exhibitor, or act as a commission-taking
+            sourcing agent. You buy from the factory; we get you in front of the right one.</span
+          >
+        </li>
+      </ul>
+      {/* Fair dates are the organiser's to set, not ours. Saying so once, in a
+          sentence, is more useful than echoing a date that will expire — and it
+          keeps the link in prose, where an inline link belongs. */}
+      <p class="u-mt-6">
+        Fair dates are set by the organisers and do move. Confirm the current edition on <a
+          href="https://www.yiwufair.com"
+          target="_blank"
+          rel="noopener">yiwufair.com</a
+        > before booking flights.
+      </p>
+      <p>
+        <a class="link-arrow" href="/trade-shows/">How we combine a trade show with factory visits</a>
+      </p>
+    </div>
+  </Section>
+</BaseLayout>

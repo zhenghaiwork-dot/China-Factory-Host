@@ -1,0 +1,67 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Section from '../components/Section.astro';
+import Icon from '../components/Icon.astro';
+
+/* 404 — a real page, not the host's default error sheet.
+   Static output builds it to /404.html, which Cloudflare Pages serves
+   automatically for unknown routes; Hostinger needs a one-line rewrite
+   (documented in DEPLOYMENT.md).
+   Copy rules: honest about the miss, no "oops" jokes, and every link out of
+   here goes to a page that verifiably exists. No closing CTA band — the page
+   already ends in a wayfinding block. */
+const title = 'Page not found | ChinaFactoryHost';
+const description =
+  'That page does not exist. Everything on this site is within three clicks of the home page — destinations, services, or how we vet factories.';
+---
+
+<BaseLayout title={title} description={description} crumbs={[]} cta={false}>
+  <Section>
+    <div class="container container--md err404">
+      <p class="eyebrow">Error 404</p>
+      <h1>That page does not exist.</h1>
+      <p class="lead">
+        The link is old or mistyped. Nothing was lost — every page on this site sits within
+        three clicks of the home page, and the four places people usually want are below.
+      </p>
+      <div class="btn-row err404__actions">
+        <a class="btn btn--primary" href="/">Back to the home page</a>
+        <a class="btn btn--secondary" href="/destinations/">Browse destinations</a>
+      </div>
+      <p class="err404__alt">
+        <a class="link-arrow" href="/about/how-we-vet-factories/"
+          >See how we vet factories<Icon name="arrow" size={14} /></a
+        >
+        <a class="link-arrow" href="/contact/"
+          >Contact us directly<Icon name="arrow" size={14} /></a
+        >
+      </p>
+    </div>
+  </Section>
+</BaseLayout>
+
+<style>
+  /* Scoped: three extra rules only, all layout — colours and spacing come from
+     the shared tokens/components so the page cannot drift from the system. */
+  .err404 {
+    text-align: center;
+    padding-block: var(--space-12);
+  }
+  .err404 :global(.eyebrow) {
+    justify-content: center;
+  }
+  .err404 :global(.lead) {
+    margin-inline: auto;
+  }
+  .err404__actions {
+    justify-content: center;
+    margin-top: var(--space-8);
+  }
+  .err404__alt {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-6);
+    margin-top: var(--space-6);
+    max-width: none;
+  }
+</style>

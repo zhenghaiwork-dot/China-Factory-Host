@@ -1,11 +1,13 @@
 // ChinaFactoryHost — favicon + apple-touch-icon generator.
 // Single source of truth for the brand mark. Run with: node scripts/gen-icons.mjs
 // Output: public/favicon.svg         (transparent bg, big RED open-bay mark, ~80% fill)
+//         public/favicon.ico         (16/32/48/256 layers — Google Search requires pixel formats)
 //         public/apple-touch-icon.png (180x180, white bg, same red mark — iOS needs opaque)
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import sharp from 'sharp';
+import pngToIco from 'png-to-ico';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');
@@ -55,10 +57,26 @@ const appleSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180" 
 
 async function main() {
   fs.writeFileSync(path.join(publicDir, 'favicon.svg'), favicon.trim() + '\n');
+  // favicon.ico: Google Search only accepts pixel formats (BMP/GIF/ICO/PNG/JPEG/
+  // PPM/TIFF — SVG is NOT supported since the 2026-08-28 doc update). Build a
+  // small multi-size ICO (16/32/48/96) — skip a 256 layer to keep the file ~25KB.
+  const sizes = [16, 32, 48, 96];
+  const pngs = await Promise.all(
+    sizes.map((s) =>
+      sharp(Buffer.from(favicon), { density: 72 * (96 / 32) })
+        .resize(s, s)
+        .png()
+        .toBuffer()
+    )
+  );
+  const ico = await pngToIco(pngs);
+  fs.writeFileSync(path.join(publicDir, 'favicon.ico'), ico);
   await sharp(Buffer.from(appleSvg))
     .png()
     .toFile(path.join(publicDir, 'apple-touch-icon.png'));
-  console.log('Wrote public/favicon.svg and public/apple-touch-icon.png');
+  console.log(
+    'Wrote public/favicon.svg, public/favicon.ico, public/apple-touch-icon.png'
+  );
 }
 
 main().catch((e) => {

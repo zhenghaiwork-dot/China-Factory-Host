@@ -15,6 +15,7 @@
     "check": "astro check",
     "astro": "astro",
     "pdf": "node scripts/build-checklist-pdf.mjs",
+    "icons": "node scripts/gen-icons.mjs",
     "cf:dev": "wrangler dev --config dist/server/wrangler.json",
     "cf:secret": "wrangler secret put"
   },

@@ -53,6 +53,18 @@ const CITIES = [
   { name: 'Shenzhen', lon: 114.06, lat: 22.55, dx: 6, dy: 12, anchor: 'start' },
 ];
 
+/* "Route" arcs between the cities we actually operate in — a line-style nod to
+   the fact that we move people between these industrial belts. Drawn as thin
+   quadratic arcs with a marching-dash (flow) animation, which is the same
+   visual language as the blueprint grid: lines, not blobs. */
+const ROUTES = [
+  ['Beijing', "Xi'an"],
+  ["Xi'an", 'Chengdu'],
+  ['Shanghai', 'Ningbo'],
+  ['Ningbo', 'Yiwu'],
+  ['Yiwu', 'Guangzhou'],
+];
+
 async function main() {
   const geo = await loadGeo();
 
@@ -122,19 +134,32 @@ async function main() {
     const rings = p.jd ? p.rings : p.rings.filter(ringBigEnough);
     if (!rings.length) continue;
     const d = rings.map(ringToPath).join('');
-    (p.jd ? dash : land).push(`<path d="${d}"/>`);
+    // pathLength="100" normalises every outline to 100 user units, so one
+    // CSS rule can stroke-dash-animate all of them without measuring.
+    (p.jd ? dash : land).push(
+      `<path class="draw" pathLength="100" d="${d}"/>`
+    );
   }
 
-  // Animated pins. The whole file is loaded as an <img>, which puts the SVG in
-  // declarative-animation mode — the CSS/SMIL inside it runs (a CSS
-  // background-image SVG would stay frozen). Only the pins animate: the
-  // outline, the dash line and the labels are static, so the animated area is
-  // 8 × ~20px. --d staggers each pin; --d propagates to both circles.
+  // City dots. --d staggers the (very slow) breathing so the pins don't pulse
+  // in lockstep. No radar halo: the site's language is lines, not blobs.
   const dotEls = CITIES.map((c, i) => {
     const x = px(c.lon);
     const y = py(c.lat);
     const d = (i * 0.45).toFixed(2);
-    return `<g style="--d:${d}s"><circle class="halo" cx="${x}" cy="${y}" r="3"/><circle class="dot" cx="${x}" cy="${y}" r="2.6"/></g>`;
+    return `<circle class="dot" cx="${x}" cy="${y}" r="2.6" style="--d:${d}s"/>`;
+  });
+
+  // Route arcs: midpoint control point lifted north for a gentle bow.
+  const byName = Object.fromEntries(CITIES.map((c) => [c.name, c]));
+  const routeEls = ROUTES.map(([a, b], i) => {
+    const A = byName[a];
+    const B = byName[b];
+    const x1 = px(A.lon), y1 = py(A.lat);
+    const x2 = px(B.lon), y2 = py(B.lat);
+    const bow = Math.min(Math.hypot(x2 - x1, y2 - y1) * 0.18, 46);
+    const d = (i * 0.5).toFixed(2);
+    return `<path class="route" style="--d:${d}s" d="M${x1},${y1}Q${(x1 + x2) / 2},${(y1 + y2) / 2 - bow} ${x2},${y2}"/>`;
   });
   const labelEls = CITIES.map((c) => {
     const x = px(c.lon) + c.dx;
@@ -158,31 +183,48 @@ async function main() {
     /* Declarative animation — runs because this file is embedded via an img
        element (a CSS background-image SVG would stay frozen).
        WARNING: SVG is parsed as XML. Never write angle brackets or ampersands
-       in any comment or string in this file, not even inside a comment — the
-       document will fail to parse. Already bit us once.
-       Scoped to the pins only: 8 small circles, opacity + transform, so the
-       cost per frame is negligible. Honours prefers-reduced-motion. */
-    .dot { animation: cfh-dot 4s ease-in-out infinite; animation-delay: var(--d, 0s); }
-    .halo {
-      transform-box: fill-box; transform-origin: center;
-      animation: cfh-halo 4s ease-out infinite; animation-delay: var(--d, 0s);
-      opacity: 0;
+       anywhere in this file, not even inside a comment — the document will
+       fail to parse. Already bit us once.
+       House style is lines, so the motion is line motion:
+         1. the outline is "drawn" once, like a plotter / CAD pen;
+         2. the inter-city arcs march (dashed flow) — routes, not blobs;
+         3. pins and labels fade in after the drawing settles.
+       Cost: the draw is a one-shot (2.8s, then static); the only permanent
+       animation is 5 thin dashed arcs. Honours prefers-reduced-motion. */
+    .draw {
+      stroke-dasharray: 100; stroke-dashoffset: 100;
+      animation: cfh-draw 2.8s ease-out forwards;
     }
-    @keyframes cfh-dot { 0%, 100% { opacity: .3 } 50% { opacity: 1 } }
-    @keyframes cfh-halo {
-      0% { transform: scale(1); opacity: .45 }
-      60%, 100% { transform: scale(3.4); opacity: 0 }
+    @keyframes cfh-draw { to { stroke-dashoffset: 0 } }
+
+    .route {
+      stroke-dasharray: 5 7;
+      animation: cfh-flow 2.6s linear infinite;
+      animation-delay: var(--d, 0s);
     }
+    @keyframes cfh-flow { to { stroke-dashoffset: -12 } }
+
+    .dot { animation: cfh-breathe 7s ease-in-out infinite; animation-delay: var(--d, 0s); }
+    @keyframes cfh-breathe { 0%, 100% { opacity: .4 } 50% { opacity: .85 } }
+
+    .pins, .labels { animation: cfh-fade .9s ease-out 2.2s both; }
+    @keyframes cfh-fade { from { opacity: 0 } to { opacity: 1 } }
+
     @media (prefers-reduced-motion: reduce) {
+      .draw { animation: none; stroke-dashoffset: 0 }
+      .route { animation: none }
       .dot { animation: none; opacity: ${DOT_OP} }
-      .halo { animation: none; display: none }
+      .pins, .labels { animation: none; opacity: 1 }
     }
   </style>
+  <g fill="none" stroke="${ink}" stroke-opacity="0.28" stroke-width="0.9" stroke-linecap="round">
+    ${routeEls.join('\n    ')}
+  </g>
   <g fill="${ink}">
-    <g fill-opacity="${DOT_OP}">
+    <g class="pins" fill-opacity="${DOT_OP}">
       ${dotEls.join('\n      ')}
     </g>
-    <g fill-opacity="${LABEL_OP}" font-family="Inter, 'Helvetica Neue', Arial, sans-serif" font-size="13" font-weight="500">
+    <g class="labels" fill-opacity="${LABEL_OP}" font-family="Inter, 'Helvetica Neue', Arial, sans-serif" font-size="13" font-weight="500">
       ${labelEls.join('\n      ')}
     </g>
   </g>

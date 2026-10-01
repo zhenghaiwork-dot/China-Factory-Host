@@ -13,9 +13,24 @@ import Icon from '../components/Icon.astro';
 const title = 'Page not found | ChinaFactoryHost';
 const description =
   'That page does not exist. Everything on this site is within three clicks of the home page — destinations, services, or how we vet factories.';
+
+/* `noindex` below is load-bearing, not decoration. Two things go wrong without
+   it:
+   · the page emitted <link rel="canonical" href="…/404/"> — the one anomalous
+     canonical out of the site's 54. A canonical is a self-declaration of "this
+     is the URL to index", and a 404 is not a page anybody can rank; pointing it
+     at its own URL asks Google to consider indexing the error document.
+   · /404/ then competes with real routes in the index.
+   `follow` is retained so the wayfinding links still pass equity. */
 ---
 
-<BaseLayout title={title} description={description} crumbs={[]} cta={false}>
+<BaseLayout
+  title={title}
+  description={description}
+  crumbs={[]}
+  cta={false}
+  noindex
+>
   <Section>
     <div class="container container--md err404">
       <p class="eyebrow">Error 404</p>

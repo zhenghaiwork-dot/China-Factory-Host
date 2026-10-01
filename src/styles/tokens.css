@@ -303,7 +303,23 @@ html { font-size: 112.5%; }
   --fs-body-sm:    0.8889rem;                                      /* 16 — floor */
   --fs-caption:    0.7778rem;                                      /* 14 */
   --fs-label:      0.6667rem;                                      /* 12 — uppercase field labels */
-  --fs-micro:      0.6111rem;                                      /* 11 — plate names, codes */
+  /* Was 0.6111rem (11px), which is below what any of these elements can be
+     read at — and --fs-micro is not decorative here. It carries real copy:
+     .hero__micro, .cta__micro, .form-footnote, .wa-bar__note, .footer__meta,
+     .cmp-head-sub and the testimonial "verified" badge. 11px capitals at
+     --ls-micro tracking (0.07em) was the worst legibility case on the site, and
+     part of why those lines read as furniture rather than as sentences.
+     0.7222rem = 13px. That puts micro one step ABOVE --fs-label (12px), so the
+     two are no longer purely ordered by size — fine: they are different roles
+     (translated/uppercase marker vs micro decoration).
+     OVERFLOW CHECK (2026-10-01, all 17 references): the only nowrap consumer is
+     .badge, whose strings are short single words (CREATOR / BUYER / Plan ahead)
+     in >=280px cards; .badge inside .cmp-table takes an optional `badge` prop no
+     page currently passes. .step__code sits in `.step__head { flex-wrap: wrap }`
+     and .filter__count in a space-between row with no nowrap, so both reflow
+     rather than push. Nothing needed a local override, and adding one would have
+     meant editing components.css — which belongs to another worker this round. */
+  --fs-micro:      0.7222rem;                                      /* 13 */
   --fs-data-xl:    clamp(2.5rem,    1.7rem  + 3.4vw, 3.5rem);      /* 45   → 63 */
   --fs-data-lg:    clamp(1.5rem,    1.25rem + 1.1vw, 2rem);        /* 27   → 36 */
   --fs-data:       1.3333rem;                                      /* 24 */

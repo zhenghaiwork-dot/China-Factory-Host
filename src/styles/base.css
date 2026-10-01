@@ -70,6 +70,29 @@ a:hover { color: var(--color-link-hover); }
   border-radius: var(--radius-xs);
 }
 
+/* Dark contexts need the inverse ring. This is NOT a tokens.css change —
+   --focus-ring stays --accent-600 site-wide, because that red is correct on
+   white (5.40:1). On the dark bands (#1A1917) the same #D0202A measures
+   3.28:1, which fails WCAG 1.4.11 non-text contrast (3:1 is the floor for UI
+   components and focus indicators, and it is a hair over it — one brand-red
+   shade darker and it would be failing outright). --accent-300 #F2A6A6 on
+   #1A1917 measures 9.02:1, so override the colour only where the background
+   is known to be dark. Tokens already carry the value as
+   --focus-ring-inverse; referencing that keeps one source of truth. */
+.cta--inverse :focus-visible,
+.site-footer :focus-visible,
+.hero-full :focus-visible,
+.section--inverse :focus-visible {
+  outline-color: var(--focus-ring-inverse);
+}
+
+/* Selected text. Undefined site-wide until now, so every browser fell back to
+   its own default — usually a pale blue that fights the palette. */
+::selection {
+  background: var(--accent-600);
+  color: #fff;
+}
+
 /* V4: mono retired site-wide — the reference (chinatours) uses one sans stack
    everywhere. Numeric alignment is carried by tabular-nums, not the family.
    (.tag-mono below keeps mono: it is internal placeholder language.) */
@@ -115,14 +138,28 @@ img, svg, video { max-width: 100%; height: auto; display: block; }
 .card  { border-radius: var(--track-radius-card); }
 .media { aspect-ratio: var(--track-media-ratio); border-radius: var(--track-media-radius); overflow: hidden; }
 
-/* 入场动效（.js 由 app.js 添加，保证无 JS 时内容不被隐藏） */
-.js [data-reveal] {
-  opacity: 0;
-  transform: translateY(var(--track-motion-shift));
-  transition: opacity   var(--track-motion-enter) var(--ease-out),
-              transform var(--track-motion-enter) var(--ease-out);
+/* 入场动效（.js 由 app.js 添加，保证无 JS 时内容不被隐藏）
+   The hidden starting state lives inside `no-preference` on purpose. It used to
+   sit unconditionally, which silently defeated the reduced-motion fallback
+   below: `.js [data-reveal]` (0,2,0) outranks `[data-reveal]` (0,1,0) and a
+   media query adds no specificity, so reduce users still got opacity:0 and had
+   to wait for the IntersectionObserver to release each block. Gating the whole
+   mechanism on `no-preference` means a reduce user never receives a hidden
+   state at all — content is visible whether or not app.js ever runs. */
+@media (prefers-reduced-motion: no-preference) {
+  .js [data-reveal] {
+    opacity: 0;
+    transform: translateY(var(--track-motion-shift));
+    transition: opacity   var(--track-motion-enter) var(--ease-out),
+                transform var(--track-motion-enter) var(--ease-out);
+    /* Stagger hook. Pages set style="--reveal-delay:120ms" per element; unset,
+       the var falls back to 0ms and nothing changes. Declared on the base rule
+       so it applies to the transition INTO .is-visible, where the browser reads
+       the destination element's computed transition properties. */
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+  .js [data-reveal].is-visible { opacity: 1; transform: none; }
 }
-.js [data-reveal].is-visible { opacity: 1; transform: none; }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
@@ -131,7 +168,9 @@ img, svg, video { max-width: 100%; height: auto; display: block; }
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
-  [data-reveal] { opacity: 1; transform: none; }
+  /* Both selectors so this can also out-rank a later component rule that hides
+     [data-reveal] — the fallback must beat the hidden state, not just match it. */
+  .js [data-reveal], [data-reveal] { opacity: 1; transform: none; }
 }
 
 /* 屏幕阅读器专用 */

@@ -34,6 +34,13 @@ interface Props {
   };
   ogImage?: string;
   bodyClass?: string;
+  /** Suppress the page's own <link rel=canonical> and ask engines not to index.
+      Only for utility pages that must not compete with the real thing — a 404
+      declaring itself canonical is a broken signal (it is the page's own URL,
+      so it points nowhere useful and was the single anomalous canonical out of
+      the site's 54). Canonical is the stronger assertion, so the two must never
+      be emitted together. */
+  noindex?: boolean;
 }
 
 const {
@@ -60,6 +67,7 @@ const {
   },
   ogImage = '/og-default.svg',
   bodyClass,
+  noindex = false,
 } = Astro.props;
 
 /* Pages pass their own title / lead / primary and deliberately omit `micro`:
@@ -71,19 +79,37 @@ const ctaProps = cta === false ? false : { micro: REPLY_TIME_MICRO, ...cta };
 const canonical = new URL(Astro.url.pathname, SITE_URL).href;
 const og = new URL(ogImage, SITE_URL).href;
 
+/* True only on the home page, which is the only route that renders the hero
+   photograph. Checked here rather than passed in from index.astro so the
+   preload can never drift from the frontmatter that owns <picture>. */
+const IS_HOME = Astro.url.pathname === '/';
+
 /* JSON-LD. Evidence-gating applies here too: Organization carries ONLY what the
    site itself states on its pages — name, url, what the service is, where it
-   operates. No address, phone, founder name, rating or price until those are
-   published; a schema field we cannot back with a page is worse than a missing
-   field, because it is machine-readable fiction. */
+   operates, and the two location facts every page already publishes in the
+   footer ("Based in Zhejiang, China · Working nationwide").
+   No street address, no phone number, no Unified Social Credit Code: none of
+   those are on the site yet, and a schema field we cannot back with a page is
+   worse than a missing field, because it is machine-readable fiction. */
 const orgSchema = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
+  /* Stable graph id, so this node can be referenced (publisher/provider) from
+     other schema blocks instead of being re-declared as a second, possibly
+     disagreeing Organization. */
+  '@id': SITE_URL + '/#organization',
   name: SITE,
   url: SITE_URL,
+  logo: new URL(ogImage, SITE_URL).href,
   description:
     'Hosted factory visits in China: verified factory shortlists, on-the-ground escorts and filming coordination for content creators and brand buyers.',
   areaServed: 'China',
+  /* Region + country only — the granularity the site actually publishes. */
+  address: {
+    '@type': 'PostalAddress',
+    addressRegion: 'Zhejiang',
+    addressCountry: 'CN',
+  },
 };
 
 /* Derived from the same crumbs/current props the visible breadcrumb renders —
@@ -114,6 +140,9 @@ const serviceSchema = service && {
   serviceType: service.serviceType,
   areaServed: 'China',
   provider: {
+    /* Points at the graph node declared above instead of re-declaring the
+       organization — same reason as @id: one node, one set of facts. */
+    '@id': SITE_URL + '/#organization',
     '@type': 'Organization',
     name: SITE,
     url: SITE_URL,
@@ -135,11 +164,32 @@ const serviceSchema = service && {
     <meta property="og:image" content={og} />
     <meta property="og:url" content={canonical} />
     <meta name="twitter:card" content="summary_large_image" />
-    <link rel="canonical" href={canonical} />
-    <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48 96x96" />
+    {!noindex && <link rel="canonical" href={canonical} />}
+    {noindex && <meta name="robots" content="noindex, follow" />}
+    <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="sitemap" href="/sitemap.xml" type="application/xml" />
+    {/* First-screen image, discovered before CSS. Without this the LCP element
+        is found last: CSS has to parse, then the HTML reach the <picture>, then
+        the browser pick a candidate. imagesrcset/imagesizes make the preload
+        resolve to the SAME candidate the <picture> will choose, so we never pay
+        for two downloads; type gates it off entirely for browsers that cannot
+        decode AVIF.
+        Only the home page has this hero (verified: hero.jpg is referenced from
+        src/pages/index.astro only), so every other route skips it — a preload
+        for an image that is not there is a guaranteed wasted round trip. */}
+    {IS_HOME && (
+      <link
+        rel="preload"
+        as="image"
+        type="image/avif"
+        href="/images/hero-1600.avif"
+        imagesrcset="/images/hero-800.avif 800w, /images/hero-1600.avif 1600w"
+        imagesizes="100vw"
+        fetchpriority="high"
+      />
+    )}
     <script type="application/ld+json" set:html={JSON.stringify(orgSchema)} />
     {trail.length > 1 && (
       <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
@@ -147,6 +197,17 @@ const serviceSchema = service && {
     {service && (
       <script type="application/ld+json" set:html={JSON.stringify(serviceSchema)} />
     )}
+    {/* DELIBERATELY NO modulepreload HERE.
+        The two module scripts Astro emits per page are
+          /_astro/BaseLayout.astro_astro_type_script_index_0_lang.<hash>.js
+          /_astro/page.<hash>.js
+        Both hashes change whenever their source changes, so a hand-written link
+        would silently rot into a permanent 404 on every page load — and a dead
+        preload is worse than no preload, because it also spends a request.
+        Astro exposes no stable accessor for those URLs from a component, and the
+        scripts already sit in <head> inside the first ~2 KB of markup, so the
+        browser discovers them in the very first response packet anyway.
+        Revisit only if something can supply the emitted URL at build time. */}
     <!-- Behaviour layer. Loaded as a bundled <script> (not a frontmatter import)
          so it never executes during server-side prerendering. -->
     <script>

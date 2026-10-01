@@ -938,20 +938,25 @@
 .hero__media { margin-top: var(--space-8); }
 @media (min-width: 1024px) { .hero__media { margin-top: 0; } }
 
-/* --- Hero media: top pinned to the H1, fills down to the copy's foot (2026-10-01) ---
-   Round 3 of the user audit. Round 2 clamped the plate to the H1's height, which
-   read as a squashed landscape strip and left a big void beneath it. The plate
-   should instead start at the headline's TOP (so it never sits too high) and
-   stretch down to the BOTTOM of the copy block - eyebrow-to-foot on the left -
-   so it fills the right column with no blank gap and a comfortable proportion.
+/* --- Hero media: top pinned to the H1, natural proportion, no forced stretch (2026-10-01) ---
+   Round 4 of the user audit. Round 2 squashed the plate to the H1's height
+   (tiny strip, void below); round 3 stretched it to the copy's foot (on long
+   heroes the 1.6-2.2 landscape photos were cover-cropped into narrow portrait
+   slivers - ugly). Neither geometric forcing works.
+
+   The plate now keeps a comfortable near-natural ratio (16:10, close to the
+   onsite photos' real ~1.6-2.2 proportions, so cover-cropping stays minimal),
+   pinned at the headline top and never forced further: on short-copy heroes it
+   lands just past the copy's foot, on long-copy heroes it stops at its natural
+   height and leaves breathing room below - "no need to reach the bottom".
 
    Done without touching any of the ~50 hero templates: above 1024px the text
    wrapper becomes display:contents so its children promote to grid items of the
-   split. The H1 owns the "title" row; the media spans the title through micro
-   rows (align-self stretch), so its top is the headline top and its bottom is
-   the copy's foot. Element-type selectors (not nth-child) keep this safe across
-   heroes that differ in having an audience line or a micro list. Below 1024px
-   the layout is single-column and untouched. */
+   split; the H1 owns the "title" row and the media area starts there, aligned
+   to its top (align-self: start) instead of stretched. Element-type selectors
+   (not nth-child) keep this safe across heroes that differ in having an
+   audience line or a micro list. Below 1024px the layout is single-column and
+   untouched. */
 @media (min-width: 1024px) {
   .hero .split-7-5 {
     grid-template-columns: 7fr 5fr;
@@ -962,7 +967,7 @@
       "aud     media"
       "btns    media"
       "micro   media";
-    align-items: stretch;
+    align-items: start;
     row-gap: 0;
   }
   .hero .split-7-5 > div:first-child { display: contents; }
@@ -975,11 +980,11 @@
   .hero .split-7-5 > div:first-child > ul.hero__micro { grid-area: micro; }
   .hero .split-7-5 > .hero__media {
     grid-area: media;
+    align-self: start;
   }
   .hero .split-7-5 > .hero__media .photo-slot {
-    aspect-ratio: auto;
-    min-height: 0;
-    height: 100%;
+    aspect-ratio: 16 / 10;
+    height: auto;
   }
 }
 .hero__panel {

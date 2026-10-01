@@ -538,11 +538,18 @@ html { font-size: 112.5%; }
 }
 
 /* ============================================================
-   Breakpoints — media queries must hard-code the widths
+   Breakpoints — three tiers, mobile-first, min-width only
+   ------------------------------------------------------------
+     768   tablet     1024   desktop     1280   wide
+   Every media query in the project must use one of these three values. An
+   earlier @media (min-width: 480px) step set --rail-h to 36px for 480–767; it
+   is folded into the 768 tier below, so 480–767 now keeps the 40px mobile rail
+   height (tokens.css §"header/rail"). 4px on a landscape phone is not worth a
+   fourth breakpoint.
+   Why min-width only: pairs like (max-width:899px) / (min-width:900px) leave a
+   half-pixel band at fractional viewport widths (browser zoom, 1.25 DPR) where
+   NEITHER matches, so a component silently renders unstyled there.
    ============================================================ */
-@media (min-width: 480px) {
-  :root { --rail-h: 36px; }
-}
 @media (min-width: 768px) {
   :root {
     --grid-cols: 8;

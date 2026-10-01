@@ -61,7 +61,7 @@ a { color: var(--color-link); text-decoration-thickness: 1px; text-underline-off
 a:hover { color: var(--color-link-hover); }
 /* Prose links need an underline now that they are neutral: colour alone no
    longer separates them from body copy (WCAG 1.4.1 use of colour). */
-.prose a, .prose-wide a { text-decoration: underline; }
+.prose a { text-decoration: underline; }
 
 /* 焦点可见性 — 必须 2px 实线 + offset，不能只靠 box-shadow */
 :focus-visible {
@@ -82,7 +82,15 @@ a:hover { color: var(--color-link-hover); }
 .cta--inverse :focus-visible,
 .site-footer :focus-visible,
 .hero-full :focus-visible,
-.section--inverse :focus-visible {
+.section--inverse :focus-visible,
+/* The utility rail is --ink-950 #1A1917 (components.css §4, 2026-10-01 change
+   that moved it off accent red). It was left out of this group when it was
+   accent-coloured, where the default red ring was invisible against red; on
+   near-black the default --focus-ring #D0202A measures 3.28:1 — over the 3:1
+   non-text floor but with no margin, and it sits next to near-white 14px text
+   at 17.57:1, so the ring reads as dimmer than the content it outlines.
+   --accent-300 #F2A6A6 on #1A1917 measures 9.02:1. */
+.rail :focus-visible {
   outline-color: var(--focus-ring-inverse);
 }
 
@@ -96,8 +104,9 @@ a:hover { color: var(--color-link-hover); }
 /* V4: mono retired site-wide — the reference (chinatours) uses one sans stack
    everywhere. Numeric alignment is carried by tabular-nums, not the family.
    (.tag-mono below keeps mono: it is internal placeholder language.) */
+/* (.process-step__num and .badge--code dropped 2026-10-01 dead-CSS pass.) */
 .num, .data, .stat, time, .mono,
-.process-step__num, .badge--code, .photo-slot__name {
+.photo-slot__name {
   font-family: var(--font-body);
   font-variant-numeric: tabular-nums lining-nums;
   font-feature-settings: 'tnum' 1, 'lnum' 1;
@@ -112,19 +121,19 @@ table td, table th {
 
 img, svg, video { max-width: 100%; height: auto; display: block; }
 
-/* 长文容器 */
-.prose      { max-width: var(--measure); }
-.prose-wide { max-width: var(--measure-wide); }
+/* 长文容器
+   (.prose-wide removed 2026-10-01 dead-CSS pass — nothing emits it.) */
+.prose { max-width: var(--measure); }
 
-/* 容器 */
+/* 容器
+   (.container--prose removed 2026-10-01 dead-CSS pass — nothing emits it.) */
 .container {
   width: 100%;
   max-width: var(--container-lg);
   margin-inline: auto;
   padding-inline: var(--container-px);
 }
-.container--md    { max-width: var(--container-md); }
-.container--prose { max-width: var(--container-prose); }
+.container--md { max-width: var(--container-md); }
 
 .section            { padding-block: calc(var(--section-py) * var(--track-section-py)); }
 .section--tight     { padding-block: calc(var(--section-py-tight) * var(--track-section-py)); }
@@ -188,10 +197,16 @@ img, svg, video { max-width: 100%; height: auto; display: block; }
 body { display: flex; flex-direction: column; min-height: 100vh; }
 main { flex: 1 0 auto; }
 
-/* 移动端吸底条占位 + 桌面 FAB 不遮挡页尾内容 */
-@media (max-width: 767px) {
-  body { padding-bottom: var(--bottombar-h); }
-  body { padding-bottom: calc(var(--bottombar-h) + env(safe-area-inset-bottom, 0px)); }
+/* 移动端吸底条占位 + 桌面 FAB 不遮挡页尾内容
+   Mobile-first: the sticky WhatsApp bar is a phone affordance, so the reserve
+   is the DEFAULT and the desktop tier takes it away. Same rendering as the old
+   `@media (max-width: 767px)` block, but with no upper bound to fall through at
+   fractional widths (a 767.5px viewport matched neither max:767 nor min:768).
+   The two declarations it used to repeat were a duplicate — the second always
+   won, so only the safe-area-aware one survives. */
+body { padding-bottom: calc(var(--bottombar-h) + env(safe-area-inset-bottom, 0px)); }
+@media (min-width: 768px) {
+  body { padding-bottom: 0; }
 }
 body.is-menu-open { overflow: hidden; }
 
@@ -215,7 +230,8 @@ ul.clean, ol.clean { list-style: none; margin: 0; padding: 0; }
 .skip-link:focus { transform: translate(-50%, 0); }
 
 /* --- Grid helpers --------------------------------------------- */
-.grid--2, .grid--3, .grid--4 {
+/* (.grid--4 removed 2026-10-01 dead-CSS pass — nothing emits it.) */
+.grid--2, .grid--3 {
   display: grid;
   gap: var(--track-grid-gap);
   grid-template-columns: 1fr;
@@ -223,11 +239,9 @@ ul.clean, ol.clean { list-style: none; margin: 0; padding: 0; }
 @media (min-width: 768px) {
   .grid--2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .grid--3 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .grid--4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (min-width: 1024px) {
   .grid--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  .grid--4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 }
 
 /* 7 + 5 分栏（HeroSplit 桌面版） */
@@ -300,7 +314,6 @@ ul.clean, ol.clean { list-style: none; margin: 0; padding: 0; }
 @media (min-width: 1024px) {
   .section .container > .section-head,
   .section .container > .prose,
-  .section .container > .prose-wide,
   .section .container > .faq {
     margin-inline: auto;
   }
@@ -323,8 +336,7 @@ ul.clean, ol.clean { list-style: none; margin: 0; padding: 0; }
 
 /* --- Flow utilities -------------------------------------------- */
 .stack > * + * { margin-top: var(--space-4); }
-.stack-lg > * + * { margin-top: var(--space-6); }
-.flow-reset p:last-child, .flow-reset ul:last-child { margin-bottom: 0; }
+/* (.stack-lg and .flow-reset removed 2026-10-01 dead-CSS pass.) */
 
 /* --- Rules ------------------------------------------------------ */
 .rule {
@@ -332,15 +344,14 @@ ul.clean, ol.clean { list-style: none; margin: 0; padding: 0; }
   border-top: var(--border-default);
   margin: var(--space-8) 0;
 }
-.rule--strong { border-top: var(--border-emphasis); }
+/* (.rule--strong removed 2026-10-01 dead-CSS pass.) */
 
-/* --- Text utilities --------------------------------------------- */
+/* --- Text utilities ---------------------------------------------
+   .u-muted / .u-center / .u-nowrap / .u-full removed 2026-10-01 dead-CSS pass.
+   The rest are emitted by at least one page and stay. */
 .u-secondary { color: var(--color-text-secondary); }
-.u-muted     { color: var(--color-text-muted); }
 .u-sm        { font-size: var(--fs-body-sm); }
 .u-caption   { font-size: var(--fs-caption); }
-.u-center    { text-align: center; }
-.u-nowrap    { white-space: nowrap; }
 .u-mt-0      { margin-top: 0; }
 .u-mt-5      { margin-top: var(--space-5); }
 .u-mt-6      { margin-top: var(--space-6); }
@@ -349,7 +360,6 @@ ul.clean, ol.clean { list-style: none; margin: 0; padding: 0; }
 .u-mb-6      { margin-bottom: var(--space-6); }
 .u-mb-8      { margin-bottom: var(--space-8); }
 .u-px-0      { padding-inline: 0; }
-.u-full      { max-width: none; }
 
 /* Mono micro / visible placeholder language（第 7.7 节占位治理） */
 .tag-mono {

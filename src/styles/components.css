@@ -41,8 +41,14 @@
   line-height: 1.2;
   text-decoration: none;
   cursor: pointer;
-  /* V4: a wrapping pill reads as two stacked chips (mobile header bug) */
-  white-space: nowrap;
+  /* 2026-09-20 audit P0-2: nowrap makes a pill's min-content width the whole
+     label, which is what made /destinations/ draggable sideways at 390px
+     (measured scrollWidth 458). Below the tablet tier a pill is allowed to
+     wrap — two-line pills are normal on a phone; a page you can drag sideways
+     is not. Mobile-first: wrapping is the default, nowrap is added at 768. */
+  white-space: normal;
+  text-align: center;
+  line-height: 1.3;
   /* V4 craft: buttons animate transform + shadow too, not just colour. A pill
      that only changes fill reads as a flat swatch; a 1px lift with a coloured
      shadow is what the Elementor reference does on every CTA. */
@@ -57,11 +63,13 @@
    from being pushed out, but the button itself is still 438px wide at 390px
    because nowrap makes its min-content width the label's full length. Re-run
    measured scrollWidth 458 on /destinations/ — unchanged.
-   So on phone widths the pill is allowed to wrap. Two-line pills are normal on
-   mobile; a page you can drag sideways is not. Short labels still fit on one
-   line, so nothing else moves. */
-@media (max-width: 480px) {
-  .btn { white-space: normal; text-align: center; line-height: 1.3; }
+    Short labels still fit on one line, so nothing else moves.
+   (Was `@media (max-width: 480px)`. 480 is not one of the three tiers, so the
+   boundary moved to 768: 481–767 now also allows a wrapping pill. Wrapping only
+   happens when the label genuinely does not fit, so a tablet that has room is
+   unaffected.) */
+@media (min-width: 768px) {
+  .btn { white-space: nowrap; line-height: 1.2; }
 }
 .btn--block { display: flex; width: 100%; }
 
@@ -73,7 +81,10 @@
   background: var(--action-bg-hover);
   color: var(--action-text);
   transform: translateY(-1px);
-  box-shadow: 0 6px 16px rgba(208, 32, 42, 0.28);
+  /* Was the literal rgba(208,32,42,.28). Derived from --accent-600 instead so
+     the shadow tracks the action colour rather than being a second copy of it
+     that silently goes stale if the red ever moves. */
+  box-shadow: 0 6px 16px color-mix(in srgb, var(--accent-600) 28%, transparent);
 }
 .btn--primary:active { background: var(--action-bg-pressed); color: var(--action-text); transform: translateY(0); box-shadow: none; }
 
@@ -108,8 +119,8 @@
    call sites now use .btn--secondary, and a dead rule would keep showing up in
    every "no V2 leftovers" grep. */
 
-.btn--whatsapp { background: var(--color-whatsapp); color: #FFFFFF; }
-.btn--whatsapp:hover { background: var(--color-whatsapp-hover); color: #FFFFFF; }
+.btn--whatsapp { background: var(--color-whatsapp); color: var(--white); }
+.btn--whatsapp:hover { background: var(--color-whatsapp-hover); color: var(--white); }
 
 /* Disabled is the ONE place --text-disabled may appear (WCAG 1.4.3 exempts
    inactive controls). Never reuse this colour as body copy (§11.4 #1). */
@@ -173,7 +184,7 @@
    "Placeholder" — shipping it announced our draft status to a client on the
    deepest page of the funnel (critique round-2 N1). The pre-launch anchor is
    now the data-placeholder attribute, which is invisible. */
-.badge--tbc     { background: var(--color-surface-subtle); border: var(--border-divider); color: var(--text-muted); }
+/* .badge--tbc removed 2026-10-01 (dead CSS pass): no template emits it. */
 
 .chip-tag {
   display: inline-flex;
@@ -194,34 +205,10 @@
    Unsourced figures render as "—" and carry data-placeholder="case". */
 
 
-/* Card field pair（V3 §7.2）—— label is mono, value is body. That contrast is
-   the whole point: it reads as a recorded field, not a marketing line. */
-.card__field { margin-bottom: var(--space-3); }
-.card__field-k {
-  display: block;
-  font-family: var(--font-body);
-  font-size: var(--fs-label);
-  font-weight: 500;
-  line-height: var(--lh-label);
-  letter-spacing: var(--ls-label);
-  text-transform: uppercase;
-  color: var(--text-muted);
-  margin-bottom: 2px;
-}
-.card__field-v { font-size: var(--fs-body-sm); color: var(--text-primary); }
-.card__fields { margin: var(--space-4) 0 0; }
-
-/* Multi-tag stack over card media（§7.2） */
-.card__tags {
-  position: absolute;
-  top: var(--space-3);
-  left: var(--space-3);
-  z-index: 2;
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2);
-  max-width: calc(100% - var(--space-6));
-}
+/* .card__field / .card__field-k / .card__field-v / .card__fields / .card__tags
+   removed 2026-10-01 (dead CSS pass): the card field pair and the media tag
+   stack are both rendered by .case-card__* now; nothing emits the .card__*
+   names. */
 
 /* ============================================================
    3. PhotoSlot（V3 第 8.5 节）— 「底片 / Plate」
@@ -249,7 +236,7 @@
   --slot-bg-1: var(--ink-050);                  /* #F4F6FA — cool, not warm */
   --slot-bg-2: var(--ink-100);                  /* #E6EBF5 */
   --slot-edge: var(--border-strong-color);      /* #CDD2D8 — the "cut line" */
-  --slot-line: rgba(26, 25, 23, 0.055);         /* hatch · ink at ~5% */
+  --slot-line: color-mix(in srgb, var(--ink-950) 5.5%, transparent);   /* hatch · ink at ~5% */
   --slot-ink:  var(--text-muted);               /* #616670 · 5.76:1 on #FFF */
 
   position: relative;
@@ -270,10 +257,14 @@
   pointer-events: none;
   background-image: repeating-linear-gradient(135deg,
     var(--slot-line) 0 1px, transparent 1px 10px);
+  /* mask-image reads the ALPHA channel only, so the hue of these stops is
+     irrelevant — near-black --ink-1000 behaves exactly like the pure black
+     that used to be written here. Referencing a token keeps it off the
+     literal-colour list. */
   -webkit-mask-image: linear-gradient(to bottom left,
-    #000 0%, rgba(0, 0, 0, 0.40) 44%, transparent 76%);
+    var(--ink-1000) 0%, color-mix(in srgb, var(--ink-1000) 40%, transparent) 44%, transparent 76%);
           mask-image: linear-gradient(to bottom left,
-    #000 0%, rgba(0, 0, 0, 0.40) 44%, transparent 76%);
+    var(--ink-1000) 0%, color-mix(in srgb, var(--ink-1000) 40%, transparent) 44%, transparent 76%);
 }
 
 /* The nameplate. It is real text, not decoration — it says what belongs on this
@@ -346,15 +337,25 @@
 .photo-slot--thumb  .photo-slot__note  { display: none; }
 
 /* Narrow plates (the 120px .download__thumb doc, thumbs in a timeline column)
-   get the tighter inset so the type never sits on the edge. */
-@media (max-width: 600px) {
+   get the tighter inset so the type never sits on the edge. Mobile-first: the
+   tight inset is the DEFAULT and the tablet tier widens it.
+   (Was `@media (max-width: 600px)`; 600 is not a tier, so 601–767 now also uses
+   the tight inset. It is a 4px inset difference on a plate label.) */
+.photo-slot__label {
+  left: var(--space-3);
+  right: var(--space-3);
+  bottom: var(--space-3);
+  gap: 1px;
+}
+.photo-slot__label::before { margin-bottom: var(--space-1); }
+@media (min-width: 768px) {
   .photo-slot__label {
-    left: var(--space-3);
-    right: var(--space-3);
-    bottom: var(--space-3);
-    gap: 1px;
+    left: var(--space-4);
+    right: var(--space-4);
+    bottom: var(--space-4);
+    gap: 2px;
   }
-  .photo-slot__label::before { margin-bottom: var(--space-1); }
+  .photo-slot__label::before { margin-bottom: var(--space-2); }
 }
 
 /* §24b — the dark band re-points the plate, it does not re-author it. One block
@@ -408,7 +409,7 @@
      (#B4B9C3) 8.92:1 · --on-inverse-text-muted (#8A8F99) 5.41:1. All AA+.
      The red now appears once above the fold: the header CTA pill. ────────── */
   background: var(--ink-950);
-  color: rgba(255, 255, 255, 0.82);
+  color: color-mix(in srgb, var(--white) 82%, transparent);
   /* was --font-mono at --fs-micro with wide overline tracking: at 100% zoom it
      rendered ~10px and read as a discount banner. Body face at the caption step
      (14px), normal tracking — still a quiet utility strip, but legible.
@@ -451,18 +452,22 @@
 .rail__fact { color: var(--on-inverse-text-strong); white-space: nowrap; }
 .rail__fact a { color: var(--on-inverse-text-strong); }
 .rail__sep { color: var(--on-inverse-border); }
-@media (max-width: 767px) {
-  /* small screens: the vetting link only — contacts live in the drawer and the
-     sticky WhatsApp bar, which is where a thumb can actually reach them. */
-  .rail__facts { display: none; }
-  .rail__inner { flex-wrap: nowrap; }
-}
-/* 2026-09-19 — tablet (768–1023): the fixed-height rail clipped a wrapped
-   second line ("…check — / see how") and the two facts squeezed the lead.
-   Ellipsis is now handled by .rail__lead-text at every width; the facts only
-   survive where they genuinely fit. */
-@media (max-width: 899px) {
-  .rail__facts { display: none; }
+/* 2026-09-19 — the fixed-height rail clipped a wrapped second line ("…check — /
+   see how") and the two facts squeezed the lead. Ellipsis is now handled by
+   .rail__lead-text at every width; the facts only survive where they genuinely
+   fit, which is the desktop tier.
+   Mobile-first: hidden by default, revealed at 1024.
+   Two former blocks collapse into this one: `@media (max-width: 767px)` (the
+   vetting link only — contacts live in the drawer and the sticky WhatsApp bar,
+   which is where a thumb can actually reach them) and `@media (max-width:899px)`
+   (the tablet range). 900–1023 now hides the facts too. The 2026-09-19 note
+   above names 768–1023 as the range that squeezed the lead, so dropping the
+   facts across the whole of it is what the note was asking for; the intermediate
+   900px step only existed because the boundary was never re-expressed as a tier. */
+.rail__facts { display: none; }
+.rail__inner { flex-wrap: nowrap; }
+@media (min-width: 1024px) {
+  .rail__facts { display: flex; }
 }
 
 .site-header__bar {
@@ -608,8 +613,10 @@
   .nav {
     display: flex;
     align-items: center;
-    gap: var(--space-6);
-    margin-left: var(--space-8);
+    /* Tight values: the 1024–1279 band is where the container is tightest. The
+       wide tier relaxes them below. See the 1280 block. */
+    gap: var(--space-4);
+    margin-left: var(--space-5);
     flex-wrap: nowrap;
   }
 }
@@ -617,8 +624,18 @@
    two lines ("How we / vet") — never acceptable in a primary nav. Items never
    wrap; the GAP gives way instead. */
 .nav-trigger, .nav-link { white-space: nowrap; }
-@media (min-width: 1024px) and (max-width: 1220px) {
-  .nav { gap: var(--space-4); margin-left: var(--space-5); }
+/* Tier 1280 replaces the old `@media (min-width:1024px) and (max-width:1220px)`
+   range query, which was the one place in the codebase that mixed min and max.
+   A fluid clamp() could reproduce it continuously, but only as
+   `clamp(var(--space-4), calc(4.0816vw - 25.796px), var(--space-6))` — three
+   magic constants derived from the 1024/1220 endpoints that silently break the
+   moment --space-4 or --space-6 moves. A tier step at 1280 keeps the values
+   readable and is the safer direction: 1220–1279 now takes the TIGHTER gap, and
+   a gap that is too small can never reintroduce the two-line nav the original
+   range query existed to prevent.
+   .nav is display:none below 1024, so the mobile tier needs no counterpart. */
+@media (min-width: 1280px) {
+  .nav { gap: var(--space-6); margin-left: var(--space-8); }
 }
 .nav-group { position: relative; }
 .nav-trigger {
@@ -767,19 +784,36 @@
      · 44px tall     → unchanged, WCAG 2.5.8 still met;
      · inside the bar → 13px/14px instead of a 16px step.
    Measured at 390px before: 2 lines, 92px wide. After: 1 line, 84px wide. */
-@media (max-width: 480px) {
-  .site-header__actions .btn {
-    white-space: nowrap;
-    padding: 0 14px;
-    font-size: 13px;
-  }
-  /* long form for ≥481px only — the short form is a <span> toggled here, so the
-     accessible name always contains exactly one of them (display:none drops it
-     from the a11y tree, unlike visibility/opacity). */
-  .header-cta__long { display: none; }
+/* Mobile-first: the compact form is the default, the tablet tier switches to
+   the long one. (Was a `(max-width: 480px)` / `(min-width: 481px)` pair; 481 is
+   not a tier, so 481–767 now keeps the COMPACT "Plan visit" — 84px instead of
+   92px, and the direction that cannot reintroduce the two-line wrap measured at
+   390px. From 768 the header has room for "Plan my visit" and takes it.) */
+.site-header__actions .btn {
+  white-space: nowrap;
+  padding: 0 14px;
+  font-size: 13px;
 }
-@media (min-width: 481px) {
+/* Only ever ONE of the two spans is displayed — the hidden one is dropped from
+   the a11y tree by display:none (unlike visibility/opacity), so the accessible
+   name always contains exactly one label. */
+.header-cta__long { display: none; }
+@media (min-width: 768px) {
+  /* Back to the values the unconditional .site-header__actions .btn rule above
+     already declares — 16px inset and the caption step. Restating them (rather
+     than deleting the mobile rule's properties) is required because this block
+     comes LATER in the cascade, so anything it omits keeps the compact value. */
+  .site-header__actions .btn {
+    padding: 0 var(--space-4);
+    font-size: var(--fs-caption);
+  }
+  .header-cta__long { display: inline; }
   .header-cta__short { display: none; }
+}
+/* The 1024 tier's own font-size step has to be re-stated here for the same
+   cascade reason — the block above would otherwise mask the rule at line 774. */
+@media (min-width: 1024px) {
+  .site-header__actions .btn { font-size: var(--fs-body-sm); }
 }
 
 /* Hamburger — minimal, no box. A bordered square around two lines is the
@@ -919,13 +953,15 @@
   /* 68vh, not 78vh: the reference hero leaves the surface section visible
      above the fold, which is what makes the rhythm read as "big image → light
      content band" instead of "wall of photo". */
-  min-height: 68vh;
+  min-height: 60vh;   /* 68vh from the tablet tier up — see the 768 block below */
   display: flex;
   align-items: flex-start;
   overflow: hidden;
   background: var(--surface-inverse);
 }
-@media (max-width: 767px) { .hero-full { min-height: 60vh; } }
+@media (min-width: 768px) { .hero-full { min-height: 68vh; } }
+/* (Was `@media (max-width: 767px) { min-height: 60vh }` — mobile-first now:
+   60vh is declared on .hero-full itself and the tablet tier raises it.) */
 /* The header is sticky and sits in normal flow, so a hero that must sit UNDER it
    has to be pulled up by the full rail + bar height. The rail covers the photo's
    top edge — it stays solid by design (§6.2 deviation ②) — and the transparent
@@ -1152,14 +1188,18 @@
 .trust-bar { background: var(--color-surface-inverse); padding-block: var(--section-py-tight); }
 .trust-bar--light { background: var(--color-surface-subtle); }
 .trust-bar__grid { display: grid; gap: var(--space-6); }
+/* Mobile-first: a stacked bar separates its items with a TOP rule; from the
+   tablet tier the bar is a row and the rule becomes a LEFT one. Same two
+   renderings as the old (max-width:767px) / (min-width:768px) pair. */
+.trust-bar__item + .trust-bar__item { border-top: 1px solid var(--on-inverse-border-subtle); padding-top: var(--space-6); }
+.trust-bar--light .trust-bar__item + .trust-bar__item { border-top: var(--border-divider); }
 @media (min-width: 768px) {
   .trust-bar__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-8); }
-  .trust-bar__item + .trust-bar__item { border-left: 1px solid var(--on-inverse-border-subtle); padding-left: var(--space-8); }
-  .trust-bar--light .trust-bar__item + .trust-bar__item { border-left: var(--border-divider); }
-}
-@media (max-width: 767px) {
-  .trust-bar__item + .trust-bar__item { border-top: 1px solid var(--on-inverse-border-subtle); padding-top: var(--space-6); }
-  .trust-bar--light .trust-bar__item + .trust-bar__item { border-top: var(--border-divider); }
+  .trust-bar__item + .trust-bar__item {
+    border-top: 0; padding-top: 0;
+    border-left: 1px solid var(--on-inverse-border-subtle); padding-left: var(--space-8);
+  }
+  .trust-bar--light .trust-bar__item + .trust-bar__item { border-top: 0; border-left: var(--border-divider); }
 }
 .trust-figure {
   display: flex;
@@ -1332,7 +1372,8 @@
 .cmp-table tbody td:last-child { border-right: var(--border-divider); }
 .cmp-table tbody tr td.featured-cell { background: var(--color-accent-tint); border-left: var(--border-accent); border-right: var(--border-accent); }
 .cmp-table tbody tr:last-child th, .cmp-table tbody tr:last-child td { border-bottom: 0; }
-.cmp-table .row-featured th { background: transparent; }
+/* .row-featured removed 2026-10-01 (dead CSS pass): .cmp-table marks the
+   featured column with .featured-cell on the td, not a row class. */
 .cmp-head-sub { display: block; font-family: var(--font-body); font-size: var(--fs-micro); font-weight: 400; letter-spacing: var(--ls-micro); color: var(--text-muted); margin-top: 4px; text-transform: uppercase; }
 .cmp-price { font-family: var(--font-body); font-size: var(--fs-data-lg); font-weight: var(--fw-semibold); color: var(--color-text); line-height: 1.1; font-variant-numeric: tabular-nums lining-nums; }
 .cmp-cell { display: flex; align-items: flex-start; gap: var(--space-2); }
@@ -1528,16 +1569,27 @@
     background: var(--ink-200);
   }
 }
-.tl-item { position: relative; }
-@media (max-width: 1023px) {
-  .tl-item { display: grid; grid-template-columns: 20px 1fr; gap: var(--space-4); }
-  .tl-item::before {
-    content: '';
-    position: absolute;
-    left: 5px; top: 16px; bottom: calc(-1 * var(--space-6));
-    width: 2px; background: var(--ink-200);
-  }
-  .tl-item:last-child::before { display: none; }
+/* Mobile-first: below the desktop tier the timeline is a VERTICAL list, so each
+   item carries its own connector stub and lays its marker out in a 20px column.
+   From 1024 the .timeline grid above turns it horizontal: the per-item stub is
+   replaced by the single .timeline::before rail, so both are switched off here.
+   Same two renderings as the old `@media (max-width: 1023px)` block. */
+.tl-item {
+  position: relative;
+  display: grid;
+  grid-template-columns: 20px 1fr;
+  gap: var(--space-4);
+}
+.tl-item::before {
+  content: '';
+  position: absolute;
+  left: 5px; top: 16px; bottom: calc(-1 * var(--space-6));
+  width: 2px; background: var(--ink-200);
+}
+.tl-item:last-child::before { display: none; }
+@media (min-width: 1024px) {
+  .tl-item { display: block; }
+  .tl-item::before { display: none; }
 }
 .tl-dot {
   display: block;
@@ -1698,7 +1750,9 @@
 .download__form-wrap { margin-top: var(--space-6); }
 @media (min-width: 1024px) { .download__form-wrap { margin-top: 0; } }
 .download__form { display: grid; gap: var(--space-3); }
-@media (min-width: 480px) { .download__form { grid-template-columns: 1fr auto; align-items: start; } }
+/* (Was `min-width: 480px`; 480 is not a tier, so the two-column form now starts
+   at the tablet tier — 481–767 stacks the field above the button.) */
+@media (min-width: 768px) { .download__form { grid-template-columns: 1fr auto; align-items: start; } }
 .download__micro { margin-top: var(--space-3); font-size: var(--fs-caption); color: var(--color-text-muted); }
 .download__success {
   display: flex; align-items: center; gap: var(--space-3);
@@ -1716,21 +1770,9 @@
   margin-bottom: var(--space-8);
 }
 @media (min-width: 1024px) { .filter { padding: var(--space-6); } }
-.filter__row + .filter__row { margin-top: var(--space-5); }
-.filter__legend {
-  font-family: var(--font-body);
-  font-size: var(--fs-label);
-  font-weight: 500;
-  letter-spacing: var(--ls-label);
-  text-transform: uppercase;
-  color: var(--text-muted);
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-  margin-bottom: var(--space-3);
-}
-.filter__legend::before { content: ''; width: 16px; height: 2px; background: var(--color-accent); flex: none; }
-.filter__chips { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+/* .filter__row / .filter__legend / .filter__chips removed 2026-10-01 (dead CSS
+   pass): the case-study filter renders .chip buttons inside .filter directly,
+   with no row/legend/chips wrappers. */
 /* Filter chip = a control: 4px radius, ≥3:1 boundary. It is NOT a pill — there
    is no pill radius left in the scale (§4.1). */
 .chip {
@@ -1755,16 +1797,8 @@
 .chip svg { width: 14px; height: 14px; display: none; }
 .chip[aria-pressed="true"] svg { display: block; }
 .chip:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
-.filter__meta {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-3);
-  margin-top: var(--space-5);
-  padding-top: var(--space-4);
-  border-top: var(--border-divider);
-}
+/* .filter__meta removed 2026-10-01 (dead CSS pass): app.js renders the count
+   into [data-filter-count] inside .filter, with no .filter__meta wrapper. */
 .filter__count { font-family: var(--font-body); font-size: var(--fs-micro); letter-spacing: var(--ls-micro); color: var(--text-muted); text-transform: uppercase; }
 
 .case-grid { display: grid; gap: var(--space-6); }
@@ -1821,36 +1855,18 @@
 .case-card__type { position: absolute; top: var(--space-3); left: var(--space-3); z-index: 2; display: flex; flex-wrap: wrap; gap: var(--space-2); max-width: calc(100% - var(--space-6)); }
 .case-card__body { padding: var(--space-5); display: flex; flex-direction: column; gap: var(--space-3); flex: 1 1 auto; }
 .case-card__title { font-family: var(--font-display); font-size: var(--fs-h4); font-weight: var(--fw-semibold); line-height: var(--lh-h4); }
-.case-card__field-k {
-  display: block;
-  font-family: var(--font-body);
-  font-size: var(--fs-label);
-  font-weight: 500;
-  line-height: var(--lh-label);
-  letter-spacing: var(--ls-label);
-  text-transform: uppercase;
-  color: var(--text-muted);
-  margin-bottom: 2px;
-}
-.case-card__field-v { font-size: var(--fs-body-sm); color: var(--text-primary); }
-.case-card__fields { display: grid; gap: var(--space-3); margin: var(--space-1) 0 0; }
+/* .case-card__field-k / -v / .case-card__fields removed 2026-10-01 (dead CSS
+   pass): CaseCard.astro renders its spec rows as .spec-list, not as a
+   case-card__fields grid. */
 .case-card__result { display: flex; align-items: flex-start; gap: var(--space-2); font-family: var(--font-body); font-size: var(--fs-body-sm); font-weight: var(--fw-semibold); color: var(--color-accent); line-height: 1.5; font-variant-numeric: tabular-nums lining-nums; }
 .case-card__result svg { width: 16px; height: 16px; margin-top: var(--space-1); flex: none; }
-.case-card__cta { margin-top: auto; padding-top: var(--space-3); }
 .case-card__info { font-size: var(--fs-caption); color: var(--color-text-muted); }
 .case-card[hidden] { display: none; }
 
-.filter-empty {
-  background: var(--color-surface-subtle);
-  border: var(--border-dashed);
-  border-radius: var(--radius-lg);
-  padding: var(--space-12) var(--space-6);
-  text-align: center;
-}
-.filter-empty__icon { width: 48px; height: 48px; margin: 0 auto var(--space-4); color: var(--ink-300); }
-.filter-empty__title { font-family: var(--font-display); font-size: var(--fs-h4); font-weight: var(--fw-semibold); margin-bottom: var(--space-3); }
-.filter-empty__body { font-size: var(--fs-body-sm); color: var(--color-text-secondary); max-width: 46ch; margin: 0 auto var(--space-6); }
-.filter-empty__actions { display: flex; flex-wrap: wrap; gap: var(--space-3); justify-content: center; }
+/* .filter-empty and its __icon/__title/__body/__actions children removed
+   2026-10-01 (dead CSS pass): app.js's filter contract is the ATTRIBUTE
+   [data-filter-empty] (see the markup contract comment in src/scripts/app.js §5)
+   — the class-based panel these rules styled was never emitted. */
 
 /* ============================================================
    18. FAQAccordion（第 5.11 节）
@@ -1932,8 +1948,8 @@
    being .vet-link, which is an action bar and looks nothing like it). */
 .testimonial__quote { font-size: var(--fs-lead); line-height: 1.5; color: var(--color-text); max-width: 58ch; margin: 0; }
 .testimonial__by { display: flex; align-items: center; gap: var(--space-3); margin-top: var(--space-2); }
-.testimonial__avatar { width: 40px; height: 40px; flex: none; }
-.testimonial__avatar .photo-slot { border-radius: 0; box-shadow: none; }
+/* .testimonial__avatar removed 2026-10-01 (dead CSS pass): the byline renders
+   .testimonial__initial (an initials plate), never an avatar image. */
 .testimonial__initial {
   width: 40px; height: 40px; flex: none;
   display: grid; place-items: center;
@@ -1949,8 +1965,8 @@
 /* Consistent with .caveat above: dashed = provisional / awaiting real content. */
 .testimonial--empty { border: var(--border-dashed); background: var(--color-surface-subtle); box-shadow: none; }
 .testimonial--empty .testimonial__quote { font-size: var(--fs-body); color: var(--color-text-secondary); }
-.testimonial-grid { display: grid; gap: var(--space-6); }
-@media (min-width: 1024px) { .testimonial-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+/* .testimonial-grid removed 2026-10-01 (dead CSS pass): testimonials are
+   dropped into the page grid by the page, not into a .testimonial-grid. */
 
 /* ============================================================
    20. CTASection（第 5.13 节）
@@ -1967,9 +1983,9 @@
      cannot clash with the palette; a center vignette keeps the copy readable. */
   background-image:
     radial-gradient(120% 140% at 50% 46%,
-      rgb(26 25 23 / 0.9) 20%,
-      rgb(26 25 23 / 0.55) 55%,
-      rgb(26 25 23 / 0) 100%),
+      color-mix(in srgb, var(--ink-950) 90%, transparent) 20%,
+      color-mix(in srgb, var(--ink-950) 55%, transparent) 55%,
+      color-mix(in srgb, var(--ink-950) 0%, transparent) 100%),
     linear-gradient(to right,  var(--on-inverse-grid) 1px, transparent 1px),
     linear-gradient(to bottom, var(--on-inverse-grid) 1px, transparent 1px);
   background-repeat: no-repeat, repeat, repeat;
@@ -2073,7 +2089,8 @@
 }
 .field input[disabled], .field textarea[disabled] { background: var(--color-surface-muted); color: var(--text-disabled); cursor: not-allowed; }
 .field input[aria-invalid="true"], .field textarea[aria-invalid="true"] { border-color: var(--color-danger); }
-.field__error { font-size: var(--fs-caption); color: var(--color-danger); margin-top: var(--space-2); }
+/* .field__error removed 2026-10-01 (dead CSS pass): field errors render as
+   .form-status--err panels, not as per-field messages. */
 
 .radio-group { display: flex; flex-wrap: wrap; gap: var(--space-2); }
 .radio-chip { position: relative; }
@@ -2100,9 +2117,8 @@
 .form-status { border-radius: var(--radius-md); padding: var(--space-6); display: flex; flex-direction: column; gap: var(--space-3); }
 .form-status--ok { background: var(--success-bg); border: 1px solid var(--color-success); }
 .form-status--err { background: var(--stop-bg); border: var(--border-danger); }
-.form-status__icon { width: 48px; height: 48px; }
-.form-status--ok .form-status__icon { color: var(--color-success); }
-.form-status--err .form-status__icon { color: var(--color-stop); }
+/* .form-status__icon removed 2026-10-01 (dead CSS pass): the status panels are
+   text-only; no icon element is emitted inside them. */
 .form-status__title { font-family: var(--font-display); font-size: var(--fs-h4); font-weight: var(--fw-semibold); }
 .form-status__note { font-size: var(--fs-caption); color: var(--color-text-muted); }
 .form-footnote { margin-top: var(--space-5); font-family: var(--font-body); font-size: var(--fs-micro); letter-spacing: var(--ls-micro); text-transform: uppercase; color: var(--text-muted); }
@@ -2209,7 +2225,7 @@
 .coverage__svg { position: absolute; inset: 0; width: 100%; height: 100%; }
 .map-region-t1 { fill: var(--map-region-t1-bg); stroke: var(--map-region-t1-border); stroke-width: 1; }
 .map-region-t2 { fill: var(--map-region-t2-bg); stroke: var(--map-region-t2-border); stroke-width: 1; }
-.map-region-t3 { fill: #FFFFFF; stroke: var(--map-tier3-stroke); stroke-width: 1; stroke-dasharray: 4 3; }
+.map-region-t3 { fill: var(--white); stroke: var(--map-tier3-stroke); stroke-width: 1; stroke-dasharray: 4 3; }
 .map-label {
   font-family: var(--font-body);
   font-size: var(--map-code-size);
@@ -2406,9 +2422,10 @@ ul.legend.clean { margin-top: var(--space-5); }
    The sticky bar is 64px tall; a two-line "Plan / visit" pill inside it reads
    as a broken control exactly like the header one did. Bar buttons are short
    by construction, so nowrap cannot push the page sideways here. */
-@media (max-width: 480px) {
-  .wa-bar .btn { white-space: nowrap; padding: 0 14px; }
-}
+/* Unconditional, not `@media (max-width: 480px)`: .wa-bar is display:none from
+   the tablet tier anyway, so the phone is its only audience and a query buys
+   nothing but a second breakpoint value. */
+.wa-bar .btn { white-space: nowrap; padding: 0 14px; }
 @media (min-width: 768px) { .wa-bar { display: none; } }
 
 .wa-fab { display: none; }
@@ -2428,7 +2445,7 @@ ul.legend.clean { margin-top: var(--space-5); }
        square control that grows on hover, so it takes the card radius. */
     border-radius: var(--radius-lg);
     background: var(--color-whatsapp);
-    color: #FFFFFF;
+    color: var(--white);
     box-shadow: var(--shadow-md);
     text-decoration: none;
     overflow: hidden;
@@ -2571,7 +2588,10 @@ ul.legend.clean { margin-top: var(--space-5); }
   .note-strip, .vet-link, .download, .form-shell, .tier-card,
   .service-card, .case-card, .card, .chip, .chip-tag, .related-nav, .photo-slot,
   .hero__panel, .split-card, .pillar, .testimonial, .spec-list, .step__num,
-  .field__input, .wa-panel, .coverage__canvas
+  /* .field__input and .wa-panel dropped from this list 2026-10-01 (dead CSS
+     pass): neither is emitted anywhere. List one component per line so the next
+     deletion is a single-line diff. */
+  .coverage__canvas
 ) {
   --color-text:           var(--text-primary);
   --color-text-secondary: var(--text-secondary);
@@ -2632,8 +2652,8 @@ ul.legend.clean { margin-top: var(--space-5); }
 .fact__v { display: block; margin-top: var(--space-2); font-family: var(--font-body); font-size: var(--fs-data-lg); font-weight: var(--fw-semibold); color: var(--color-text); line-height: 1.1; font-variant-numeric: tabular-nums lining-nums; }
 .fact__note { font-size: var(--fs-caption); color: var(--color-text-muted); margin-top: var(--space-2); }
 
-.pillars { display: grid; gap: var(--space-4); }
-@media (min-width: 768px) { .pillars { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+/* .pillars removed 2026-10-01 (dead CSS pass): .pillar items are laid out by
+   the page's own .grid; no .pillars wrapper exists. */
 .pillar {
   background: var(--color-surface);
   border: var(--border-default);
@@ -2721,7 +2741,10 @@ ul.legend.clean { margin-top: var(--space-5); }
    In a 1200px container a 1-col spec list stacks 4–6 tight rows against
    ~400px of dead space on the right — the "窄 + 挤" combination the director
    flagged. Two columns halve the height and use the band. */
-@media (min-width: 900px) {
+/* (Was `min-width: 900px`. 900 is not a tier: the two-column variant now starts
+   at 1024, so 900–1023 stacks. A stacked spec list at 900px is fine — the
+   complaint being fixed here was dead space at 1200px, not at 900.) */
+@media (min-width: 1024px) {
   .spec-list--split { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-5) var(--space-8); }
   .spec-list--split li { grid-template-columns: minmax(120px, 170px) 1fr; }
 }
@@ -2809,12 +2832,11 @@ ul.legend.clean { margin-top: var(--space-5); }
    the right, with nothing on the page acknowledging it.
    TODO(base.css owner): remove `margin-inline: auto` from the
    `.section .container > …` rule at base.css:261-268 (it covers section-head,
-   prose, prose-wide AND faq — all four are overridden here), then delete this
+   prose and faq — all three are overridden here), then delete this
    block. ---- */
 @media (min-width: 1024px) {
   .section .container > .section-head,
   .section .container > .prose,
-  .section .container > .prose-wide,
   .section .container > .faq {
     margin-inline: 0;
   }
@@ -2882,11 +2904,20 @@ ul.legend.clean { margin-top: var(--space-5); }
   box-shadow: none;
 }
 .service-list > .service-card:hover { border-top-color: var(--border-strong-color); }
-@media (max-width: 767px) {
+/* Mobile-first: 32px icons are the default, the tablet tier goes back to 40px
+   (the value the .service-list rule above declares for wider rows). Same two
+   renderings as the old `@media (max-width: 767px)` block. */
+.service-list > .service-card {
+  grid-template-columns: 32px minmax(0, 1fr);
+  column-gap: var(--space-4);
+}
+.service-list > .service-card .service-card__icon { width: 32px; height: 32px; }
+.service-list > .service-card .service-card__icon svg { width: 32px; height: 32px; }
+@media (min-width: 768px) {
   .service-list > .service-card {
-    grid-template-columns: 32px minmax(0, 1fr);
-    column-gap: var(--space-4);
+    grid-template-columns: 40px minmax(0, 1fr);
+    column-gap: var(--space-5);
   }
-  .service-list > .service-card .service-card__icon { width: 32px; height: 32px; }
-  .service-list > .service-card .service-card__icon svg { width: 32px; height: 32px; }
+  .service-list > .service-card .service-card__icon { width: 40px; height: 40px; }
+  .service-list > .service-card .service-card__icon svg { width: 40px; height: 40px; }
 }

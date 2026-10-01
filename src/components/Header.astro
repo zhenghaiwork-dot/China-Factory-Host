@@ -149,7 +149,14 @@ const MENU_FOOT: Record<string, { label: string; href: string }> = {
           ghost + "Plan my trip"), which diluted the only real CTA on the page.
           Secondary actions inside the menu are text links, not buttons. */}
       <div class="site-header__actions">
-        <a class="btn btn--primary" href="/contact/">Plan my visit</a>
+        {/* H4 2026-10-01 — the label shortened below 480px. Two spans rather than
+          a CSS content swap: the string stays in the HTML, so translation,
+          find-in-page and the accessible name all keep working, and the hidden
+          variant is display:none (removed from the a11y tree) rather than
+          visually hidden. See components.css §4 `.site-header__actions .btn`. */}
+      <a class="btn btn--primary" href="/contact/">
+        <span class="header-cta__long">Plan my visit</span><span class="header-cta__short">Plan visit</span>
+      </a>
         <button
           class="burger"
           type="button"

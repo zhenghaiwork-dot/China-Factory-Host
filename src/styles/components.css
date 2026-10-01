@@ -77,29 +77,24 @@
 }
 .btn--primary:active { background: var(--action-bg-pressed); color: var(--action-text); transform: translateY(0); box-shadow: none; }
 
-/* Teal pill — the reference's HERO call-to-action is teal while every other
-   CTA is red. This mirrors that split exactly. */
-.btn--second { background: var(--green-700); color: var(--on-inverse-text-strong); }
-.btn--second:hover {
-  background: var(--green-800);
-  color: var(--on-inverse-text-strong);
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-accent-green);
-}
-.btn--second:active { transform: translateY(0); box-shadow: none; }
+/* ── RETIRED 2026-10-01 (B3 · one accent colour per screen) ────────────────
+   The green hero pill (.btn--second) and its white hero counterpart
+   (.hero-full .btn--primary) are both deleted here, together with the
+   .hero-full .btn--primary:active step that only existed for that white fill.
 
-/* On the photographic hero the red pill still works, but the reference's hero
-   CTA is teal — so the hero swaps to .btn--second in the markup. The white
-   fallback below only applies if a red primary is ever used over the photo,
-   where the old near-black fill vanished entirely (first real screenshot). */
-.hero-full .btn--primary { background: #FFFFFF; color: var(--text-primary); }
-.hero-full .btn--primary:hover { background: var(--surface-tint); color: var(--text-primary); }
-/* #DFE4EB was the only occurrence of that colour on the site. It is the pressed
-   state of the white primary button on the light hero, one step darker than the
-   --surface-tint it hovers to; --ink-150 (#DBE0EA) is within 5/4/5 — not
-   distinguishable — and takes it off the literal-colour list.
-   (audit-visual.md P2-9) */
-.hero-full .btn--primary:active { background: var(--ink-150); color: var(--text-primary); }
+   Why: the homepage carried THREE competing action colours on one screen —
+   a brand-red utility rail, a red header pill and a green hero CTA. The green
+   fill also read as "success / tick" everywhere else on the site, so a green
+   primary button quietly meant "already verified" rather than "act".
+   Green now carries success semantics only (--color-verified, .i-check).
+
+   The hero primary is once again .btn--primary = the brand red pill
+   (white on #D0202A = 5.40:1 AA on the scrim). Its previous white hero
+   override is gone with it — there is exactly one primary fill again.
+
+   Last call site was src/pages/index.astro:252, now removed — verify with:
+     grep -rn 'btn--second' src/ --include=*.astro   (must return nothing)
+   ------------------------------------------------------------------------- */
 
 /* Outlined button = a control boundary → WCAG 1.4.11 needs ≥3:1 (§4.2) */
 .btn--secondary { background: transparent; color: var(--color-text); border-color: var(--border-control-color); }
@@ -402,11 +397,17 @@
    must be able to read, and hero.jpg's top edge is unverified (§6.2). */
 .rail {
   height: var(--rail-h);
-  /* Reference-site move: the utility strip is BRAND-OXBLOOD, not near-black.
-     This is the single highest-leverage colour change on the page — the red bar
-     at the very top establishes the palette before anything else renders
-     (white on #6E000B = 12.59:1, AAA). */
-  background: var(--color-accent);
+  /* ── B3 2026-10-01: the utility rail is NEAR-BLACK, not accent ──────────
+     It was var(--color-accent) (#D0202A) while the same band already carried
+     red in the header pill — so the top of every page spent two of the
+     three-per-screen accent budget (tokens.css §3 discipline: "the utility
+     rail is near-black, not accent").
+     Near-black also fixes the only measured WCAG AA failure on the site: the
+     rail's own white-ish body copy landed at 4.00:1 / 2.72:1 on red.
+     On --ink-950 (#1A1917): #FFFFFF 17.57:1 · --on-inverse-text-secondary
+     (#B4B9C3) 8.92:1 · --on-inverse-text-muted (#8A8F99) 5.41:1. All AA+.
+     The red now appears once above the fold: the header CTA pill. ────────── */
+  background: var(--ink-950);
   color: rgba(255, 255, 255, 0.82);
   /* was --font-mono at --fs-micro with wide overline tracking: at 100% zoom it
      rendered ~10px and read as a discount banner. Body face at the caption step
@@ -440,12 +441,13 @@
 .rail a { color: var(--on-inverse-text-strong); text-decoration: none; }
 .rail a:hover { color: var(--on-inverse-text-strong); text-decoration: underline; text-underline-offset: 3px; }
 .rail__facts { margin-left: auto; display: flex; align-items: center; gap: var(--space-6); }
-/* 2026-09-20 audit P0-1: this used --on-inverse-text-secondary (#B4B9C3),
-   whose documented 8.92:1 is measured against the NEAR-BLACK #1A1917 surface.
-   On the brand-red rail (#D0202A) it actually lands at 2.72:1 — the only
-   WCAG AA failure on the site, on every one of the 21 routes. White is 5.35:1
-   here. Do not "fix" this by editing the token: other inverse blocks rely on it
-   against the dark surface. */
+/* 2026-09-20 audit P0-1 kept, re-derived 2026-10-01 for the new rail surface:
+   this used --on-inverse-text-secondary (#B4B9C3), whose documented 8.92:1 is
+   measured against #1A1917. When the rail was brand red (#D0202A) that token
+   actually landed at 2.72:1 — the only AA failure left on the site.
+   White (#FFFFFF) measures 17.57:1 on --ink-950, so the audit point is moot
+   and the token documented value is now a fact rather than a coincidence.
+   Do not "fix" this by editing the token: other inverse blocks rely on it. */
 .rail__fact { color: var(--on-inverse-text-strong); white-space: nowrap; }
 .rail__fact a { color: var(--on-inverse-text-strong); }
 .rail__sep { color: var(--on-inverse-border); }
@@ -493,8 +495,10 @@
 .over-hero .site-header__bar .brand__mark,
 .over-hero .site-header__bar .brand__word,
 .over-hero .site-header__bar .brand__geo,
-.over-hero .site-header__bar .brand__core,
-/* ---------- M1: the second half of the wordmark ----------
+.over-hero .site-header__bar .brand__core {
+  color: var(--on-inverse-text);
+}
+/* ---------- M1 (2026-09) / M3 (2026-10-01): the second half of the wordmark --
    .brand__host is a <span> INSIDE .brand__word and carries --color-accent
    (#6E000B). Whitening the parent never touched it, so over the hero scrim the
    wordmark rendered "ChinaFactory" in white + "Host" in oxblood at 1.33–1.91:1 —
@@ -503,14 +507,25 @@
 
    Both halves take --on-inverse-text. --on-inverse-link (#E39A94) would keep the
    two-tone look but only reaches ~2.9:1 on the scrim's mid-grey, so the split is
-   carried by font-weight instead (§3.1's three-part weight step). */
-.over-hero .site-header__bar .brand__host { color: var(--on-inverse-text); }
+   carried by font-weight instead (§3.1's three-part weight step).
+
+   ── M3 2026-10-01 ── "both halves in the same white" is exactly what killed
+   the mark: over the hero the wordmark rendered "ChinaFactoryHost" as one
+   undifferentiated word, at the single most important position on the site.
+   The three-part weight split (§3.1) is information, not decoration — Host is
+   the part that says what we do. Over the hero only, Host takes --accent-300
+   (#F2A6A6 = 8.9:1 on the #1A1917 scrim floor, tokens.css:88), so the split
+   NOTE: this used to be a trailing entry in the selector list above, so the
+   wordmark could only ever have ONE colour across its two halves — the flaw
+   M3 exists to fix. It is its own rule now, after the list closes. ---------- */
+.over-hero .site-header__bar .brand__host { color: var(--accent-300); }
 .over-hero .site-header__bar .nav-trigger svg { color: currentColor; }
 .over-hero .site-header__bar .burger { color: var(--on-inverse-text-strong); }
 /* The default .brand:hover rule below drops the wordmark to --text-primary, which
    is INK — invisible on the scrim. Over the hero, hover stays inverse. */
-.over-hero .site-header__bar .brand:hover .brand__word,
-.over-hero .site-header__bar .brand:hover .brand__host { color: var(--on-inverse-text); }
+.over-hero .site-header__bar .brand:hover .brand__word { color: var(--on-inverse-text); }
+/* hover must not flatten the mark either (M3) */
+.over-hero .site-header__bar .brand:hover .brand__host { color: var(--accent-300); }
 /* the moment it is stuck it goes back to solid — never white-on-light */
 .over-hero .site-header.is-stuck .site-header__bar {
   background: var(--header-bg);
@@ -528,6 +543,13 @@
    exactly like the header on every other page. */
 .over-hero .site-header.is-stuck .site-header__bar .brand__geo { color: var(--text-secondary); }
 .over-hero .site-header.is-stuck .site-header__bar .brand__core { color: var(--text-primary); }
+/* M3 follow-through: the over-hero __host rule (0,3,0) out-specifies the base
+   .brand__host rule (0,1,0), so without this the homepage kept a pink "Host"
+   on the SOLID WHITE bar after scrolling — #F2A6A6 on #FFFFFF is 1.9:1 and
+   fails even non-text contrast. The comment above has promised this reset
+   since 2026-09; it was simply never written because both halves shared one
+   colour. Reset to the wordmark's normal second tone: --color-accent. */
+.over-hero .site-header.is-stuck .site-header__bar .brand__host { color: var(--color-accent); }
 .over-hero .site-header.is-stuck .site-header__bar .brand:hover .brand__word { color: var(--text-primary); }
 .over-hero .site-header.is-stuck .site-header__bar .brand:hover .brand__host { color: var(--color-accent); }
 
@@ -734,6 +756,32 @@
 .site-header__actions .btn { min-height: 44px; font-size: var(--fs-caption); padding: 0 var(--space-4); }
 @media (min-width: 1024px) { .site-header__actions .btn { min-height: 44px; font-size: var(--fs-body-sm); } }
 
+/* ── H4 2026-10-01: "Plan my visit" wrapped onto two lines at 390px ────────
+   components.css §1 lets every .btn wrap under 480px (that is what stopped two
+   long hero CTAs from making the page draggable sideways on /destinations/),
+   but a WRAPPING PILL inside a 64px header bar reads as a broken control — the
+   top-right corner is the one place on the site whose silhouette must never
+   change shape. The header CTA is therefore exempted from the global wrap rule
+   and shortened instead ("Plan visit", Header.astro), which keeps it:
+     · one line      → white-space: nowrap beats .btn's mobile normal;
+     · 44px tall     → unchanged, WCAG 2.5.8 still met;
+     · inside the bar → 13px/14px instead of a 16px step.
+   Measured at 390px before: 2 lines, 92px wide. After: 1 line, 84px wide. */
+@media (max-width: 480px) {
+  .site-header__actions .btn {
+    white-space: nowrap;
+    padding: 0 14px;
+    font-size: 13px;
+  }
+  /* long form for ≥481px only — the short form is a <span> toggled here, so the
+     accessible name always contains exactly one of them (display:none drops it
+     from the a11y tree, unlike visibility/opacity). */
+  .header-cta__long { display: none; }
+}
+@media (min-width: 481px) {
+  .header-cta__short { display: none; }
+}
+
 /* Hamburger — minimal, no box. A bordered square around two lines is the
    single cheapest-looking element in a header (§6.5). */
 .burger {
@@ -891,7 +939,14 @@
    point lives here rather than inline. 62%/40% keeps the workshop action in
    frame at every cover-crop; the header-contrast measurement in _hero_lum.cjs
    was taken at this exact object-position. */
-.hero-full__media img { width: 100%; height: 100%; object-fit: cover; object-position: 62% 40%; filter: saturate(0.55) contrast(1.04); }
+/* ── M1 2026-10-01: 0.55 → 0.75 saturation. At 0.55 the only real photograph
+   on the site rendered near-monochrome — the saturation loss killed exactly
+   the "we were actually standing there" evidence the picture exists for, and
+   combined with the hero scrim the image read as an almost black plate rather
+   than a factory floor. 0.75 still desaturates it enough to sit under white
+   type and under the red accent, but keeps material colour in the shot.
+   The left-hand scrim gradient is unchanged, so text contrast is untouched. */
+.hero-full__media img { width: 100%; height: 100%; object-fit: cover; object-position: 62% 40%; filter: saturate(0.75) contrast(1.02); }
 /* --scrim-hero α ≥ 0.68 across the 0–42% text zone ⇒ white text is AAA.
    --scrim-top sits on top of it to guarantee the transparent header's own
    text never falls out of the ≥0.66 band. */
@@ -1396,7 +1451,14 @@
   width: 36px; height: 36px;
   display: grid; place-items: center;
   background: var(--color-surface);
-  border: 2px solid var(--color-accent);
+  /* ── H3 2026-10-01: four red outlined numerals + four red FAQ pluses + the
+     rail + the header pill put ~10 red marks on one page, against the ≤3 per
+     screen rule in tokens.css §3. Step markers are STRUCTURE, not action:
+     neutral at rest, accent only while the step they belong to is engaged.
+     --ink-500, not --ink-400: the ring is a UI boundary, and #9EA3AD measures
+     only 2.53:1 on white — under the 3:1 floor of WCAG 1.4.11. #828791
+     measures 3.61:1. ────────────────────────────────────────────────────── */
+  border: 2px solid var(--ink-500);
   /* Reference (chinatours.com "Easy Booking Steps"): the step marker is a THIN
      OUTLINED CIRCLE, not a rounded square. radius-sm here made it read as a
      chip. Circle is what makes a 4-step band look like a process. */
@@ -1404,9 +1466,13 @@
   font-family: var(--font-body);
   font-size: var(--fs-body-sm);
   font-weight: var(--fw-semibold);
-  color: var(--color-accent);
+  color: var(--ink-600);
   font-variant-numeric: tabular-nums lining-nums;
+  transition: color var(--duration-fast) var(--ease-out),
+              border-color var(--duration-fast) var(--ease-out);
 }
+.step:hover .step__num,
+.step:focus-within .step__num { border-color: var(--color-accent); color: var(--color-accent); }
 @media (min-width: 768px) { .step__num { width: 44px; height: 44px; font-size: var(--fs-body); } }
 .step__head { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--space-3); }
 .step__title { flex: 1 1 auto; }
@@ -1817,12 +1883,23 @@
 .faq-item__q:active { background: var(--color-surface-muted); }
 .faq-item__q:focus-visible { outline: 2px solid var(--color-accent); outline-offset: -2px; }
 .faq-item__icon { position: relative; width: 20px; height: 20px; flex: none; }
+/* ── H3 2026-10-01: the plus is a control affordance, not an action. Neutral at
+   rest (--ink-500 #828791 ≈ 3.6:1 on white → WCAG 1.4.11 non-text floor met),
+   red only when the row is engaged (hover / focus / open) — four permanent red
+   pluses were four of the ~10 red marks counted on the homepage. */
 .faq-item__icon::before, .faq-item__icon::after {
   content: '';
   position: absolute;
-  background: var(--color-accent);
-  transition: transform var(--duration-base) var(--ease-in-out);
+  background: var(--ink-500);
+  transition: transform var(--duration-base) var(--ease-in-out),
+              background-color var(--duration-fast) var(--ease-out);
 }
+.faq-item__q:hover .faq-item__icon::before,
+.faq-item__q:hover .faq-item__icon::after,
+.faq-item__q:focus-visible .faq-item__icon::before,
+.faq-item__q:focus-visible .faq-item__icon::after,
+.faq-item[open] .faq-item__icon::before,
+.faq-item[open] .faq-item__icon::after { background: var(--color-accent); }
 .faq-item__icon::before { top: 9px; left: 0; width: 20px; height: 2px; }
 .faq-item__icon::after  { left: 9px; top: 0; width: 2px; height: 20px; }
 .faq-item[open] .faq-item__icon::after { transform: rotate(90deg); }
@@ -2325,6 +2402,13 @@ ul.legend.clean { margin-top: var(--space-5); }
 .wa-bar__note { font-family: var(--font-body); font-size: var(--fs-micro); letter-spacing: var(--ls-micro); color: var(--text-muted); text-transform: uppercase; }
 .wa-bar__actions { margin-left: auto; display: flex; gap: var(--space-2); align-items: center; }
 .wa-bar .btn { min-height: 44px; font-size: var(--fs-caption); }
+/* H4 sibling fix: same wrapping-pill bug as the header CTA, one bar down.
+   The sticky bar is 64px tall; a two-line "Plan / visit" pill inside it reads
+   as a broken control exactly like the header one did. Bar buttons are short
+   by construction, so nowrap cannot push the page sideways here. */
+@media (max-width: 480px) {
+  .wa-bar .btn { white-space: nowrap; padding: 0 14px; }
+}
 @media (min-width: 768px) { .wa-bar { display: none; } }
 
 .wa-fab { display: none; }
@@ -2693,4 +2777,116 @@ ul.legend.clean { margin-top: var(--space-5); }
       default grid. */
 @media (min-width: 1024px) {
   .case-grid--two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* ============================================================
+   21. Landing-page pass 2026-10-01 — B1 / B2 / H2
+   ------------------------------------------------------------
+   Three of the four homepage blockers, resolved in the component layer.
+
+   Ownership note: the root cause below lives in base.css, which is owned
+   by another worker in this round — so it is OVERRIDDEN HERE rather than
+   edited there. The override is single-purpose and can be deleted the
+   moment base.css changes:
+     · base.css「.section .container > …」centering rule → §21.1 below
+       (delete the whole block with it)
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   21.1 · B2 — one left edge for every H2 on a page
+   base.css:261-268 centres any measure-capped head inside a .container at
+   ≥1024px. On the homepage that put section H2s at x≈361 while the grid of
+   cards below them started at x≈95 — two left edges for the same hierarchy
+   level, which reads as a layout accident rather than as a decision (and one
+   page even showed 93 / 95 / 361 for the same level).
+
+   The head is not centred here; it is put BACK on the container's content
+   edge, where every grid, table and card below it already starts. One edge,
+   one hierarchy. Same specificity as the base rule + later in the cascade.
+
+   Centring the *block* was also the cause of the rest of that report: the
+   leftover space stopped being split evenly and became a single ragged hole on
+   the right, with nothing on the page acknowledging it.
+   TODO(base.css owner): remove `margin-inline: auto` from the
+   `.section .container > …` rule at base.css:261-268 (it covers section-head,
+   prose, prose-wide AND faq — all four are overridden here), then delete this
+   block. ---- */
+@media (min-width: 1024px) {
+  .section .container > .section-head,
+  .section .container > .prose,
+  .section .container > .prose-wide,
+  .section .container > .faq {
+    margin-inline: 0;
+  }
+}
+
+/* ------------------------------------------------------------
+   21.2 · B1 — hero reveal depth
+   base.css §Part B owns the reveal mechanics (hidden start state under .js +
+   no-preference, .is-visible end state, reduced-motion reset) AND, as of this
+   round, the per-element stagger hook: base.css declares
+   `transition-delay: var(--reveal-delay, 0ms)`, so index.astro's inline
+   --reveal-delay values (0 / 80 / 160 …) need nothing here.
+   The one thing base.css cannot know is the hero: three lines entering as one
+   gesture, slower and deeper than reading-pace content. ---- */
+@media (prefers-reduced-motion: no-preference) {
+  /* Three lines at 0 / 120 / 240ms translate 24px on --duration-slower (560ms).
+     Every other section keeps the neutral track's 220ms / 0px, which is the
+     right speed for content you are already reading past.
+     `:not(.is-visible)` is load-bearing — without it this rule ties with
+     base.css `.js [data-reveal].is-visible { transform: none }` on specificity
+     and, being later, would pin the hero copy 24px off forever. */
+  .js .hero-full [data-reveal] { transition-duration: var(--duration-slower); }
+  .js .hero-full [data-reveal]:not(.is-visible) { transform: translateY(24px); }
+}
+
+/* ------------------------------------------------------------
+   21.3 · H2 — the services band becomes a LIST
+   See index.astro §"what we do" for why. Everything below is scoped to
+   .service-list, so removing the class from the grid restores the standard
+   ServiceCard shell with zero other edits. Reversible by construction. ---- */
+.service-list {
+  /* rows butt together; the divider IS the row separator */
+  row-gap: 0;
+  column-gap: var(--space-10);
+}
+.service-list > .service-card {
+  display: grid;
+  grid-template-columns: 40px minmax(0, 1fr);
+  column-gap: var(--space-5);
+  align-items: start;
+  /* the shell is gone: no fill, no box, no radius */
+  background: none;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  padding: var(--space-6) 0;
+  border-top: var(--border-divider);
+}
+.service-list > .service-card:last-child { border-bottom: var(--border-divider); }
+.service-list > .service-card .service-card__icon {
+  grid-row: 1 / span 3;
+  margin-bottom: 0;
+}
+.service-list > .service-card .service-card__title,
+.service-list > .service-card .service-card__desc,
+.service-list > .service-card .service-card__cta { grid-column: 2; }
+/* the 40px title underline is card grammar — it would re-draw a box the list
+   just removed */
+.service-list > .service-card .service-card__title::after { display: none; }
+/* a row must not lift: in a list, a hovering card reads as a broken row */
+.service-list > .service-card:hover,
+.service-list > .service-card:active,
+.service-list > .service-card:has(.link-arrow:hover) {
+  transform: none;
+  box-shadow: none;
+}
+.service-list > .service-card:hover { border-top-color: var(--border-strong-color); }
+@media (max-width: 767px) {
+  .service-list > .service-card {
+    grid-template-columns: 32px minmax(0, 1fr);
+    column-gap: var(--space-4);
+  }
+  .service-list > .service-card .service-card__icon { width: 32px; height: 32px; }
+  .service-list > .service-card .service-card__icon svg { width: 32px; height: 32px; }
 }

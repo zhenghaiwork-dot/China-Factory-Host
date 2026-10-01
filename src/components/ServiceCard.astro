@@ -9,12 +9,16 @@ interface Props {
   list?: string[];
   cta?: string;
   soon?: boolean;
+  /** scroll-reveal stagger in ms — emits data-reveal + --reveal-delay (B1) */
+  reveal?: number;
 }
-const { title, desc, href, icon, list, cta, soon } = Astro.props;
+const { title, desc, href, icon, list, cta, soon, reveal } = Astro.props;
+const revealAttrs =
+  reveal === undefined ? {} : { 'data-reveal': '', style: `--reveal-delay:${reveal}ms` };
 ---
 {
   soon ? (
-    <article class="service-card service-card--soon">
+    <article class="service-card service-card--soon" {...revealAttrs}>
       <span class="badge badge--soon service-card__soon-badge">Plan ahead</span>
       <span class="service-card__icon">{icon && <Icon name={icon} size={32} />}</span>
       <h3 class="service-card__title">{title}</h3>
@@ -27,7 +31,7 @@ const { title, desc, href, icon, list, cta, soon } = Astro.props;
       </div>
     </article>
   ) : (
-    <article class="service-card">
+    <article class="service-card" {...revealAttrs}>
       <span class="service-card__icon">{icon && <Icon name={icon} size={32} />}</span>
       <h3 class="service-card__title">{title}</h3>
       <p class="service-card__desc">{desc}</p>

@@ -52,6 +52,26 @@ const sec: Btn | null = sameTarget
     : secondary;
 ---
 <section class:list={['cta', inv ? 'cta--inverse' : 'cta--plain']}>
+  {/* Decorative China outline watermark. Loaded as an <img> (not a CSS
+      background) on purpose: an SVG referenced by <img> runs its declarative
+      animation, while the same file used as background-image stays frozen.
+      lazy + async + no JS; the pins are the only animated pixels.
+      Inverse variant only — the watermark is warm-white, i.e. invisible on the
+      light `plain` band, so it is not emitted there at all. */}
+  {
+    inv && (
+      <img
+        class="cta__map"
+        src="/images/china-outline.svg"
+        alt=""
+        aria-hidden="true"
+        width="1000"
+        height="927"
+        loading="lazy"
+        decoding="async"
+      />
+    )
+  }
   <div class="container">
     <div class:list={['cta__inner', form && 'cta__inner--split']}>
       {

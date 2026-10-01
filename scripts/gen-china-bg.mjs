@@ -125,9 +125,17 @@ async function main() {
     (p.jd ? dash : land).push(`<path d="${d}"/>`);
   }
 
-  const dotEls = CITIES.map(
-    (c) => `<circle cx="${px(c.lon)}" cy="${py(c.lat)}" r="3"/>`
-  );
+  // Animated pins. The whole file is loaded as an <img>, which puts the SVG in
+  // declarative-animation mode — the CSS/SMIL inside it runs (a CSS
+  // background-image SVG would stay frozen). Only the pins animate: the
+  // outline, the dash line and the labels are static, so the animated area is
+  // 8 × ~20px. --d staggers each pin; --d propagates to both circles.
+  const dotEls = CITIES.map((c, i) => {
+    const x = px(c.lon);
+    const y = py(c.lat);
+    const d = (i * 0.45).toFixed(2);
+    return `<g style="--d:${d}s"><circle class="halo" cx="${x}" cy="${y}" r="3"/><circle class="dot" cx="${x}" cy="${y}" r="2.6"/></g>`;
+  });
   const labelEls = CITIES.map((c) => {
     const x = px(c.lon) + c.dx;
     const y = py(c.lat) + c.dy + 5; // +5 ≈ optical centring against the dot
@@ -146,11 +154,37 @@ async function main() {
   <g fill="${ink}" fill-opacity="${DASH_OP}" stroke="${ink}" stroke-opacity="${DASH_OP}" stroke-width="0.8" stroke-linejoin="round" fill-rule="evenodd">
     ${dash.join('\n    ')}
   </g>
-  <g fill="${ink}" fill-opacity="${DOT_OP}">
-    ${dotEls.join('\n    ')}
-  </g>
-  <g fill="${ink}" fill-opacity="${LABEL_OP}" font-family="Inter, 'Helvetica Neue', Arial, sans-serif" font-size="13" font-weight="500">
-    ${labelEls.join('\n    ')}
+  <style>
+    /* Declarative animation — runs because this file is embedded via an img
+       element (a CSS background-image SVG would stay frozen).
+       WARNING: SVG is parsed as XML. Never write angle brackets or ampersands
+       in any comment or string in this file, not even inside a comment — the
+       document will fail to parse. Already bit us once.
+       Scoped to the pins only: 8 small circles, opacity + transform, so the
+       cost per frame is negligible. Honours prefers-reduced-motion. */
+    .dot { animation: cfh-dot 4s ease-in-out infinite; animation-delay: var(--d, 0s); }
+    .halo {
+      transform-box: fill-box; transform-origin: center;
+      animation: cfh-halo 4s ease-out infinite; animation-delay: var(--d, 0s);
+      opacity: 0;
+    }
+    @keyframes cfh-dot { 0%, 100% { opacity: .3 } 50% { opacity: 1 } }
+    @keyframes cfh-halo {
+      0% { transform: scale(1); opacity: .45 }
+      60%, 100% { transform: scale(3.4); opacity: 0 }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .dot { animation: none; opacity: ${DOT_OP} }
+      .halo { animation: none; display: none }
+    }
+  </style>
+  <g fill="${ink}">
+    <g fill-opacity="${DOT_OP}">
+      ${dotEls.join('\n      ')}
+    </g>
+    <g fill-opacity="${LABEL_OP}" font-family="Inter, 'Helvetica Neue', Arial, sans-serif" font-size="13" font-weight="500">
+      ${labelEls.join('\n      ')}
+    </g>
   </g>
 </svg>
 `;

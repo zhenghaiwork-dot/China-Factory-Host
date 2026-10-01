@@ -1878,7 +1878,9 @@
 /* ============================================================
    20. CTASection（第 5.13 节）
    ============================================================ */
-.cta { padding-block: var(--section-py); }
+/* overflow:hidden crops the oversized map watermark; position:relative is its
+   containing block. */
+.cta { padding-block: var(--section-py); position: relative; overflow: hidden; }
 .cta--inverse {
   background-color: var(--color-surface-inverse);
   /* Decorative China outline watermark. Boundary data: AMap/DataV GeoAtlas
@@ -1891,13 +1893,30 @@
       rgb(26 25 23 / 0.9) 20%,
       rgb(26 25 23 / 0.55) 55%,
       rgb(26 25 23 / 0) 100%),
-    url('/images/china-outline.svg'),
     linear-gradient(to right,  var(--on-inverse-grid) 1px, transparent 1px),
     linear-gradient(to bottom, var(--on-inverse-grid) 1px, transparent 1px);
-  background-repeat: no-repeat, no-repeat, repeat, repeat;
-  background-position: center, center 42%, top left, top left;
-  background-size: 100% 100%, auto 280%, 24px 24px, 24px 24px;
+  background-repeat: no-repeat, repeat, repeat;
+  background-position: center, top left, top left;
+  background-size: 100% 100%, 24px 24px, 24px 24px;
 }
+/* The map itself is an <img class="cta__map"> (see CTASection.astro) so the
+   SVG's declarative pin animation actually runs. Positioned to match the old
+   `background: ... / auto 280% center 42%`: height 280% of the band, centred
+   horizontally, shifted up by (280% - 100%) × 42% = 75.6%. */
+.cta__map {
+  position: absolute;
+  left: 50%;
+  top: -75.6%;
+  height: 280%;
+  width: auto;
+  max-width: none; /* base.css caps img at 100% — must be overridden */
+  transform: translateX(-50%);
+  z-index: 0;
+  pointer-events: none;
+}
+/* Copy sits above the watermark. */
+.cta__inner,
+.cta .container { position: relative; z-index: 1; }
 .cta--plain { background: var(--color-surface-subtle); }
 .cta--inverse h2 { color: var(--on-inverse-text-strong); max-width: 24ch; }
 .cta--inverse .lead { color: var(--color-text-inverse-2); }

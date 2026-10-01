@@ -76,24 +76,50 @@
     <path d="M595,779L593,781L595,780L596,777L597,775L598,772L598,769L598,765L598,769L597,772L596,775L595,779Z"/>
     <path d="M590,708L589,704L588,700L586,697L585,695L581,690L585,695L586,697L587,700L589,704L590,708Z"/>
   </g>
-  <g fill="rgb(245 242 238)" fill-opacity="0.55">
-    <circle cx="697" cy="252" r="3"/>
-    <circle cx="575" cy="355" r="3"/>
-    <circle cx="496" cy="425" r="3"/>
-    <circle cx="779" cy="413" r="3"/>
-    <circle cx="780" cy="438" r="3"/>
-    <circle cx="756" cy="448" r="3"/>
-    <circle cx="645" cy="562" r="3"/>
-    <circle cx="658" cy="573" r="3"/>
-  </g>
-  <g fill="rgb(245 242 238)" fill-opacity="0.45" font-family="Inter, 'Helvetica Neue', Arial, sans-serif" font-size="13" font-weight="500">
-    <text x="703" y="255" text-anchor="start">Beijing</text>
-    <text x="569" y="360" text-anchor="end">Xi'an</text>
-    <text x="490" y="442" text-anchor="end">Chengdu</text>
-    <text x="785" y="414" text-anchor="start">Shanghai</text>
-    <text x="786" y="453" text-anchor="start">Ningbo</text>
-    <text x="750" y="465" text-anchor="end">Yiwu</text>
-    <text x="651" y="563" text-anchor="start">Guangzhou</text>
-    <text x="664" y="590" text-anchor="start">Shenzhen</text>
+  <style>
+    /* Declarative animation — runs because this file is embedded via an img
+       element (a CSS background-image SVG would stay frozen).
+       WARNING: SVG is parsed as XML. Never write angle brackets or ampersands
+       in any comment or string in this file, not even inside a comment — the
+       document will fail to parse. Already bit us once.
+       Scoped to the pins only: 8 small circles, opacity + transform, so the
+       cost per frame is negligible. Honours prefers-reduced-motion. */
+    .dot { animation: cfh-dot 4s ease-in-out infinite; animation-delay: var(--d, 0s); }
+    .halo {
+      transform-box: fill-box; transform-origin: center;
+      animation: cfh-halo 4s ease-out infinite; animation-delay: var(--d, 0s);
+      opacity: 0;
+    }
+    @keyframes cfh-dot { 0%, 100% { opacity: .3 } 50% { opacity: 1 } }
+    @keyframes cfh-halo {
+      0% { transform: scale(1); opacity: .45 }
+      60%, 100% { transform: scale(3.4); opacity: 0 }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .dot { animation: none; opacity: 0.55 }
+      .halo { animation: none; display: none }
+    }
+  </style>
+  <g fill="rgb(245 242 238)">
+    <g fill-opacity="0.55">
+      <g style="--d:0.00s"><circle class="halo" cx="697" cy="252" r="3"/><circle class="dot" cx="697" cy="252" r="2.6"/></g>
+      <g style="--d:0.45s"><circle class="halo" cx="575" cy="355" r="3"/><circle class="dot" cx="575" cy="355" r="2.6"/></g>
+      <g style="--d:0.90s"><circle class="halo" cx="496" cy="425" r="3"/><circle class="dot" cx="496" cy="425" r="2.6"/></g>
+      <g style="--d:1.35s"><circle class="halo" cx="779" cy="413" r="3"/><circle class="dot" cx="779" cy="413" r="2.6"/></g>
+      <g style="--d:1.80s"><circle class="halo" cx="780" cy="438" r="3"/><circle class="dot" cx="780" cy="438" r="2.6"/></g>
+      <g style="--d:2.25s"><circle class="halo" cx="756" cy="448" r="3"/><circle class="dot" cx="756" cy="448" r="2.6"/></g>
+      <g style="--d:2.70s"><circle class="halo" cx="645" cy="562" r="3"/><circle class="dot" cx="645" cy="562" r="2.6"/></g>
+      <g style="--d:3.15s"><circle class="halo" cx="658" cy="573" r="3"/><circle class="dot" cx="658" cy="573" r="2.6"/></g>
+    </g>
+    <g fill-opacity="0.45" font-family="Inter, 'Helvetica Neue', Arial, sans-serif" font-size="13" font-weight="500">
+      <text x="703" y="255" text-anchor="start">Beijing</text>
+      <text x="569" y="360" text-anchor="end">Xi'an</text>
+      <text x="490" y="442" text-anchor="end">Chengdu</text>
+      <text x="785" y="414" text-anchor="start">Shanghai</text>
+      <text x="786" y="453" text-anchor="start">Ningbo</text>
+      <text x="750" y="465" text-anchor="end">Yiwu</text>
+      <text x="651" y="563" text-anchor="start">Guangzhou</text>
+      <text x="664" y="590" text-anchor="start">Shenzhen</text>
+    </g>
   </g>
 </svg>

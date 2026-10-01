@@ -30,6 +30,13 @@ async function loadGeo() {
 
 // Warm-white family — identical hue to the blueprint grid (rgba(245,242,238,.06)).
 const INK = { r: 245, g: 242, b: 238 };
+// The site's primary red inside a dark band: tokens.css --on-inverse-link
+// (#E39A94). Not the oxblood accent and not the favicon red — inside an
+// inverse band the accent IS the on-inverse link colour (design system §3.4
+// rule 3), so this is the only red that belongs here. It gets the same low
+// opacity treatment as everything else, i.e. it reads as a muted, dusty red
+// rather than a bright dot.
+const RED = { r: 227, g: 154, b: 148 };
 const FILL_OP = 0.03; // landmass fill
 const STROKE_OP = 0.13; // coastline / provincial borders
 const DASH_OP = 0.2; // nine-dash line — slightly stronger so it reads
@@ -204,8 +211,10 @@ async function main() {
     }
     @keyframes cfh-flow { to { stroke-dashoffset: -12 } }
 
+    /* Breathing stays within the same muted band as the rest of the watermark —
+       never a bright pop of red. */
     .dot { animation: cfh-breathe 7s ease-in-out infinite; animation-delay: var(--d, 0s); }
-    @keyframes cfh-breathe { 0%, 100% { opacity: .4 } 50% { opacity: .85 } }
+    @keyframes cfh-breathe { 0%, 100% { opacity: .35 } 50% { opacity: .72 } }
 
     .pins, .labels { animation: cfh-fade .9s ease-out 2.2s both; }
     @keyframes cfh-fade { from { opacity: 0 } to { opacity: 1 } }
@@ -220,11 +229,11 @@ async function main() {
   <g fill="none" stroke="${ink}" stroke-opacity="0.28" stroke-width="0.9" stroke-linecap="round">
     ${routeEls.join('\n    ')}
   </g>
-  <g fill="${ink}">
+  <g fill="rgb(${RED.r} ${RED.g} ${RED.b})">
     <g class="pins" fill-opacity="${DOT_OP}">
       ${dotEls.join('\n      ')}
     </g>
-    <g class="labels" fill-opacity="${LABEL_OP}" font-family="Inter, 'Helvetica Neue', Arial, sans-serif" font-size="13" font-weight="500">
+    <g class="labels" fill="${ink}" fill-opacity="${LABEL_OP}" font-family="Inter, 'Helvetica Neue', Arial, sans-serif" font-size="13" font-weight="500">
       ${labelEls.join('\n      ')}
     </g>
   </g>

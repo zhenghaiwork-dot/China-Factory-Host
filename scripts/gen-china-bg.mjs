@@ -33,6 +33,25 @@ const INK = { r: 245, g: 242, b: 238 };
 const FILL_OP = 0.03; // landmass fill
 const STROKE_OP = 0.13; // coastline / provincial borders
 const DASH_OP = 0.2; // nine-dash line — slightly stronger so it reads
+const DOT_OP = 0.55; // city dots
+const LABEL_OP = 0.45; // city names — stronger than borders so they read
+
+/* City labels — an orientation aid for overseas visitors ("these are Chinese
+   cities"), not a gazetteer. Names are pinyin/English; coordinates are
+   approximate, which is fine at watermark scale. dx/dy/anchor are hand-tuned
+   so the dense Yangtze delta and Pearl river delta clusters don't collide.
+   All chosen cities sit between 22°N and 40°N — the latitude band that stays
+   inside the band after `background-size: auto 280%` crops the north/south.  */
+const CITIES = [
+  { name: 'Beijing', lon: 116.41, lat: 39.9, dx: 6, dy: -2, anchor: 'start' },
+  { name: "Xi'an", lon: 108.94, lat: 34.34, dx: -6, dy: 0, anchor: 'end' },
+  { name: 'Chengdu', lon: 104.07, lat: 30.57, dx: -6, dy: 12, anchor: 'end' },
+  { name: 'Shanghai', lon: 121.47, lat: 31.23, dx: 6, dy: -4, anchor: 'start' },
+  { name: 'Ningbo', lon: 121.55, lat: 29.87, dx: 6, dy: 10, anchor: 'start' },
+  { name: 'Yiwu', lon: 120.07, lat: 29.31, dx: -6, dy: 12, anchor: 'end' },
+  { name: 'Guangzhou', lon: 113.26, lat: 23.13, dx: 6, dy: -4, anchor: 'start' },
+  { name: 'Shenzhen', lon: 114.06, lat: 22.55, dx: 6, dy: 12, anchor: 'start' },
+];
 
 async function main() {
   const geo = await loadGeo();
@@ -106,15 +125,32 @@ async function main() {
     (p.jd ? dash : land).push(`<path d="${d}"/>`);
   }
 
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="China map outline">
+  const dotEls = CITIES.map(
+    (c) => `<circle cx="${px(c.lon)}" cy="${py(c.lat)}" r="3"/>`
+  );
+  const labelEls = CITIES.map((c) => {
+    const x = px(c.lon) + c.dx;
+    const y = py(c.lat) + c.dy + 5; // +5 ≈ optical centring against the dot
+    return `<text x="${x}" y="${y}" text-anchor="${c.anchor}">${c.name}</text>`;
+  });
+
+  const ink = `rgb(${INK.r} ${INK.g} ${INK.b})`;
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="China map with major cities">
   <!-- Decorative watermark. Boundary data: AMap/DataV GeoAtlas 100000_full
        (34 provincial regions incl. Taiwan / HK / Macao / Hainan + South China
-       Sea ten-dash line). Full territory per national standards. -->
-  <g fill="rgb(${INK.r} ${INK.g} ${INK.b})" fill-opacity="${FILL_OP}" stroke="rgb(${INK.r} ${INK.g} ${INK.b})" stroke-opacity="${STROKE_OP}" stroke-width="0.9" stroke-linejoin="round" fill-rule="evenodd">
+       Sea ten-dash line). Full territory per national standards. City points
+       are approximate — an orientation aid, not a gazetteer. -->
+  <g fill="${ink}" fill-opacity="${FILL_OP}" stroke="${ink}" stroke-opacity="${STROKE_OP}" stroke-width="0.9" stroke-linejoin="round" fill-rule="evenodd">
     ${land.join('\n    ')}
   </g>
-  <g fill="rgb(${INK.r} ${INK.g} ${INK.b})" fill-opacity="${DASH_OP}" stroke="rgb(${INK.r} ${INK.g} ${INK.b})" stroke-opacity="${DASH_OP}" stroke-width="0.8" stroke-linejoin="round" fill-rule="evenodd">
+  <g fill="${ink}" fill-opacity="${DASH_OP}" stroke="${ink}" stroke-opacity="${DASH_OP}" stroke-width="0.8" stroke-linejoin="round" fill-rule="evenodd">
     ${dash.join('\n    ')}
+  </g>
+  <g fill="${ink}" fill-opacity="${DOT_OP}">
+    ${dotEls.join('\n    ')}
+  </g>
+  <g fill="${ink}" fill-opacity="${LABEL_OP}" font-family="Inter, 'Helvetica Neue', Arial, sans-serif" font-size="13" font-weight="500">
+    ${labelEls.join('\n    ')}
   </g>
 </svg>
 `;

@@ -1,7 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 926.6" width="1000" height="926.6" role="img" aria-label="China map outline">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 926.6" width="1000" height="926.6" role="img" aria-label="China map with major cities">
   <!-- Decorative watermark. Boundary data: AMap/DataV GeoAtlas 100000_full
        (34 provincial regions incl. Taiwan / HK / Macao / Hainan + South China
-       Sea ten-dash line). Full territory per national standards. -->
+       Sea ten-dash line). Full territory per national standards. City points
+       are approximate — an orientation aid, not a gazetteer. -->
   <g fill="rgb(245 242 238)" fill-opacity="0.03" stroke="rgb(245 242 238)" stroke-opacity="0.13" stroke-width="0.9" stroke-linejoin="round" fill-rule="evenodd">
     <path d="M712,240L714,239L712,238L708,238L706,237L704,235L702,234L701,232L698,232L696,234L698,236L695,236L693,237L692,239L690,240L688,239L686,240L688,244L689,246L687,248L683,248L682,250L682,253L681,255L682,257L684,258L686,259L689,258L692,258L694,259L695,261L697,260L698,258L701,258L704,257L705,255L704,253L703,251L705,250L707,249L710,249L712,248L713,246L711,245L710,243L711,240L712,240Z"/>
     <path d="M719,262L721,260L720,258L718,259L717,257L716,255L715,253L716,251L719,251L718,249L716,248L715,246L712,247L711,249L709,251L710,253L709,255L708,257L705,256L703,258L703,261L704,263L704,266L703,268L701,270L702,272L703,274L705,275L707,276L710,276L712,277L714,276L717,276L718,274L717,272L719,271L721,270L720,268L722,266L723,264L721,263L719,262L717,263L715,262L717,261L719,262Z"/>
@@ -74,5 +75,25 @@
     <path d="M564,877L564,874L564,869L564,861L564,858L563,861L563,869L564,874L564,877L564,877Z"/>
     <path d="M595,779L593,781L595,780L596,777L597,775L598,772L598,769L598,765L598,769L597,772L596,775L595,779Z"/>
     <path d="M590,708L589,704L588,700L586,697L585,695L581,690L585,695L586,697L587,700L589,704L590,708Z"/>
+  </g>
+  <g fill="rgb(245 242 238)" fill-opacity="0.55">
+    <circle cx="697" cy="252" r="3"/>
+    <circle cx="575" cy="355" r="3"/>
+    <circle cx="496" cy="425" r="3"/>
+    <circle cx="779" cy="413" r="3"/>
+    <circle cx="780" cy="438" r="3"/>
+    <circle cx="756" cy="448" r="3"/>
+    <circle cx="645" cy="562" r="3"/>
+    <circle cx="658" cy="573" r="3"/>
+  </g>
+  <g fill="rgb(245 242 238)" fill-opacity="0.45" font-family="Inter, 'Helvetica Neue', Arial, sans-serif" font-size="13" font-weight="500">
+    <text x="703" y="255" text-anchor="start">Beijing</text>
+    <text x="569" y="360" text-anchor="end">Xi'an</text>
+    <text x="490" y="442" text-anchor="end">Chengdu</text>
+    <text x="785" y="414" text-anchor="start">Shanghai</text>
+    <text x="786" y="453" text-anchor="start">Ningbo</text>
+    <text x="750" y="465" text-anchor="end">Yiwu</text>
+    <text x="651" y="563" text-anchor="start">Guangzhou</text>
+    <text x="664" y="590" text-anchor="start">Shenzhen</text>
   </g>
 </svg>

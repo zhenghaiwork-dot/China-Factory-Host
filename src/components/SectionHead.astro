@@ -4,23 +4,11 @@ interface Props {
   title?: string;
   lead?: string;
   center?: boolean;
-  /* Opt-in Open Bay mark above the eyebrow, at 56px (design system §3.2).
-     DEFAULT OFF on purpose — every existing call site must render unchanged,
-     which is what makes this round reversible by deleting the prop again. */
-  mark?: boolean;
   class?: string;
 }
-const { eyebrow, title, lead, center, mark = false, class: cls } = Astro.props;
+const { eyebrow, title, lead, center, class: cls } = Astro.props;
 ---
 <div class:list={['section-head', { 'section-head--center': center }, cls]}>
-  {mark && (
-    <svg class="section-head__mark" width="56" height="56" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
-      <g fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="miter" stroke-linecap="butt">
-        <path d="M4,26 V19 L11,13 V19 L18,13 V19 L25,13 V26 H22 V20 H13 V26 H4 Z" />
-        <path d="M22,20 L27,15" />
-      </g>
-    </svg>
-  )}
   {eyebrow && <p class="eyebrow">{eyebrow}</p>}
   {title && <h2>{title}</h2>}
   {lead && <p class="lead">{lead}</p>}

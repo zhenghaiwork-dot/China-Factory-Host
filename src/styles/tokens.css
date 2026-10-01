@@ -535,16 +535,6 @@ html { font-size: 112.5%; }
   --track-motion-shift:  0px;
   --track-grid-gap:      var(--space-6);
   --track-bg-alternate:  var(--surface-tint);
-
-  /* ---------- 24 · BayRule — the Open Bay as a divider (§3.2) ---------- */
-  /* Mobile-first values: at a 335px container a 100px door is 30% of the line
-     and reads as broken, so the narrow tier gets 64px / 14px / a 7px flap and
-     the 768 tier restores the full door below. --bay-draw is the one-shot
-     door-opening duration; it must stay ≤ --duration-media. */
-  --bay-door-w:   64px;
-  --bay-door-h:   14px;
-  --bay-flap:     7px;
-  --bay-draw:     var(--duration-slower);
 }
 
 /* ============================================================
@@ -566,10 +556,6 @@ html { font-size: 112.5%; }
     --grid-gap: var(--space-6);
     --rail-h: 36px;
     --card-padding: var(--space-6);
-    /* BayRule: full-size door — 100px is ~9% of a desktop container */
-    --bay-door-w: 100px;
-    --bay-door-h: 20px;
-    --bay-flap:   10px;
   }
 }
 @media (min-width: 1024px) {

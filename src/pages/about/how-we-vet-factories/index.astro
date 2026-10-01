@@ -7,6 +7,7 @@ import ProcessSteps from '../../../components/ProcessSteps.astro';
 import ComparisonTable from '../../../components/ComparisonTable.astro';
 import RedFlags from '../../../components/RedFlags.astro';
 import Caveat from '../../../components/Caveat.astro';
+import BayRule from '../../../components/BayRule.astro';
 import PhotoSlot from '../../../components/PhotoSlot.astro';
 import OnsitePhoto from '../../../components/OnsitePhoto.astro';
 import DownloadGate from '../../../components/DownloadGate.astro';
@@ -87,6 +88,7 @@ const wa = waLink('Hi, I would like to check whether a Chinese supplier is a rea
   <Section>
     <div class="container container--md">
       <SectionHead
+        mark
         eyebrow="The method"
         title="Five checks, in this order."
         lead="We run them in the same sequence every time, because each one decides whether it is worth running the next."
@@ -161,6 +163,12 @@ const wa = waLink('Hi, I would like to check whether a Chinese supplier is a rea
       </p>
     </div>
   </Section>
+
+  <!-- 3b · Open Bay divider — the method ends, the evidence begins.
+       Pilot only: one BayRule on this page, used as a section boundary. -->
+  <div class="container container--md">
+    <BayRule />
+  </div>
 
   <!-- 4 · Factory vs trading company signals -->
   <Section alternate>
@@ -297,6 +305,7 @@ const wa = waLink('Hi, I would like to check whether a Chinese supplier is a rea
   <Section id="checklist-download">
     <div class="container container--md">
       <SectionHead
+        mark
         eyebrow="Take it with you"
         title="The checklist, in the order we run it."
         lead="The five steps and their twenty evidence checks, the eight factory-versus-trading signals, and the walk-away list — written so you can use them even if you never book us."

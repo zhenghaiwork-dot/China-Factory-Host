@@ -938,27 +938,48 @@
 .hero__media { margin-top: var(--space-8); }
 @media (min-width: 1024px) { .hero__media { margin-top: 0; } }
 
-/* --- Hero media height follows the copy, not its own ratio (2026-10-01) ---
-   User audit: on short-copy heroes the 4:3 plate in the 5fr column hung up to
-   ~120px below the text (pricing +60, faq/contact/hubs similar), while on
-   long-copy heroes it floated 200–390px short of the text (yiwu −390). The
-   plate was sizing to its own column width; the copy beside it was irrelevant.
+/* --- Hero media tracks the H1 height, not the whole copy block (2026-10-01) ---
+   Round 2 of the user audit: matching the plate to the full text column still
+   read as "too tall". The plate should sit beside the headline only, at the
+   headline's height, with the lead / actions / micro flowing beneath the copy.
 
-   Fix: stretch the media to the grid row — which the TEXT column defines —
-   clamped to a sane band. Typical heroes get matched top/bottom edges; long
-   heroes cap at 460px (the plate simply ends before the copy does, as it
-   already did); absurdly short copy floors at 240px so the plate never
-   collapses into a letterbox. Reflow safety (§8.5) is preserved and actually
-   strengthened: the height is imposed by the copy, so swapping a placeholder
-   for the real photograph still cannot move anything. */
+   Done without touching any of the ~50 hero templates: above 1024px the text
+   wrapper becomes display:contents so its children promote to grid items of the
+   split, the H1 owns the "title" row, and the media shares ONLY that row - so
+   the plate's height equals the headline's. Every other child drops into its
+   own left-column row. Element-type selectors (not nth-child) keep this safe
+   across heroes that differ in having an audience line or a micro list. Below
+   1024px the layout is single-column and untouched. */
 @media (min-width: 1024px) {
-  .hero .split-7-5 { align-items: stretch; }
-  .hero__media { display: flex; flex-direction: column; }
-  .hero__media .photo-slot {
-    aspect-ratio: auto;
+  .hero .split-7-5 {
+    grid-template-columns: 7fr 5fr;
+    grid-template-areas:
+      "eyebrow ."
+      "title   media"
+      "lead    ."
+      "aud     ."
+      "btns    ."
+      "micro   .";
+    align-items: stretch;
+    row-gap: 0;
+  }
+  .hero .split-7-5 > div:first-child { display: contents; }
+  .hero .split-7-5 > div:first-child > * { min-width: 0; }
+  .hero .split-7-5 > div:first-child > .eyebrow { grid-area: eyebrow; }
+  .hero .split-7-5 > div:first-child > h1 { grid-area: title; }
+  .hero .split-7-5 > div:first-child > .lead { grid-area: lead; }
+  .hero .split-7-5 > div:first-child > p.u-sm.u-secondary { grid-area: aud; }
+  .hero .split-7-5 > div:first-child > .btn-row { grid-area: btns; }
+  .hero .split-7-5 > div:first-child > ul.hero__micro { grid-area: micro; }
+  .hero .split-7-5 > .hero__media {
+    grid-area: media;
+    display: flex;
+    flex-direction: column;
+  }
+  .hero .split-7-5 > .hero__media .photo-slot {
     flex: 1 1 auto;
-    min-height: 240px;
-    max-height: 460px;
+    aspect-ratio: auto;
+    min-height: 0;
   }
 }
 .hero__panel {

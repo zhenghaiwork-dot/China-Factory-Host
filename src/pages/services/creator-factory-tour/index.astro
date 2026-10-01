@@ -14,6 +14,7 @@ import CaseCard from '../../../components/CaseCard.astro';
 import FAQ from '../../../components/FAQ.astro';
 import { waLink, FILMING_LEAD_TIME, FILMING_LEAD_TIME_SHORT } from '../../../data/site.ts';
 import { pickUnique } from '../../../data/onsite-photos.ts';
+import { getCollection } from 'astro:content';
 
 const title = 'Creator factory tour — film inside real Chinese factories, permits handled';
 const description =
@@ -21,14 +22,78 @@ const description =
 
 const wa = waLink('Hi, I want to film inside factories in China. Can you tell me what is feasible?');
 
-/* Photo coordination for this page: the hero is onsite-01; the three case
-   cards pick first (avoiding the hero and each other), then the day-by-day
-   timeline avoids hero + cards — so no photograph appears on this page twice.
-   The card seeds must stay in sync with the <CaseCard photo={...}> props below. */
+/* Case cards read the caseStudies collection, filtered to creator trips — the
+   cards used to be hardcoded here and had already drifted from /case-studies/.
+   One source: add or reorder an entry in src/content/case-studies/ and every
+   surface that shows it changes with it. */
+const creatorCases = (await getCollection('caseStudies'))
+  .filter((e) => e.data.clientType === 'creator')
+  .sort((a, b) => a.data.order - b.data.order || a.data.title.localeCompare(b.data.title));
+
+/* Photo coordination for this page: the hero is onsite-01; the case cards pick
+   first (avoiding the hero and each other), then the day-by-day timeline avoids
+   hero + cards — so no photograph appears on this page twice. */
 const casePicks = pickUnique(
-  ['CASE · YIWU AISLE', 'CASE · SZX SMT LINE', 'CASE · DG FILLING LINE'],
+  creatorCases.map((c) => c.data.photo),
   ['01']
 );
+
+const faqs = [
+  {
+    q: 'Can I really film inside the factory?',
+    a: [
+      'In most cases yes. Filming permission is requested in writing, addressed to the factory owner rather than the sales contact, and confirmed before you book anything. Where a plant refuses, we tell you before you pay for a flight rather than at the gate.',
+    ],
+  },
+  {
+    q: 'How early do I need to book?',
+    a: [
+      `Three weeks for a group tour, four for a private route that needs per-factory permission work. Under ${FILMING_LEAD_TIME}, expect refusals and fewer choices.`,
+    ],
+  },
+  {
+    q: 'Who owns the footage?',
+    a: [
+      'You do. Some factories ask to review what you publish; that condition is agreed in writing up front, and we tell you when it applies. We do not take a cut of anything your content earns.',
+    ],
+  },
+  {
+    q: 'Can I bring a drone?',
+    a: [
+      'Assume no unless we clear it in writing. Drone use around Chinese industrial zones involves registration and local restrictions that most visitors underestimate.',
+    ],
+  },
+  {
+    q: 'What happens if permission falls through at the last minute?',
+    a: [
+      'We build a substitute factory into every itinerary for exactly this reason. You will still have a shooting day. What we will not do is tell you everything is fine when it is not.',
+    ],
+  },
+  {
+    q: 'Do you work with first-time visitors?',
+    a: [
+      'Often. We handle visa invitation letters, hotel near the industrial zone, SIM card, payment apps and the parts of China that quietly trip people up.',
+    ],
+  },
+  {
+    q: 'Do you take commission from the factories?',
+    a: [
+      'No. Our fee comes from you. That is the only way we can tell you to walk away from a factory on the day.',
+    ],
+  },
+];
+
+/* FAQPage structured data — built from the SAME faqs array the visible list
+   renders, so the machine-readable answers can never drift from the page. */
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a.join(' ') },
+  })),
+};
 ---
 
 <BaseLayout
@@ -156,15 +221,18 @@ const casePicks = pickUnique(
           { label: 'Interpreter with technical vocabulary', values: [true, true] },
           { label: 'Second unit / local crew', values: [false, { v: 'On request' }] },
           { label: 'Lead time needed', values: [{ v: '3 weeks' }, { v: '4 weeks' }] },
+          /* "On request", not an em-dash: a dash reads as a rendering fault
+             rather than a deliberate blank. The slots keep tbc: true, so they
+             still carry data-placeholder for a pre-launch grep. */
           {
             label: 'Trip fee per person',
             values: [
-              { v: '$—', price: true, tbc: true },
-              { v: '$—', price: true, tbc: true },
+              { v: 'On request', price: true, tbc: true },
+              { v: 'On request', price: true, tbc: true },
             ],
           },
         ]}
-        footnote="Prices are intentionally blank. We will publish the audited range rather than print a number we cannot stand behind — ask us and we will quote your dates directly."
+        footnote="Trip fees are quoted per booking rather than printed here. We will publish the audited range rather than a number we cannot stand behind — ask us and we will quote your dates directly. Day count, cluster count, permission work and crew size are what move the figure."
       />
     </div>
   </Section>
@@ -253,14 +321,26 @@ const casePicks = pickUnique(
           {
             k: 'Trip fee (group)',
             /* Blank on purpose — the "Why the price is blank" note below already
-               says so in visitor-facing words. No visible [ PRICE TBC ] tag. */
-            v: '$—',
+               says so in visitor-facing words. The marker is machine-readable
+               (grep -rn 'data-placeholder="price"' src/) so the slot can be
+               filled in one pass; no visible [ PRICE TBC ] tag. */
+            v: '<span data-placeholder="price">On request</span>',
             note: 'Per person, covering hosting, interpreting, factory access and ground transport.',
           },
           {
             k: 'Trip fee (private)',
-            v: '$—',
+            v: '<span data-placeholder="price">On request</span>',
             note: 'Per group, varying with day count, crew size and how much permission work is needed.',
+          },
+          {
+            k: 'What moves the number',
+            v: 'Day count · cluster count · permission work · crew size',
+            note: 'The four variables we quote against — nothing else is added afterwards.',
+          },
+          {
+            k: 'Quote timing',
+            v: 'Fixed against your dates before you pay anything',
+            note: 'You see the number, the scope and the conditions attached to it before any money moves.',
           },
           {
             k: 'Not included, and never marked up',
@@ -269,7 +349,7 @@ const casePicks = pickUnique(
           },
         ]}
       />
-      <NoteStrip label="Why the price is blank"
+      <NoteStrip label="Why no number is printed"
         >We would rather quote your specific dates than publish a range that does not survive
         contact with real factories. Ask and you will get a number, a scope, and the conditions
         attached to it.</NoteStrip
@@ -320,48 +400,31 @@ const casePicks = pickUnique(
   <Section>
     <div class="container">
       <SectionHead
-        eyebrow="Proof"
-        title="Creator trips we have hosted."
-        lead="Structured placeholders until each client confirms they can be named."
+        eyebrow="Sample reports"
+        title="What a creator trip report looks like."
+        lead="Two worked examples, written to the format you receive. They are illustrative — not records of named clients. A real report is published only with that client's written permission."
       />
       <div class="case-grid">
-        <CaseCard
-          href="/case-studies/sample-creator-yiwu/"
-          type="creator"
-          destination="yiwu"
-          photo="CASE · YIWU AISLE"
-          id={casePicks[0]}
-          category="Small commodities"
-          place="Yiwu"
-          title="Six factory visits and one market day in five days"
-          result="<span class=&quot;num&quot;>6</span> factories filmed · <span class=&quot;num&quot;>2</span> rejected on site"
-          info="Creator · <span class=&quot;num&quot;>1</span> host · <span class=&quot;num&quot;>5</span> days"
-        />
-        <CaseCard
-          href="/case-studies/"
-          type="creator"
-          destination="shenzhen"
-          photo="CASE · SZX SMT LINE"
-          id={casePicks[1]}
-          category="Consumer electronics"
-          place="Shenzhen"
-          title="Filming an SMT line without stopping production"
-          result="Permission granted in <span class=&quot;num&quot;>9</span> working days"
-          info="Creator · crew of <span class=&quot;num&quot;>2</span> · <span class=&quot;num&quot;>4</span> days"
-        />
-        <CaseCard
-          href="/case-studies/"
-          type="creator"
-          destination="guangzhou-dongguan"
-          photo="CASE · DG FILLING LINE"
-          id={casePicks[2]}
-          category="Beauty packaging"
-          place="Dongguan"
-          title="Inside a cosmetics filling line from raw tank to carton"
-          result="5 zones cleared, <span class=&quot;num&quot;>1</span> zone refused in writing"
-          info="Creator · <span class=&quot;num&quot;>1</span> host · <span class=&quot;num&quot;>3</span> days"
-        />
+        {
+          creatorCases.map((c, k) => (
+            <CaseCard
+              href={`/case-studies/${c.id}/`}
+              type={c.data.clientType}
+              destination={c.data.destination}
+              photo={c.data.photo}
+              id={casePicks[k]}
+              category={c.data.category}
+              place={c.data.place}
+              title={c.data.title}
+              result={c.data.result}
+              info={c.data.info}
+            />
+          ))
+        }
       </div>
+      {/* The same caveat the case-study detail page carries, repeated here:
+          a visitor may read the card and never open the report. */}
+      <p class="u-caption u-secondary u-mt-6">Sample format, not a completed trip.</p>
     </div>
   </Section>
 
@@ -369,52 +432,8 @@ const casePicks = pickUnique(
   <Section alternate>
     <div class="container container--md">
       <SectionHead eyebrow="Before you book" title="Questions creators ask us most." />
-      <FAQ
-        items={[
-          {
-            q: 'Can I really film inside the factory?',
-            a: [
-              'In most cases yes. Filming permission is requested in writing, addressed to the factory owner rather than the sales contact, and confirmed before you book anything. Where a plant refuses, we tell you before you pay for a flight rather than at the gate.',
-            ],
-          },
-          {
-            q: 'How early do I need to book?',
-            a: [
-              `Three weeks for a group tour, four for a private route that needs per-factory permission work. Under ${FILMING_LEAD_TIME}, expect refusals and fewer choices.`,
-            ],
-          },
-          {
-            q: 'Who owns the footage?',
-            a: [
-              'You do. Some factories ask to review what you publish; that condition is agreed in writing up front, and we tell you when it applies. We do not take a cut of anything your content earns.',
-            ],
-          },
-          {
-            q: 'Can I bring a drone?',
-            a: [
-              'Assume no unless we clear it in writing. Drone use around Chinese industrial zones involves registration and local restrictions that most visitors underestimate.',
-            ],
-          },
-          {
-            q: 'What happens if permission falls through at the last minute?',
-            a: [
-              'We build a substitute factory into every itinerary for exactly this reason. You will still have a shooting day. What we will not do is tell you everything is fine when it is not.',
-            ],
-          },
-          {
-            q: 'Do you work with first-time visitors?',
-            a: [
-              'Often. We handle visa invitation letters, hotel near the industrial zone, SIM card, payment apps and the parts of China that quietly trip people up.',
-            ],
-          },
-          {
-            q: 'Do you take commission from the factories?',
-            a: [
-              'No. Our fee comes from you. That is the only way we can tell you to walk away from a factory on the day.',
-            ],
-          },
-        ]}
-      />
+      <FAQ items={faqs} schema={false} />
+      <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
     </div>
   </Section>
 </BaseLayout>

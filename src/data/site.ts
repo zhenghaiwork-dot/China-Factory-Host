@@ -33,14 +33,24 @@ export const REPLY_TIME_MICRO =
    NOT YET CONFIRMED BY ZHENHAI. This value is a holding decision so the site
    stops contradicting itself; he still has to pick the real number. Until he
    does, treat REPORT_WINDOW_DAYS as provisional and do not quote it as settled
-   policy anywhere else. */
-const REPORT_WINDOW_DAYS = 3;
+   policy anywhere else.
+
+   PLACEHOLDER MARKER · data-placeholder="report-window"
+   An unconfirmed digit printed in a promise is exactly the invented fact this
+   site refuses to publish, so the number is held here and NO page may render it:
+   public copy uses REPORT_TURNAROUND_PUBLIC (number-free) instead. To close the
+   slot: confirm the window, then swap the call sites back to REPORT_TURNAROUND /
+   REPORT_TURNAROUND_PROMISE. Find it again with: grep -rn 'report-window' src/ */
+const REPORT_WINDOW_DAYS = 3; // data-placeholder="report-window" — UNCONFIRMED
 const REPORT_WINDOW = REPORT_WINDOW_DAYS + ' working days';
 /** mid-sentence fragment: "a written report {REPORT_TURNAROUND_SHORT}" */
 export const REPORT_TURNAROUND_SHORT = 'within ' + REPORT_WINDOW;
 /** full commitment, tied to the trigger event */
 export const REPORT_TURNAROUND = REPORT_TURNAROUND_SHORT + ' of your departure';
 export const REPORT_TURNAROUND_PROMISE = 'Written report ' + REPORT_TURNAROUND;
+/** The wording actually published while the window is unconfirmed: no number. */
+export const REPORT_TURNAROUND_PUBLIC =
+  'A written report follows your visit — we will confirm the exact turnaround with your itinerary.';
 
 /* ---------- Filming lead time ----------
    "Ten working days" was hand-copied across five files in four different
@@ -49,10 +59,10 @@ export const REPORT_TURNAROUND_PROMISE = 'Written report ' + REPORT_TURNAROUND;
    wordings: use FILMING_LEAD_TIME mid-sentence and FILMING_LEAD_TIME_SHORT
    where the digit form reads better (tables, fact grids).
 
-   REMAINING OUT OF SCOPE — still hand-copied, not yet switched over:
-     · src/pages/destinations/shenzhen/index.astro — "inside ten working days"
-     · src/pages/contact/index.astro — "inside the next ten working days"
-   Change those to FILMING_LEAD_TIME too when their files are free. */
+   Both remaining hand-copies are now switched over — shenzhen/index.astro and
+   contact/index.astro import FILMING_LEAD_TIME — so this literal is the only
+   place the lead time is written. Keep it that way: grep -rn 'working days'
+   src/pages/ must return only constant interpolations, never a bare number. */
 export const FILMING_LEAD_TIME_DAYS = 10;
 export const FILMING_LEAD_TIME = 'ten working days';
 export const FILMING_LEAD_TIME_SHORT = FILMING_LEAD_TIME_DAYS + ' working days';
@@ -221,7 +231,10 @@ export const NAV: NavEntry[] = [
     items: [
       { href: '/about/', label: 'About the team', sub: 'based in Zhejiang' },
       { href: '/about/how-we-vet-factories/', label: 'How we vet factories', sub: 'the five documented checks' },
-      { href: '/case-studies/', label: 'Case studies', sub: 'real trips, real findings' },
+      /* Every published entry is a sample write-up until a client signs off on
+         being named, so the sub-line describes the format — not the trips. It
+         has to agree with /case-studies/ and the creator tour page. */
+      { href: '/case-studies/', label: 'Case studies', sub: 'how a trip report is written' },
     ],
   },
 ];

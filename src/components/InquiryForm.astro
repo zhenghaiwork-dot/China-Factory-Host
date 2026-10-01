@@ -78,7 +78,10 @@ const intro =
             <label class="field__label" for={`in-wa-${uid}`}>
               WhatsApp <span class="u-secondary">(optional, fastest reply)</span>
             </label>
-            <input id={`in-wa-${uid}`} name="whatsapp" type="tel" autocomplete="tel" placeholder="+1 555 000 0000" />
+            {/* Not "+1 555 …": a US film-industry dummy number reads as "not
+                for you" to the European, Australian and SE-Asian visitors who
+                make up most of the enquiries. */}
+            <input id={`in-wa-${uid}`} name="whatsapp" type="tel" autocomplete="tel" placeholder="Your number with country code" />
             <p class="field__hint">Include your country code.</p>
           </div>
         )

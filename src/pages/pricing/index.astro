@@ -54,6 +54,18 @@ const faqs = [
     ],
   },
 ];
+
+/* FAQPage structured data — built from the SAME faqs array the visible list
+   renders, so the machine-readable answers can never drift from the page. */
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a.join(' ') },
+  })),
+};
 ---
 
 <BaseLayout
@@ -150,7 +162,8 @@ const faqs = [
   <Section alternate>
     <div class="container">
       <SectionHead title="Questions about how we are paid." />
-      <FAQ items={faqs} />
+      <FAQ items={faqs} schema={false} />
+      <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
     </div>
   </Section>
 </BaseLayout>

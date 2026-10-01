@@ -7,6 +7,7 @@ import NoteStrip from '../../components/NoteStrip.astro';
 import PhotoSlot from '../../components/PhotoSlot.astro';
 import OnsitePhoto from '../../components/OnsitePhoto.astro';
 import RelatedNav from '../../components/RelatedNav.astro';
+import Testimonial from '../../components/Testimonial.astro';
 import { getCollection } from 'astro:content';
 import { waLink } from '../../data/site.ts';
 import { pickUnique } from '../../data/onsite-photos.ts';
@@ -111,7 +112,7 @@ const structure = [
   <!-- 3 · Grid -->
   <Section tight alternate>
     <div class="container">
-      <SectionHead eyebrow="The samples" title="Two example reports." />
+      <SectionHead eyebrow="The samples" title={`${entries.length} example reports.`} />
       <div class="case-grid case-grid--two">
         {
           entries.map((e, k) => (
@@ -130,12 +131,20 @@ const structure = [
           ))
         }
       </div>
+      {/* The detail page carries this caveat in full. It is repeated under the
+          grid because a visitor may read the cards and never open one. */}
+      <p class="u-caption u-secondary u-mt-6">Sample format, not a completed trip.</p>
     </div>
   </Section>
 
   <!-- 4 · Where next -->
   <Section>
     <div class="container">
+      {/* No invented quote: Testimonial renders its honest empty state until a
+          client gives written permission to be named. */}
+      <div class="container--md u-px-0 u-mb-8">
+        <Testimonial />
+      </div>
       <SectionHead eyebrow="Where next" title="Turn the format into your own trip." />
       <RelatedNav
         items={[

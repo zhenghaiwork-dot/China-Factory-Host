@@ -4,7 +4,7 @@ import Section from '../../components/Section.astro';
 import SectionHead from '../../components/SectionHead.astro';
 import PhotoSlot from '../../components/PhotoSlot.astro';
 import OnsitePhoto from '../../components/OnsitePhoto.astro';
-import { waLink, REPORT_TURNAROUND } from '../../data/site.ts';
+import { waLink } from '../../data/site.ts';
 
 const title = 'Tools — China manufacturing hub finder and factory visit scorecard';
 const description =
@@ -13,11 +13,11 @@ const description =
 const wa = waLink('Hi, I would like to use your factory visit tools.');
 
 /* Precomputed in frontmatter: Astro 7's Rust compiler rejects template literals
-   inside inline attribute/tag expressions. */
+   inside inline attribute/tag expressions.
+   The report window is unconfirmed, so this carries no digit — see
+   src/data/site.ts, grep -rn 'report-window' src/. */
 const reportLine =
-  'If you would rather have the same dimensions filled in by somebody who walks the floor for a living, that is a hosted visit, and the written report lands ' +
-  REPORT_TURNAROUND +
-  '.';
+  'If you would rather have the same dimensions filled in by somebody who walks the floor for a living, that is a hosted visit — and a written report follows it, with the exact turnaround confirmed against your itinerary.';
 
 const tools = [
   { k: 'Where to go', t: 'Manufacturing hub finder — match your product to the cluster that really makes it', href: '/tools/china-manufacturing-hub-finder/' },

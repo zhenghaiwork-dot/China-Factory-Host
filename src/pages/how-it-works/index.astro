@@ -10,7 +10,10 @@ import Caveat from '../../components/Caveat.astro';
 import VetLink from '../../components/VetLink.astro';
 import FAQ from '../../components/FAQ.astro';
 import RelatedNav from '../../components/RelatedNav.astro';
-import { waLink, REPLY_TIME, REPORT_TURNAROUND } from '../../data/site.ts';
+/* REPORT_TURNAROUND_PUBLIC, not REPORT_TURNAROUND: the report window has not
+   been confirmed, so no page may publish the digit. See src/data/site.ts,
+   grep -rn 'report-window' src/. */
+import { waLink, REPLY_TIME, REPORT_TURNAROUND_PUBLIC } from '../../data/site.ts';
 
 const title = 'How it works — from inquiry to written report';
 const description =
@@ -23,7 +26,7 @@ const steps = [
   { n: '02', title: 'We shortlist and pre-screen', body: 'Vetted matches in the right cluster. The five checks run before a factory stays on the itinerary, and the ones that fail are recorded, not quietly dropped.' },
   { n: '03', title: 'We plan the route', body: 'Cluster-by-cluster itinerary, transport, interpreter and appointments locked in. The order is deliberate — the second quote you get should be informed by the first.' },
   { n: '04', title: 'You walk the floor', body: 'Meet the production manager, with the interpreter carrying the technical questions. We handle everything around you so the day is about the factory, not the logistics.' },
-  { n: '05', title: 'Written report', body: 'A structured report covering every factory visited and rejected, delivered ' + REPORT_TURNAROUND + ', with the check that removed each rejection.' },
+  { n: '05', title: 'Written report', body: 'A structured report covering every factory visited and rejected, delivered after your visit, with the check that removed each rejection. We confirm the exact turnaround with your itinerary — we do not publish a window we have not settled.' },
 ];
 
 const provide = [
@@ -43,11 +46,23 @@ const whenNo = [
 const faqs = [
   { q: 'How fast do you reply?', a: ['We reply ' + REPLY_TIME + ', China Time (GMT+8), Monday to Friday. If it is urgent, WhatsApp is faster.'] },
   { q: 'Do I pay before I see the plan?', a: ['No. The plan and the feasibility answer are free. You pay only when you book a trip, and the structure is on the pricing page.'] },
-  { q: 'When do I get the report?', a: ['A written report ' + REPORT_TURNAROUND + ', covering every factory visited and rejected.'] },
+  { q: 'When do I get the report?', a: [REPORT_TURNAROUND_PUBLIC + ' It covers every factory visited and rejected.'] },
   { q: 'What if you cannot help?', a: ['We say so, we say why, and we point you at who can. We would rather lose an inquiry than sell a trip we cannot deliver.'] },
   { q: 'What does the report contain?', a: ['One entry per factory, the five checks recorded against each, what was verified on the floor, and what was rejected — with the check that removed each one.'] },
   { q: 'Is the process the same for creators and buyers?', a: ['The steps are the same; the details differ. Creators add filming permission and a shot list; buyers add the RFQ and the verification. The skeleton does not change.'] },
 ];
+
+/* FAQPage structured data — built from the SAME faqs array the visible list
+   renders, so the machine-readable answers can never drift from the page. */
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a.join(' ') },
+  })),
+};
 ---
 
 <BaseLayout
@@ -147,7 +162,8 @@ const faqs = [
   <Section alternate>
     <div class="container">
       <SectionHead eyebrow="Questions" title="What people ask about the process." />
-      <FAQ items={faqs} />
+      <FAQ items={faqs} schema={false} />
+      <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
     </div>
   </Section>
 

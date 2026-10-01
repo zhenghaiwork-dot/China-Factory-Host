@@ -12,13 +12,68 @@ import Caveat from '../../../components/Caveat.astro';
 import ComparisonTable from '../../../components/ComparisonTable.astro';
 import FactGrid from '../../../components/FactGrid.astro';
 import FAQ from '../../../components/FAQ.astro';
-import { waLink, REPORT_TURNAROUND } from '../../../data/site.ts';
+import Testimonial from '../../../components/Testimonial.astro';
+/* REPORT_TURNAROUND_PUBLIC, not REPORT_TURNAROUND: the report window has not
+   been confirmed, so no page may publish the digit. See src/data/site.ts,
+   grep -rn 'report-window' src/. */
+import { waLink, REPORT_TURNAROUND_PUBLIC } from '../../../data/site.ts';
 
 const title = 'Brand sourcing visit — verify the China factory before you wire the deposit';
 const description =
-  `A hosted verification trip: five documented checks per factory, the production manager in the room, and a written report ${REPORT_TURNAROUND}.`;
+  'A hosted verification trip: five documented checks per factory, the production manager in the room, and a written report after your visit.';
 
 const wa = waLink('Hi, I would like to plan a factory visit to verify suppliers in China.');
+
+/* FAQPage structured data — built from the SAME faqs array the visible list
+   renders, so the machine-readable answers can never drift from the page. */
+const faqs = [
+  {
+    q: 'How many days do I need?',
+    a: [
+      'Three days is workable for two or three suppliers in one cluster. Five days covers four to six suppliers plus a negotiation day. Anything beyond ten days is usually better split into two trips.',
+    ],
+  },
+  {
+    q: 'What is a normal MOQ in China?',
+    a: [
+      'It depends entirely on the process. Injection moulding often starts around 1,000–5,000 units because tooling setup dominates; assembly and packing can be far lower. Rather than a generic answer, we tell you the driver behind each factory’s number so you know which part is negotiable.',
+    ],
+  },
+  {
+    q: 'What if we get there and the production manager is unavailable?',
+    a: [
+      'We reschedule that stop or replace it. Either way it is recorded in the report as a failed criterion, not quietly dropped.',
+    ],
+  },
+  {
+    q: 'Do you place orders for us afterwards?',
+    a: [
+      'We can follow up on sampling and production coordination, and that arrangement is quoted separately. We do not take a silent cut of your unit price.',
+    ],
+  },
+  {
+    q: 'Can you visit suppliers I found on Alibaba?',
+    a: [
+      'Yes. Bringing your existing shortlist is one of the most useful versions of this trip — including when the result is telling you to drop half of it.',
+    ],
+  },
+  {
+    q: 'When should I not come?',
+    a: [
+      'Chinese New Year and the National Day holiday shut lines down for days to weeks, and the two weeks either side are unreliable for sampling. We will tell you the exact windows for your cluster before you book flights.',
+    ],
+  },
+];
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a.join(' ') },
+  })),
+};
 ---
 
 <BaseLayout
@@ -234,15 +289,20 @@ const wa = waLink('Hi, I would like to plan a factory visit to verify suppliers 
             >The ones removed before or during the visit, and which check removed them.</span
           >
         </li>
-        <li>
-          <span class="spec-list__k">Timing</span><span class="spec-list__v"
-            >Written report {REPORT_TURNAROUND}, sooner if your deposit decision has a deadline.</span
-          >
-        </li>
-      </ul>
+          <li>
+            <span class="spec-list__k">Timing</span><span class="spec-list__v"
+              >{REPORT_TURNAROUND_PUBLIC} Sooner if your deposit decision has a deadline.</span
+            >
+          </li>
+        </ul>
       <p class="u-mt-6">
         The report is scored the same way across suppliers — see the <a href="/tools/factory-visit-scorecard/">factory visit scorecard</a>.
       </p>
+      {/* No invented quote: Testimonial renders its honest empty state until a
+          client gives written permission to be named. */}
+      <div class="u-mt-8">
+        <Testimonial />
+      </div>
     </div>
   </Section>
 
@@ -295,9 +355,21 @@ const wa = waLink('Hi, I would like to plan a factory visit to verify suppliers 
           items={[
             {
               k: 'Hosting day rate',
-              /* Blank on purpose — no visible [ PRICE TBC ] tag (round-2 N1). */
-              v: '$—',
+              /* "On request", not an em-dash: a dash reads as a rendering fault
+                 rather than a deliberate blank. The slot keeps a machine-readable
+                 marker so it can be filled in one pre-launch pass. */
+              v: '<span data-placeholder="price">On request</span>',
               note: 'Interpreting, transport coordination, factory access and negotiation support, per day.',
+            },
+            {
+              k: 'What moves the number',
+              v: 'Day count · cluster count · permission work · crew size',
+              note: 'The four variables we quote against — nothing else is added afterwards.',
+            },
+            {
+              k: 'Quote timing',
+              v: 'Fixed against your dates before you pay anything',
+              note: 'You see the number, the scope and the conditions attached to it before any money moves.',
             },
             {
               k: 'Sourcing commission',
@@ -363,46 +435,8 @@ const wa = waLink('Hi, I would like to plan a factory visit to verify suppliers 
   <Section alternate>
     <div class="container container--md">
       <SectionHead eyebrow="Practical questions" title="What buyers ask before booking." />
-      <FAQ
-        items={[
-          {
-            q: 'How many days do I need?',
-            a: [
-              'Three days is workable for two or three suppliers in one cluster. Five days covers four to six suppliers plus a negotiation day. Anything beyond ten days is usually better split into two trips.',
-            ],
-          },
-          {
-            q: 'What is a normal MOQ in China?',
-            a: [
-              'It depends entirely on the process. Injection moulding often starts around 1,000–5,000 units because tooling setup dominates; assembly and packing can be far lower. Rather than a generic answer, we tell you the driver behind each factory’s number so you know which part is negotiable.',
-            ],
-          },
-          {
-            q: 'What if we get there and the production manager is unavailable?',
-            a: [
-              'We reschedule that stop or replace it. Either way it is recorded in the report as a failed criterion, not quietly dropped.',
-            ],
-          },
-          {
-            q: 'Do you place orders for us afterwards?',
-            a: [
-              'We can follow up on sampling and production coordination, and that arrangement is quoted separately. We do not take a silent cut of your unit price.',
-            ],
-          },
-          {
-            q: 'Can you visit suppliers I found on Alibaba?',
-            a: [
-              'Yes. Bringing your existing shortlist is one of the most useful versions of this trip — including when the result is telling you to drop half of it.',
-            ],
-          },
-          {
-            q: 'When should I not come?',
-            a: [
-              'Chinese New Year and the National Day holiday shut lines down for days to weeks, and the two weeks either side are unreliable for sampling. We will tell you the exact windows for your cluster before you book flights.',
-            ],
-          },
-        ]}
-      />
+      <FAQ items={faqs} schema={false} />
+      <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
     </div>
   </Section>
 </BaseLayout>

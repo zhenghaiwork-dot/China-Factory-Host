@@ -39,6 +39,18 @@ const faqs = [
   { q: 'Do I pay before I see the plan?', a: ['No. The plan and the feasibility answer are free. You pay only when you book a trip, and the structure is on the pricing page.'] },
   { q: 'What if you cannot help?', a: ['We say so, and we say why — wrong category, wrong dates, or a request that a cheaper remote service would serve better. We would rather lose an inquiry than sell a trip we cannot deliver.'] },
 ];
+
+/* FAQPage structured data — built from the SAME faqs array the visible list
+   renders, so the machine-readable answers can never drift from the page. */
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a.join(' ') },
+  })),
+};
 ---
 
 <BaseLayout
@@ -120,7 +132,8 @@ const faqs = [
   <Section alternate>
     <div class="container container--md">
       <SectionHead eyebrow="Before you send" title="The questions people ask first." />
-      <FAQ items={faqs} />
+      <FAQ items={faqs} schema={false} />
+      <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
     </div>
   </Section>
 

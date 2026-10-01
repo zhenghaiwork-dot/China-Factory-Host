@@ -937,6 +937,30 @@
 .hero--inverse .hero__micro li + li::before { color: var(--color-text-inverse-3); }
 .hero__media { margin-top: var(--space-8); }
 @media (min-width: 1024px) { .hero__media { margin-top: 0; } }
+
+/* --- Hero media height follows the copy, not its own ratio (2026-10-01) ---
+   User audit: on short-copy heroes the 4:3 plate in the 5fr column hung up to
+   ~120px below the text (pricing +60, faq/contact/hubs similar), while on
+   long-copy heroes it floated 200–390px short of the text (yiwu −390). The
+   plate was sizing to its own column width; the copy beside it was irrelevant.
+
+   Fix: stretch the media to the grid row — which the TEXT column defines —
+   clamped to a sane band. Typical heroes get matched top/bottom edges; long
+   heroes cap at 460px (the plate simply ends before the copy does, as it
+   already did); absurdly short copy floors at 240px so the plate never
+   collapses into a letterbox. Reflow safety (§8.5) is preserved and actually
+   strengthened: the height is imposed by the copy, so swapping a placeholder
+   for the real photograph still cannot move anything. */
+@media (min-width: 1024px) {
+  .hero .split-7-5 { align-items: stretch; }
+  .hero__media { display: flex; flex-direction: column; }
+  .hero__media .photo-slot {
+    aspect-ratio: auto;
+    flex: 1 1 auto;
+    min-height: 240px;
+    max-height: 460px;
+  }
+}
 .hero__panel {
   background: var(--color-surface);
   border: var(--border-default);

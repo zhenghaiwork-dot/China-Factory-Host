@@ -39,8 +39,11 @@ export default defineConfig({
     : node({ mode: 'standalone' }),
   trailingSlash: 'always',
   /* 301 maps from the SEO/GEO content map's proposed URLs to the pages that
-     already exist under different paths (see docs/content-gap.md §二). Existing
-     URLs stay canonical; the document URLs never 404. */
+     already exist under different paths. Existing URLs stay canonical; the
+     document URLs never 404.
+     (The content map these came from is a private planning note and is not
+     committed — see .gitignore — so the rationale stays here rather than
+     pointing at a file a fresh clone will not have.) */
   redirects: {
     '/services/supplier-verification': '/about/how-we-vet-factories',
     '/services/on-site-factory-support': '/services/on-site-support',

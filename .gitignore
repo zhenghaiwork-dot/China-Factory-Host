@@ -32,6 +32,19 @@ Thumbs.db
 # Never un-ignore these to "share quickly" — copy the content out instead.
 docs/LOCAL-*.md
 
+# Working material, not product content: planning specs, content-gap maps,
+# audit reports, agent handoffs, prototypes. Several of these were committed
+# early on and have been un-tracked; the files stay on disk for reference, only
+# the tracking stops. Whole directories rather than a per-file list, because
+# every session so far has added another planning note to docs/ and a list
+# silently lets the next one through.
+# If a document ever does need to ship, put it at the repo root — DEPLOYMENT.md
+# is there for exactly that reason (three source files point at it) — or
+# un-ignore it by name below.
+/docs/
+/design/
+/prototypes/
+
 # Audit & design-review scratch left in the repo ROOT by prior sessions.
 # Every helper file we dropped during the spacing-audit / photo-fill work is
 # _-prefixed; root-anchored (leading /) so nested source dirs are untouched.

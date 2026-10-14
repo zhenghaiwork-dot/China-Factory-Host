@@ -3,7 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Section from '../../components/Section.astro';
 import SectionHead from '../../components/SectionHead.astro';
 import PhotoSlot from '../../components/PhotoSlot.astro';
-import OnsitePhoto from '../../components/OnsitePhoto.astro';
+import CantonFairPhoto from '../../components/CantonFairPhoto.astro';
 import FAQ from '../../components/FAQ.astro';
 import Caveat from '../../components/Caveat.astro';
 import RelatedNav from '../../components/RelatedNav.astro';
@@ -159,7 +159,7 @@ const collectionSchema = {
         </div>
         <div class="hero__media">
           <PhotoSlot name="CANTON FAIR · THE HALLS" variant="media">
-            <OnsitePhoto id="06" eager />
+            <CantonFairPhoto id="05" eager />
           </PhotoSlot>
         </div>
       </div>
@@ -217,6 +217,25 @@ const collectionSchema = {
         <a href="/guides/canton-fair-practical-tips-hotels-interpreters/">Canton Fair practical
         tips</a>.
       </p>
+    </div>
+  </Section>
+
+  {/* Scenes from the floor. Every frame in this row carries a visible source
+      line because none of them is ours (see src/data/canton-fair-photos.ts):
+      they stand in until we shoot our own or license these. Nothing here is
+      asserted as a client visit, a factory or a result. */}
+  <Section>
+    <div class="container">
+      <SectionHead
+        eyebrow="The floor itself"
+        title="Scenes from the halls."
+        lead="Crowded aisles, a demonstration that pulls a crowd, and the ten seconds a buyer gets to decide whether a booth is worth a business card. Each photograph is credited to its source."
+      />
+      <div class="grid grid--3 scenes">
+        <CantonFairPhoto id="01" sizes="(max-width: 720px) 100vw, 30vw" />
+        <CantonFairPhoto id="04" sizes="(max-width: 720px) 100vw, 30vw" />
+        <CantonFairPhoto id="09" sizes="(max-width: 720px) 100vw, 30vw" />
+      </div>
     </div>
   </Section>
 
@@ -295,3 +314,12 @@ const collectionSchema = {
     </div>
   </Section>
 </BaseLayout>
+
+<style>
+  /* One ratio across the row. 01 is 769×500 and 04/09 are 3:2 — a difference
+     small enough to look like a mistake if the credit lines do not line up. */
+  .scenes :global(img) {
+    aspect-ratio: 3 / 2;
+    object-fit: cover;
+  }
+</style>

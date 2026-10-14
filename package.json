@@ -13,7 +13,7 @@
     "prebuild": "node scripts/build-sitemap.mjs",
     "preview": "astro preview",
     "check": "astro check",
-    "test": "node scripts/test-fair-status.mjs",
+    "test": "node scripts/test-fair-status.mjs && node scripts/check-inline-spacing.mjs",
     "astro": "astro",
     "pdf": "node scripts/build-checklist-pdf.mjs",
     "icons": "node scripts/gen-icons.mjs",

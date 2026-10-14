@@ -1,0 +1,348 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Section from '../../../components/Section.astro';
+import SectionHead from '../../../components/SectionHead.astro';
+import PhotoSlot from '../../../components/PhotoSlot.astro';
+import OnsitePhoto from '../../../components/OnsitePhoto.astro';
+import Checklist from '../../../components/Checklist.astro';
+import FAQ from '../../../components/FAQ.astro';
+import Caveat from '../../../components/Caveat.astro';
+import RelatedNav from '../../../components/RelatedNav.astro';
+import DownloadGate from '../../../components/DownloadGate.astro';
+import { waLink } from '../../../data/site.ts';
+
+const title = 'Canton Fair to factory visits: plan your China supplier trip';
+const description =
+  'Met suppliers at Canton Fair? How to shortlist, verify and plan factory visits in China: what to confirm in writing, how to group visits by region, and what to check on site.';
+
+const wa = waLink('Hi, I met suppliers at Canton Fair and want to plan factory visits after it.');
+
+/* Sorting the business cards — the first 48 hours decide the whole trip. */
+const triage = [
+  { k: 'Continue', v: 'Product fits, quote is reasonable, answers were clear. Next: verify, then plan a visit.' },
+  { k: 'Ask more', v: 'Product fits but the answers or the price were unclear. Next: send written questions.' },
+  { k: 'Drop', v: 'Poor fit, evasive, or no response at all. Next: stop.' },
+];
+
+const worthIt = [
+  'The order is large, custom or likely to repeat.',
+  'The product carries quality, safety or compliance risk.',
+  'You need to confirm the supplier makes the product itself.',
+  'Two or three suppliers quote similar prices and you have to choose.',
+  'Something in the booth conversation did not fully add up.',
+];
+
+/* On-site checklist — one list used at every factory, so the comparison is fair. */
+const onSite = [
+  { k: 'Production', v: 'Machines, workshop layout, work in progress — whether the product is really made here.' },
+  { k: 'Materials', v: 'Raw material storage, labels, supplier records — quality starts with materials.' },
+  { k: 'Process', v: 'Which steps happen in-house and which are outsourced — the real control over quality and lead time.' },
+  { k: 'Quality control', v: 'Inspection points, test equipment, defect records — how problems get caught.' },
+  { k: 'Capacity', v: 'Number of lines, shifts, current orders — whether they can carry your volume.' },
+  { k: 'Packaging and warehouse', v: 'Finished goods, labelling, packing process — where shipment problems usually start.' },
+  { k: 'Samples', v: 'Compare against the sample or the booth display — confirms consistency.' },
+  { k: 'People', v: 'Who answers the technical questions — whether they actually understand the product.' },
+];
+
+/* The fields that make two quotes comparable at all. */
+const compareFields = [
+  'Exact specification quoted.',
+  'Unit price at your target quantity.',
+  'Unit price at two other quantities.',
+  'MOQ, and whether it is flexible.',
+  'Tooling or mould cost.',
+  'Whether packaging is included.',
+  'Trade term — EXW, FOB or other.',
+  'Lead time.',
+  'Payment terms.',
+  'Sample cost and sample time.',
+];
+
+const faqs = [
+  {
+    q: 'Should I visit the factory before or after ordering samples?',
+    a: [
+      'Either can work. A visit before samples helps you judge whether the supplier is worth the effort; samples first help you avoid travelling for a product that does not meet your standard.',
+      'Many buyers order samples first for low-cost products, and visit first for high-value or custom items.',
+    ],
+  },
+  {
+    q: 'How many factories should I visit in one trip?',
+    a: [
+      'Two to three per day at most, and fewer if they are in different cities. It is better to see fewer suppliers properly than many in a rush.',
+    ],
+  },
+  {
+    q: 'Can I visit a factory without a registered company?',
+    a: [
+      'Individual buyers and small businesses do visit factories, but the factory decides whom to host. Explain clearly what you plan to order, and ask before you travel — whether a supplier will accept a small order is their decision.',
+    ],
+  },
+  {
+    q: 'Do I need to tell the factory in advance?',
+    a: [
+      'Yes. Confirm the date, the address and the host in writing. Arriving without notice rarely works, and may be refused for safety or confidentiality reasons.',
+    ],
+  },
+  {
+    q: 'What if the factory refuses to let me see the workshop?',
+    a: [
+      'Ask why. Some areas are restricted for confidentiality or safety, which is normal — but a supplier that never allows any workshop access deserves extra caution.',
+    ],
+  },
+  {
+    q: 'Is a factory visit enough to guarantee quality?',
+    a: [
+      'No. It shows capability and process at that moment. For important orders, add samples, written specifications in the contract and inspection before shipment.',
+    ],
+  },
+  {
+    q: 'Can someone visit for me if I cannot travel?',
+    a: [
+      'Yes. A local representative or an inspection service can visit, take photos and video, and report back. Send them your checklist and agree in advance on what they should record.',
+    ],
+  },
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  active=""
+  crumbs={[{ href: '/canton-fair/', label: 'Canton Fair' }]}
+  current="Canton Fair to factory visits"
+  article={{
+    title,
+    description,
+    datePublished: '2026-10-14',
+    dateModified: '2026-10-14',
+    section: 'Factory Visits',
+  }}
+  cta={{
+    eyebrow: 'Next step',
+    title: 'Turn the shortlist into a route.',
+    lead: 'Send us your suppliers, your product and your dates. We will tell you which visits can be grouped, what to confirm in advance, and what is realistic.',
+    primary: { label: 'Plan my factory visits', href: '/contact/' },
+    secondary: { label: 'Ask on WhatsApp', href: wa, external: true },
+  }}
+>
+  <section class="hero">
+    <div class="container">
+      <div class="split-7-5">
+        <div>
+          <p class="eyebrow">Guide</p>
+          <h1>From Canton Fair to factory visits: how to plan supplier visits in China.</h1>
+          <p class="lead hero__lead">
+            A booth lets you meet a supplier and see samples. A visit lets you see how the product
+            is actually made. Narrow the list to two or three, verify the company first, confirm the
+            address and date in writing, group visits by region, and take one checklist to every
+            factory so the comparison is fair.
+          </p>
+          <div class="btn-row">
+            <a class="btn btn--secondary" href="#checklist-download">Get the visit checklist</a>
+          </div>
+        </div>
+        <div class="hero__media">
+          <PhotoSlot name="GUIDE · FAIR TO FLOOR" variant="media">
+            <OnsitePhoto id="10" />
+          </PhotoSlot>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Section>
+    <div class="container container--md">
+      <SectionHead eyebrow="Is it worth it" title="Do you need a visit after the fair?" />
+      <div class="prose stack">
+        <p>
+          Not always, but often yes. The fair is good for comparing many suppliers quickly, testing
+          communication, and collecting samples and quotes. It cannot show you the workshop, the
+          equipment, how quality is controlled, or how the factory handles your kind of order.
+        </p>
+        <p>
+          For a small standard order, samples plus document checks may be enough. That decision is
+          yours — it is a trade-off between cost and risk.
+        </p>
+      </div>
+      <Checklist title="A visit is worth the time when" items={worthIt} />
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container container--md">
+      <SectionHead
+        eyebrow="Free download"
+        title="Take the visit checklist with you."
+        lead="The checks in this guide, in the order we run them on site."
+      />
+      <DownloadGate id="checklist-download" photo="CANTON-FAIR-VISIT-CHECKLIST" />
+    </div>
+  </Section>
+
+  <Section>
+    <div class="container container--md">
+      <SectionHead eyebrow="The plan" title="Eight steps, from business cards to a decision." />
+      <div class="prose stack">
+        <h3>Step 1 — Narrow your list within 48 hours</h3>
+        <p>
+          You will come back with a stack of cards and notes. Within two days, sort them:
+        </p>
+        <ul class="spec-list clean">
+          {triage.map((t) => (
+            <li>
+              <span class="spec-list__k">{t.k}</span><span class="spec-list__v">{t.v}</span>
+            </li>
+          ))}
+        </ul>
+        <p>
+          Aim for two or three suppliers, not ten. Each visit costs a day or more once travel is
+          counted.
+        </p>
+
+        <h3>Step 2 — Verify before you travel</h3>
+        <p>
+          Do not travel to a company you have not checked. Confirm the legal company name, the
+          registration record, and whether the name on the quotation matches the licence. The
+          seven-step walkthrough is in
+          <a href="/guides/verify-canton-fair-suppliers/">how to verify Canton Fair suppliers</a>.
+        </p>
+        <p>
+          Verification does not replace the visit. It stops you spending a trip on a company that
+          fails basic checks.
+        </p>
+
+        <h3>Step 3 — Confirm the visit in writing</h3>
+        <p>Send each supplier a short message and ask for a written reply confirming:</p>
+        <ol>
+          <li>The exact factory address — not only the office address.</li>
+          <li>The date and start time.</li>
+          <li>The name and role of the person who will host you.</li>
+          <li>Which workshops or processes you can see.</li>
+          <li>Whether samples or your drawings can be discussed on site.</li>
+          <li>Whether photos and video are allowed.</li>
+        </ol>
+        <p>
+          If a supplier avoids giving a factory address or discourages a visit, note it. It is not
+          proof of a problem, but it matters for your decision.
+        </p>
+
+        <h3>Step 4 — Group visits by region, not by the fair location</h3>
+        <p>
+          Many buyers assume suppliers sit near Guangzhou. In practice a factory can be anywhere in
+          China, and every production cluster has its own region. Check each address and group the
+          visits by city or province:
+        </p>
+        <ul>
+          <li>Visits in the same city can often be done in one day, if the factories confirm.</li>
+          <li>Visits in different provinces need travel days between them.</li>
+          <li>
+            Do not plan more than two or three factory visits in a day — rushed visits give you less
+            information.
+          </li>
+        </ul>
+        <p>
+          The clusters are mapped in
+          <a href="/tools/china-manufacturing-hub-finder/">the manufacturing hub finder</a>, and
+          <a href="/destinations/zhejiang/">Zhejiang</a> is the one most buyers add after the fair.
+          If you are trying to fit visits around the fair itself, the
+          <a href="/canton-fair/">Canton Fair buyer guide</a> covers the switch-over days between
+          phases — the quietest window in the whole fortnight.
+        </p>
+
+        <h3>Step 5 — Prepare what to bring</h3>
+        <ul>
+          <li>Your product specification, drawings or reference samples.</li>
+          <li>The sample or quotation from this supplier, printed.</li>
+          <li>A list of questions, plus the answers they already gave you at the fair.</li>
+          <li>Target quantity, delivery date and destination market.</li>
+          <li>The compliance requirements your target market imposes.</li>
+          <li>A notebook or phone for photos — with permission.</li>
+          <li>An interpreter, if your Chinese is limited.</li>
+        </ul>
+        <p>
+          If you cannot travel yourself, a local representative can visit for you. Send them the
+          checklist and agree in advance on what they should photograph and record.
+        </p>
+
+        <h3>Step 6 — What to check on site</h3>
+        <p>Use the same checklist at every factory, so the comparison is fair:</p>
+        <ul class="spec-list clean">
+          {onSite.map((o) => (
+            <li>
+              <span class="spec-list__k">{o.k}</span><span class="spec-list__v">{o.v}</span>
+            </li>
+          ))}
+        </ul>
+        <p>
+          Write it down as you go — the
+          <a href="/tools/factory-visit-scorecard/">factory visit scorecard</a> exists because two
+          suppliers visited a week apart are otherwise remembered very differently.
+        </p>
+
+        <h3>Step 7 — Compare prices and MOQ on the same basis</h3>
+        <p>
+          Build one table and fill in the same fields for every supplier, or the numbers are not
+          comparable:
+        </p>
+        <ul>
+          {compareFields.map((f) => <li>{f}</li>)}
+        </ul>
+        <p>
+          Quotes are only comparable when the specification and the trade terms are identical. A low
+          price often reflects a different material or a lower specification.
+        </p>
+
+        <h3>Step 8 — After the visit</h3>
+        <ol>
+          <li>Write up your notes the same day, while they are fresh.</li>
+          <li>Send the supplier a written summary of what you agreed and what is still open.</li>
+          <li>Request samples that match the agreed specification.</li>
+          <li>
+            Check that the company name on the contract and on the bank account match — the last
+            step of <a href="/guides/verify-canton-fair-suppliers/">the verification guide</a>.
+          </li>
+          <li>Decide whether to place a trial order, and which inspection you will use.</li>
+        </ol>
+      </div>
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container container--md">
+      <SectionHead eyebrow="Questions" title="Frequently asked questions." />
+      <FAQ items={faqs} />
+    </div>
+  </Section>
+
+  <Section>
+    <div class="container container--md">
+      <Caveat
+        title="What a visit can and cannot prove"
+        body="A visit shows capability and process on that day. It cannot prove long-term quality or financial stability, and it is not an audit. For high-risk products add a professional inspection or audit alongside your own visit. This guide is general information, not legal advice."
+        items={[
+          'A supplier that refuses all workshop access deserves extra caution; restricted areas for safety or confidentiality are normal.',
+          'A visit is not an audit and not an inspection — the three answer different questions.',
+        ]}
+      />
+      <p class="u-mt-6">
+        If you are deciding between the three, that difference is set out in
+        <a href="/guides/factory-visit-vs-audit-vs-inspection/">factory visit vs audit vs inspection</a>.
+      </p>
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container">
+      <SectionHead eyebrow="Go deeper" title="Related pages." />
+      <RelatedNav
+        items={[
+          { k: 'Guide', t: 'Verify Canton Fair suppliers — 7 steps', href: '/guides/verify-canton-fair-suppliers/' },
+          { k: 'Canton Fair', t: 'The fair itself — phases and factory days', href: '/canton-fair/' },
+          { k: 'Tool', t: 'Factory visit scorecard', href: '/tools/factory-visit-scorecard/' },
+          { k: 'Region', t: 'Zhejiang', href: '/destinations/zhejiang/' },
+        ]}
+      />
+    </div>
+  </Section>
+</BaseLayout>

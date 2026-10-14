@@ -1,0 +1,333 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Section from '../../../components/Section.astro';
+import SectionHead from '../../../components/SectionHead.astro';
+import PhotoSlot from '../../../components/PhotoSlot.astro';
+import OnsitePhoto from '../../../components/OnsitePhoto.astro';
+import Checklist from '../../../components/Checklist.astro';
+import FAQ from '../../../components/FAQ.astro';
+import Caveat from '../../../components/Caveat.astro';
+import RelatedNav from '../../../components/RelatedNav.astro';
+import DownloadGate from '../../../components/DownloadGate.astro';
+import { waLink } from '../../../data/site.ts';
+
+const title = 'Visiting factories between Canton Fair phases: what is realistic';
+const description =
+  'The 140th Canton Fair has two three-day gaps with no exhibition, 20–22 and 28–30 October 2026. What you can fit into them, what to confirm first, and when to wait until after the fair.';
+
+const wa = waLink('Hi, I am at Canton Fair and want to use the days between phases for factory visits.');
+
+/* Phase themes and dates are the organiser's, and they match what the
+   /canton-fair/ hub publishes — the two pages must never disagree. */
+const phases = [
+  { k: 'Phase 1 · 15–19 October', v: 'Advanced manufacturing — appliances and consumer electronics, machinery, vehicles and parts, lighting, hardware and tools.' },
+  { k: 'Phase 2 · 23–27 October', v: 'Quality home life — ceramics, kitchenware, household goods, gifts and festival items, building materials, furniture.' },
+  { k: 'Phase 3 · 31 October – 4 November', v: 'Better living — toys, apparel, textiles and fabrics, shoes and bags, home textiles, stationery, food, sports and leisure.' },
+];
+
+const gaps = [
+  { k: 'Gap 1 · 20–22 October 2026', v: 'Three days between Phase 1 and Phase 2. The halls are closed for switch-over, so the suppliers you met are off booth duty.' },
+  { k: 'Gap 2 · 28–30 October 2026', v: 'Three days between Phase 2 and Phase 3. Same window, quieter roads, and the last one — after Phase 3 the fair simply ends.' },
+  { k: 'After 4 November', v: 'No deadline pulling you back to Pazhou. This is when a multi-province trip becomes possible, not the three-day gaps.' },
+];
+
+const decide = [
+  { k: 'Is the supplier still available?', v: 'Exhibitors differ by phase. A supplier you met in Phase 1 may have gone home, or may still be at the venue for a few days. Ask directly: "Will your team be at the factory on 21 October?" Do not assume.' },
+  { k: 'Has the factory confirmed in writing?', v: 'Exact address, date and start time, the host\'s name, and which areas you may see. Without a written confirmation a day can disappear.' },
+  { k: 'Where is the factory?', v: 'Not necessarily in Guangzhou. Check the city on the licence and the quotation, then check real travel times including the station and the last kilometre. A factory that looks close on a map can cost half a day in transfers.' },
+  { k: 'What do you need from the visit?', v: 'One purpose per factory — verify production, discuss a custom product, inspect a sample, or negotiate. A visit with a stated purpose is shorter and returns more.' },
+];
+
+const threeWays = [
+  { k: 'Stay local', v: 'Visit factories in or near Guangzhou — the outer districts, Foshan and Dongguan are all within reach. Best for: suppliers already in the same area and limited time. Watch out for: assuming a supplier is local when the licence says another city.' },
+  { k: 'One cluster, several factories', v: 'Go to one production region and visit two or three suppliers there. Best for: one product category sourced from one area. Watch out for: a cluster trip only works with confirmed appointments and a hard daily limit.' },
+  { k: 'Verify remotely', v: 'Use video calls instead of travelling. Best for: buyers who cannot spare the days, or whose factories are a long way from Guangzhou. Watch out for: a video is weaker evidence than a visit — use it to narrow the list, not to close it.' },
+];
+
+const notWorth = [
+  'The supplier has not confirmed a date, an address and a host in writing.',
+  'The factory is far enough that the round trip would eat most of the gap.',
+  'You have not yet checked the company records.',
+  'You are not clear what you want to check once you are there.',
+  'You are tired and the next phase starts in three days. A rushed visit returns less than a rested one.',
+];
+
+const prep = [
+  'Your specification, drawings or reference samples.',
+  'The supplier\'s quotation and what they told you at the booth.',
+  'A written list of questions.',
+  'Your target quantity, delivery date and destination market.',
+  'A way to record notes and photos — with permission.',
+  'An interpreter, if your Chinese is limited.',
+];
+
+const faqs = [
+  {
+    q: 'Can I visit factories while Canton Fair is still running?',
+    a: [
+      'Yes, but the days the halls are open are usually full of booth meetings. The switch-over gaps are easier to use, provided the supplier confirms they are available.',
+    ],
+  },
+  {
+    q: 'How many factories can I visit in one day?',
+    a: [
+      'Two or three at most, and fewer if they are in different cities. Rushed visits return less information than fewer visits done properly.',
+    ],
+  },
+  {
+    q: 'Should I visit before I order samples?',
+    a: [
+      'It depends. Visiting first suits high-value or custom products; samples first suit lower-cost products where a trip may never pay for itself. The trade-off is set out step by step in the Canton Fair to factory visits guide.',
+    ],
+  },
+  {
+    q: 'Is a video call a good substitute?',
+    a: [
+      'It is useful for narrowing a list and weaker than a visit. A video shows what the supplier chooses to show; a visit lets you see the workshop, the material store and the work in progress for yourself.',
+    ],
+  },
+  {
+    q: 'What if I only have three days in China?',
+    a: [
+      'Prioritise verification, sorting your notes and one or two confirmed visits. Do not try to cover more than one region in three days.',
+    ],
+  },
+  {
+    q: 'Can someone visit the factory for me?',
+    a: [
+      'Yes. A local representative can visit, photograph and film, and report back using your checklist. Agree in advance on what they should record, and ask for the raw files, not only a summary.',
+    ],
+  },
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  active=""
+  crumbs={[{ href: '/canton-fair/', label: 'Canton Fair' }]}
+  current="Visiting factories between phases"
+  article={{
+    title,
+    description,
+    datePublished: '2026-10-14',
+    dateModified: '2026-10-14',
+    section: 'Factory Visits',
+  }}
+  cta={{
+    eyebrow: 'Next step',
+    title: 'Send us the list and the dates.',
+    lead: 'Tell us which suppliers you want to see, which cities they are in and which gap you have. We will say what is realistic, which visits can be grouped, and what to confirm before you commit the days.',
+    primary: { label: 'Plan the gap days', href: '/contact/' },
+    secondary: { label: 'Ask on WhatsApp', href: wa, external: true },
+  }}
+>
+  <section class="hero">
+    <div class="container">
+      <div class="split-7-5">
+        <div>
+          <p class="eyebrow">Guide</p>
+          <h1>Can you visit factories between Canton Fair phases? Yes — if you plan it before you fly.</h1>
+          <p class="lead hero__lead">
+            The 140th session has two three-day gaps with no exhibition at all, 20–22 and 28–30
+            October 2026. That is enough for factories inside one region, provided the suppliers
+            confirm in writing and you group the visits. It is not enough for a multi-province tour.
+          </p>
+          <div class="btn-row">
+            <a class="btn btn--secondary" href="#checklist-download">Get the visit checklist</a>
+          </div>
+        </div>
+        <div class="hero__media">
+          <PhotoSlot name="GUIDE · THE SWITCH-OVER DAYS" variant="media">
+            <OnsitePhoto id="07" />
+          </PhotoSlot>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Section tight>
+    <div class="container">
+      <SectionHead
+        eyebrow="The 140th session"
+        title="Three phases, and the two gaps between them."
+        lead="Dates and phase themes belong to the organiser — confirm the current schedule on cantonfair.org.cn before you book anything."
+      />
+      <ul class="spec-list">
+        {phases.map((p) => (
+          <li>
+            <span class="spec-list__k">{p.k}</span><span class="spec-list__v">{p.v}</span>
+          </li>
+        ))}
+      </ul>
+      <p class="u-mt-6">What matters for planning is not the phases but the days between them:</p>
+      <ul class="spec-list clean">
+        {gaps.map((g) => (
+          <li>
+            <span class="spec-list__k">{g.k}</span><span class="spec-list__v">{g.v}</span>
+          </li>
+        ))}
+      </ul>
+      <p class="u-mt-6">
+        Because each phase covers different categories, the gaps mostly help buyers who attend more
+        than one phase, or who finish a phase and want to act on what they found before the next one
+        starts.
+      </p>
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container container--md">
+      <SectionHead
+        eyebrow="Is it realistic"
+        title="Four things decide whether the gap works."
+        lead="None of these is a reason to skip the visit. They are the four that turn a three-day window into a wasted trip when they are ignored."
+      />
+      <ul class="spec-list">
+        {decide.map((d) => (
+          <li>
+            <span class="spec-list__k">{d.k}</span><span class="spec-list__v">{d.v}</span>
+          </li>
+        ))}
+      </ul>
+      <p class="u-mt-6">
+        The full list of what to ask for in writing — address, host, which areas you may see, whether
+        photos are allowed — is step three of
+        <a href="/guides/canton-fair-to-factory-visits/">from Canton Fair to factory visits</a>.
+      </p>
+    </div>
+  </Section>
+
+  <Section>
+    <div class="container container--md">
+      <SectionHead eyebrow="Three options" title="How buyers actually use the gap." />
+      <ul class="spec-list">
+        {threeWays.map((w) => (
+          <li>
+            <span class="spec-list__k">{w.k}</span><span class="spec-list__v">{w.v}</span>
+          </li>
+        ))}
+      </ul>
+      <p class="u-mt-6">
+        For most buyers the best use of a gap is not a long trip. It is rest, sorting the notes while
+        they still mean something, running the company checks, and one or two factory visits that were
+        confirmed before the halls closed. The five checks behind that are in
+        <a href="/about/how-we-vet-factories/">how we vet factories</a>.
+      </p>
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container container--md">
+      <SectionHead
+        eyebrow="Free download"
+        title="Take the visit checklist with you."
+        lead="The checks in this guide, in the order we run them on site."
+      />
+      <DownloadGate id="checklist-download" photo="POST-FAIR-VISIT-CHECKLIST" />
+    </div>
+  </Section>
+
+  <Section>
+    <div class="container container--md">
+      <SectionHead
+        eyebrow="Illustrative only"
+        title="A three-day plan, as an example."
+        lead="This is a shape, not an itinerary we can promise. Real plans depend on confirmed appointments and on where your suppliers actually are."
+      />
+      <div class="prose stack">
+        <h3>Day 1 — Sort and verify</h3>
+        <p>
+          Sort the cards into continue, ask more and drop. Check the company records of the
+          shortlist, then send written visit requests asking for confirmation of the address, the time
+          and the host. The seven-step walkthrough is in
+          <a href="/guides/verify-canton-fair-suppliers/">how to verify Canton Fair suppliers</a>.
+        </p>
+
+        <h3>Day 2 — Visit two or three factories in one area</h3>
+        <p>
+          Start early. Bring your specification and the supplier's sample or quotation, use the same
+          checklist at every factory, and write up the notes the same evening. Two visits in a day is
+          the useful number — the second conversation is sharper because the first one told you what
+          to ask.
+        </p>
+
+        <h3>Day 3 — Follow up, or hand back</h3>
+        <p>
+          Send each supplier a written summary of what was agreed and what is still open, request
+          samples, then either return to Guangzhou for the next phase or carry on to your next
+          destination.
+        </p>
+        <p>
+          If your suppliers sit in
+          <a href="/destinations/zhejiang/">Zhejiang</a> or elsewhere in the Yangtze River Delta, a
+          proper trip usually takes longer than three days. The clusters around the fair itself are
+          mapped in <a href="/destinations/guangzhou-dongguan/">Guangzhou and Dongguan</a>, and the
+          sequencing is what <a href="/services/factory-visit-planning/">visit planning</a> handles.
+        </p>
+      </div>
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container container--md">
+      <SectionHead
+        eyebrow="When to wait"
+        title="Five signs the gap is the wrong window."
+        lead="In these cases waiting until the fair is over usually buys a better visit: more time, a shorter shortlist, and suppliers who are not half-distracted by their own booth."
+      />
+      <Checklist title="Wait instead when" refusal items={notWorth} />
+    </div>
+  </Section>
+
+  <Section>
+    <div class="container container--md">
+      <SectionHead eyebrow="What to bring" title="The list, before you leave the hotel." />
+      <Checklist title="Six things" plain items={prep} />
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container container--md">
+      <SectionHead eyebrow="Questions" title="Frequently asked questions." />
+      <FAQ items={faqs} />
+      <p class="u-mt-6">
+        Two of those answers have a longer version elsewhere: the visit-versus-samples trade-off is
+        argued out in <a href="/guides/canton-fair-to-factory-visits/">from Canton Fair to factory
+        visits</a>, and sending someone in your place is one of the
+        <a href="/services/existing-supplier-visits/">existing supplier visits</a> we run.
+      </p>
+    </div>
+  </Section>
+
+  <Section>
+    <div class="container container--md">
+      <Caveat
+        title="What this guide can and cannot promise"
+        body="Fair dates, halls, badges and the switch-over schedule belong to the organisers; we plan around them and do not speak for them. Whether a specific supplier will host you on a specific day is the supplier's decision, not ours. This page is general information, not legal advice."
+        items={[
+          'Confirm the current phase dates on cantonfair.org.cn before booking flights or a hotel.',
+          'A three-day gap is enough for one region. It is not enough for Guangzhou plus Zhejiang plus Jiangsu.',
+        ]}
+      />
+      <p class="u-mt-6">
+        Everything about the fair itself — phases, what it can and cannot tell you, and where the
+        factories actually sit — is on the <a href="/canton-fair/">Canton Fair buyer guide</a>.
+      </p>
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container">
+      <SectionHead eyebrow="Go deeper" title="Related pages." />
+      <RelatedNav
+        items={[
+          { k: 'Canton Fair', t: 'The fair itself — phases, switch-over days, factory days', href: '/canton-fair/' },
+          { k: 'Guide', t: 'From Canton Fair to factory visits — the 8-step route', href: '/guides/canton-fair-to-factory-visits/' },
+          { k: 'Guide', t: 'Verify Canton Fair suppliers — 7 steps', href: '/guides/verify-canton-fair-suppliers/' },
+          { k: 'Region', t: 'Guangzhou and Dongguan — the clusters within reach', href: '/destinations/guangzhou-dongguan/' },
+        ]}
+      />
+    </div>
+  </Section>
+</BaseLayout>

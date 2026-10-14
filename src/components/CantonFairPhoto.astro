@@ -1,0 +1,122 @@
+---
+/**
+ * CantonFairPhoto — one of the Canton Fair photographs (public/images/canton-fair/).
+ *
+ * Mirrors OnsitePhoto's contract — one line per call site, dimensions and alt
+ * text come from the data file — but serves avif → webp → jpg through <picture>.
+ * The site already ships avif/webp files for the onsite set that nothing
+ * references; this component actually uses them, which is the point of having
+ * generated them.
+ *
+ * A frame with a `credit` in the data file is NOT ours. It renders inside a
+ * <figure> with the source named below the photograph, so the attribution can
+ * never drift away from the image it belongs to.
+ */
+import {
+  CANTON_FAIR_PHOTOS,
+  hasVariant,
+  type CantonFairPhotoId,
+} from '../data/canton-fair-photos.ts';
+
+interface Props {
+  id: CantonFairPhotoId;
+  /** Override only when the surrounding copy justifies a more specific alt. */
+  alt?: string;
+  /** Above-the-fold slots (heroes) only. */
+  eager?: boolean;
+  sizes?: string;
+  /** Suppress the credit line. Do not use this to publish a credited frame bare. */
+  hideCredit?: boolean;
+}
+
+const { id, alt, eager = false, sizes = '(max-width: 720px) 100vw, 45vw', hideCredit = false } = Astro.props;
+
+const p = CANTON_FAIR_PHOTOS[id];
+const base = `/images/canton-fair/canton-fair-${id}`;
+const variant = hasVariant(id);
+
+/* srcset per format: the 700w variant first, then the master at its own width. */
+const srcset = (ext: string) =>
+  variant ? `${base}@700.${ext} 700w, ${base}.${ext} ${p.w}w` : `${base}.${ext} ${p.w}w`;
+---
+
+{
+  p.credit && !hideCredit ? (
+    <figure class="cf-photo">
+      <picture>
+        <source type="image/avif" srcset={srcset('avif')} sizes={sizes} />
+        <source type="image/webp" srcset={srcset('webp')} sizes={sizes} />
+        <img
+          src={`${base}.jpg`}
+          srcset={srcset('jpg')}
+          sizes={sizes}
+          alt={alt ?? p.alt}
+          width={p.w}
+          height={p.h}
+          loading={eager ? 'eager' : 'lazy'}
+          decoding="async"
+        />
+      </picture>
+      <figcaption class="cf-photo__credit">
+        Photo:{' '}
+        {p.credit.url ? (
+          <a href={p.credit.url} target="_blank" rel="noopener noreferrer">{p.credit.source}</a>
+        ) : (
+          p.credit.source
+        )}
+      </figcaption>
+    </figure>
+  ) : (
+    <picture>
+      <source type="image/avif" srcset={srcset('avif')} sizes={sizes} />
+      <source type="image/webp" srcset={srcset('webp')} sizes={sizes} />
+      <img
+        src={`${base}.jpg`}
+        srcset={srcset('jpg')}
+        sizes={sizes}
+        alt={alt ?? p.alt}
+        width={p.w}
+        height={p.h}
+        loading={eager ? 'eager' : 'lazy'}
+        decoding="async"
+      />
+    </picture>
+  )
+}
+
+<style>
+  /* Two homes, one component. Bare (<picture>, no credit) the frame drops into a
+     PhotoSlot and the slot's own `.photo-slot img` rule fills the plate — so the
+     bare branch declares no height at all and does not fight it. Credited, the
+     frame carries a <figure> of its own and keeps its natural aspect, because it
+     sits in an editorial grid rather than inside a plate. */
+  .cf-photo {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1, 0.25rem);
+  }
+
+  .cf-photo picture,
+  .cf-photo img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  /* The source line is part of the image, not decoration: small, but real text
+     at a readable contrast, and it never covers the photograph. */
+  .cf-photo__credit {
+    font-size: var(--fs-11, 0.6875rem);
+    line-height: 1.4;
+    letter-spacing: 0.01em;
+    color: var(--ink-3, #6b7280);
+    text-align: left;
+  }
+
+  .cf-photo__credit a {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+</style>

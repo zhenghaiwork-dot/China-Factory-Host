@@ -6,6 +6,11 @@
  * 2026, Pazhou, Guangzhou). It exists to catch the seasonal traffic and hand
  * it to the hub; it is not part of the permanent homepage argument.
  *
+ * v2, same day: v1 forgot the .container, so the photograph sat pinned to the
+ * viewport edge while every neighbouring band is inset — it read as a broken
+ * banner, and the user was right. It is a three-part band now (media / body /
+ * link), inside the same container as the claims strip above it.
+ *
  * REMOVAL — do this after the fair closes:
  *   1. delete this file
  *   2. delete the import and the <FairPromo /> line in src/pages/index.astro
@@ -28,22 +33,26 @@ const show = Date.now() < Date.parse(HIDE_AFTER);
 {
   show && (
     <aside class="fair-promo" aria-label="Canton Fair notice">
-      <a class="fair-promo__link" href="/canton-fair/">
-        <span class="fair-promo__media">
-          <CantonFairPhoto id="02" sizes="200px" />
-        </span>
-        <span class="fair-promo__body">
-          <span class="fair-promo__eyebrow">Trade shows · Guangzhou</span>
-          <span class="fair-promo__title">
-            The 140th Canton Fair runs 15 October – 4 November 2026.
+      <div class="container">
+        <a class="fair-promo__link" href="/canton-fair/">
+          <span class="fair-promo__media">
+            <CantonFairPhoto id="02" sizes="200px" />
           </span>
-          <span class="fair-promo__lead">
-            Three phases, five exhibition days each. Which one carries your product, and what a booth
-            can tell you before you commit to a visit.
+          <span class="fair-promo__body">
+            <span class="fair-promo__eyebrow">Trade shows · Guangzhou</span>
+            <span class="fair-promo__title">
+              The 140th Canton Fair runs 15 October – 4 November 2026.
+            </span>
+            <span class="fair-promo__lead">
+              Three phases, five exhibition days each. Which one carries your product, and what a
+              booth can tell you before you commit to a visit.
+            </span>
           </span>
-          <span class="fair-promo__cta">Canton Fair buyer guide</span>
-        </span>
-      </a>
+          <span class="fair-promo__cta">
+            Canton Fair buyer guide <span aria-hidden="true">→</span>
+          </span>
+        </a>
+      </div>
     </aside>
   )
 }
@@ -60,12 +69,16 @@ const show = Date.now() < Date.parse(HIDE_AFTER);
        3:2 frame would make this "small, temporary" strip the tallest thing on
        a 375px screen. */
     grid-template-columns: 88px 1fr;
-    gap: var(--space-4);
+    grid-template-areas:
+      'media body'
+      'media cta';
+    gap: var(--space-2) var(--space-4);
     align-items: center;
     padding-block: var(--space-4);
     text-decoration: none;
   }
   .fair-promo__media {
+    grid-area: media;
     display: block;
     overflow: hidden;
     aspect-ratio: 1 / 1;
@@ -78,6 +91,7 @@ const show = Date.now() < Date.parse(HIDE_AFTER);
     object-fit: cover;
   }
   .fair-promo__body {
+    grid-area: body;
     display: grid;
     gap: var(--space-2);
   }
@@ -102,24 +116,35 @@ const show = Date.now() < Date.parse(HIDE_AFTER);
     max-width: 62ch;
   }
   .fair-promo__cta {
+    grid-area: cta;
     font-size: var(--fs-body-sm);
     font-weight: 500;
     color: var(--accent-600);
     text-decoration: underline;
     text-underline-offset: 3px;
   }
+  .fair-promo__cta :global(span) {
+    text-decoration: none;
+    margin-left: 2px;
+  }
   .fair-promo__link:hover .fair-promo__cta {
     color: var(--accent-700);
+  }
+  .fair-promo__link:hover .fair-promo__title {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1px;
   }
 
   @media (min-width: 768px) {
     .fair-promo__link {
-      grid-template-columns: 200px 1fr;
-      gap: var(--space-6);
+      grid-template-columns: 200px 1fr auto;
+      grid-template-areas: 'media body cta';
+      gap: var(--space-8);
       padding-block: var(--space-6);
     }
     .fair-promo__media {
-      aspect-ratio: 4 / 3;
+      aspect-ratio: 3 / 2;
     }
   }
 </style>

@@ -1281,7 +1281,20 @@
   color: var(--on-inverse-text-muted);
 }
 .trust-bar--light .trust-bar__label { color: var(--text-muted); }
-.trust-bar__foot { margin-top: var(--space-6); font-size: var(--fs-caption); color: var(--color-text-inverse-3); max-width: 60ch; }
+/* The foot is a provenance note capped at 60ch. Left-aligned it sat in the
+   bottom-left corner under a full-width figure grid and read as a rendering
+   accident (2026-10-14) — so the block is centered, text stays left-aligned,
+   the same symmetry pass the section headers got on 2026-09-19. */
+.trust-bar__foot {
+  margin-top: var(--space-6);
+  padding-top: var(--space-5);
+  border-top: 1px solid var(--border-divider);
+  font-size: var(--fs-caption);
+  color: var(--color-text-inverse-3);
+  max-width: 60ch;
+  margin-inline: auto;
+}
+.trust-bar:not(.trust-bar--light) .trust-bar__foot { border-top-color: var(--on-inverse-border-subtle); }
 .trust-bar--light .trust-bar__foot { color: var(--color-text-muted); }
 
 /* ============================================================
@@ -1750,6 +1763,10 @@
 /* Same defect class, found by the 2026-09-21 rhythm audit: on the six industry
    pages the compliance Caveat sits directly under the compliance Checklist. */
 .checklist + .caveat { margin-top: var(--space-8); }
+/* 2026-10-14 — two stacked checklists on the Canton Fair hotels guide touched:
+   the numbered card's top border sat against the last line of the plain list
+   above it. Cards need a beat between them like anything else. */
+.checklist + .checklist { margin-top: var(--space-8); }
 .redflags__list svg { width: 18px; height: 18px; margin-top: var(--space-1); color: var(--color-stop); flex: none; }
 .redflags__text { font-size: var(--fs-body-sm); color: var(--color-stop); line-height: 1.6; }
 .redflags__text b { font-weight: var(--fw-semibold); }

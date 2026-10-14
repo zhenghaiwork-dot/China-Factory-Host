@@ -138,28 +138,26 @@ const faqs = [
     secondary: { label: 'Ask on WhatsApp', href: wa, external: true },
   }}
 >
-  <section class="hero">
+  <section class="hero hero--centered">
     <div class="container">
-      <div class="split-7-5">
-        <div>
-          <p class="eyebrow">Guide</p>
-          <h1>Canton Fair MOQ: Options for Small Buyers</h1>
-          <p class="lead hero__lead">
-            A minimum order quantity exists to cover setup, materials and line time. It is often
-            negotiable, but rarely for free. Find out which of those three is driving it, then offer a
-            trade: a higher unit price, standard materials or packaging, fewer variants, a paid trial
-            run, or a reorder plan you can actually stand behind. If none of that lands, test through
-            a different channel first.
-          </p>
-          <div class="btn-row">
-            <a class="btn btn--secondary" href="#checklist-download">Get the MOQ question sheet</a>
-          </div>
+      <div class="hero__center">
+        <p class="eyebrow">Guide</p>
+        <h1>Canton Fair MOQ: Options for Small Buyers</h1>
+        <p class="lead hero__lead">
+          A minimum order quantity exists to cover setup, materials and line time. It is often
+          negotiable, but rarely for free. Find out which of those three is driving it, then offer a
+          trade: a higher unit price, standard materials or packaging, fewer variants, a paid trial
+          run, or a reorder plan you can actually stand behind. If none of that lands, test through
+          a different channel first.
+        </p>
+        <div class="btn-row">
+          <a class="btn btn--primary" href="#checklist-download">Get the MOQ question sheet</a>
         </div>
-        <div class="hero__media">
-          <PhotoSlot name="GUIDE · THE MINIMUM" variant="media">
-            <OnsitePhoto id="05" />
-          </PhotoSlot>
-        </div>
+      </div>
+      <div class="hero__media hero__banner">
+        <PhotoSlot name="GUIDE · THE MINIMUM" variant="strip">
+          <OnsitePhoto id="05" sizes="(max-width: 720px) 100vw, 100vw" />
+        </PhotoSlot>
       </div>
     </div>
   </section>
@@ -167,14 +165,16 @@ const faqs = [
   <Section tight>
     <div class="container container--md">
       <SectionHead
+        center
         eyebrow="Why the wall exists"
         title="MOQs are not arbitrary."
         lead="Meeting the minimum is the obstacle small importers hit most often at the fair, and it helps to know what the number is actually protecting."
       />
-      <ul class="spec-list">
+      <ul class="why-grid clean">
         {drivers.map((d) => (
           <li>
-            <span class="spec-list__k">{d.k}</span><span class="spec-list__v">{d.v}</span>
+            <p class="why-grid__k">{d.k}</p>
+            <p class="why-grid__v">{d.v}</p>
           </li>
         ))}
       </ul>
@@ -189,14 +189,16 @@ const faqs = [
   <Section alternate>
     <div class="container container--md">
       <SectionHead
+        center
         eyebrow="Step 1"
         title="Know which type of order you are asking for."
         lead="The single biggest lever is decided before you speak to anyone: whether you are asking them to make something new."
       />
-      <ul class="spec-list">
+      <ul class="why-grid why-grid--three clean">
         {orderTypes.map((o) => (
           <li>
-            <span class="spec-list__k">{o.k}</span><span class="spec-list__v">{o.v}</span>
+            <p class="why-grid__k">{o.k}</p>
+            <p class="why-grid__v">{o.v}</p>
           </li>
         ))}
       </ul>
@@ -210,7 +212,7 @@ const faqs = [
 
   <Section>
     <div class="container container--md">
-      <SectionHead eyebrow="Step 2" title="Ask why the number is what it is." />
+      <SectionHead center eyebrow="Step 2" title="Ask why the number is what it is." />
       <div class="prose stack">
         <p>Before you push it down, ask the supplier directly:</p>
         <p class="lead">
@@ -232,11 +234,14 @@ const faqs = [
   <Section alternate>
     <div class="container container--md">
       <SectionHead
+        center
         eyebrow="Step 3"
         title="Eight levers, in the order worth trying."
         lead="None of these is free. Each one trades something you have for something they want."
       />
-      <Checklist title="What to offer" numbered items={levers} />
+      <div class="soft-card">
+        <Checklist title="What to offer" numbered items={levers} />
+      </div>
       <p class="u-mt-6">
         One rule sits above the list: do not promise volumes you cannot deliver. A forecast you later
         break costs you more than the MOQ did, because it costs you the supplier.
@@ -247,11 +252,14 @@ const faqs = [
   <Section>
     <div class="container container--md">
       <SectionHead
+        center
         eyebrow="At the booth"
         title="Six questions, asked the same way every time."
         lead="Present yourself first — your sales channel, your target market, your specification and your plan for reorders. Then ask."
       />
-      <Checklist title="Ask these" plain items={sayThis} />
+      <div class="soft-block">
+        <Checklist title="Ask these" plain items={sayThis} />
+      </div>
       <p class="u-mt-6">
         Ask every supplier the same questions, use the same specification in every conversation, and
         record the answers in one table — otherwise the quotes are not comparable and the whole
@@ -263,8 +271,8 @@ const faqs = [
 
   <Section alternate>
     <div class="container container--md">
-      <SectionHead eyebrow="Trade-offs" title="What each ask costs you." />
-      <ul class="spec-list clean">
+      <SectionHead center eyebrow="Trade-offs" title="What each ask costs you." />
+      <ul class="spec-list clean spec-list--split">
         {tradeoffs.map((t) => (
           <li>
             <span class="spec-list__k">{t.k}</span><span class="spec-list__v">{t.v}</span>
@@ -282,6 +290,7 @@ const faqs = [
   <Section>
     <div class="container container--md">
       <SectionHead
+        center
         eyebrow="Free download"
         title="Take the MOQ question sheet to the fair."
         lead="The checks in this guide, in the order we run them on site."
@@ -296,6 +305,7 @@ const faqs = [
   <Section alternate>
     <div class="container container--md">
       <SectionHead
+        center
         eyebrow="Two workarounds"
         title="Trading companies, and pooling with other buyers."
         lead="Both get suggested at the fair. Both can work. Neither is free of consequences."
@@ -315,7 +325,9 @@ const faqs = [
           practice:
         </p>
       </div>
-      <Checklist title="Where pooled orders go wrong" refusal items={pooled} />
+      <div class="soft-card">
+        <Checklist title="Where pooled orders go wrong" refusal items={pooled} />
+      </div>
       <p class="u-mt-6">
         If you still want to do it, put a written agreement in place first with one responsible party.
         Most small buyers are better served by a lower-MOQ product or a lower-MOQ channel for the
@@ -327,10 +339,13 @@ const faqs = [
   <Section>
     <div class="container container--md">
       <SectionHead
+        center
         eyebrow="Use a different door"
         title="When the fair is not the place to start."
       />
-      <Checklist title="Signs" plain items={otherChannel} />
+      <div class="soft-block">
+        <Checklist title="Signs" plain items={otherChannel} />
+      </div>
       <p class="u-mt-6">
         Channels combine, though — plenty of buyers use the fair for the main product line and a
         market for smaller or mixed purchases in the same trip. Yiwu and the Zhejiang clusters are
@@ -345,7 +360,7 @@ const faqs = [
 
   <Section alternate>
     <div class="container container--md">
-      <SectionHead eyebrow="Questions" title="Frequently asked questions." />
+      <SectionHead center eyebrow="Questions" title="Frequently asked questions." />
       <FAQ items={faqs} />
       <p class="u-mt-6">
         The supplier-behind-the-supplier question in the FAQ above is the whole of{' '}
@@ -370,7 +385,7 @@ const faqs = [
 
   <Section alternate>
     <div class="container">
-      <SectionHead eyebrow="Go deeper" title="Related pages." />
+      <SectionHead center eyebrow="Go deeper" title="Related pages." />
       <RelatedNav
         items={[
           { k: 'Guide', t: 'Is Canton Fair worth it for small buyers?', href: '/guides/is-canton-fair-worth-it-for-small-buyers/' },
@@ -382,3 +397,81 @@ const faqs = [
     </div>
   </Section>
 </BaseLayout>
+
+<style>
+  /* wps.com layout grammar (docs/visual-grammar-wps.md), page-scoped:
+     centered hero, grouping by whitespace and soft colour blocks, one
+     band one h2, generous air. Copy untouched; rest of site untouched. */
+
+  .hero__center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-5);
+    text-align: center;
+  }
+  .hero__center :global(.eyebrow) { justify-content: center; }
+  .hero__center :global(h1) { max-width: 15em; }
+  .hero__center :global(.hero__lead) {
+    font-size: var(--fs-h4);
+    line-height: 1.5;
+    max-width: 34em;
+  }
+  .hero__banner {
+    max-width: none;
+    margin-top: var(--space-12);
+  }
+
+  :global(.section:not(.section--tight)) {
+    padding-block: calc(var(--section-py) * 1.3);
+  }
+
+  /* Borderless soft blocks (white band: sunken surface; grey band: white). */
+  .why-grid {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: var(--space-4);
+  }
+  .why-grid li {
+    background: var(--surface-sunken);
+    border-radius: var(--radius-lg);
+    padding: var(--space-5) var(--space-6);
+  }
+  .why-grid__k {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: var(--fs-body);
+    font-weight: var(--fw-semibold);
+    color: var(--text-primary);
+  }
+  .why-grid__v {
+    margin: var(--space-2) 0 0;
+    font-size: var(--fs-body-sm);
+    color: var(--text-secondary);
+  }
+  @media (min-width: 768px) {
+    .why-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-5); }
+    .why-grid--three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
+  /* The grey band version swaps the tint so blocks contrast their band. */
+  :global(.section--alternate) .why-grid li {
+    background: var(--color-surface);
+  }
+
+  /* Plain checklists on white bands sit on a soft block instead of bare. */
+  .soft-block {
+    background: var(--surface-sunken);
+    border-radius: var(--radius-lg);
+    padding: var(--space-5) var(--space-6);
+  }
+
+  /* Numbered / refusal checklists on grey bands become borderless white
+     cards — same treatment the sample page gives .twocol checklists. */
+  .soft-card :global(.checklist) {
+    background: var(--color-surface);
+    border: 0;
+    border-radius: var(--radius-lg);
+  }
+</style>

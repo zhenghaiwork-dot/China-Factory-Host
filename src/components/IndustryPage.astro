@@ -18,6 +18,11 @@ export interface Rel { k: string; t: string; href: string; }
 interface Props {
   slotName: string;
   strip?: boolean;
+  /* wps.com grammar (docs/visual-grammar-wps.md): centered hero with a
+     full-width 21:9 banner, centered section headings, generous air.
+     Optional and OFF by default — every other industry page keeps the
+     split hero until its own Phase C pass. */
+  centered?: boolean;
   h1: string;
   lead: string;
   /* Who this page is for, shown on the FIRST screen. The two industry pages
@@ -40,16 +45,25 @@ interface Props {
   related: Rel[];
 }
 const c = Astro.props;
+const ctr = c.centered === true;
+const heroPhoto = pickPhoto(c.slotName);
 ---
-<section class="hero">
-  <div class="container">
-    <div class="split-7-5">
-      <div>
+{/* The wrapper carries .ind-ctr ONLY in centered mode. Every centered-mode
+    rule in the <style> below is gated on it, so the other industry pages are
+    untouched. IMPORTANT: the style block itself must stay UNCONDITIONAL —
+    a `{ctr && <style>}` is emitted as raw template text, so :global() never
+    compiles and every rule that uses it silently dies (verified in dist:
+    the old conditional block shipped literal ":global(.eyebrow)" selectors). */}
+<div class:list={[{ 'ind-ctr': ctr }]}>
+{ctr ? (
+  <section class="hero hero--centered">
+    <div class="container">
+      <div class="hero__center">
         <p class="eyebrow">Industry</p>
         <h1>{c.h1}</h1>
         <p class="lead hero__lead">{c.lead}</p>
         {c.audience && <p class="u-sm u-secondary">{c.audience}</p>}
-        <div class="btn-row btn-row--stack">
+        <div class="btn-row">
           <a class="btn btn--primary" href="/contact/">{c.ctaLabel}</a>
           <a class="btn btn--secondary" href="/about/how-we-vet-factories/"
             >See how we check suppliers</a
@@ -59,18 +73,45 @@ const c = Astro.props;
           {c.micro.map((m) => <li>{m}</li>)}
         </ul>
       </div>
-      <div class="hero__media">
-        <PhotoSlot name={`IND · ${c.slotName}`} variant={c.strip ? 'strip' : 'media'}>
-          <OnsitePhoto id={pickPhoto(c.slotName)} eager />
+      <div class="hero__media hero__banner">
+        <PhotoSlot name={`IND · ${c.slotName}`} variant="strip">
+          <OnsitePhoto id={heroPhoto} eager sizes="(max-width: 720px) 100vw, 100vw" />
         </PhotoSlot>
       </div>
     </div>
-  </div>
-</section>
+  </section>
+) : (
+  <section class="hero">
+    <div class="container">
+      <div class="split-7-5">
+        <div>
+          <p class="eyebrow">Industry</p>
+          <h1>{c.h1}</h1>
+          <p class="lead hero__lead">{c.lead}</p>
+          {c.audience && <p class="u-sm u-secondary">{c.audience}</p>}
+          <div class="btn-row btn-row--stack">
+            <a class="btn btn--primary" href="/contact/">{c.ctaLabel}</a>
+            <a class="btn btn--secondary" href="/about/how-we-vet-factories/"
+              >See how we check suppliers</a
+            >
+          </div>
+          <ul class="hero__micro">
+            {c.micro.map((m) => <li>{m}</li>)}
+          </ul>
+        </div>
+        <div class="hero__media">
+          <PhotoSlot name={`IND · ${c.slotName}`} variant={c.strip ? 'strip' : 'media'}>
+            <OnsitePhoto id={heroPhoto} eager />
+          </PhotoSlot>
+        </div>
+      </div>
+    </div>
+  </section>
+)}
 
 <Section>
   <div class="container container--md">
-    <SectionHead eyebrow="Why this category" title="Sourcing considerations for this category" />
+    <SectionHead center={ctr} eyebrow="Why this category" title="Sourcing considerations for this category" />
     <div class="prose stack">
       {c.why.map((p) => <p set:html={p} />)}
     </div>
@@ -80,6 +121,7 @@ const c = Astro.props;
 <Section alternate>
   <div class="container container--md">
     <SectionHead
+      center={ctr}
       eyebrow="Supply chain shape"
       title="Supplier roles and production stages"
       lead={c.chainLead}
@@ -98,14 +140,17 @@ const c = Astro.props;
 
 <Section>
   <div class="container container--md">
-    <SectionHead eyebrow="On the floor" title="Checks specific to this category." />
-    <Checklist title="What to verify on site" numbered items={c.checks} />
+    <SectionHead center={ctr} eyebrow="On the floor" title="Checks specific to this category." />
+    <div class="ind-soft">
+      <Checklist title="What to verify on site" numbered items={c.checks} />
+    </div>
   </div>
 </Section>
 
 <Section alternate>
   <div class="container">
     <SectionHead
+      center={ctr}
       eyebrow="Numbers"
       title="What affects MOQ, sampling and lead time"
       lead="Confirm minimum quantities and timing for your specification with each supplier."
@@ -132,10 +177,13 @@ const c = Astro.props;
 <Section>
   <div class="container container--md">
     <SectionHead
+      center={ctr}
       eyebrow="Compliance"
       title="Target-market requirements you cannot skip."
     />
-    <Checklist title={c.complianceTitle} items={c.compliance} />
+    <div class="ind-soft">
+      <Checklist title={c.complianceTitle} items={c.compliance} />
+    </div>
     <Caveat
       title="What we can and cannot verify here"
       body={c.complianceCaveatBody}
@@ -154,7 +202,50 @@ const c = Astro.props;
 
 <Section>
   <div class="container">
-    <SectionHead eyebrow="Keep going" title="Where this category is made." />
+    <SectionHead center={ctr} eyebrow="Keep going" title="Where this category is made." />
     <RelatedNav items={c.related} />
   </div>
 </Section>
+
+</div>
+
+<style>
+  /* Centered hero (wps.com grammar, docs/visual-grammar-wps.md). These
+     elements only render in the centered branch, so the rules are inert
+     on split-hero pages. */
+  .hero__center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-5);
+    text-align: center;
+  }
+  .hero__center :global(.eyebrow) { justify-content: center; }
+  .hero__center :global(h1) { max-width: 15em; }
+  .hero__center :global(.hero__lead) {
+    font-size: var(--fs-h4);
+    line-height: 1.5;
+    max-width: 34em;
+  }
+  .hero__center :global(.hero__micro) { justify-content: center; }
+  .hero__banner {
+    max-width: none;
+    margin-top: var(--space-12);
+  }
+  .ind-ctr :global(.section:not(.section--tight)) {
+    padding-block: calc(var(--section-py) * 1.3);
+  }
+  /* White-band checklists sit on a soft sunken block instead of an
+     outlined card (grammar §2.2 — same treatment as the sample page). */
+  .ind-ctr .ind-soft {
+    background: var(--surface-sunken);
+    border-radius: var(--radius-lg);
+    padding: var(--space-5) var(--space-6);
+  }
+  .ind-ctr .ind-soft :global(.checklist) {
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    padding: 0;
+  }
+</style>

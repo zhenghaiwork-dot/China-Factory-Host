@@ -4,40 +4,61 @@ import Section from '../../components/Section.astro';
 import SectionHead from '../../components/SectionHead.astro';
 import PhotoSlot from '../../components/PhotoSlot.astro';
 import OnsitePhoto from '../../components/OnsitePhoto.astro';
-import Checklist from '../../components/Checklist.astro';
 import FAQ from '../../components/FAQ.astro';
 import Caveat from '../../components/Caveat.astro';
 import RelatedNav from '../../components/RelatedNav.astro';
-import { waLink } from '../../data/site.ts';
+import { waLink, SITE_URL } from '../../data/site.ts';
 
 const title = 'Canton Fair buyer guide — from booth to verified factory';
 const description =
-  'The 140th Canton Fair runs 15 October to 4 November 2026 in three phases at Pazhou, Guangzhou. What the fair can and cannot tell you, and how to turn a booth conversation into a factory visit.';
+  'The 140th Canton Fair runs 15 October to 4 November 2026 in three phases at Pazhou, Guangzhou. Where the fair is today, what it can and cannot tell you, and the seven guides for before, during and after it.';
 
 const wa = waLink('Hi, I am going to Canton Fair and want to add factory visits after it.');
 
 /* The 140th session, autumn 2026. Dates and phase themes are the organiser's
    (Ministry of Commerce notice + cantonfair.org.cn); if an organiser moves
-   them, the honest move is to say so and send the reader to the source. */
+   them, the honest move is to say so and send the reader to the source.
+
+   `days` drives the width of each rail segment, so the rail is a scale
+   drawing of the session rather than three equal blocks. */
 const phases = [
   {
-    k: 'Phase 1 · 15–19 October 2026',
-    v: 'Advanced manufacturing: household appliances and consumer electronics, industrial automation and intelligent manufacturing, processing and general machinery, construction and agricultural machinery, new energy vehicles and smart mobility, vehicles and parts, motorcycles and bicycles, lighting, hardware and tools.',
+    no: 1,
+    days: 5,
+    from: '2026-10-15',
+    to: '2026-10-19',
+    dates: 'Phase 1 · 15–19 October 2026',
+    theme: 'Advanced manufacturing — appliances and consumer electronics, industrial automation and machinery, vehicles and parts, lighting, hardware and tools.',
   },
   {
-    k: 'Phase 2 · 23–27 October 2026',
-    v: 'Quality home life: daily-use ceramics, kitchenware and tableware, household goods, glass and handicrafts, home decorations, garden products, festival and gift items, watches and eyewear, building and decorative materials, sanitary ware, furniture.',
+    no: 2,
+    days: 5,
+    from: '2026-10-23',
+    to: '2026-10-27',
+    dates: 'Phase 2 · 23–27 October 2026',
+    theme: 'Quality home life — ceramics and kitchenware, household goods, glass and handicrafts, gifts and festival items, building and decorative materials, furniture.',
   },
   {
-    k: 'Phase 3 · 31 October – 4 November 2026',
-    v: 'Better living: toys, children baby and maternity, mens and womens wear, underwear, sportswear, fur leather down, garment accessories, textile raw materials and fabrics, shoes, bags and cases, home textiles, stationery, medicines and health products, food, sports and leisure.',
+    no: 3,
+    days: 5,
+    from: '2026-10-31',
+    to: '2026-11-04',
+    dates: 'Phase 3 · 31 October – 4 November 2026',
+    theme: 'Better living — toys, apparel, textiles and fabrics, shoes and bags, home textiles, stationery, food, sports and leisure.',
   },
 ];
 
-const whatItGives = [
-  'Breadth: more categories in one week than a month of online searching, with the product in your hand rather than on a screen.',
-  'Private-label and OEM conversations face to face, including the questions a listing never answers.',
-  'A shortlist you can price against itself, because every quote arrives within the same few days.',
+/* The hub's actual job: one directory, grouped by where the reader is in the
+   process. Every guide on the site that belongs to this fair is here, and
+   nothing is listed twice. */
+const guides = [
+  { stage: 'Before', t: 'Is Canton Fair worth it for small buyers? — fair vs Alibaba, 1688 and Yiwu', href: '/guides/is-canton-fair-worth-it-for-small-buyers/' },
+  { stage: 'Before', t: 'MOQ for small buyers — eight levers, and what to say at the booth', href: '/guides/canton-fair-moq-for-small-buyers/' },
+  { stage: 'Before', t: 'Practical tips — hotels, interpreters, what to carry', href: '/guides/canton-fair-practical-tips-hotels-interpreters/' },
+  { stage: 'During', t: 'Verify Canton Fair suppliers — seven checks before you pay a deposit', href: '/guides/verify-canton-fair-suppliers/' },
+  { stage: 'During', t: 'Visiting factories between phases — what fits into the three-day gaps', href: '/guides/visit-factories-between-canton-fair-phases/' },
+  { stage: 'After', t: 'From Canton Fair to factory visits — shortlist, confirm, visit, compare', href: '/guides/canton-fair-to-factory-visits/' },
+  { stage: 'After', t: 'Canton Fair to Zhejiang — fifteen clusters, which town makes what', href: '/destinations/zhejiang/canton-fair-to-zhejiang-factory-visits/' },
 ];
 
 const whatItCannot = [
@@ -47,18 +68,11 @@ const whatItCannot = [
   { k: 'Whether the bank account matches', v: 'Payment details are a document check, and it is the one that costs the most when it is skipped.' },
 ];
 
-const afterTheFair = [
-  'Within 48 hours, sort the cards into continue, ask more questions and drop — memory of a booth decays fast.',
-  'Run the licence, registry, scope and name-matching checks on every supplier you kept.',
-  'Order samples and compare them with what was on the table.',
-  'Put the top two or three into factory days before you commit.',
-];
-
 const faqs = [
   {
     q: 'Do I need to attend all three phases?',
     a: [
-      'No. Each phase covers different categories, so attend the phase that holds your product. The halls close for switch-over between phases (20–22 October and 28–30 October 2026), which is often the best window for factory visits because suppliers are free of their booths. What fits into those three days — and what does not — is worked through in the guide on visiting factories between phases.',
+      'No. Each phase covers different categories, so attend the phase that holds your product. The halls close for switch-over between phases (20–22 October and 28–30 October 2026), which is often the best window for factory visits because suppliers are free of their booths. What three days can hold is worked through in the guide on visiting factories between phases.',
     ],
   },
   {
@@ -80,13 +94,39 @@ const faqs = [
     ],
   },
 ];
+
+/* A hub is a directory, so it says so: CollectionPage carrying an ItemList of
+   the guides it points at. The guides themselves publish Article schema; this
+   node is what tells a crawler the page above them is the collection. */
+const canonical = SITE_URL + '/canton-fair/';
+const collectionSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: 'Canton Fair buyer guide',
+  description,
+  url: canonical,
+  dateModified: '2026-10-14',
+  inLanguage: 'en',
+  mainEntity: {
+    '@type': 'ItemList',
+    name: 'Canton Fair guides',
+    itemListOrder: 'https://schema.org/ItemListOrderAscending',
+    numberOfItems: guides.length,
+    itemListElement: guides.map((g, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: g.t.split(' — ')[0],
+      url: SITE_URL + g.href,
+    })),
+  },
+};
 ---
 
 <BaseLayout
   title={title}
   description={description}
   active="trade-shows"
-  crumbs={[]}
+  crumbs={[{ href: '/trade-shows/', label: 'Trade shows' }]}
   current="Canton Fair"
   cta={{
     eyebrow: 'Next step',
@@ -96,6 +136,8 @@ const faqs = [
     secondary: { label: 'Ask on WhatsApp', href: wa, external: true },
   }}
 >
+  <script type="application/ld+json" set:html={JSON.stringify(collectionSchema)} />
+
   <section class="hero">
     <div class="container">
       <div class="split-7-5">
@@ -104,14 +146,15 @@ const faqs = [
           <h1>A booth gets you a conversation. It does not tell you who makes the product.</h1>
           <p class="lead hero__lead">
             The 140th session runs 15 October to 4 November 2026 in three phases at the Canton Fair
-            Complex in Pazhou, Guangzhou. This page is the part nobody at the fair sells you: what
-            to do with the suppliers you meet, and how to turn a shortlist into factory days.
+            Complex in Pazhou, Guangzhou. This page is the part nobody at the fair sells you: where
+            the fair is today, what it cannot tell you, and the seven guides for before, during and
+            after it.
           </p>
           <div class="btn-row">
             <a class="btn btn--primary" href="/guides/verify-canton-fair-suppliers/"
               >Get the 7-step verification checklist</a
             >
-            <a class="btn btn--secondary" href="#after-the-fair">What to do afterwards</a>
+            <a class="btn btn--secondary" href="#the-guides">See all seven guides</a>
           </div>
         </div>
         <div class="hero__media">
@@ -127,48 +170,71 @@ const faqs = [
     <div class="container">
       <SectionHead
         eyebrow="The 140th session"
-        title="Three phases, and what is in each."
+        title="Three phases, and where the fair is right now."
         lead="Dates, halls and themes belong to the organiser — confirm the current schedule on cantonfair.org.cn before you book flights."
       />
-      <ul class="spec-list">
+
+      {/* Where the session is today. The rail and the line below it are
+          dated by app.js; without it the line falls back to the date range,
+          which is true on every day of the year. */}
+      <div class="fair-status" data-fair-status>
+        <div class="fair-status__rail" data-fair-rail>
+          {phases.map((p) => (
+            <span
+              class="fair-status__seg"
+              data-fair-seg
+              data-phase={p.no}
+              data-from={p.from}
+              data-to={p.to}
+              style={'flex-grow:' + p.days}
+            ></span>
+          ))}
+          <span class="fair-status__fill" data-fair-fill></span>
+        </div>
+        <p class="fair-status__now" data-fair-now>15 October – 4 November 2026</p>
+        <p class="fair-status__note">
+          Five exhibition days in each phase. The halls close for switch-over on 20–22 October and
+          28–30 October.
+        </p>
+      </div>
+
+      <ul class="spec-list" style="margin-top: var(--space-6)">
         {phases.map((p) => (
           <li>
-            <span class="spec-list__k">{p.k}</span><span class="spec-list__v">{p.v}</span>
+            <span class="spec-list__k">{p.dates}</span><span class="spec-list__v">{p.theme}</span>
           </li>
         ))}
       </ul>
+
       <p class="u-mt-6">
-        Between phases the halls close for switch-over — 20–22 October and 28–30 October 2026. Those
-        days are unusable for booths and unusually good for factory visits, because the suppliers you
-        met are off duty and the roads are quieter. Whether three days is actually enough is the
-        subject of <a href="/guides/visit-factories-between-canton-fair-phases/">visiting factories
-        between Canton Fair phases</a>, including the cases where waiting is the better call.
-      </p>
-      <p class="u-mt-6">
-        The logistics that decide whether the week is survivable — hotel prices during the fair,
-        finding an interpreter who is not paid by the supplier, and what to carry — are in
+        Each phase covers different categories, so attend the one that holds your product — the
+        switch-over days in between are unusable for booths and unusually good for factory visits,
+        because the suppliers you met are off duty and the roads are quieter. What three days can
+        actually hold is the subject of
+        <a href="/guides/visit-factories-between-canton-fair-phases/">visiting factories between
+        Canton Fair phases</a>, including the cases where waiting is the better call. The logistics —
+        hotel rates, finding an interpreter, what to carry — are in
         <a href="/guides/canton-fair-practical-tips-hotels-interpreters/">Canton Fair practical
         tips</a>.
       </p>
     </div>
   </Section>
 
-  <Section alternate>
-    <div class="container container--md">
-      <SectionHead eyebrow="What it is for" title="What the fair genuinely gives you." />
-      <Checklist title="Three things" plain items={whatItGives} />
-      <p class="u-mt-6">
-        Used that way, the fair is the most efficient filter in sourcing. Used as the decision itself,
-        it is how buyers end up paying a trading company and believing they paid a factory.
-      </p>
-      <p class="u-mt-6">
-        Whether it is worth the flight at your order size is a separate question, and the honest
-        answer is sometimes no — <a href="/guides/is-canton-fair-worth-it-for-small-buyers/">is
-        Canton Fair worth it for small buyers</a> puts the fair next to Alibaba, 1688 and Yiwu and
-        says which situations land where. If the obstacle is the minimum rather than the flight,
-        <a href="/guides/canton-fair-moq-for-small-buyers/">Canton Fair MOQ for small buyers</a>
-        covers why the number exists and the eight trades that move it.
-      </p>
+  <Section id="the-guides" alternate>
+    <div class="container">
+      <SectionHead
+        eyebrow="The seven guides"
+        title="Before, during and after."
+        lead="Used as a filter, the fair is the most efficient thing in sourcing. Used as the decision itself, it is how buyers end up paying a trading company and believing they paid a factory. These are the guides that sit between those two."
+      />
+      <div class="related-nav" role="navigation" aria-label="Canton Fair guides">
+        {guides.map((g) => (
+          <a href={g.href}>
+            <span class="related-nav__k">{g.stage}</span>
+            <span class="related-nav__t">{g.t}</span>
+          </a>
+        ))}
+      </div>
     </div>
   </Section>
 
@@ -191,56 +257,6 @@ const faqs = [
         <a href="/guides/verify-canton-fair-suppliers/">how to verify Canton Fair suppliers</a>, and
         the factory-versus-trader signals are in
         <a href="/guides/factory-vs-trading-company-china/">factory vs trading company</a>.
-      </p>
-    </div>
-  </Section>
-
-  <Section alternate>
-    <div class="container container--md">
-      <SectionHead
-        eyebrow="The factory days"
-        title="Pazhou to a production line in under an hour."
-        lead="The fair city is not the manufacturing city. The factories behind most Canton Fair booths sit in Guangzhou's outer districts, Foshan and Dongguan."
-      />
-      <div class="prose stack">
-        <p>
-          That is the whole argument for adding days after the fair: the booth is where you select,
-          and the floor is where you decide. Two visits in a day is the useful number — the second
-          conversation is sharper because the first one already told you what to ask.
-        </p>
-        <p>
-          The clusters within reach of the fair are covered in
-          <a href="/destinations/guangzhou-dongguan/">Guangzhou and Dongguan</a>, and the sequencing —
-          hotels, drivers, which factory on which day — is what
-          <a href="/services/factory-visit-planning/">visit planning</a> handles. If you are building
-          the trip yourself, <a href="/guides/how-to-plan-a-china-factory-visit/">start with the
-          cluster, not the airport</a>.
-        </p>
-        <p>
-          Step by step, from the business cards to the decision, that is
-          <a href="/guides/canton-fair-to-factory-visits/">from Canton Fair to factory visits</a> —
-          which suppliers to keep, what to confirm in writing, and how to group the visits so the
-          week is not spent in transit.
-        </p>
-        <p>
-          And when the product points away from the Pearl River Delta entirely — appliances, molds,
-          hardware, giftware — the trip continues in
-          <a href="/destinations/zhejiang/canton-fair-to-zhejiang-factory-visits/">Zhejiang</a>,
-          where the town you go to is decided by what you are making.
-        </p>
-      </div>
-    </div>
-  </Section>
-
-  <Section id="after-the-fair">
-    <div class="container container--md">
-      <SectionHead eyebrow="After the fair" title="The week that decides it." />
-      <Checklist title="Four steps" numbered items={afterTheFair} />
-      <p class="u-mt-6">
-        The checks in step two are the same five we run on any visit —
-        <a href="/about/how-we-vet-factories/">how we vet factories</a> sets them out, and the
-        <a href="/tools/factory-visit-scorecard/">factory visit scorecard</a> is where they get
-        written down while you still remember which supplier was which.
       </p>
     </div>
   </Section>
@@ -270,9 +286,9 @@ const faqs = [
       <SectionHead eyebrow="Go deeper" title="Where to go next." />
       <RelatedNav
         items={[
-          { k: 'Guide', t: 'Verify Canton Fair suppliers — 7 steps', href: '/guides/verify-canton-fair-suppliers/' },
-          { k: 'Guide', t: 'From Canton Fair to factory visits — the 8-step route', href: '/guides/canton-fair-to-factory-visits/' },
-          { k: 'Guide', t: 'Visiting factories between phases — the switch-over days', href: '/guides/visit-factories-between-canton-fair-phases/' },
+          { k: 'Trade shows', t: 'Every fair we plan around, and the clusters behind each', href: '/trade-shows/' },
+          { k: 'Region', t: 'Guangzhou and Dongguan — the clusters within reach', href: '/destinations/guangzhou-dongguan/' },
+          { k: 'Trust', t: 'The five checks in full', href: '/about/how-we-vet-factories/' },
           { k: 'Service', t: 'Factory visit planning', href: '/services/factory-visit-planning/' },
         ]}
       />

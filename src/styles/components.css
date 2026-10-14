@@ -2975,3 +2975,57 @@ ul.legend.clean { margin-top: var(--space-5); }
   .service-list > .service-card .service-card__icon { width: 40px; height: 40px; }
   .service-list > .service-card .service-card__icon svg { width: 40px; height: 40px; }
 }
+
+/* ==========================================================================
+   25. FairStatus — where the session is today（第 140 届，2026 秋）
+   --------------------------------------------------------------------------
+   A hub page is read weeks before the fair and again during it, and the
+   question is different each time: "how long do I have" versus "which day
+   is it". Only the second can be answered at request time, and this is a
+   static site — so the answer has to be computed in the browser.
+
+   The whole thing is one 10px rail plus one line of text. Deliberately not a
+   countdown widget, not a card, not animated: the reader wants the number,
+   not a gadget.
+
+   Without app.js the rail is display:none (the site's own .js flag gates it)
+   and the line falls back to the date range, which is true on every single
+   day of the year. The rail is never allowed to be the only thing carrying
+   the dates.
+   ========================================================================== */
+.fair-status { margin-top: var(--space-6); }
+
+/* Hidden until app.js has actually dated the rail — a tint bar with nothing
+   filled in reads as a broken progress indicator, so it must never ship
+   on its own. app.js sets display:flex only after it has a real answer. */
+.fair-status__rail {
+  display: none;
+  gap: 4px;
+  position: relative;
+  height: 10px;
+  border-radius: 2px;
+  overflow: hidden;
+  background: var(--color-accent-tint);
+}
+/* flex-grow comes in inline from the phase length, so a five-day phase and a
+   four-day phase are drawn to scale rather than as equal blocks. */
+.fair-status__seg { flex: 0 1 auto; min-width: 0; }
+.fair-status__fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 0;
+  background: var(--color-accent);
+}
+.fair-status__now {
+  margin-top: var(--space-3);
+  font-weight: 600;
+  font-size: var(--fs-body);
+  color: var(--text-primary);
+}
+.fair-status__note {
+  margin-top: var(--space-2);
+  font-size: var(--fs-body-sm);
+  color: var(--text-muted);
+}

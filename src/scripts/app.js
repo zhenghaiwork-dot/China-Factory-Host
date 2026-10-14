@@ -10,6 +10,8 @@
    6) lead-magnet / inquiry form states (simulated; no endpoint yet)
    Every block is defensive: missing markup never throws.
    ============================================================ */
+import { fairStatus } from './fair-status.js';
+
 (function () {
   'use strict';
 
@@ -272,4 +274,64 @@
         });
     });
   });
+
+  /* ---------------------------------------------------------
+     7) Canton Fair phase status
+        The hub page is read weeks before the fair ("how long do I have")
+        and again during it ("which day is it"). Only the second question
+        can be answered at request time, and this is a static site, so the
+        answer is computed here.
+
+        Every date is handled as UTC midnight. "Today" is the visitor's
+        moment shifted to UTC+8 — Guangzhou keeps one offset all year, so
+        adding eight hours to the UTC instant is exact and needs no tz data.
+        Comparing UTC midnights then makes every difference a whole number
+        of days with no DST edge cases.
+
+        Progressive enhancement: the rail is display:none until the .js
+        flag lands, and the status line ships server-rendered with the
+        date range, which is true on every day of the year. If anything
+        here throws, the fallback text stays and the rail never appears —
+        a wrong "Day 4" is much worse than no day at all.
+     --------------------------------------------------------- */
+  (function () {
+    var wrap = doc.querySelector('[data-fair-status]');
+    if (!wrap) { return; }
+
+    var segs = Array.prototype.slice.call(wrap.querySelectorAll('[data-fair-seg]'));
+    var now = wrap.querySelector('[data-fair-now]');
+    var fill = wrap.querySelector('[data-fair-fill]');
+    var rail = wrap.querySelector('[data-fair-rail]');
+    if (segs.length < 1 || !now) { return; }
+
+    var windows = segs.map(function (el, i) {
+      return {
+        no: Number(el.getAttribute('data-phase')) || i + 1,
+        from: el.getAttribute('data-from'),
+        to: el.getAttribute('data-to'),
+      };
+    });
+
+    /* The date maths lives in fair-status.js as a pure function — five
+       possible answers, all of them date comparisons, none of them
+       checkable by looking at the page. Null means "not trustworthy", and
+       in that case we leave the server-rendered date range alone. */
+    var state = null;
+    try {
+      state = fairStatus(windows, Date.now());
+    } catch (e) {
+      state = null;
+    }
+    if (!state) { return; }
+
+    now.textContent = state.text;
+    /* Only now is the rail allowed to appear — see the CSS note. */
+    if (rail) { rail.style.display = 'flex'; }
+    if (fill) {
+      /* Width, not a transform: the fill has to survive a resize without
+         being recalculated. */
+      fill.style.width = Math.max(0, Math.min(100, state.pct)).toFixed(2) + '%';
+    }
+    if (state.phaseNo !== null) { wrap.setAttribute('data-fair-phase', String(state.phaseNo)); }
+  })();
 })();

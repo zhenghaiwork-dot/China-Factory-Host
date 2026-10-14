@@ -10,10 +10,15 @@
  * "好难看 做个简约的风格吧", which was correct: the detail was calibrated
  * for the wrong size.
  *
- * v2 is typographic and nothing else. A red rule, the title set in three
- * lines, two hairlines, and a lot of white. It survives being 120px wide
- * because the only thing asked of it at that size is the red mark and three
- * words, and both are big enough to survive.
+ * v2 is typographic and nothing else: a red rule, the title, hairlines, and
+ * a lot of white. It survives being 120px wide because the only thing asked
+ * of it at that size is the red mark and the title, and both are big enough.
+ *
+ * v2.1 is landscape (4:3). v2 was portrait A4, which was the honest shape
+ * for a document page and the wrong shape for this layout: 120px wide meant
+ * 170px tall, and that stretched the whole download block. The user's
+ * verdict: 把整个版块也拉长了, 很难看. It is a cover *card* now, not a
+ * miniature of the page — same type treatment, a shape that fits the slot.
  *
  * WHY VECTOR AND NOT A PHOTOGRAPH
  *   · Size: ~1.5 KB. A JPEG doing a comparable job is 120-250 KB.
@@ -42,36 +47,34 @@ const FONT =
   "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif";
 
 /**
- * The cover, as an A4 portrait SVG at the .photo-slot--doc ratio (1:1.414).
- * Displayed at 120px wide in the download card.
+ * The cover card: landscape 4:3, displayed at 120x90 in the download card.
+ * Portrait A4 was 170px tall at that width and stretched the block.
  */
 export function svgSheet() {
   const W = 200;
-  const H = 283;
-  const M = 24;
-  const PW = W - M * 2; // 152
+  const H = 150;
+  const M = 20;
+  const PW = W - M * 2; // 160
 
-  const title = ['FACTORY', 'VETTING', 'CHECKLIST']
+  const title = ['FACTORY VETTING', 'CHECKLIST']
     .map(
       (line, i) =>
-        `<text x="${M}" y="${66 + i * 23}" fill="${INK}" font-family="${FONT}"` +
-        ` font-size="21" font-weight="600" letter-spacing="0.2">${line}</text>`
+        `<text x="${M}" y="${68 + i * 22}" fill="${INK}" font-family="${FONT}"` +
+        ` font-size="16" font-weight="600" letter-spacing="0.2">${line}</text>`
     )
     .join('');
 
-  /* Lead and footer stand in for the real copy, which is 4px of grey at this
-     size — unreadable, so it is drawn as weight rather than as text. */
+  /* The meta line stands in for the real copy, which is unreadable at 6px —
+     drawn as weight rather than as text. */
   const bars =
-    `<rect x="${M}" y="132" width="116" height="2" fill="${HAIR}"/>` +
-    `<rect x="${M}" y="141" width="84" height="2" fill="${HAIR}"/>` +
-    `<rect x="${M}" y="214" width="${PW}" height="1" fill="${RULE}"/>` +
-    `<rect x="${M}" y="224" width="52" height="2" fill="${HAIR}"/>`;
+    `<rect x="${M}" y="114" width="${PW}" height="1" fill="${RULE}"/>` +
+    `<rect x="${M}" y="122" width="56" height="2" fill="${HAIR}"/>`;
 
   return (
     `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="Factory vetting checklist cover">` +
     `<rect width="${W}" height="${H}" fill="#FFFFFF"/>` +
     `<rect x="0.5" y="0.5" width="${W - 1}" height="${H - 1}" fill="none" stroke="${RULE}" stroke-width="0.8"/>` +
-    `<rect x="${M}" y="32" width="40" height="3" fill="${RED}"/>` +
+    `<rect x="${M}" y="30" width="34" height="3" fill="${RED}"/>` +
     title +
     bars +
     `</svg>`

@@ -1797,6 +1797,11 @@
   .download { padding: var(--space-8); display: grid; grid-template-columns: 7fr 5fr; gap: var(--space-10); align-items: center; }
 }
 .download__thumb { width: 120px; margin-bottom: var(--space-5); }
+/* The plate defaults to the A4 portrait ratio (--slot-ratio 1/1.414), which
+   at 120px wide is 170px tall — enough on its own to double the height of the
+   download block. The cover card is landscape, so the slot is too. Portrait
+   is the honest shape for a document page; it is the wrong shape here. */
+.download__thumb .photo-slot { --slot-ratio: 4 / 3; }
 /* h1-h4 carry margin: 0 in this system, so the h3 above the lead text sat
    flush against it (0px). 12px — the same eyebrow-to-heading step. */
 .download h3 { margin-bottom: var(--space-3); }

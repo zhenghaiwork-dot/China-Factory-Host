@@ -200,26 +200,24 @@ const faqs = [
     secondary: { label: 'Ask on WhatsApp', href: wa, external: true },
   }}
 >
-  <section class="hero">
+  <section class="hero hero--centered">
     <div class="container">
-      <div class="split-7-5">
-        <div>
-          <p class="eyebrow">Guide</p>
-          <h1>Factory Visits Between Canton Fair Phases: Time and Planning</h1>
-          <p class="lead hero__lead">
-            The 140th session has two three-day gaps with no exhibition at all, 20–22 and 28–30
-            October 2026. That is enough for factories inside one region, provided the suppliers
-            confirm in writing and you group the visits. It is not enough for a multi-province tour.
-          </p>
-          <div class="btn-row">
-            <a class="btn btn--primary" href="#checklist-download">Get the visit checklist</a>
-          </div>
+      <div class="hero__center">
+        <p class="eyebrow">Guide</p>
+        <h1>Factory Visits Between Canton Fair Phases: Time and Planning</h1>
+        <p class="lead hero__lead">
+          The 140th session has two three-day gaps with no exhibition at all, 20–22 and 28–30
+          October 2026. That is enough for factories inside one region, provided the suppliers
+          confirm in writing and you group the visits. It is not enough for a multi-province tour.
+        </p>
+        <div class="btn-row">
+          <a class="btn btn--primary" href="#checklist-download">Get the visit checklist</a>
         </div>
-        <div class="hero__media">
-          <PhotoSlot name="GUIDE · THE SWITCH-OVER DAYS" variant="media">
-            <OnsitePhoto id="07" />
-          </PhotoSlot>
-        </div>
+      </div>
+      <div class="hero__media hero__banner">
+        <PhotoSlot name="GUIDE · THE SWITCH-OVER DAYS" variant="strip">
+          <OnsitePhoto id="07" sizes="(max-width: 720px) 100vw, 100vw" />
+        </PhotoSlot>
       </div>
     </div>
   </section>
@@ -234,6 +232,7 @@ const faqs = [
   <Section tight>
     <div class="container">
       <SectionHead
+        center
         eyebrow="The 140th session · 2026"
         title="Three phases, and the two gaps between them."
       />
@@ -270,7 +269,7 @@ const faqs = [
       from-booth-to-visit guide. */}
   <Section>
     <div class="container container--md">
-      <SectionHead title="Four things decide whether the gap works." />
+      <SectionHead center title="Four things decide whether the gap works." />
       <ReadinessList items={readiness} />
       <p class="u-mt-6">
         Without a written date and a real address, confirm first and route second — the full list of
@@ -284,22 +283,24 @@ const faqs = [
       Was: three more key/value rows. "Best for" and "Watch out for" are the
       same two questions asked of each option — that is a table, and the
       table's own mobile rendering keeps the field order aligned. */}
-  <Section alternate>
+  <Section alternate class="band-compare">
     <div class="container">
-      <SectionHead title="How buyers actually use the gap." />
+      <SectionHead center title="How buyers actually use the gap." />
       <ComparisonTable
         caption="Three ways to use the switch-over gap: stay local, one cluster with several factories, or verify remotely."
         labelCol="Compare"
         columns={compare.columns}
         rows={compare.rows}
       />
-      <p class="u-mt-6">
-        Stay local and one-cluster are not either/or — a local visit on one day and a cluster trip on
-        the next is a normal shape. For most buyers the best use of a gap is not a long trip anyway:
-        it is rest, sorting the notes while they still mean something, running the company checks,
-        and one or two factory visits that were confirmed before the halls closed. The five checks
-        behind that are in <a href="/about/how-we-vet-factories/">how we vet factories</a>.
-      </p>
+      <div class="container container--md">
+        <p class="u-mt-6">
+          Stay local and one-cluster are not either/or — a local visit on one day and a cluster trip on
+          the next is a normal shape. For most buyers the best use of a gap is not a long trip anyway:
+          it is rest, sorting the notes while they still mean something, running the company checks,
+          and one or two factory visits that were confirmed before the halls closed. The five checks
+          behind that are in <a href="/about/how-we-vet-factories/">how we vet factories</a>.
+        </p>
+      </div>
     </div>
   </Section>
 
@@ -309,9 +310,9 @@ const faqs = [
       stated in the heading, and no day gets a stock factory photo it does
       not belong to. The band's weight comes from the h3-scale day titles,
       not from enlarging the section heading (a 48px h2 would tie the H1). */}
-  <Section alternate>
-    <div class="container">
-      <SectionHead title="A three-day plan, as an example." />
+  <Section>
+    <div class="container container--md">
+      <SectionHead center title="A three-day plan, as an example." />
       <div class="gap-plan">
         <Timeline items={threeDay} />
       </div>
@@ -348,6 +349,7 @@ const faqs = [
   <Section>
     <div class="container container--md">
       <SectionHead
+        center
         eyebrow="Free download"
         title="Take the visit checklist with you."
         lead="The checks in this guide, in the order we run them on site."
@@ -380,7 +382,7 @@ const faqs = [
 
   <Section>
     <div class="container container--md">
-      <SectionHead title="Frequently asked questions." />
+      <SectionHead center title="Frequently asked questions." />
       <FAQ items={faqs} />
       <p class="u-mt-6">
         Two of those answers have a longer version elsewhere: the visit-versus-samples trade-off is
@@ -410,7 +412,7 @@ const faqs = [
 
   <Section>
     <div class="container">
-      <SectionHead title="Related pages." />
+      <SectionHead center title="Related pages." />
       <RelatedNav
         items={[
           { k: 'Canton Fair', t: 'The fair itself — phases, switch-over days, factory days', href: '/canton-fair/' },
@@ -424,12 +426,104 @@ const faqs = [
 </BaseLayout>
 
 <style>
+  /* ── WPS.com grammar, ported ──────────────────────────────────────────────
+     The client's reference site (wps.com, measured via CDP) groups content
+     with WHITESPACE and colour blocks, not hairlines: 1295 elements, 30
+     borders, 10 shadows. Section headings sit centred over full-width
+     bands; the hero lead is a real sub-headline (~half the H1), and one
+     band carries one h2 — sub-lists inside a band drop to h3 scale. This
+     page follows that grammar; the rest of the site is untouched. */
+
+  /* ── The centered hero ────────────────────────────────────────────────────
+     The reference site's first screen sets the centered grammar for the
+     whole page: big centered H1, real centered sub-headline, action below,
+     then a full-width banner image. The left-text/right-photo split was the
+     last whole band speaking the old left-aligned grammar — with it gone,
+     the centered bands below read as one system instead of exceptions. */
+  .hero__center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-5);
+    text-align: center;
+  }
+  .hero__center :global(.eyebrow) { justify-content: center; }
+  /* The measure cap belongs on the H1 itself (max-width in em resolves
+     against THIS block's inherited 18px — on the container it meant 360px
+     and crushed the headline into a five-line column). 15em at the 48–63px
+     display size ≈ 940px. */
+  .hero__center :global(h1) {
+    max-width: 15em;
+  }
+  .hero__center :global(.hero__lead) {
+    /* Hero lead as a sub-headline: the reference hero reads 58 → 34;
+       63 → 22 keeps the ratio without the marketing scale. */
+    font-size: var(--fs-h4);
+    line-height: 1.5;
+    max-width: 34em;
+  }
+  .hero__banner {
+    max-width: none;
+    margin-top: var(--space-12);
+  }
+
+  /* One band, one h2: the two sub-lists drop to h3 scale (they are
+     children of the band, not peers of the other section headings). */
+  .twocol :global(h2) {
+    font-size: var(--fs-h3);
+    margin-bottom: var(--space-5);
+  }
+  /* Cards in the reference are soft colour blocks without outlines — and
+     they sit on a CONTRASTING band (grey block on white, white on grey),
+     never grey-on-grey. This band is alternate, so the cards go white. */
+  .twocol :global(.checklist) {
+    background: var(--color-surface);
+    border: 0;
+    border-radius: var(--radius-lg);
+  }
+
+  /* Band rhythm: generous vertical air — the reference runs 60–140px
+     section padding, one theme per screen. :not(.section--tight) keeps the
+     tight bands (schedule, photo) actually tight. */
+  :global(.section:not(.section--tight)) {
+    padding-block: calc(var(--section-py) * 1.3);
+  }
+
+  /* ── The comparison table, de-gridded ────────────────────────────────────
+     The reference groups with whitespace, not rules. Column dividers and
+     row rules come out; the head keeps its single bottom rule (a data
+     table still needs one anchor), and the featured column keeps its tint
+     but loses the frame. Cells gain air. Page-scoped: other pages' tables
+     are untouched. */
+  .band-compare :global(.cmp-table thead th) {
+    border-left: 0;
+    border-right: 0;
+    border-top: 0;
+  }
+  .band-compare :global(.cmp-table thead th.is-featured) {
+    border-left: 0;
+    border-right: 0;
+    border-top: 0;
+  }
+  .band-compare :global(.cmp-table tbody th) {
+    border-left: 0;
+    border-bottom: 1px solid var(--ink-100);
+  }
+  .band-compare :global(.cmp-table tbody td) {
+    border-left: 0;
+    border-bottom: 1px solid var(--ink-100);
+    padding: var(--space-5) var(--space-4);
+  }
+  .band-compare :global(.cmp-table tbody td:last-child) { border-right: 0; }
+  .band-compare :global(.cmp-table tbody tr td.featured-cell) {
+    border-left: 0;
+    border-right: 0;
+  }
+
   /* Phase themes: supplementary to the strip, collapsed by default — the
      key dates and both windows stay visible without opening anything. */
   .phase-detail {
-    margin-top: var(--space-6);
-    border-top: 1px solid var(--ink-100);
-    padding-top: var(--space-4);
+    margin-top: var(--space-8);
   }
   .phase-detail summary {
     cursor: pointer;

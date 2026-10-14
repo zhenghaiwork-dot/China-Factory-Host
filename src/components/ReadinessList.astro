@@ -7,8 +7,9 @@
    Each item: the question you need to answer (q), the action that answers
    it (action), and the background fact behind it (note, optional). No
    checkboxes, no "pass" state — nothing here is a verified result, so
-   nothing may look like one. A hairline and a mono index are the only
-   decoration; desktop runs a 2×2 grid, phones a single column.
+   nothing may look like one. A mono index is the only decoration; items
+   separate by air, not rules (wps.com reference grammar); desktop runs a
+   2×2 grid, phones a single column.
 
    a11y: an <ol> (the conditions have a checking order); the index is
    aria-hidden because the list already numbers them. */
@@ -45,14 +46,12 @@ const { items } = Astro.props;
     padding: 0;
     list-style: none;
     display: grid;
-    gap: var(--space-4);
+    gap: var(--space-8);
   }
   .readiness__item {
     display: grid;
     grid-template-columns: auto 1fr;
     gap: var(--space-3);
-    padding-top: var(--space-3);
-    border-top: 1px solid var(--ink-100);
   }
   .readiness__n {
     font-family: var(--font-mono);
@@ -80,7 +79,7 @@ const { items } = Astro.props;
   @media (min-width: 768px) {
     .readiness {
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: var(--space-6) var(--space-8);
+      gap: var(--space-10) var(--space-12);
     }
   }
 </style>

@@ -80,10 +80,11 @@ const { year, meta, segments, footnotes = [] } = Astro.props;
 <style>
   .calstrip__meta {
     display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: var(--space-1) var(--space-4);
-    margin: 0 0 var(--space-4);
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-1);
+    margin: 0 0 var(--space-6);
+    text-align: center;
   }
   .calstrip__year {
     margin: 0;
@@ -121,22 +122,22 @@ const { year, meta, segments, footnotes = [] } = Astro.props;
   .calstrip__seg--gap { background: var(--color-accent); }
   /* The schedule itself: spec-list grammar — uppercase label, body-size
      value — so the facts read at the same size as every other list on the
-     site instead of a caption-scale box. */
+     site instead of a caption-scale box. Rows separate by air, not rules
+     (wps.com reference: 30 borders in 1295 elements — grouping is the
+     whitespace's job). */
   .calstrip__rows {
     margin: 0;
     padding: 0;
     list-style: none;
     display: grid;
-    gap: 0;
-    border-top: 1px solid var(--ink-100);
+    gap: var(--space-1);
   }
   .calstrip__rows li {
     display: grid;
     grid-template-columns: 140px 1fr;
     gap: var(--space-4);
     align-items: baseline;
-    padding: var(--space-3) 0;
-    border-bottom: 1px solid var(--ink-100);
+    padding: var(--space-2) 0;
   }
   .calstrip__k {
     font-family: var(--font-body);
@@ -157,7 +158,7 @@ const { year, meta, segments, footnotes = [] } = Astro.props;
     color: var(--text-secondary);
   }
   .calstrip__notes {
-    margin: var(--space-5) 0 0;
+    margin: var(--space-6) 0 0;
     padding: 0;
     list-style: none;
     display: grid;

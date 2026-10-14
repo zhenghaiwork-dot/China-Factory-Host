@@ -1,0 +1,334 @@
+---
+import BaseLayout from '../../../../layouts/BaseLayout.astro';
+import Section from '../../../../components/Section.astro';
+import SectionHead from '../../../../components/SectionHead.astro';
+import PhotoSlot from '../../../../components/PhotoSlot.astro';
+import OnsitePhoto from '../../../../components/OnsitePhoto.astro';
+import Checklist from '../../../../components/Checklist.astro';
+import FAQ from '../../../../components/FAQ.astro';
+import Caveat from '../../../../components/Caveat.astro';
+import RelatedNav from '../../../../components/RelatedNav.astro';
+import DownloadGate from '../../../../components/DownloadGate.astro';
+import { waLink } from '../../../../data/site.ts';
+
+const title = 'Canton Fair to Zhejiang: planning factory visits in Ningbo, Taizhou, Wenzhou and Yiwu';
+const description =
+  'After Canton Fair, match your product to a Zhejiang cluster: Cixi appliances, Huangyan molds, Qiaotou buttons and zippers, Ninghai trekking poles, Yiwu gifts, Yongkang drinkware. What to confirm and how to route it.';
+
+const wa = waLink('Hi, I am coming from Canton Fair and want to plan factory visits in Zhejiang.');
+
+/* Town-level cluster notes, not a province overview — /destinations/zhejiang/
+   already does the province. Each row is a starting point for research. */
+const clusters = [
+  { k: 'Ningbo, Cixi · Small home appliances', v: 'Portable ice makers, space heaters, circulation fans, car fridges, car air pumps, portable power stations, pet water fountains, pet drying boxes. Relevant to home, outdoor and pet brands.' },
+  { k: 'Ningbo, Yuyao · Appliances and plastics', v: 'Air fryers, vacuum cleaners, coffee machines, melamine tableware, plastic housings, garden water pumps. Relevant to appliance ODM and restaurant or supermarket private label.' },
+  { k: 'Ningbo, Ninghai (Xidian) · Outdoor gear', v: 'Carbon fibre and aluminium trekking poles, camping flashlights, headlamps, camp lights. Relevant to outdoor retailers.' },
+  { k: 'Taizhou, Huangyan · Molds and plastic goods', v: 'Injection molds, storage boxes, pet plastic items, outdoor plastic furniture, garden planters. Relevant to anyone developing a new plastic private-label product.' },
+  { k: 'Taizhou, Linhai · Eyewear', v: 'Sunglasses, optical frames in metal and TR90. Relevant to eyewear wholesalers and niche brands.' },
+  { k: 'Taizhou, Wenling · Pumps and garden tools', v: 'Water pumps, pressure washers, home generators, garden tools, casual and safety shoes. Relevant to construction and outdoor distributors.' },
+  { k: 'Wenzhou, Yongjia (Qiaotou) · Garment accessories', v: 'Metal and resin buttons, zippers, webbing. Relevant to apparel and bag brands.' },
+  { k: 'Wenzhou, Rui’an · Auto parts and bathroom hardware', v: 'Motorcycle and EV parts, filters, brake parts, stainless bathroom accessories, floor drains. Relevant to auto parts wholesalers and building material brands.' },
+  { k: 'Wenzhou, Yueqing · Low voltage electrical', v: 'Mini switches, sockets, wire terminals. Relevant to electrical and building importers.' },
+  { k: 'Wenzhou, Ouhai · Footwear', v: 'Fashion and casual shoes. Relevant to niche shoe brands.' },
+  { k: 'Wenzhou, Pingyang · Pet fabric goods', v: 'Pet leashes, collars, fabric toys. Relevant to pet product brands.' },
+  { k: 'Jinhua, Yiwu · Daily goods and gifts', v: 'Party supplies, seasonal decorations, daily gadgets, umbrellas, acrylic gifts. Relevant to gift retailers and cross-border sellers.' },
+  { k: 'Jinhua, Yongkang · Metalware and tools', v: 'Stainless vacuum flasks, metal cookware, hand garden tools, mini fitness equipment, power tools. Relevant to hardware wholesalers and outdoor brands.' },
+  { k: 'Huzhou, Anji · Chairs', v: 'Mesh office chairs, folding camping chairs. Relevant to office and furniture brands.' },
+  { k: 'Huzhou, Zhili · Children’s clothing', v: 'Kids clothing. Relevant to apparel buyers.' },
+];
+
+const whyClusters = [
+  'You can often see several steps of production in one area — mold, injection, assembly and packing within a short drive.',
+  'Suppliers inside a cluster are used to custom changes in colour, logo and packaging, though how flexible any one factory is varies.',
+  'You can compare several workshops making the same product in one or two days, which is what makes a shortlist honest.',
+];
+
+const regions = [
+  { k: 'Ningbo — appliances and outdoor gear', v: 'Cixi for small home appliances with the motor and plastic supply chain nearby: ask which parts the factory makes itself and which it buys in, and which markets its safety documents cover. Yuyao combines mold capability with appliances and melamine tableware — for food-contact products ask for test reports for the exact material and product, not a general food-grade statement. Ninghai is where to see trekking pole production: ask about material options, small-batch runs and logo marking.' },
+  { k: 'Taizhou — molds and plastics', v: 'Huangyan is the stop for anyone developing a new plastic product. Bring a sketch or a sample and ask for a mold cost and a lead time. Linhai has small eyewear workshops that will customise frame colour, engraving and packaging. Wenling is better known for pumps, pressure washers and garden tools.' },
+  { k: 'Wenzhou — accessories, parts and footwear', v: 'Qiaotou is the first stop for apparel and bag brands needing buttons, zippers and webbing; samples are often quick to make, but confirm the minimum order for your specific item. Rui’an and Yueqing serve auto parts, bathroom hardware and electrical products — for electrical, ask for the certificates that apply to your target market and check the certificate covers the exact model. Ouhai and Pingyang cover small-batch footwear and pet fabric goods.' },
+  { k: 'Yiwu and Yongkang — gifts, drinkware and tools', v: 'Yiwu is strong for fast-changing daily goods and seasonal items: the market is for seeing samples and comparing prices, the factories nearby are where production happens, and many stalls are traders — so ask who actually makes the product. Yongkang has a deep supply chain for stainless drinkware, cookware and hand tools; ask about laser logo options and custom packaging, and check material specifications for food-contact items.' },
+  { k: 'Huzhou — an optional stop', v: 'Anji for chairs and Zhili for children’s clothing. Only add them if they fit your product, because they add travel time. For children’s products, check the safety rules and documents that apply in your market before ordering.' },
+];
+
+const routes = [
+  { k: 'Route 1 · Ningbo and Taizhou', v: 'Home products and plastics. Start with small appliance or outdoor factories in Cixi, Yuyao or Ninghai, then continue to Huangyan for a mold workshop. Best for brands developing a new plastic or appliance product.' },
+  { k: 'Route 2 · Wenzhou', v: 'Accessories, parts and electrical items. Group Qiaotou, Rui’an and Yueqing by your categories. Best for apparel or bag brands, auto parts buyers and electrical importers who need several suppliers in one area.' },
+  { k: 'Route 3 · Yiwu and Yongkang', v: 'Gifts and metalware. See the Yiwu market for samples and ideas, then visit confirmed factories nearby, adding Yongkang if you buy drinkware or tools. Best for gift retailers, cross-border sellers and hardware wholesalers.' },
+];
+
+const confirmFirst = [
+  'The exact factory address, date, start time and host, in writing.',
+  'That the factory actually makes the product you want — not only a similar one.',
+  'MOQ for your specification, with prices at two or three quantities.',
+  'Sample lead time and cost.',
+  'Certificates for your target market, and which model and material they cover.',
+  'Whether you can see the workshop areas you need: molds, injection, assembly, quality control.',
+  'Who owns the mold or tooling, if you are paying for it.',
+];
+
+const faqs = [
+  {
+    q: 'Which Zhejiang city is best for plastic molds?',
+    a: [
+      'Huangyan in Taizhou is widely known as a major mold center, and it is a good first stop if you are developing a new plastic product. Compare several mold shops and agree tool ownership in writing before anything is cut.',
+    ],
+  },
+  {
+    q: 'Where do I source buttons and zippers in Zhejiang?',
+    a: [
+      'Qiaotou in Yongjia, Wenzhou, is known for buttons and zippers. Public sources report it produces around 60 percent of the world’s buttons and 80 percent of its zippers — a figure we have not verified, and one that says nothing about whether a specific supplier is right for you.',
+    ],
+  },
+  {
+    q: 'Is the Yiwu market or a Yiwu factory better for small orders?',
+    a: [
+      'The market is better for seeing samples, comparing prices and assembling small mixed orders, but many stalls are traders. For anything you will order in volume, ask who actually makes the product and go and see that factory.',
+    ],
+  },
+  {
+    q: 'Can I visit Zhejiang factories right after Canton Fair?',
+    a: [
+      'Yes, but route it by cluster, confirm each visit in writing and keep to two or three factories a day. Guangzhou to Zhejiang is real travel time — check it before you book, and do not assume you can fit the province into a three-day gap between phases.',
+    ],
+  },
+  {
+    q: 'Do Zhejiang factories offer low MOQ?',
+    a: [
+      'Some do, especially for small items, accessories and flexible small-batch products, but it depends on the factory and the product. Ask for prices at several quantities rather than a single number.',
+    ],
+  },
+  {
+    q: 'Do I need certificates before I order?',
+    a: [
+      'It depends on your product and your market. Ask for certificates that cover the exact model and material, and check them before you pay. A certificate for a similar model is not a certificate for yours.',
+    ],
+  },
+  {
+    q: 'Can you help organise the trip?',
+    a: [
+      'Yes. Zhejiang is our home base. Send us your product, your target market, your quantities and your dates, and we will tell you which cluster fits and what is realistic in the days you have.',
+    ],
+  },
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  track="neutral"
+  active="destinations"
+  crumbs={[
+    { href: '/destinations/', label: 'Destinations' },
+    { href: '/destinations/zhejiang/', label: 'Zhejiang' },
+  ]}
+  current="Canton Fair to Zhejiang"
+  article={{
+    title,
+    description,
+    datePublished: '2026-10-14',
+    dateModified: '2026-10-14',
+    section: 'Zhejiang Factory Visits',
+  }}
+  cta={{
+    eyebrow: 'Next step',
+    title: 'Match the product to the cluster first.',
+    lead: 'Send us what you want to source, your target market, your quantities and your dates. We will say which towns deserve your days — and which you should skip.',
+    primary: { label: 'Plan my Zhejiang trip', href: '/contact/' },
+    secondary: { label: 'Ask on WhatsApp', href: wa, external: true },
+  }}
+>
+  <section class="hero">
+    <div class="container">
+      <div class="split-7-5">
+        <div>
+          <p class="eyebrow">Guide</p>
+          <h1>Canton Fair to Zhejiang: match the product to the town before you book anything.</h1>
+          <p class="lead hero__lead">
+            Zhejiang is a set of specialised clusters, each strong in a narrow product group:
+            appliances in Cixi, molds in Huangyan, buttons and zippers in Qiaotou, trekking poles in
+            Ninghai, gifts in Yiwu, drinkware and tools in Yongkang. Finish the fair knowing your
+            product, match it to one cluster, then book two or three confirmed visits there. Do not
+            try to cover the province in one trip.
+          </p>
+          <div class="btn-row">
+            <a class="btn btn--secondary" href="#checklist-download">Get the cluster visit planner</a>
+          </div>
+        </div>
+        <div class="hero__media">
+          <PhotoSlot name="ZJ · CANTON FAIR ROUTE" variant="media">
+            <OnsitePhoto id="08" />
+          </PhotoSlot>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Section tight>
+    <div class="container container--md">
+      <SectionHead eyebrow="Who this is for" title="Private label, OEM and ODM, after the fair." />
+      <div class="prose stack">
+        <p>
+          This is written for small and medium importers, Amazon and Shopify sellers and niche brands
+          developing private-label, OEM or ODM products after Canton Fair. The goals are usually the
+          same: lower minimum order quantities, fast sampling, custom design or packaging, and
+          suppliers who can produce compliance documents.
+        </p>
+        <p>
+          It is not a tourism itinerary and it does not chase large enterprises. The aim is to find
+          small and mid-sized workshops where you can see the molds, the injection machines, the
+          assembly line and the quality checks.
+        </p>
+      </div>
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container container--md">
+      <SectionHead
+        eyebrow="Why clusters"
+        title="Why Zhejiang suits small buyers."
+        lead="Many towns here grew around one product, with mold makers, material suppliers, component makers and assembly shops within a short distance of each other."
+      />
+      <Checklist title="What that means in practice" plain items={whyClusters} />
+      <p class="u-mt-6">
+        Two cluster facts are widely reported: Qiaotou in Yongjia is called the button capital of
+        the world and is reported to make around 60 percent of the world's buttons and 80 percent of
+        its zippers; Ninghai in Ningbo is reported to produce about 60 percent of the world's
+        trekking poles, exporting over 15 million a year, according to Chinese state media. Huangyan
+        in Taizhou is widely known as a major mold center. <strong>We have not verified any of those
+        figures</strong>, and more importantly they describe the scale of a cluster, not whether a
+        particular factory is any good — that still has to be checked one factory at a time.
+      </p>
+    </div>
+  </Section>
+
+  <Section>
+    <div class="container">
+      <SectionHead
+        eyebrow="The map"
+        title="Which cluster fits your product?"
+        lead="From our own cluster notes. Treat every row as a starting point for research, not a guarantee — confirm a factory's actual products, MOQ and certificates in writing."
+      />
+      <ul class="spec-list">
+        {clusters.map((c) => (
+          <li>
+            <span class="spec-list__k">{c.k}</span><span class="spec-list__v">{c.v}</span>
+          </li>
+        ))}
+      </ul>
+      <p class="u-mt-6">
+        If your product does not obviously land on one of these rows, work through
+        <a href="/tools/china-manufacturing-hub-finder/">the manufacturing hub finder</a> — it routes
+        by material and by whether the shape is stock or custom, which is often the faster answer.
+      </p>
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container container--md">
+      <SectionHead eyebrow="Region by region" title="What to look for where." />
+      <ul class="spec-list">
+        {regions.map((r) => (
+          <li>
+            <span class="spec-list__k">{r.k}</span><span class="spec-list__v">{r.v}</span>
+          </li>
+        ))}
+      </ul>
+      <p class="u-mt-6">
+        One structural option worth knowing in Taizhou: mold making is a separate industry there, so
+        some buyers commission the mold from an independent mold shop and then place the moulding
+        with a factory they choose. That can make tool ownership clearer. Whether it suits your
+        project depends on volume and risk — and either way, agree in writing who owns the tool.
+      </p>
+    </div>
+  </Section>
+
+  <Section>
+    <div class="container container--md">
+      <SectionHead
+        eyebrow="Illustrative only"
+        title="Three routes that group well."
+        lead="Examples, not itineraries we can promise. Real routes depend on confirmed appointments and on actual travel times — check those with a map or a rail app before you book."
+      />
+      <ul class="spec-list">
+        {routes.map((r) => (
+          <li>
+            <span class="spec-list__k">{r.k}</span><span class="spec-list__v">{r.v}</span>
+          </li>
+        ))}
+      </ul>
+      <p class="u-mt-6">
+        Whichever route you take, do not plan more than two or three factories a day. Rushed visits
+        return less information than fewer visits done properly.
+      </p>
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container container--md">
+      <SectionHead
+        eyebrow="Free download"
+        title="Take the cluster visit planner with you."
+        lead="The checks in this guide, in the order we run them on site."
+      />
+      <DownloadGate id="checklist-download" photo="ZHEJIANG-CLUSTER-PLANNER" />
+    </div>
+  </Section>
+
+  <Section>
+    <div class="container container--md">
+      <SectionHead
+        eyebrow="Before you travel"
+        title="Seven things to confirm in writing."
+      />
+      <Checklist title="Confirm these first" numbered items={confirmFirst} />
+      <p class="u-mt-6">
+        The company checks that sit behind number two are the seven steps in
+        <a href="/guides/verify-canton-fair-suppliers/">how to verify Canton Fair suppliers</a>, and
+        the on-site checklist that covers number six is in
+        <a href="/guides/canton-fair-to-factory-visits/">from Canton Fair to factory visits</a>.
+      </p>
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container container--md">
+      <SectionHead eyebrow="Questions" title="Frequently asked questions." />
+      <FAQ items={faqs} />
+      <p class="u-mt-6">
+        The province as a whole — how the clusters sit relative to each other and what a typical
+        three-to-five-day trip looks like — is on
+        <a href="/destinations/zhejiang/">the Zhejiang destination page</a>. Yiwu, Ningbo and
+        Shaoxing each have their own page too.
+      </p>
+    </div>
+  </Section>
+
+  <Section>
+    <div class="container container--md">
+      <Caveat
+        title="What this guide is and is not"
+        body="Cluster descriptions are summaries, and individual factories vary. The market-share figures quoted above are reported by public sources, not verified by us, and they describe a town's scale rather than any supplier's quality. Verify every supplier and every certificate yourself or with a professional."
+        items={[
+          'Confirm a factory’s actual products, MOQ and certificates in writing before you travel — a cluster’s reputation is not a supplier’s capability.',
+          'Agree mold and tooling ownership in writing. It is the clause that decides what happens if you move production later.',
+        ]}
+      />
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container">
+      <SectionHead eyebrow="Go deeper" title="Related pages." />
+      <RelatedNav
+        items={[
+          { k: 'Destination', t: 'Zhejiang — the province and a typical trip', href: '/destinations/zhejiang/' },
+          { k: 'Canton Fair', t: 'The fair itself — phases, dates, factory days', href: '/canton-fair/' },
+          { k: 'Guide', t: 'From Canton Fair to factory visits — the 8-step route', href: '/guides/canton-fair-to-factory-visits/' },
+          { k: 'Tool', t: 'Manufacturing hub finder — category to cluster', href: '/tools/china-manufacturing-hub-finder/' },
+        ]}
+      />
+    </div>
+  </Section>
+</BaseLayout>

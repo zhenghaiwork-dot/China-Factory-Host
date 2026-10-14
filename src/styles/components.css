@@ -703,6 +703,18 @@
 .nav-menu--2col .nav-menu__title,
 .nav-menu--2col .nav-menu__foot { grid-column: 1 / -1; }
 
+/* 2026-10-14 — right-side groups open LEFTWARD. The cards hide via
+   visibility, not display, so they occupy layout while closed — and every
+   card was left-anchored (left:0), which pushed the document to 1332px at a
+   1280px viewport (About) and 1221px at 1024px (Destinations / Resources /
+   About): horizontal scroll for menus nobody had opened. Right-anchoring the
+   last four groups' cards keeps every card inside the container at every
+   width the desktop nav renders (>=1024px), open or closed. Chosen over
+   display:none so the slide/fade transition and focus-within behaviour stay
+   exactly as they were; chosen over a hardcoded key list so reordering NAV
+   keeps working. Verify with: node _measure-nav.mjs 1024 1280 1440. */
+.nav > :nth-last-child(-n + 4) .nav-menu { left: auto; right: 0; }
+
 .nav-menu__title {
   font-family: var(--font-body);
   font-size: var(--fs-label);
@@ -814,6 +826,34 @@
    cascade reason — the block above would otherwise mask the rule at line 774. */
 @media (min-width: 1024px) {
   .site-header__actions .btn { font-size: var(--fs-body-sm); }
+}
+
+/* ── 2026-10-14: the 1024–1279 band never actually fit ─────────────────────
+   Measured at 1024px the row needed ~1077px (brand 191 + nav 697 + CTA 137,
+   plus gaps and the nav's left margin) inside a 958px content box — the header
+   CTA, the one button the whole page funnels to, sat 85px past the viewport.
+   The 1024 tier had already tightened the nav gaps once ("Tight values", the
+   .nav rule above), but that was still ~120px short. Three more levers, all
+   scoped to the band and restored at the 1280 tier below, following the
+   tier-step pattern this file prefers over mixed min/max queries:
+   nav text steps down to the caption size, the row gaps take --space-3, and
+   the CTA takes its existing short label ("Plan visit") with 12px insets.
+   Verified with: node _probe-header.mjs  (1024 → row fits with ~15px slack) */
+@media (min-width: 1024px) {
+  .nav { gap: var(--space-3); margin-left: var(--space-3); }
+  .nav-trigger, .nav-link { font-size: var(--fs-caption); }
+  .site-header__actions .btn { padding: 0 var(--space-3); }
+  .header-cta__long { display: none; }
+  .header-cta__short { display: inline; }
+}
+/* 1280 tier: back to the full-size values (nav wide tier is gap --space-6 /
+   margin-left --space-8 per the block at line 638). */
+@media (min-width: 1280px) {
+  .nav { gap: var(--space-6); margin-left: var(--space-8); }
+  .nav-trigger, .nav-link { font-size: var(--fs-body-sm); }
+  .site-header__actions .btn { padding: 0 var(--space-4); }
+  .header-cta__long { display: inline; }
+  .header-cta__short { display: none; }
 }
 
 /* Hamburger — minimal, no box. A bordered square around two lines is the
@@ -2418,7 +2458,17 @@ ul.legend.clean { margin-top: var(--space-5); }
    no --space-7 on the ladder (it jumps 6 -> 8), so --space-7 would resolve to
    invalid and collapse the gap to 0. 24px x 5 = 120px, leaving ~169px per link
    column inside the 1200px container. */
-@media (min-width: 1024px) { .footer__grid { grid-template-columns: 1.4fr repeat(5, minmax(0, 1fr)); gap: var(--space-6); } }
+@media (min-width: 1024px) { .footer__grid { grid-template-columns: 1.4fr repeat(4, minmax(0, 1fr)) minmax(auto, 1fr); gap: var(--space-6); } }
+/* 2026-10-14 — the Contact column switched from minmax(0, 1fr) to
+   minmax(auto, 1fr). Its longest value, support@chinafactoryhost.com, is a
+   212px unbreakable token; the 1fr track was ~170–195px at every desktop
+   width, so the column silently overflowed its track — past the viewport
+   below 1440 (6px of horizontal scroll at 1280, 49px at 1024) and into the
+   container padding above. auto as the track floor sizes the column to its
+   own content and takes the difference from the four minmax(0, 1fr) link
+   columns, which can shrink because their labels wrap. The email now stays
+   on one line at every width and nothing overflows. Found with
+   node _find-overflow.mjs 1024 1280. */
 .footer__col-title {
   font-family: var(--font-body);
   font-size: var(--fs-label);

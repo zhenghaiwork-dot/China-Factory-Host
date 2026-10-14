@@ -50,7 +50,7 @@ docs/LOCAL-*.md
 # _-prefixed; root-anchored (leading /) so nested source dirs are untouched.
 /_*
 /.chrome-audit-profile/
-/.chrome-*-profile/
+/.chrome-*-profile*/
 /.chrome-v2-profile/
 /.chrome-verify-profile/
 /alive.txt

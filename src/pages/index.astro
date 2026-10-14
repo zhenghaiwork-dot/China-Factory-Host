@@ -26,6 +26,8 @@ import FAQ from '../components/FAQ.astro';
 import TrustBar from '../components/TrustBar.astro';
 import CostComparison from '../components/CostComparison.astro';
 import Icon from '../components/Icon.astro';
+/* Temporary, seasonal: see the file header for how and when to remove it. */
+import FairPromo from '../components/FairPromo.astro';
 /* Every figure on this page is DERIVED from a constant that also renders
    elsewhere on the site — never hand-typed. See the TrustBar below. */
 import { REPLY_TIME_MICRO, FILMING_LEAD_TIME, FILMING_LEAD_TIME_DAYS, VET_STEPS } from '../data/site.ts';
@@ -345,6 +347,12 @@ const faqs = [
       </ul>
     </div>
   </section>
+
+  {/* ── Canton Fair promo — temporary, seasonal ─────────────────────────────
+      Sits just under the claims strip: high enough to be seen by anyone
+      arriving on the homepage, outside the permanent argument of the page.
+      Self-hiding after the session closes; delete afterwards. */}
+  <FairPromo />
 
   {/* ── trust bar — evidence, not adjectives ────────────────────────────────
       The homepage was a list of ARGUMENTS with nothing to point at. TrustBar

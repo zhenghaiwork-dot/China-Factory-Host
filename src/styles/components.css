@@ -938,17 +938,19 @@
 .hero__media { margin-top: var(--space-8); }
 @media (min-width: 1024px) { .hero__media { margin-top: 0; } }
 
-/* --- Hero media: top pinned to the H1, natural proportion, no forced stretch (2026-10-01) ---
+/* --- Hero media: top pinned to the H1, design-system ratio, no forced stretch (2026-10-01) ---
    Round 4 of the user audit. Round 2 squashed the plate to the H1's height
    (tiny strip, void below); round 3 stretched it to the copy's foot (on long
    heroes the 1.6-2.2 landscape photos were cover-cropped into narrow portrait
    slivers - ugly). Neither geometric forcing works.
 
-   The plate now keeps a comfortable near-natural ratio (16:10, close to the
-   onsite photos' real ~1.6-2.2 proportions, so cover-cropping stays minimal),
-   pinned at the headline top and never forced further: on short-copy heroes it
-   lands just past the copy's foot, on long-copy heroes it stops at its natural
-   height and leaves breathing room below - "no need to reach the bottom".
+   Final ruling (user delegated the call to the design side): the plate keeps
+   the ratio its PhotoSlot variant already defines - 4:3 for media plates per
+   the design system's own hero spec (§5.3 "媒体区 PhotoSlot", §6.4 "Creator 路径
+   4:3 大图"), 21:9 where a page uses the strip variant - pinned at the headline
+   top and never forced further. On short-copy heroes it lands just past the
+   copy's foot; on long-copy heroes it stops at its natural height and leaves
+   breathing room below - "no need to reach the bottom".
 
    Done without touching any of the ~50 hero templates: above 1024px the text
    wrapper becomes display:contents so its children promote to grid items of the
@@ -983,7 +985,9 @@
     align-self: start;
   }
   .hero .split-7-5 > .hero__media .photo-slot {
-    aspect-ratio: 16 / 10;
+    /* The variant system owns the ratio (§5.3 / §6.4 of the design system):
+       media = 4:3 large plate, strip = 21:9 - never a geometric forcing. */
+    aspect-ratio: var(--slot-ratio, 4 / 3);
     height: auto;
   }
 }

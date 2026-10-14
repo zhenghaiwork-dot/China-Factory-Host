@@ -1828,7 +1828,11 @@
    15. CaveatBlock（第 5.15.3 节）
    ============================================================ */
 .caveat {
-  background: var(--ochre-100);
+  /* Cool sunken grey (was ochre-100): the WPS grammar keeps the page cold, and
+     one warm beige block read as a stray leftover. The dashed border stays —
+     it is the only dashed grammar on the site and carries the "boundary"
+     meaning on its own; the fill no longer needs to shout. */
+  background: var(--surface-sunken);
   /* Dashed, all four sides, square corners — the only dashed grammar on the
      site. "Boundary / provisional" is exactly what a caveat means, and it can
      no longer be mistaken for the checklist or quote cards above it. */
@@ -1836,20 +1840,23 @@
   border-radius: var(--radius-none);
   padding: var(--space-6);
 }
+/* Grey band version swaps to white — grey-on-grey washes out (same swap
+   rule the soft-block grids follow: a block must contrast its band). */
+.section--alternate .caveat { background: var(--color-surface); }
 .caveat__eyebrow {
   font-family: var(--font-body);
   font-size: var(--fs-label);
   font-weight: 500;
   letter-spacing: var(--ls-label);
   text-transform: uppercase;
-  color: var(--ochre-700);
+  color: var(--text-muted);
   margin-bottom: var(--space-2);
 }
 .caveat__title { margin-bottom: var(--space-3); }
 .caveat__body { font-size: var(--fs-body-sm); color: var(--text-secondary); max-width: 62ch; }
 .caveat__list { margin: var(--space-4) 0 0; padding: 0; list-style: none; display: grid; gap: var(--space-2); }
 .caveat__list li { display: flex; gap: var(--space-3); font-size: var(--fs-caption); color: var(--text-secondary); line-height: 1.6; }
-.caveat__list li::before { content: '—'; color: var(--ochre-600); flex: none; }
+.caveat__list li::before { content: '—'; color: var(--text-muted); flex: none; }
 
 /* ============================================================
    16. DownloadGate（第 5.15.4 节）

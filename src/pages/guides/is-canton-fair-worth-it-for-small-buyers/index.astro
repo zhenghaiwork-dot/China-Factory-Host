@@ -1,0 +1,349 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Section from '../../../components/Section.astro';
+import SectionHead from '../../../components/SectionHead.astro';
+import PhotoSlot from '../../../components/PhotoSlot.astro';
+import OnsitePhoto from '../../../components/OnsitePhoto.astro';
+import Checklist from '../../../components/Checklist.astro';
+import FAQ from '../../../components/FAQ.astro';
+import Caveat from '../../../components/Caveat.astro';
+import RelatedNav from '../../../components/RelatedNav.astro';
+import DownloadGate from '../../../components/DownloadGate.astro';
+import { waLink } from '../../../data/site.ts';
+
+const title = 'Is Canton Fair worth it for small buyers? A decision guide';
+const description =
+  'Is Canton Fair worth the trip for first-time and small buyers? What the fair is good at, where it does not fit, how it compares with Alibaba, 1688 and Yiwu, and how to make the trip pay for itself.';
+
+const wa = waLink('Hi, I am a small buyer and want to know whether Canton Fair is worth the trip for my product.');
+
+const goodAt = [
+  'Seeing many suppliers in a short time — products, materials and communication style compared across exhibitors without waiting days for replies.',
+  'Face-to-face discussion — technical details, custom requirements and tooling are easier to settle in person than by message.',
+  'Category discovery — if you do not yet know which suppliers or product types exist, a large fair shows you the whole range in a day.',
+  'Relationships — a supplier you have met in person is usually easier to work with than one you only know from a listing. Buyers say this often; it is an observation, not a guarantee.',
+];
+
+const notFit = [
+  'A very small first order. Exhibitors generally expect larger volumes than market vendors, and MOQs for custom products tend to be higher. Some will negotiate a sample order — do not count on it.',
+  'Simple, low-value products. For small commodities, accessories and mixed small goods, Yiwu is usually easier to buy from in small quantities.',
+  'A tight budget with no plan. A trip without a target product, a target price and a list of suppliers costs money without producing anything usable.',
+  'No way to verify what you saw. A booth is not proof of a factory. You still need the company checks and, for anything that matters, the floor.',
+];
+
+const channels = [
+  { k: 'Canton Fair', v: 'Best for new categories, custom and OEM conversations, and comparing many exhibitors in person. Limitation for small buyers: higher MOQs, real travel cost, and you still have to verify the company.' },
+  { k: 'Alibaba', v: 'Best for export-ready suppliers and comparing remotely. Limitation: a listing makes it hard to judge who the real supplier is behind the storefront.' },
+  { k: '1688', v: 'Best for domestic pricing and components. Limitation: mostly in Chinese and aimed at domestic buyers, so it usually needs an agent.' },
+  { k: 'Yiwu market', v: 'Best for small commodities, mixed small orders and same-day sample comparison. Limitation: many stalls are intermediaries, so quality is yours to check.' },
+];
+
+const fitTest = [
+  { k: 'Strong fit', v: 'You know your product, have a specification, and plan orders of a size a factory will take seriously.' },
+  { k: 'Strong fit', v: 'You want new suppliers for an existing product line you already understand.' },
+  { k: 'Strong fit', v: 'You need custom or OEM discussions with engineers, not just a price.' },
+  { k: 'Possible', v: 'You are researching a new category with no specification yet — treat it as a research trip, not a buying trip.' },
+  { k: 'Think twice', v: 'You plan a small first order of simple goods — Yiwu or online usually suits that better.' },
+  { k: 'Weak fit', v: 'You cannot spend time on verification and follow-up afterwards. Most of the value of the fair arrives after it, not at it.' },
+];
+
+const valueTest = [
+  'List the trip costs — travel, hotel, days away from work, samples.',
+  'Write down the order value you expect to place in the next 6 to 12 months.',
+  'Estimate the price or quality improvement you need to justify the trip.',
+  'If the trip costs a large share of your first order, test the product a cheaper way first.',
+];
+
+const smallOrder = [
+  'Ask whether they hold stock items, or a lower-MOQ version of the same product.',
+  'Start with a sample order and a small first batch, then increase once the quality is proven.',
+  'Compare Yiwu and online sources for the same product before you accept the first MOQ you are given.',
+  'Be careful with pooled orders. Combining with other buyers adds complexity around payment, logistics, quality control and IP — if you do it, put the agreement in writing first.',
+];
+
+const prepBefore = [
+  'Register early as an overseas buyer through the official channel.',
+  'Decide which phase matches your category, and only that phase.',
+  'Write a one-page brief: product, specification, target quantity, target price, market and certifications.',
+  'Pick 10 to 15 suppliers to meet. Not hundreds.',
+  'Prepare questions on MOQ, price at two other quantities, lead time, and who actually makes the product.',
+];
+
+const atFair = [
+  'Do not commit on the spot, however attractive the price looks.',
+  'Photograph the booth and the business card, and write down the legal company name.',
+  'Ask every supplier for the same quote format, or nothing is comparable.',
+  'Use a translation app if you need one — a misunderstanding about MOQ is expensive.',
+];
+
+const faqs = [
+  {
+    q: 'Is Canton Fair worth it for a first-time buyer?',
+    a: [
+      'It can be, if you arrive with a specific product, a target price and a list of suppliers to meet. Without that preparation the scale of the fair is overwhelming and the trip often produces nothing usable.',
+    ],
+  },
+  {
+    q: 'Is Canton Fair cheaper than Alibaba?',
+    a: [
+      'Not always. Some buyers report better prices or more room to negotiate at the fair; others find MOQs higher. The only reliable answer is to compare quotes for the same specification and the same trade terms.',
+    ],
+  },
+  {
+    q: 'Is registration for overseas buyers free?',
+    a: [
+      'According to the Canton Fair organisers, applying for, replacing or renewing the overseas buyer badge is free of charge. Confirm current requirements on the official website before you travel.',
+    ],
+  },
+  {
+    q: 'Can small buyers attend Canton Fair?',
+    a: [
+      'Yes, if they qualify as buyers under the official registration rules. Whether a supplier accepts a small order is that supplier’s decision, so ask about MOQ before you invest time in a conversation.',
+    ],
+  },
+  {
+    q: 'Is Yiwu better than Canton Fair for small orders?',
+    a: [
+      'For small commodities and mixed small orders, Yiwu is often easier, because many vendors sell in small quantities. Many Yiwu stalls are intermediaries though, so verify the source and the quality yourself.',
+    ],
+  },
+  {
+    q: 'Do I need to visit factories after Canton Fair?',
+    a: [
+      'For larger, custom or repeat orders, yes — it is the recommendation. A booth cannot show you the production process, the equipment or how quality is controlled.',
+    ],
+  },
+  {
+    q: 'What should I prepare before going?',
+    a: [
+      'A product specification, a target quantity and price, a short list of suppliers, a list of questions, and a plan for what you will do in the first 48 hours after the fair ends.',
+    ],
+  },
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  active=""
+  crumbs={[{ href: '/canton-fair/', label: 'Canton Fair' }]}
+  current="Is Canton Fair worth it for small buyers?"
+  article={{
+    title,
+    description,
+    datePublished: '2026-10-14',
+    dateModified: '2026-10-14',
+    section: 'Canton Fair Guide',
+  }}
+  cta={{
+    eyebrow: 'Next step',
+    title: 'Tell us the product and the budget.',
+    lead: 'Send us what you want to source, roughly how much and by when. We will say straight out whether Canton Fair, Yiwu or another route fits — including when the answer is that the trip is not worth it yet.',
+    primary: { label: 'Ask about my product', href: '/contact/' },
+    secondary: { label: 'Ask on WhatsApp', href: wa, external: true },
+  }}
+>
+  <section class="hero">
+    <div class="container">
+      <div class="split-7-5">
+        <div>
+          <p class="eyebrow">Guide</p>
+          <h1>Is Canton Fair worth the trip if you are a small or first-time buyer?</h1>
+          <p class="lead hero__lead">
+            It depends on what you buy and how much of it. The fair is strongest when you already
+            know your category, want to compare suppliers face to face and can order in quantities a
+            factory takes seriously. For a small, simple or first test order, Yiwu or online is often
+            the better first move — and the fair still works as a research trip if you prepare for
+            it.
+          </p>
+          <div class="btn-row">
+            <a class="btn btn--secondary" href="#checklist-download">Get the trip planning checklist</a>
+          </div>
+        </div>
+        <div class="hero__media">
+          <PhotoSlot name="GUIDE · IS IT WORTH THE TRIP" variant="media">
+            <OnsitePhoto id="09" />
+          </PhotoSlot>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Section tight>
+    <div class="container">
+      <SectionHead eyebrow="What it is for" title="What the fair is genuinely good at." />
+      <div class="grid grid--2">
+        <div>
+          <Checklist title="Four things the fair does well" plain items={goodAt} />
+        </div>
+        <div>
+          <Checklist title="And four places it does not fit" refusal items={notFit} />
+        </div>
+      </div>
+      <p class="u-mt-6">
+        Both lists are about the same fact: the fair is a filter, not a decision. It is very good at
+        showing you a lot quickly, and it cannot tell you who actually makes the product.
+      </p>
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container">
+      <SectionHead
+        eyebrow="The alternatives"
+        title="Canton Fair vs Alibaba vs 1688 vs Yiwu."
+        lead="A general comparison, not a rule. Individual suppliers vary, and the only real test is a quote for your own product at your own quantity."
+      />
+      <ul class="spec-list">
+        {channels.map((c) => (
+          <li>
+            <span class="spec-list__k">{c.k}</span><span class="spec-list__v">{c.v}</span>
+          </li>
+        ))}
+      </ul>
+      <p class="u-mt-6">
+        Two of those are places we work in rather than websites we link to:
+        <a href="/destinations/yiwu/">Yiwu</a> for commodities and small goods, and
+        <a href="/destinations/guangzhou-dongguan/">Guangzhou and Dongguan</a> for the private-label
+        and OEM conversations the fair is full of.
+      </p>
+    </div>
+  </Section>
+
+  <Section>
+    <div class="container container--md">
+      <SectionHead
+        eyebrow="Decide for yourself"
+        title="Six situations, and how each one lands."
+        lead="Read yours. If it lands on think twice, that is not a refusal of the fair — it is a suggestion to spend the money on a different first step."
+      />
+      <ul class="spec-list">
+        {fitTest.map((f) => (
+          <li>
+            <span class="spec-list__k">{f.k}</span><span class="spec-list__v">{f.v}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container container--md">
+      <SectionHead
+        eyebrow="The money"
+        title="What it costs, and whether it pays."
+        lead="According to the Canton Fair organisers, applying for, replacing or renewing the overseas buyer badge is free of charge. The badge is not the cost — the trip is."
+      />
+      <div class="prose stack">
+        <p>
+          Your real costs are flights, accommodation, local transport, translation help, samples and
+          the days away from work. Registration being free is exactly why people underestimate those.
+        </p>
+      </div>
+      <Checklist title="A four-line test before you book" numbered items={valueTest} />
+      <p class="u-mt-6">
+        Do not rely on anyone's claim that the fair is always cheaper or always more expensive —
+        including ours. Compare your own quotes, at your own specification and trade terms.
+      </p>
+    </div>
+  </Section>
+
+  <Section>
+    <div class="container container--md">
+      <SectionHead
+        eyebrow="Free download"
+        title="Take the trip planning checklist with you."
+        lead="The checks in this guide, in the order we run them on site."
+      />
+      <DownloadGate id="checklist-download" photo="CANTON-FAIR-TRIP-CHECKLIST" />
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container container--md">
+      <SectionHead eyebrow="How to make it pay" title="Before, during and after." />
+      <div class="prose stack">
+        <h3>Before you go</h3>
+        <ul>
+          {prepBefore.map((p) => <li>{p}</li>)}
+        </ul>
+
+        <h3>At the fair</h3>
+        <ul>
+          {atFair.map((a) => <li>{a}</li>)}
+        </ul>
+
+        <h3>After the fair — where the value actually is</h3>
+        <ol>
+          <li>Sort suppliers into continue, ask more and drop within 48 hours.</li>
+          <li>
+            Verify the companies you kept. The seven steps are in
+            <a href="/guides/verify-canton-fair-suppliers/">how to verify Canton Fair suppliers</a>.
+          </li>
+          <li>Order samples before you place anything large.</li>
+          <li>
+            Visit the top two or three. That route is set out in
+            <a href="/guides/canton-fair-to-factory-visits/">from Canton Fair to factory visits</a>,
+            and if you are still inside the fair the
+            <a href="/guides/visit-factories-between-canton-fair-phases/">switch-over days between
+            phases</a> can carry one or two of those visits.
+          </li>
+        </ol>
+      </div>
+    </div>
+  </Section>
+
+  <Section>
+    <div class="container container--md">
+      <SectionHead
+        eyebrow="If your order is small"
+        title="Four things to try before you rule the fair out."
+      />
+      <Checklist title="Options" plain items={smallOrder} />
+      <p class="u-mt-6">
+        The second one is the one small buyers skip: a sample order and a small first batch prove the
+        quality, and a proven first batch is what makes a supplier willing to discuss MOQ at all.
+      </p>
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container container--md">
+      <SectionHead eyebrow="Questions" title="Frequently asked questions." />
+      <FAQ items={faqs} />
+      <p class="u-mt-6">
+        The Yiwu comparison has a fuller version on the
+        <a href="/destinations/yiwu/">Yiwu destination page</a>, and the factory-visit question in the
+        FAQ above is answered step by step in
+        <a href="/guides/canton-fair-to-factory-visits/">from Canton Fair to factory visits</a>.
+      </p>
+    </div>
+  </Section>
+
+  <Section>
+    <div class="container container--md">
+      <Caveat
+        title="What this guide is and is not"
+        body="This is general information, not business or legal advice. Badge rules, registration requirements and phase dates belong to the organisers — check the official Canton Fair website before you travel or commit money. Whether a supplier accepts your order size is that supplier's decision, not ours."
+        items={[
+          'Confirm current badge requirements and phase dates on cantonfair.org.cn before booking anything.',
+          'One red flag is not proof of a problem. Ask for an explanation in writing and verify before you pay.',
+        ]}
+      />
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container">
+      <SectionHead eyebrow="Go deeper" title="Related pages." />
+      <RelatedNav
+        items={[
+          { k: 'Canton Fair', t: 'The fair itself — phases, dates, factory days', href: '/canton-fair/' },
+          { k: 'Guide', t: 'Verify Canton Fair suppliers — 7 steps', href: '/guides/verify-canton-fair-suppliers/' },
+          { k: 'Guide', t: 'From Canton Fair to factory visits — the 8-step route', href: '/guides/canton-fair-to-factory-visits/' },
+          { k: 'Region', t: 'Yiwu — the low-MOQ alternative', href: '/destinations/yiwu/' },
+        ]}
+      />
+    </div>
+  </Section>
+</BaseLayout>

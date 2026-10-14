@@ -27,6 +27,11 @@ Thumbs.db
 # Build / type artifacts
 *.tsbuildinfo
 
+# Local-only working notes. Deliberately NOT committed and NOT deployed:
+# a private backlog of documents the site promises but does not have yet.
+# Never un-ignore these to "share quickly" — copy the content out instead.
+docs/LOCAL-*.md
+
 # Audit & design-review scratch left in the repo ROOT by prior sessions.
 # Every helper file we dropped during the spacing-audit / photo-fill work is
 # _-prefixed; root-anchored (leading /) so nested source dirs are untouched.

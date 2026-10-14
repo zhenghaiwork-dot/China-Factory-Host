@@ -1,0 +1,168 @@
+---
+/* CalendarStrip — an exhibition schedule as one proportional strip.
+   Built for /guides/visit-factories-between-canton-fair-phases/ (visual
+   refactor, docs/visual-layout-refactor-guide.md §4.2): the dates used to
+   live in a spec-list, where a date range was visually identical to every
+   other key/value row on the page. Here the sequence, the duration and the
+   two switch-over windows ARE the shape of the component.
+
+   Facts stay page-local on purpose. The /canton-fair/ hub owns its own copy
+   of the same organiser dates; if these ever move to a shared data file,
+   update both call sites in the same commit so the two pages cannot drift.
+
+   a11y: the strip is an <ol> (the segments have an order); every date range
+   is a <time datetime="…"> (ISO 8601 interval); gap vs phase is carried by
+   the visible label text as well as the colour, never colour alone; below
+   1024px the segments stack vertically — the full schedule stays readable
+   with no script and no horizontal scrolling. */
+export interface CalSegment {
+  id: string;
+  kind: 'phase' | 'gap';
+  name: string;
+  /** Visible date range, e.g. "15–19 Oct". Year lives in the meta row. */
+  dates: string;
+  /** ISO 8601 interval, e.g. "2026-10-15/2026-10-19". */
+  iso: string;
+  /** Day count — drives the desktop column width, so duration stays honest. */
+  days: number;
+  /** Status line under the dates ("Exhibition open" / "Switch-over …"). */
+  note: string;
+}
+interface Props {
+  year: string;
+  /** Shown in the meta row, as plain text — the site references the
+      organiser's domain as text everywhere, never as a link. */
+  meta: string;
+  segments: CalSegment[];
+  footnotes?: string[];
+}
+const { year, meta, segments, footnotes = [] } = Astro.props;
+---
+<div class="calstrip">
+  <div class="calstrip__meta">
+    <p class="calstrip__year">{year}</p>
+    <p class="calstrip__meta-note">{meta}</p>
+  </div>
+  <ol class="calstrip__bar clean">
+    {
+      segments.map((s) => (
+        <li class:list={['calstrip__seg', `calstrip__seg--${s.kind}`]} style={`--days:${s.days}`}>
+          <p class="calstrip__name">{s.name}</p>
+          <p class="calstrip__dates">
+            <time datetime={s.iso}>{s.dates}</time>
+          </p>
+          <p class="calstrip__note">{s.note}</p>
+        </li>
+      ))
+    }
+  </ol>
+  {
+    footnotes.length > 0 && (
+      <ul class="calstrip__notes clean">
+        {footnotes.map((f) => (
+          <li>{f}</li>
+        ))}
+      </ul>
+    )
+  }
+</div>
+
+<style>
+  .calstrip__meta {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--space-1) var(--space-4);
+    margin: 0 0 var(--space-3);
+  }
+  .calstrip__year {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: var(--fs-label);
+    font-weight: 500;
+    letter-spacing: var(--ls-label);
+    text-transform: uppercase;
+    color: var(--text-primary);
+  }
+  .calstrip__meta-note {
+    margin: 0;
+    font-size: var(--fs-caption);
+    color: var(--text-muted);
+  }
+  /* Mobile first: five stacked segments, order preserved, nothing squeezed. */
+  .calstrip__bar {
+    display: grid;
+    gap: var(--space-2);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .calstrip__seg {
+    padding: var(--space-3) var(--space-4);
+    border-radius: var(--radius-md);
+    background: var(--surface-sunken);
+    border: 1px solid var(--ink-100);
+  }
+  /* The two switch-over windows are the point of the page: brand-coloured
+     edge and tint, everything else stays neutral. Red carries meaning here,
+     it is not spread over every date. */
+  .calstrip__seg--gap {
+    background: var(--accent-100);
+    border-color: var(--accent-200);
+  }
+  .calstrip__name {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: var(--fs-label);
+    font-weight: 500;
+    letter-spacing: var(--ls-label);
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  .calstrip__seg--gap .calstrip__name {
+    color: var(--accent-600);
+    font-weight: var(--fw-semibold);
+  }
+  .calstrip__dates {
+    margin: 2px 0 0;
+    font-family: var(--font-display);
+    font-size: var(--fs-body-sm);
+    font-weight: var(--fw-semibold);
+    color: var(--text-primary);
+  }
+  .calstrip__note {
+    margin: 0;
+    font-size: var(--fs-caption);
+    color: var(--text-secondary);
+  }
+  .calstrip__notes {
+    margin: var(--space-4) 0 0;
+    padding: var(--space-3) 0 0;
+    border-top: 1px solid var(--ink-100);
+    list-style: none;
+    display: grid;
+    gap: var(--space-2);
+    font-size: var(--fs-caption);
+    color: var(--text-secondary);
+  }
+  /* Desktop: one horizontal strip, column width proportional to the number
+     of days (flex-grow: var(--days)) — a five-day phase is visibly wider
+     than a three-day gap, and the two windows sit inside the fair, not
+     after it. */
+  @media (min-width: 1024px) {
+    .calstrip__bar {
+      display: flex;
+      gap: var(--space-2);
+      align-items: stretch;
+    }
+    .calstrip__seg {
+      flex: 1 1 0;
+      flex-grow: var(--days);
+      min-width: 0;
+    }
+    .calstrip__notes {
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-2) var(--space-8);
+    }
+  }
+</style>

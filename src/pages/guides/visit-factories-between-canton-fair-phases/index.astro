@@ -5,6 +5,10 @@ import SectionHead from '../../../components/SectionHead.astro';
 import PhotoSlot from '../../../components/PhotoSlot.astro';
 import OnsitePhoto from '../../../components/OnsitePhoto.astro';
 import Checklist from '../../../components/Checklist.astro';
+import Timeline from '../../../components/Timeline.astro';
+import ComparisonTable from '../../../components/ComparisonTable.astro';
+import CalendarStrip from '../../../components/CalendarStrip.astro';
+import ReadinessList from '../../../components/ReadinessList.astro';
 import FAQ from '../../../components/FAQ.astro';
 import Caveat from '../../../components/Caveat.astro';
 import RelatedNav from '../../../components/RelatedNav.astro';
@@ -17,31 +21,105 @@ const description =
 
 const wa = waLink('Hi, I am at Canton Fair and want to use the days between phases for factory visits.');
 
-/* Phase themes and dates are the organiser's, and they match what the
-   /canton-fair/ hub publishes — the two pages must never disagree. */
-const phases = [
+/* ── The organiser's schedule, as structured date records ───────────────────
+   Same facts as the /canton-fair/ hub publishes — the two pages must never
+   disagree, so any date change happens in both files in one commit. Phase
+   themes stay verbatim below in `phaseThemes`. */
+const schedule = [
+  { id: 'p1', kind: 'phase', name: 'Phase 1', dates: '15–19 Oct', iso: '2026-10-15/2026-10-19', days: 5, note: 'Exhibition open' },
+  { id: 'g1', kind: 'gap', name: 'Gap 1', dates: '20–22 Oct', iso: '2026-10-20/2026-10-22', days: 3, note: 'Switch-over — halls closed' },
+  { id: 'p2', kind: 'phase', name: 'Phase 2', dates: '23–27 Oct', iso: '2026-10-23/2026-10-27', days: 5, note: 'Exhibition open' },
+  { id: 'g2', kind: 'gap', name: 'Gap 2', dates: '28–30 Oct', iso: '2026-10-28/2026-10-30', days: 3, note: 'Switch-over — halls closed' },
+  { id: 'p3', kind: 'phase', name: 'Phase 3', dates: '31 Oct–4 Nov', iso: '2026-10-31/2026-11-04', days: 5, note: 'Exhibition open' },
+];
+
+const scheduleFootnotes = [
+  'Both windows are three days, with the halls closed for switch-over — the suppliers you met are off booth duty. Gap 2 is the quieter, last one: after Phase 3 the fair simply ends.',
+  'After 4 November there is no deadline pulling you back to Pazhou. A multi-province trip becomes possible then — not inside the gaps.',
+];
+
+const phaseThemes = [
   { k: 'Phase 1 · 15–19 October', v: 'Advanced manufacturing — appliances and consumer electronics, machinery, vehicles and parts, lighting, hardware and tools.' },
   { k: 'Phase 2 · 23–27 October', v: 'Quality home life — ceramics, kitchenware, household goods, gifts and festival items, building materials, furniture.' },
   { k: 'Phase 3 · 31 October – 4 November', v: 'Better living — toys, apparel, textiles and fabrics, shoes and bags, home textiles, stationery, food, sports and leisure.' },
 ];
 
-const gaps = [
-  { k: 'Gap 1 · 20–22 October 2026', v: 'Three days between Phase 1 and Phase 2. The halls are closed for switch-over, so the suppliers you met are off booth duty.' },
-  { k: 'Gap 2 · 28–30 October 2026', v: 'Three days between Phase 2 and Phase 3. Same window, quieter roads, and the last one — after Phase 3 the fair simply ends.' },
-  { k: 'After 4 November', v: 'No deadline pulling you back to Pazhou. This is when a multi-province trip becomes possible, not the three-day gaps.' },
+/* Four conditions, regrouped from the old `decide` rows: the question, the
+   action that answers it, and the fact behind it. No sentence was invented —
+   the originals were only split at their natural joints. */
+const readiness = [
+  {
+    q: 'Is the supplier still available?',
+    action: 'Ask directly: "Will your team be at the factory on 21 October?" Do not assume.',
+    note: 'Exhibitors differ by phase. A supplier you met in Phase 1 may have gone home, or may still be at the venue for a few days.',
+  },
+  {
+    q: 'Has the factory confirmed in writing?',
+    action: 'Exact address, date and start time, the host’s name, and which areas you may see — in writing.',
+    note: 'Without a written confirmation a day can disappear.',
+  },
+  {
+    q: 'Where is the factory?',
+    action: 'Check the city on the licence and the quotation, then check real travel times including the station and the last kilometre.',
+    note: 'Not necessarily in Guangzhou. A factory that looks close on a map can cost half a day in transfers.',
+  },
+  {
+    q: 'What do you need from the visit?',
+    action: 'State one purpose per factory — verify production, discuss a custom product, inspect a sample, or negotiate.',
+    note: 'A visit with a stated purpose is shorter and returns more.',
+  },
 ];
 
-const decide = [
-  { k: 'Is the supplier still available?', v: 'Exhibitors differ by phase. A supplier you met in Phase 1 may have gone home, or may still be at the venue for a few days. Ask directly: "Will your team be at the factory on 21 October?" Do not assume.' },
-  { k: 'Has the factory confirmed in writing?', v: 'Exact address, date and start time, the host\'s name, and which areas you may see. Without a written confirmation a day can disappear.' },
-  { k: 'Where is the factory?', v: 'Not necessarily in Guangzhou. Check the city on the licence and the quotation, then check real travel times including the station and the last kilometre. A factory that looks close on a map can cost half a day in transfers.' },
-  { k: 'What do you need from the visit?', v: 'One purpose per factory — verify production, discuss a custom product, inspect a sample, or negotiate. A visit with a stated purpose is shorter and returns more.' },
-];
+/* The three ways to use a gap, regrouped from `threeWays` into comparison
+   rows. Stay local and one-cluster are not mutually exclusive — see the
+   note under the table. */
+const compare = {
+  columns: [
+    { name: 'Stay local', sub: 'In or near Guangzhou — the outer districts, Foshan and Dongguan are all within reach.' },
+    { name: 'One cluster, several factories', sub: 'Go to one production region and visit two or three suppliers there.' },
+    { name: 'Verify remotely', sub: 'Use video calls instead of travelling.' },
+  ],
+  rows: [
+    {
+      label: 'Best for',
+      values: [
+        'Suppliers already in the same area, and limited time.',
+        'One product category sourced from one area.',
+        'Buyers who cannot spare the days, or whose factories are a long way from Guangzhou.',
+      ],
+    },
+    {
+      label: 'Watch out for',
+      values: [
+        'Assuming a supplier is local when the licence says another city.',
+        'A cluster trip only works with confirmed appointments and a hard daily limit.',
+        'A video is weaker evidence than a visit — use it to narrow the list, not to close it.',
+      ],
+    },
+  ],
+};
 
-const threeWays = [
-  { k: 'Stay local', v: 'Visit factories in or near Guangzhou — the outer districts, Foshan and Dongguan are all within reach. Best for: suppliers already in the same area and limited time. Watch out for: assuming a supplier is local when the licence says another city.' },
-  { k: 'One cluster, several factories', v: 'Go to one production region and visit two or three suppliers there. Best for: one product category sourced from one area. Watch out for: a cluster trip only works with confirmed appointments and a hard daily limit.' },
-  { k: 'Verify remotely', v: 'Use video calls instead of travelling. Best for: buyers who cannot spare the days, or whose factories are a long way from Guangzhou. Watch out for: a video is weaker evidence than a visit — use it to narrow the list, not to close it.' },
+/* Three-day example plan — same three days the old prose blocks described,
+   now as the itinerary structure they always were. */
+const threeDay = [
+  {
+    day: 'DAY 1',
+    time: 'SORT & VERIFY',
+    title: 'Cards, records, written requests',
+    desc: 'Sort the cards into continue, ask more and drop. Check the company records of the shortlist, then send written visit requests asking for confirmation of the address, the time and the host.',
+  },
+  {
+    day: 'DAY 2',
+    time: 'ONE CLUSTER',
+    title: 'Two or three factories in one area',
+    desc: 'Start early. Bring your specification and the supplier’s sample or quotation, use the same checklist at every factory, and write up the notes the same evening. Two visits in a day is the useful number — the second conversation is sharper because the first one told you what to ask.',
+  },
+  {
+    day: 'DAY 3',
+    time: 'FOLLOW UP',
+    title: 'Written summaries, or hand back',
+    desc: 'Send each supplier a written summary of what was agreed and what is still open, request samples, then either return to Guangzhou for the next phase or carry on to your next destination.',
+  },
 ];
 
 const notWorth = [
@@ -54,7 +132,7 @@ const notWorth = [
 
 const prep = [
   'Your specification, drawings or reference samples.',
-  'The supplier\'s quotation and what they told you at the booth.',
+  'The supplier’s quotation and what they told you at the booth.',
   'A written list of questions.',
   'Your target quantity, delivery date and destination market.',
   'A way to record notes and photos — with permission.',
@@ -146,78 +224,111 @@ const faqs = [
     </div>
   </section>
 
+  {/* ── The schedule, as a schedule ─────────────────────────────────────────
+      The old version showed three phase rows and three gap rows as two
+      spec-lists — six key/value rows in the same visual grammar as every
+      other list on the page. A schedule is a sequence with durations, so it
+      is now one proportional strip: five segments, phases neutral, the two
+      switch-over windows carrying the brand colour because they are the
+      entire subject of the page. */}
   <Section tight>
     <div class="container">
       <SectionHead
-        eyebrow="The 140th session"
+        eyebrow="The 140th session · 2026"
         title="Three phases, and the two gaps between them."
-        lead="Dates and phase themes belong to the organiser — confirm the current schedule on cantonfair.org.cn before you book anything."
       />
-      <ul class="spec-list">
-        {phases.map((p) => (
-          <li>
-            <span class="spec-list__k">{p.k}</span><span class="spec-list__v">{p.v}</span>
-          </li>
-        ))}
-      </ul>
-      <p class="u-mt-6">What matters for planning is not the phases but the days between them:</p>
-      <ul class="spec-list clean">
-        {gaps.map((g) => (
-          <li>
-            <span class="spec-list__k">{g.k}</span><span class="spec-list__v">{g.v}</span>
-          </li>
-        ))}
-      </ul>
+      <CalendarStrip
+        year="2026"
+        meta="Organiser's schedule — confirm current dates on cantonfair.org.cn"
+        segments={schedule}
+        footnotes={scheduleFootnotes}
+      />
       <p class="u-mt-6">
         Because each phase covers different categories, the gaps mostly help buyers who attend more
         than one phase, or who finish a phase and want to act on what they found before the next one
         starts.
       </p>
+      <details class="phase-detail">
+        <summary>What each phase covers</summary>
+        <dl class="phase-detail__list">
+          {phaseThemes.map((p) => (
+            <div>
+              <dt>{p.k}</dt>
+              <dd>{p.v}</dd>
+            </div>
+          ))}
+        </dl>
+      </details>
     </div>
   </Section>
 
+  {/* ── Four conditions, as a check ────────────────────────────────────────
+      Was: a lead paragraph, four long key/value rows, and a closing paragraph
+      that repeated the lead. Now: question → action → fact, scannable in a
+      2×2 grid, with one closing reminder. The full "what to ask for in
+      writing" detail stays where it always lived — step three of the
+      from-booth-to-visit guide. */}
   <Section alternate>
     <div class="container container--md">
-      <SectionHead
-        eyebrow="Is it realistic"
-        title="Four things decide whether the gap works."
-        lead="None of these is a reason to skip the visit. They are the four that turn a three-day window into a wasted trip when they are ignored."
-      />
-      <ul class="spec-list">
-        {decide.map((d) => (
-          <li>
-            <span class="spec-list__k">{d.k}</span><span class="spec-list__v">{d.v}</span>
-          </li>
-        ))}
-      </ul>
+      <SectionHead title="Four things decide whether the gap works." />
+      <ReadinessList items={readiness} />
       <p class="u-mt-6">
-        The full list of what to ask for in writing — address, host, which areas you may see, whether
-        photos are allowed — is step three of{' '}
+        Without a written date and a real address, confirm first and route second — the full list of
+        what to ask for in writing is step three of{' '}
         <a href="/guides/canton-fair-to-factory-visits/">from Canton Fair to factory visits</a>.
       </p>
     </div>
   </Section>
 
+  {/* ── Three options, as a comparison ─────────────────────────────────────
+      Was: three more key/value rows. "Best for" and "Watch out for" are the
+      same two questions asked of each option — that is a table, and the
+      table's own mobile rendering keeps the field order aligned. */}
   <Section>
-    <div class="container container--md">
-      <SectionHead eyebrow="Three options" title="How buyers actually use the gap." />
-      <ul class="spec-list">
-        {threeWays.map((w) => (
-          <li>
-            <span class="spec-list__k">{w.k}</span><span class="spec-list__v">{w.v}</span>
-          </li>
-        ))}
-      </ul>
+    <div class="container">
+      <SectionHead title="How buyers actually use the gap." />
+      <ComparisonTable
+        caption="Three ways to use the switch-over gap: stay local, one cluster with several factories, or verify remotely."
+        labelCol="Compare"
+        columns={compare.columns}
+        rows={compare.rows}
+      />
       <p class="u-mt-6">
-        For most buyers the best use of a gap is not a long trip. It is rest, sorting the notes while
-        they still mean something, running the company checks, and one or two factory visits that were
-        confirmed before the halls closed. The five checks behind that are in{' '}
-        <a href="/about/how-we-vet-factories/">how we vet factories</a>.
+        Stay local and one-cluster are not either/or — a local visit on one day and a cluster trip on
+        the next is a normal shape. For most buyers the best use of a gap is not a long trip anyway:
+        it is rest, sorting the notes while they still mean something, running the company checks,
+        and one or two factory visits that were confirmed before the halls closed. The five checks
+        behind that are in <a href="/about/how-we-vet-factories/">how we vet factories</a>.
       </p>
     </div>
   </Section>
 
+  {/* ── The example plan, as an itinerary ──────────────────────────────────
+      Was: three H3 + paragraph blocks in prose styling — a day-by-day plan
+      wearing article clothes. Timeline renders days; it stays an example,
+      stated in the heading, and no day gets a stock factory photo it does
+      not belong to. */}
   <Section alternate>
+    <div class="container">
+      <SectionHead title="A three-day plan, as an example." />
+      <div class="gap-plan">
+        <Timeline items={threeDay} />
+      </div>
+      <p class="u-mt-6">
+        Day 1’s records-and-requests routine is the seven-step walkthrough in{' '}
+        <a href="/guides/verify-canton-fair-suppliers/">how to verify Canton Fair suppliers</a>. If
+        your suppliers sit in Zhejiang or elsewhere in the Yangtze River Delta, a proper trip
+        usually takes longer than three days — which town to go to is decided by the product, and
+        that town-by-town map is in{' '}
+        <a href="/destinations/zhejiang/canton-fair-to-zhejiang-factory-visits/">Canton Fair to
+        Zhejiang</a>. The clusters around the fair itself are mapped in{' '}
+        <a href="/destinations/guangzhou-dongguan/">Guangzhou and Dongguan</a>, and the sequencing
+        is what <a href="/services/factory-visit-planning/">visit planning</a> handles.
+      </p>
+    </div>
+  </Section>
+
+  <Section>
     <div class="container container--md">
       <SectionHead
         eyebrow="Free download"
@@ -231,70 +342,28 @@ const faqs = [
     </div>
   </Section>
 
-  <Section>
+  {/* ── Two compact lists, deliberately not twins ───────────────────────────
+      "When to wait" is a decision (refusal styling), "what to bring" is a
+      packing list (plain). Different jobs, different look, one section: the
+      old version gave each its own H2 + lead + full-width band. */}
+  <Section alternate>
     <div class="container container--md">
-      <SectionHead
-        eyebrow="Illustrative only"
-        title="A three-day plan, as an example."
-        lead="This is a shape, not an itinerary we can promise. Real plans depend on confirmed appointments and on where your suppliers actually are."
-      />
-      <div class="prose stack">
-        <h3>Day 1 — Sort and verify</h3>
-        <p>
-          Sort the cards into continue, ask more and drop. Check the company records of the
-          shortlist, then send written visit requests asking for confirmation of the address, the time
-          and the host. The seven-step walkthrough is in{' '}
-          <a href="/guides/verify-canton-fair-suppliers/">how to verify Canton Fair suppliers</a>.
-        </p>
-
-        <h3>Day 2 — Visit two or three factories in one area</h3>
-        <p>
-          Start early. Bring your specification and the supplier's sample or quotation, use the same
-          checklist at every factory, and write up the notes the same evening. Two visits in a day is
-          the useful number — the second conversation is sharper because the first one told you what
-          to ask.
-        </p>
-
-        <h3>Day 3 — Follow up, or hand back</h3>
-        <p>
-          Send each supplier a written summary of what was agreed and what is still open, request
-          samples, then either return to Guangzhou for the next phase or carry on to your next
-          destination.
-        </p>
-        <p>
-          If your suppliers sit in Zhejiang or elsewhere in the Yangtze River Delta, a proper trip
-          usually takes longer than three days — which town to go to is decided by the product, and
-          that town-by-town map is in{' '}
-          <a href="/destinations/zhejiang/canton-fair-to-zhejiang-factory-visits/">Canton Fair to
-          Zhejiang</a>. The clusters around the fair itself are mapped in{' '}
-          <a href="/destinations/guangzhou-dongguan/">Guangzhou and Dongguan</a>, and the sequencing
-          is what <a href="/services/factory-visit-planning/">visit planning</a> handles.
-        </p>
+      <div class="twocol">
+        <div>
+          <SectionHead title="When to wait instead." />
+          <Checklist title="Wait instead when" refusal items={notWorth} />
+        </div>
+        <div>
+          <SectionHead title="What to bring." />
+          <Checklist title="Six things" plain items={prep} />
+        </div>
       </div>
     </div>
   </Section>
 
-  <Section alternate>
-    <div class="container container--md">
-      <SectionHead
-        eyebrow="When to wait"
-        title="Five signs the gap is the wrong window."
-        lead="In these cases waiting until the fair is over usually buys a better visit: more time, a shorter shortlist, and suppliers who are not half-distracted by their own booth."
-      />
-      <Checklist title="Wait instead when" refusal items={notWorth} />
-    </div>
-  </Section>
-
   <Section>
     <div class="container container--md">
-      <SectionHead eyebrow="What to bring" title="The list, before you leave the hotel." />
-      <Checklist title="Six things" plain items={prep} />
-    </div>
-  </Section>
-
-  <Section alternate>
-    <div class="container container--md">
-      <SectionHead eyebrow="Questions" title="Frequently asked questions." />
+      <SectionHead title="Frequently asked questions." />
       <FAQ items={faqs} />
       <p class="u-mt-6">
         Two of those answers have a longer version elsewhere: the visit-versus-samples trade-off is
@@ -305,7 +374,7 @@ const faqs = [
     </div>
   </Section>
 
-  <Section>
+  <Section alternate>
     <div class="container container--md">
       <Caveat
         title="What this guide can and cannot promise"
@@ -322,9 +391,9 @@ const faqs = [
     </div>
   </Section>
 
-  <Section alternate>
+  <Section>
     <div class="container">
-      <SectionHead eyebrow="Go deeper" title="Related pages." />
+      <SectionHead title="Related pages." />
       <RelatedNav
         items={[
           { k: 'Canton Fair', t: 'The fair itself — phases, switch-over days, factory days', href: '/canton-fair/' },
@@ -336,3 +405,58 @@ const faqs = [
     </div>
   </Section>
 </BaseLayout>
+
+<style>
+  /* Phase themes: supplementary to the strip, collapsed by default — the
+     key dates and both windows stay visible without opening anything. */
+  .phase-detail {
+    margin-top: var(--space-6);
+    border-top: 1px solid var(--ink-100);
+    padding-top: var(--space-4);
+  }
+  .phase-detail summary {
+    cursor: pointer;
+    font-family: var(--font-body);
+    font-size: var(--fs-label);
+    font-weight: 500;
+    letter-spacing: var(--ls-label);
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  .phase-detail summary:hover { color: var(--text-primary); }
+  .phase-detail[open] summary { margin-bottom: var(--space-4); }
+  .phase-detail__list {
+    margin: 0;
+    display: grid;
+    gap: var(--space-3);
+  }
+  .phase-detail__list dt {
+    font-family: var(--font-body);
+    font-size: var(--fs-label);
+    font-weight: 500;
+    letter-spacing: var(--ls-label);
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  .phase-detail__list dd {
+    margin: 2px 0 0;
+    font-size: var(--fs-body-sm);
+    color: var(--text-secondary);
+  }
+  @media (min-width: 768px) {
+    .phase-detail__list div { display: grid; grid-template-columns: 220px 1fr; gap: var(--space-4); align-items: baseline; }
+  }
+
+  /* Timeline ships with a five-column desktop grid (its other call sites pass
+     five or six items). This plan has three days — three columns, via a page
+     scoped override so no other page's timeline changes. */
+  @media (min-width: 1024px) {
+    .gap-plan :global(.timeline) { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
+
+  /* The two compact lists share one band at desktop, stack on phones. */
+  .twocol { display: grid; gap: var(--space-8); }
+  @media (min-width: 1024px) {
+    .twocol { grid-template-columns: 1fr 1fr; gap: var(--space-10); }
+  }
+</style>

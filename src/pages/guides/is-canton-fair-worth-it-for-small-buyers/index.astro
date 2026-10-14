@@ -54,13 +54,6 @@ const valueTest = [
   'If the trip costs a large share of your first order, test the product a cheaper way first.',
 ];
 
-const smallOrder = [
-  'Ask whether they hold stock items, or a lower-MOQ version of the same product.',
-  'Start with a sample order and a small first batch, then increase once the quality is proven.',
-  'Compare Yiwu and online sources for the same product before you accept the first MOQ you are given.',
-  'Be careful with pooled orders. Combining with other buyers adds complexity around payment, logistics, quality control and IP — if you do it, put the agreement in writing first.',
-];
-
 const prepBefore = [
   'Register early as an overseas buyer through the official channel.',
   'Decide which phase matches your category, and only that phase.',
@@ -303,13 +296,21 @@ const faqs = [
     <div class="container container--md">
       <SectionHead
         eyebrow="If your order is small"
-        title="Four things to try before you rule the fair out."
+        title="Do not rule the fair out on quantity alone."
+        lead="A minimum is a commercial decision the supplier made, not a law. Whether it can be moved is a negotiation with eight specific levers — and it is its own guide."
       />
-      <Checklist title="Options" plain items={smallOrder} />
-      <p class="u-mt-6">
-        The second one is the one small buyers skip: a sample order and a small first batch prove the
-        quality, and a proven first batch is what makes a supplier willing to discuss MOQ at all.
-      </p>
+      <div class="prose stack">
+        <p>
+          Two things you can settle before you travel: ask whether a stock version of the product
+          exists, and price the same product through Yiwu or online so you know what the fair has to
+          beat. Both are quick, and both change the conversation.
+        </p>
+        <p>
+          Everything beyond that — why the minimum exists, the eight trades that lower it, what to say
+          at the booth, and when to test through another channel instead — is in
+          <a href="/guides/canton-fair-moq-for-small-buyers/">Canton Fair MOQ for small buyers</a>.
+        </p>
+      </div>
     </div>
   </Section>
 

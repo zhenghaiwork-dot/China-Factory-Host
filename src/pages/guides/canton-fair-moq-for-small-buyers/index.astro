@@ -1,0 +1,381 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Section from '../../../components/Section.astro';
+import SectionHead from '../../../components/SectionHead.astro';
+import PhotoSlot from '../../../components/PhotoSlot.astro';
+import OnsitePhoto from '../../../components/OnsitePhoto.astro';
+import Checklist from '../../../components/Checklist.astro';
+import FAQ from '../../../components/FAQ.astro';
+import Caveat from '../../../components/Caveat.astro';
+import RelatedNav from '../../../components/RelatedNav.astro';
+import DownloadGate from '../../../components/DownloadGate.astro';
+import { waLink } from '../../../data/site.ts';
+
+const title = 'Canton Fair MOQ: what small buyers can do when orders are too small';
+const description =
+  'Why MOQs exist, the three order types and how each affects the minimum, eight levers that lower a first order, what to say at the booth, and when to use a different channel instead.';
+
+const wa = waLink('Hi, the MOQ I was quoted at Canton Fair is too high for a first order.');
+
+const drivers = [
+  { k: 'Raw material minimums', v: 'Factories buy material in lots. An order smaller than the lot leaves them with leftover stock or a price premium.' },
+  { k: 'Tooling and setup', v: 'Molded, printed or custom products carry fixed costs that have to be spread across a run.' },
+  { k: 'Packaging minimums', v: 'Custom boxes and printing usually carry their own minimum, separate from the product.' },
+  { k: 'Line scheduling', v: 'A very small run can disrupt a production line for very little revenue. That is a real cost to them, not an excuse.' },
+];
+
+const orderTypes = [
+  { k: 'Stock item', v: 'The factory already holds the product. MOQ is often the lowest — sometimes a few units. This is where a first test belongs.' },
+  { k: 'Light customization', v: 'An existing product with your logo, colour or packaging. Moderate minimums.' },
+  { k: 'Full OEM or ODM', v: 'New tooling, custom materials, custom design. Highest minimums, because the setup cost has to be amortised.' },
+];
+
+const levers = [
+  'Offer a slightly higher unit price. Their worry is production efficiency, and a premium compensates for it.',
+  'Use standard materials and colours — ask what they have in the warehouse right now.',
+  'Use existing packaging. Custom printing and boxes carry their own minimums.',
+  'Use an existing mold. Their current tooling with your material or colour avoids commissioning new tooling.',
+  'Reduce variants. Fewer sizes, colours or SKUs means less setup complexity.',
+  'Combine SKUs. Several SKUs can sometimes share one minimum — four SKUs at a lower quantity each, in one shipment.',
+  'Ask for a paid trial order or pilot batch, framed as a qualification run with a plan to scale once quality is confirmed.',
+  'Offer a repeat-order plan. A credible forecast, a phased schedule or a framework agreement for several orders.',
+];
+
+const sayThis = [
+  'What is the MOQ if we use your standard configuration?',
+  'If we reduce the first order, how much does the unit price increase?',
+  'Can we start with a paid trial order?',
+  'Can the price be adjusted once we reach an annual volume?',
+  'Do you have a stock version of this product?',
+  'Is the MOQ per SKU, or per order?',
+];
+
+const tradeoffs = [
+  { k: 'A lower MOQ', v: 'Usually a higher unit price.' },
+  { k: 'Custom packaging on a small order', v: 'Higher packaging cost per unit, or a separate minimum for the packaging itself.' },
+  { k: 'A new design on a small order', v: 'Tooling paid up front, or a higher unit price to absorb it.' },
+  { k: 'Faster delivery', v: 'A higher price, or fewer options.' },
+  { k: 'Many variants', v: 'Higher setup costs and a higher overall quantity.' },
+];
+
+const pooled = [
+  'Who signs the contract, and who pays?',
+  'Who owns the goods, and who runs quality control and shipping?',
+  'What happens if one buyer drops out halfway through?',
+  'How do you protect your design or brand from the other buyers in the pool?',
+];
+
+const otherChannel = [
+  'Your first order is far below what a factory normally accepts, and no lever moves it.',
+  'You are buying simple small goods, where a market such as Yiwu supplies small quantities as a matter of course.',
+  'You need a quick test and cannot support tooling costs at all.',
+];
+
+const faqs = [
+  {
+    q: 'Is MOQ negotiable at Canton Fair?',
+    a: [
+      'Often, yes — but it is a trade, not a discount. Factories commonly lower a first-order minimum in exchange for a higher unit price, a simpler specification, or a reorder plan they believe.',
+    ],
+  },
+  {
+    q: 'What is a reasonable MOQ for a small buyer?',
+    a: [
+      'There is no single number; it depends entirely on the product. Stock items can have very low minimums, while custom moulded or printed products usually need larger runs. Always ask for the MOQ for your exact specification.',
+    ],
+  },
+  {
+    q: 'Can I order a sample before committing to the MOQ?',
+    a: [
+      'Many suppliers will make samples for a fee, and some will accept a small pilot batch. Ask about the sample cost, the lead time, and whether the sample fee is credited against a later order.',
+    ],
+  },
+  {
+    q: 'Why does a custom product need a higher MOQ?',
+    a: [
+      'Tooling, custom materials and packaging carry fixed costs that have to be spread across the production run. The smaller the run, the more each unit has to carry.',
+    ],
+  },
+  {
+    q: 'Is a trading company a good way to get a lower MOQ?',
+    a: [
+      'It can be, particularly for testing. Trading companies buy from several factories and may hold inventory, so their minimums are often lower and their unit price a little higher. Verify who they are and find out who actually makes the product.',
+    ],
+  },
+  {
+    q: 'Should I join with other buyers to reach the MOQ?',
+    a: [
+      'It is risky. Payment, logistics, quality control and intellectual property all get more complicated. If you do it, use a written agreement with one clearly responsible party.',
+    ],
+  },
+  {
+    q: 'What if the supplier will not lower the MOQ at all?',
+    a: [
+      'Ask whether a stock version exists, take the same question to other suppliers at the fair, or run your first test through a different channel and come back to this supplier once you have volume.',
+    ],
+  },
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  active=""
+  crumbs={[{ href: '/canton-fair/', label: 'Canton Fair' }]}
+  current="MOQ for small buyers"
+  article={{
+    title,
+    description,
+    datePublished: '2026-10-14',
+    dateModified: '2026-10-14',
+    section: 'Canton Fair Guide',
+  }}
+  cta={{
+    eyebrow: 'Next step',
+    title: 'Send us the product and the quantity.',
+    lead: 'Tell us what you want to make, your target first-order quantity and your market. We will say which suppliers are likely to accept it, check who they are, and tell you when the honest answer is that the quantity is too small.',
+    primary: { label: 'Ask about my quantity', href: '/contact/' },
+    secondary: { label: 'Ask on WhatsApp', href: wa, external: true },
+  }}
+>
+  <section class="hero">
+    <div class="container">
+      <div class="split-7-5">
+        <div>
+          <p class="eyebrow">Guide</p>
+          <h1>Canton Fair MOQ: what to do when the minimum is bigger than your first order.</h1>
+          <p class="lead hero__lead">
+            A minimum order quantity exists to cover setup, materials and line time. It is often
+            negotiable, but rarely for free. Find out which of those three is driving it, then offer a
+            trade: a higher unit price, standard materials or packaging, fewer variants, a paid trial
+            run, or a reorder plan you can actually stand behind. If none of that lands, test through
+            a different channel first.
+          </p>
+          <div class="btn-row">
+            <a class="btn btn--secondary" href="#checklist-download">Get the MOQ question sheet</a>
+          </div>
+        </div>
+        <div class="hero__media">
+          <PhotoSlot name="GUIDE · THE MINIMUM" variant="media">
+            <OnsitePhoto id="05" />
+          </PhotoSlot>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Section tight>
+    <div class="container container--md">
+      <SectionHead
+        eyebrow="Why the wall exists"
+        title="MOQs are not arbitrary."
+        lead="Meeting the minimum is the obstacle small importers hit most often at the fair, and it helps to know what the number is actually protecting."
+      />
+      <ul class="spec-list">
+        {drivers.map((d) => (
+          <li>
+            <span class="spec-list__k">{d.k}</span><span class="spec-list__v">{d.v}</span>
+          </li>
+        ))}
+      </ul>
+      <p class="u-mt-6">
+        Minimums vary enormously by product — dozens of units for simple goods, thousands for custom
+        items — and the more customisation a product needs, the higher the quantity usually is. Always
+        ask for the number attached to your exact specification, not to the product family.
+      </p>
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container container--md">
+      <SectionHead
+        eyebrow="Step 1"
+        title="Know which type of order you are asking for."
+        lead="The single biggest lever is decided before you speak to anyone: whether you are asking them to make something new."
+      />
+      <ul class="spec-list">
+        {orderTypes.map((o) => (
+          <li>
+            <span class="spec-list__k">{o.k}</span><span class="spec-list__v">{o.v}</span>
+          </li>
+        ))}
+      </ul>
+      <p class="u-mt-6">
+        If you are testing a market, start with stock or lightly customised items. Moving to a full
+        custom product is much easier after the first sales, because by then the conversation is about
+        volume rather than risk.
+      </p>
+    </div>
+  </Section>
+
+  <Section>
+    <div class="container container--md">
+      <SectionHead eyebrow="Step 2" title="Ask why the number is what it is." />
+      <div class="prose stack">
+        <p>Before you push it down, ask the supplier directly:</p>
+        <p class="lead">
+          Is this MOQ driven by material minimums, mold cost, packaging, or line scheduling?
+        </p>
+        <p>
+          The answer tells you which lever to pull. If it is packaging, standard packaging may fix it.
+          If it is material, a colour or fabric they already hold may fix it. If it is tooling, an
+          existing mold may fix it.
+        </p>
+        <p>
+          Also confirm what the number counts. Whether the MOQ is per order, per SKU, per colour or
+          per size changes everything — a quote of 1,000 units can mean four very different things.
+        </p>
+      </div>
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container container--md">
+      <SectionHead
+        eyebrow="Step 3"
+        title="Eight levers, in the order worth trying."
+        lead="None of these is free. Each one trades something you have for something they want."
+      />
+      <Checklist title="What to offer" numbered items={levers} />
+      <p class="u-mt-6">
+        One rule sits above the list: do not promise volumes you cannot deliver. A forecast you later
+        break costs you more than the MOQ did, because it costs you the supplier.
+      </p>
+    </div>
+  </Section>
+
+  <Section>
+    <div class="container container--md">
+      <SectionHead
+        eyebrow="At the booth"
+        title="Six questions, asked the same way every time."
+        lead="Present yourself first — your sales channel, your target market, your specification and your plan for reorders. Then ask."
+      />
+      <Checklist title="Ask these" plain items={sayThis} />
+      <p class="u-mt-6">
+        Ask every supplier the same questions, use the same specification in every conversation, and
+        record the answers in one table — otherwise the quotes are not comparable and the whole
+        exercise is wasted. The fields that make two quotes comparable are listed in
+        <a href="/guides/canton-fair-to-factory-visits/">from Canton Fair to factory visits</a>.
+      </p>
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container container--md">
+      <SectionHead eyebrow="Trade-offs" title="What each ask costs you." />
+      <ul class="spec-list clean">
+        {tradeoffs.map((t) => (
+          <li>
+            <span class="spec-list__k">{t.k}</span><span class="spec-list__v">{t.v}</span>
+          </li>
+        ))}
+      </ul>
+      <p class="u-mt-6">
+        Work out the full landed cost at your trial quantity and again at a larger one. A small order
+        at a higher unit price is often still the right decision — it caps your risk while you find
+        out whether the product sells at all.
+      </p>
+    </div>
+  </Section>
+
+  <Section>
+    <div class="container container--md">
+      <SectionHead
+        eyebrow="Free download"
+        title="Take the MOQ question sheet to the fair."
+        lead="The checks in this guide, in the order we run them on site."
+      />
+      <DownloadGate id="checklist-download" photo="MOQ-QUESTION-SHEET" />
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container container--md">
+      <SectionHead
+        eyebrow="Two workarounds"
+        title="Trading companies, and pooling with other buyers."
+        lead="Both get suggested at the fair. Both can work. Neither is free of consequences."
+      />
+      <div class="prose stack">
+        <p>
+          <strong>Trading companies</strong> often quote lower minimums, because they buy from several
+          factories and sometimes hold inventory. The unit price is usually a little higher. For a
+          first test that is a reasonable trade, and you can move to a factory for volume once demand
+          is proven — but know which one you are dealing with. The seven checks are in
+          <a href="/guides/verify-canton-fair-suppliers/">how to verify Canton Fair suppliers</a>, and
+          the signals that separate the two models are in
+          <a href="/guides/factory-vs-trading-company-china/">factory vs trading company</a>.
+        </p>
+        <p>
+          <strong>Pooling with other buyers</strong> works in theory and adds four problems in
+          practice:
+        </p>
+      </div>
+      <Checklist title="Where pooled orders go wrong" refusal items={pooled} />
+      <p class="u-mt-6">
+        If you still want to do it, put a written agreement in place first with one responsible party.
+        Most small buyers are better served by a lower-MOQ product or a lower-MOQ channel for the
+        first order.
+      </p>
+    </div>
+  </Section>
+
+  <Section>
+    <div class="container container--md">
+      <SectionHead
+        eyebrow="Use a different door"
+        title="When the fair is not the place to start."
+      />
+      <Checklist title="Signs" plain items={otherChannel} />
+      <p class="u-mt-6">
+        Channels combine, though — plenty of buyers use the fair for the main product line and a
+        market for smaller or mixed purchases in the same trip. Yiwu and the Zhejiang clusters are
+        mapped town by town in
+        <a href="/destinations/zhejiang/canton-fair-to-zhejiang-factory-visits/">Canton Fair to
+        Zhejiang</a>, and the wider decision — fair versus Yiwu versus online at your order size — is
+        in <a href="/guides/is-canton-fair-worth-it-for-small-buyers/">is Canton Fair worth it for
+        small buyers</a>.
+      </p>
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container container--md">
+      <SectionHead eyebrow="Questions" title="Frequently asked questions." />
+      <FAQ items={faqs} />
+      <p class="u-mt-6">
+        The supplier-behind-the-supplier question in the FAQ above is the whole of
+        <a href="/guides/verify-canton-fair-suppliers/">the verification guide</a>, and anything about
+        the fair itself is on the <a href="/canton-fair/">Canton Fair buyer guide</a>.
+      </p>
+    </div>
+  </Section>
+
+  <Section>
+    <div class="container container--md">
+      <Caveat
+        title="What this guide is and is not"
+        body="This is general information, not legal or financial advice. A minimum is a commercial decision the supplier makes, and no lever on this page guarantees they will move it. Put every agreement in writing, and take professional advice on contracts and payment terms."
+        items={[
+          'Never promise a volume you cannot deliver — a broken forecast costs more than a high MOQ.',
+          'Agree tooling ownership in writing before you pay for a mold, and confirm which model a certificate covers.',
+        ]}
+      />
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container">
+      <SectionHead eyebrow="Go deeper" title="Related pages." />
+      <RelatedNav
+        items={[
+          { k: 'Guide', t: 'Is Canton Fair worth it for small buyers?', href: '/guides/is-canton-fair-worth-it-for-small-buyers/' },
+          { k: 'Guide', t: 'Verify Canton Fair suppliers — 7 steps', href: '/guides/verify-canton-fair-suppliers/' },
+          { k: 'Guide', t: 'Factory vs trading company — the signals', href: '/guides/factory-vs-trading-company-china/' },
+          { k: 'Region', t: 'Canton Fair to Zhejiang — 15 clusters', href: '/destinations/zhejiang/canton-fair-to-zhejiang-factory-visits/' },
+        ]}
+      />
+    </div>
+  </Section>
+</BaseLayout>

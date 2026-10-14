@@ -86,7 +86,7 @@ const heroPick = pickPhoto(c.slotName);
   <div class="container container--md">
     <SectionHead
       eyebrow="Why this cluster"
-      title={`Why ${c.cityShort}, rather than somewhere bigger.`}
+      title={`Sourcing in ${c.cityShort}`}
     />
     <div class="prose stack">
       {c.why.map((p) => <p set:html={p} />)}
@@ -99,8 +99,8 @@ const heroPick = pickPhoto(c.slotName);
   <div class="container container--md">
     <SectionHead
       eyebrow="Categories & markets"
-      title="What is actually made here."
-      lead="Categories first, then where inside the cluster each one trades."
+      title="Products and supplier locations"
+      lead="Check where the relevant product is sold and where it is produced."
     />
     <ul class="spec-list clean spec-list--split">
       {

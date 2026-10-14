@@ -34,8 +34,8 @@ const heading = title ?? (compact ? 'Ask about this' : 'Tell us what you are try
 const intro =
   lead ??
   (compact
-    ? 'Four fields. We read every one and reply with a straight answer, including when we are not the right people for the job.'
-    : 'Five fields. We read every one and reply with a straight answer — including when we are not the right people for the job.');
+    ? 'Send your product, dates and the support you need.'
+    : 'Send your product, dates and supplier details if known.');
 
 /* Mail readiness can no longer be measured at build time. Since the Workers
    move the mail key is a runtime binding, not a build-time env var, so there
@@ -76,7 +76,7 @@ const intro =
         !compact && (
           <div class="field">
             <label class="field__label" for={`in-wa-${uid}`}>
-              WhatsApp <span class="u-secondary">(optional, fastest reply)</span>
+              WhatsApp <span class="u-secondary">(optional)</span>
             </label>
             {/* Not "+1 555 …": a US film-industry dummy number reads as "not
                 for you" to the European, Australian and SE-Asian visitors who

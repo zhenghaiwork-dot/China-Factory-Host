@@ -12,9 +12,8 @@ import VetLink from '../../components/VetLink.astro';
 import RelatedNav from '../../components/RelatedNav.astro';
 import { waLink, HOST_NAME } from '../../data/site.ts';
 
-const title = 'About — a small team on the ground in Zhejiang';
-const description =
-  'ChinaFactoryHost is hosted by a tight team in Zhejiang with a second footprint in the Pearl River Delta. Not a marketplace, not a sourcing agency, not a travel agency.';
+const title = "About Our Factory Visit Team in China";
+const description = "Local support for factory visits in China. Learn about our team, coverage, supplier checks and the services we coordinate.";
 
 const wa = waLink('Hi, I have a question about your team and how the trips work.');
 ---
@@ -38,10 +37,9 @@ const wa = waLink('Hi, I have a question about your team and how the trips work.
       <div class="split-7-5">
         <div>
           <p class="eyebrow">About</p>
-          <h1>We are on the ground in China — so you're never alone in a factory.</h1>
+          <h1>About Our Factory Visit Team in China</h1>
           <p class="lead hero__lead">
-            A small team based in <a href="/destinations/zhejiang/">Zhejiang</a>. We host creators and buyers inside real factories, and
-            we publish <a href="/about/how-we-vet-factories/">our method</a> because that is the only part of this worth trusting.
+            We support buyers and creators visiting factories in China. Our base is in Zhejiang; coverage and support are confirmed for each trip.
           </p>
           <div class="btn-row">
             <a class="btn btn--primary" href="/contact/">Talk to our team</a>
@@ -62,40 +60,30 @@ const wa = waLink('Hi, I have a question about your team and how the trips work.
   <!-- Who we are -->
   <Section>
     <div class="container container--md">
-      <SectionHead eyebrow="Who you are dealing with" title="A small team, not a marketplace." />
+      <SectionHead eyebrow="Who you are dealing with" title="Our team and coverage" />
       <div class="prose">
         <p>
-          ChinaFactoryHost is hosted by a tight team in Zhejiang, with a second footprint in the
-          Pearl River Delta. We are not a platform, and there is no network of freelance agents
-          being dispatched under our name. When you book us, the people you meet are the people who
-          did the preparation.
+          ChinaFactoryHost supports supplier visits, interpreting and factory filming. Our team
+          confirms the available support and visit locations for your product and dates.
         </p>
+        
         <p>
-          We are deliberately small because the work does not survive being handed off. Somebody has
-          to know which factories said yes, which ones we argued with, and which ones we will not
-          take you back to. That knowledge does not transfer through a booking form.
-        </p>
-        <p>
-          The person who reads your first message, prepares the itinerary and stands beside you on the
-          floor goes by <strong>{HOST_NAME}</strong> — one consistent point of contact from
-          “can you help?” to “we're home”. You will not be handed between anonymous inboxes.
+          Contact <strong>{HOST_NAME}</strong> to discuss the product, suppliers and support you need.
         </p>
       </div>
       <div class="grid--3 u-mt-8">
         <div class="pillar">
-          <p class="pillar__n">TEAM SIZE</p>
-          <p class="pillar__t">Single-digit, intentionally</p>
+          <p class="pillar__n">SUPPORT</p>
+          <p class="pillar__t">Trip coordination</p>
           <p class="pillar__d">
-            Every trip is run by somebody who prepared it — no dispatched subcontractors under our
-            name.
+            Supplier appointments, interpreting and transport requirements agreed for your trip.
           </p>
         </div>
         <div class="pillar">
           <p class="pillar__n">HEADQUARTERS</p>
           <p class="pillar__t">Zhejiang</p>
           <p class="pillar__d">
-            Close to Yiwu, Ningbo and Hangzhou, with a resident team in Shenzhen, Dongguan and
-            Guangzhou.
+            Visits in Zhejiang and other covered regions, with availability confirmed for your dates.
           </p>
         </div>
         <div class="pillar">
@@ -121,24 +109,20 @@ const wa = waLink('Hi, I have a question about your team and how the trips work.
   <!-- Why we do this -->
   <Section alternate>
     <div class="container container--md">
-      <SectionHead eyebrow="Why this exists" title="The premise is simple and slightly unfair." />
+      <SectionHead eyebrow="Why this exists" title="Check suppliers before planning travel" />
       <div class="prose stack">
         <p>
-          Every factory in China is easy to find online and hard to trust from abroad. A listing, a
-          catalogue and a friendly salesperson look identical whether you are dealing with a maker
-          or with a <a href="/guides/factory-vs-trading-company-china/">trading company</a> renting an office above them. The difference only becomes
-          visible once somebody is physically standing on the floor.
+          An online listing does not establish where a product is made. We identify the supplier's
+          role and the checks needed for a visit. A <a href="/guides/factory-vs-trading-company-china/">trading company</a>{' '}
+          can be a suitable partner when its role and production arrangements are clear.
         </p>
         <p>
-          We started hosting after watching people fly twenty hours to discover this in the wrong
-          order — first for friends who wanted to film inside factories, then for buyers who wanted
-          to stop guessing. The service is not complicated: we are already close enough to check
-          first.
+          Registration checks can be completed before travel. Production-site checks and technical
+          meetings are arranged around the purpose of the visit.
         </p>
         <p>
-          The part we are sticky about is <a href="/pricing/">who pays us</a>. Our fee comes from you and never from a
-          factory, because anything else quietly rearranges our judgement. Every other decision on
-          this site flows from that one.
+          Our <a href="/pricing/">fees</a> are agreed with the client. Any optional sourcing commission
+          is disclosed separately; we do not take factory commissions.
         </p>
       </div>
     </div>
@@ -149,15 +133,15 @@ const wa = waLink('Hi, I have a question about your team and how the trips work.
     <div class="container container--md">
       <SectionHead
         eyebrow="Language advantage"
-        title="Two things get lost in translation."
-        lead="Neither is vocabulary. Both cost money."
+        title="Interpreting specifications and decisions"
+        lead="Record technical requirements, conditions and unresolved questions clearly."
       />
       <Checklist
         title="What we bridge"
         numbered
         items={[
           'Technical specifics — tolerances, surface finish, defect acceptance — stated as numbers instead of adjectives',
-          'Politeness codes interpreted honestly: “maybe” and “it is difficult” are usually refusals, and we say so',
+          'Clarify whether an answer is a refusal, a condition or still awaiting confirmation',
           'The difference between a price that is negotiable and a price that has already absorbed the discount',
           'Why a factory may say yes in the room and no in writing, and how to get the real answer on paper',
           'Holiday and shutdown timing that quietly rewrites your lead-time assumptions',
@@ -191,8 +175,8 @@ const wa = waLink('Hi, I have a question about your team and how the trips work.
       />
       <div class="stack">
         <Caveat
-          title="We are not sourcing agents"
-          body="We will take you to factories, negotiate beside you and tell you what we would do. We do not build supplier lists from a desk and email quotes to people we have never met."
+          title="Limits of sourcing support"
+          body="Our sourcing support focuses on supplier shortlisting and visits. Any later order-placement support is agreed separately."
           items={[
             'No factory-spreadsheet services delivered remotely for a flat fee',
             'No drop-shipping setup or store management',
@@ -220,7 +204,7 @@ const wa = waLink('Hi, I have a question about your team and how the trips work.
         />
       </div>
       <p class="u-mt-6">
-        What we do run, rather than not, is on the <a href="/services/">services page</a>.
+        See the available support on the <a href="/services/">services page</a>.
       </p>
     </div>
   </Section>

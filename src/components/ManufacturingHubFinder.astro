@@ -1,0 +1,204 @@
+---
+import InquiryForm from './InquiryForm.astro';
+import HubFinderResult from './HubFinderResult.astro';
+import { SOURCING_PRODUCTS, PRODUCT_CATEGORIES, SOURCING_MODES, type SourcingMode } from '../data/sourcing-products.ts';
+import { HUB_DATA_VERSION, HUB_REVIEWED } from '../data/hub-sources.ts';
+import { matchManufacturingHubs, validateHubDirectory, HUB_FINDER_PATH } from '../lib/match-manufacturing-hubs.ts';
+import { productDirectionSummary, HUB_FINDER_QUESTIONS, hubFinderStructuredData } from '../data/hub-finder-editorial.ts';
+const errors = validateHubDirectory();
+if (errors.length) throw new Error('Hub finder data is incomplete: ' + errors.join('; '));
+const directory = SOURCING_PRODUCTS.map((product) => ({ product, result: matchManufacturingHubs({ product: product.id })! }));
+const structuredData = JSON.stringify(hubFinderStructuredData()).replace(/</g, '\\u003c');
+---
+<div class="hub-finder" data-hub-finder data-version={HUB_DATA_VERSION}>
+  <div class="hf-intro">
+    <h1>Where should you source your product in China?</h1>
+    <p class="lead">Choose a product to see sourcing regions, supplier types and checks.</p>
+    <p class="hf-muted">Free to use. No email needed. {SOURCING_PRODUCTS.length} product entries · reviewed {HUB_REVIEWED}.</p>
+  </div>
+  <p data-hf-fallback-note class="hf-fallback-note">Browse the product directory below and open a product to see its sourcing information.</p>
+  <div data-hf-interactive hidden>
+    <form class="hf-search" data-hf-search-form role="search" aria-label="Find a sourcing product">
+      <div class="hf-field"><label for="hf-search">What product are you looking for?</label><input id="hf-search" data-hf-search type="search" maxlength="100" placeholder="Try: bottle, fabric, office chair" autocomplete="off" aria-controls="hf-product-list" /></div>
+      <div class="hf-field"><label for="hf-category">Browse a category</label><select id="hf-category" data-hf-category><option value="">All categories</option>{PRODUCT_CATEGORIES.map((c) => <option value={c.id}>{c.label}</option>)}</select></div>
+      <button class="btn btn--primary" type="submit">Find products</button>
+    </form>
+    <p data-hf-count tabindex="-1" class="hf-count">Choose one of the products below.</p>
+    <ul class="hf-product-list" id="hf-product-list" data-hf-product-list>{SOURCING_PRODUCTS.map((p) => <li data-hf-product-item={p.id}><a href={'#product-' + p.id} data-hf-select={p.id}>{p.name}</a></li>)}</ul>
+    <div data-hf-empty hidden class="hf-notice"><p>That product is not in our reviewed directory yet. Try a more specific name or choose another category.</p><p><button type="button" class="hf-text-button" data-hf-clear-search>Show all products</button> · <a href="/contact/">Ask about an unlisted product</a></p></div>
+    <p data-hf-notice hidden class="hf-notice"></p>
+    <section data-hf-selection hidden aria-labelledby="hf-result-heading" class="hf-selection">
+      <div class="hf-selection-head"><div><h2 id="hf-result-heading" data-hf-result-heading tabindex="-1">Your research starting points</h2><p data-hf-selected-label class="hf-muted"></p></div><button type="button" data-hf-change-product class="hf-text-button">Choose another product</button></div>
+      <form data-hf-refine-form class="hf-refine" aria-label="Refine this product’s sourcing direction">
+        <div class="hf-field"><label for="hf-mode">How do you want to source it?</label><select id="hf-mode" data-hf-mode></select></div>
+        <div class="hf-field" data-hf-material-field hidden><label for="hf-material">Material or construction</label><select id="hf-material" data-hf-material></select></div>
+        <div class="hf-field"><label for="hf-quantity" data-hf-quantity-label>Quantity per design / colour (optional)</label><input id="hf-quantity" data-hf-quantity type="text" maxlength="14" inputmode="numeric" placeholder="Not sure yet" aria-describedby="hf-quantity-help" /></div>
+        <p id="hf-quantity-help" class="hf-muted">Enter the quantity per design or colour. Confirm MOQ with each supplier.</p>
+        <button class="btn btn--primary" type="submit">Update my results</button>
+      </form>
+      <div data-hf-condition-notes class="hf-condition-notes"></div>
+      <div data-hf-results></div>
+      <div class="hf-save">
+        <h3>Keep this sourcing direction</h3>
+        <div class="hf-actions"><button type="button" class="btn btn--outline" data-hf-copy-link>Copy result link</button><button type="button" class="btn btn--outline" data-hf-copy-brief>Copy sourcing brief</button><button type="button" class="btn btn--outline" data-hf-print>Print results</button></div>
+        <details><summary>View link and sourcing brief</summary><div class="hf-field"><label for="hf-share">Result link</label><input id="hf-share" data-hf-share readonly type="text" /></div><div class="hf-field"><label for="hf-brief">Sourcing brief</label><textarea id="hf-brief" data-hf-brief readonly rows="9"></textarea></div></details>
+        <p data-hf-save-status role="status" class="hf-muted"></p>
+        <p class="hf-muted">Shared links show the current directory version. Keep a printed copy if you need a record of today’s information.</p>
+      </div>
+      <div class="hf-inquiry" id="hub-inquiry" data-hf-inquiry>
+        <h3>Want to turn this into confirmed factory visits?</h3>
+        <p>Your product brief is filled in below. Add your dates and any details you want checked.</p>
+        <button type="button" class="hf-text-button" data-hf-refresh-inquiry>Use current results in my inquiry</button><p data-hf-inquiry-status class="hf-muted"></p>
+        <InquiryForm variant="compact" destination="Hub finder" title="Ask about this product" lead="We will review the product, the suppliers you need and what a visit could cover." submitLabel="Send my sourcing brief" />
+      </div>
+    </section>
+    <p class="sr-only" role="status" aria-live="polite" data-hf-live></p>
+  </div>
+  <section class="hf-answer-index" aria-labelledby="hf-answer-heading">
+    <h2 id="hf-answer-heading">Where in China can you start sourcing these products?</h2>
+    <p>Sourcing directions depend on the product and approach. Open an entry for its sources and checks.</p>
+    <table class="hf-answer-table" data-hf-answer-table>
+      <caption>Product-to-region sourcing directory · regional information reviewed {HUB_REVIEWED}</caption>
+      <thead><tr><th scope="col">Product</th><th scope="col">Research starting direction</th></tr></thead>
+      <tbody>
+        {SOURCING_PRODUCTS.map((product) => <tr data-hf-answer-product={product.id}><th scope="row"><a href={HUB_FINDER_PATH + '#product-' + product.id}>{product.name}</a></th><td>{productDirectionSummary(product)}</td></tr>)}
+      </tbody>
+    </table>
+  </section>
+  <section class="hf-directory" id="product-directory" aria-labelledby="hf-directory-heading">
+    <h2 id="hf-directory-heading">Browse the complete product directory</h2>
+    <p>Open a product for sources, sourcing conditions and supplier checks.</p>
+    {PRODUCT_CATEGORIES.map((category) => (
+      <div class="hf-category-group">
+        <h3>{category.label}</h3>
+        {directory.filter(({ product }) => product.category === category.id).map(({ product, result }) => (
+          <details class="hf-directory-product" id={'product-' + product.id} data-hf-directory-product={product.id}>
+            <summary>{product.name}</summary>
+            <HubFinderResult result={result} />
+            <div class="hf-static-refinement">
+              <h3>How your approach changes the search</h3>
+              <ul>{Object.entries(product.modeNotes).map(([mode, note]) => <li><strong>{mode === 'stock' ? 'Existing product' : mode === 'label' ? 'Your branding' : mode === 'custom' ? 'Product development' : 'Part or process'}:</strong> {note}</li>)}</ul>
+              {product.materials.map((option) => <p><strong>{option.label}:</strong> {option.note}</p>)}
+              {Object.keys(product.modeRecommendations || {}).map((approach) => (
+                <details><summary>Specific direction: {SOURCING_MODES[approach as SourcingMode]}</summary><HubFinderResult result={matchManufacturingHubs({ product: product.id, mode: approach })!} /></details>
+              ))}
+            </div>
+          </details>
+        ))}
+      </div>
+    ))}
+  </section>
+  <section class="hf-method" id="how-this-directory-works" aria-labelledby="hf-method-heading">
+    <h2 id="hf-method-heading">How to use and check this sourcing directory</h2>
+    <p>ChinaFactoryHost maintains this directory using the regional sources listed under each product. Our supplier questions and preparation notes explain how to follow up; the source links establish regional activity, rather than approval of individual factories.</p>
+    <p>We distinguish wholesale markets from manufacturing, and parts or processes from finished products. Region choices follow explicit product and sourcing rules. Your order quantity adds quotation questions; it does not independently select a city.</p>
+    <p>Regional sources last reviewed <time datetime={HUB_REVIEWED}>{HUB_REVIEWED}</time>. Supplier capacity, MOQ, production addresses and visit access need confirmation for each brief. <a href="/about/how-we-vet-factories/">Read our factory checks</a> or <a href="/guides/how-to-plan-a-china-factory-visit/">prepare a factory visit</a>.</p>
+    {HUB_FINDER_QUESTIONS.map((item) => <details class="hf-method-question"><summary>{item.question}</summary><p>{item.answer}</p></details>)}
+  </section>
+  <p class="hf-maintenance">Found an incorrect entry or a missing product? <a href="/contact/">Tell us what should change</a>. Directory version {HUB_DATA_VERSION}.</p>
+  <p class="hf-print-version">ChinaFactoryHost · directory version {HUB_DATA_VERSION} · reviewed {HUB_REVIEWED}.</p>
+</div>
+<script type="application/ld+json" data-hf-structured-data set:html={structuredData} />
+<script>
+  import '../scripts/manufacturing-hub-finder.ts';
+</script>
+<style is:global>
+  /* Page-local styles: every screen selector is prefixed to avoid changing other pages. */
+  .hub-finder { max-width: 1160px; margin: 0 auto; padding: 42px 24px 64px; }
+  .hub-finder .hf-intro { max-width: 850px; margin-bottom: 30px; }
+  .hub-finder h1 { font-size: clamp(2rem, 4vw, 3.1rem); line-height: 1.12; margin-bottom: 18px; }
+  .hub-finder h2 { font-size: clamp(1.5rem, 2.4vw, 2rem); line-height: 1.25; }
+  .hub-finder h3 { font-size: 1.12rem; line-height: 1.35; }
+  .hub-finder .hf-muted, .hub-finder .hf-location { color: var(--text-muted, #616670); font-size: .85rem; }
+  .hub-finder .hf-search { display: grid; grid-template-columns: 1.8fr 1fr auto; align-items: end; gap: 16px; padding: 24px; background: var(--surface-tint, #F6F8FA); border: 1px solid var(--ink-200, #D2D7E1); border-radius: 8px; }
+  .hub-finder .hf-field { min-width: 0; display: grid; gap: 6px; }
+  .hub-finder .hf-field label { font-size: .88rem; font-weight: 650; }
+  .hub-finder .hf-field input, .hub-finder .hf-field select, .hub-finder .hf-field textarea { box-sizing: border-box; width: 100%; min-width: 0; border: 1px solid var(--text-muted, #616670); border-radius: 4px; padding: 11px 12px; background: white; color: var(--text-primary, #1A1917); font: inherit; font-size: .9rem; }
+  .hub-finder .hf-field textarea { resize: vertical; }
+  .hub-finder a:focus-visible, .hub-finder button:focus-visible, .hub-finder input:focus-visible, .hub-finder select:focus-visible, .hub-finder summary:focus-visible, .hub-finder textarea:focus-visible { outline: 3px solid var(--accent-600, #D0202A); outline-offset: 3px; }
+  .hub-finder .hf-count { margin: 18px 0 12px; font-size: .88rem; }
+  .hub-finder .hf-product-list { list-style: none; padding: 0; margin: 0 0 24px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+  .hub-finder .hf-product-list a { display: flex; align-items: center; min-height: 52px; height: 100%; padding: 12px 14px; font-size: .9rem; border: 1px solid var(--ink-200, #D2D7E1); border-radius: 4px; text-decoration: underline; text-underline-offset: 3px; }
+  .hub-finder .hf-product-list a:hover, .hub-finder .hf-product-list a[aria-current="true"] { background: var(--surface-tint, #F6F8FA); border-color: var(--text-muted, #616670); }
+  .hub-finder .hf-notice, .hub-finder .hf-boundary, .hub-finder .hf-fallback-note { padding: 16px 18px; background: var(--surface-tint, #F6F8FA); border-left: 3px solid var(--text-muted, #616670); }
+  .hub-finder .hf-selection { margin-top: 36px; padding-top: 30px; border-top: 2px solid var(--text-primary, #1A1917); }
+  .hub-finder .hf-selection-head { display: flex; align-items: start; justify-content: space-between; gap: 20px; margin-bottom: 20px; }
+  .hub-finder .hf-selection-head p { margin-top: 8px; }
+  .hub-finder .hf-text-button { background: none; border: none; padding: 8px 0; font: inherit; font-size: .88rem; text-decoration: underline; cursor: pointer; color: var(--text-primary, #1A1917); }
+  .hub-finder .hf-refine { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; padding: 20px; background: var(--surface-tint, #F6F8FA); border-radius: 6px; }
+  .hub-finder .hf-refine > p { grid-column: 1 / -1; margin: 0; }
+  .hub-finder .hf-refine > button { justify-self: start; grid-column: 1 / -1; }
+  .hub-finder .hf-condition-notes { margin: 20px 0; }
+  .hub-finder .hf-condition-notes li { margin-bottom: 10px; }
+  .hub-finder .hf-description { margin-bottom: 20px; }
+  .hub-finder .hf-regions { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: 20px; }
+  .hub-finder .hf-region { min-width: 0; padding: 24px; border: 1px solid var(--ink-200, #D2D7E1); border-radius: 6px; }
+  .hub-finder .hf-location { margin-top: 7px; }
+  .hub-finder .hf-facts { margin: 20px 0; }
+  .hub-finder .hf-facts div { margin-bottom: 16px; }
+  .hub-finder .hf-facts dt { font-size: .8rem; font-weight: 700; margin-bottom: 4px; }
+  .hub-finder .hf-facts dd { margin: 0; font-size: .93rem; }
+  .hub-finder details > summary { cursor: pointer; padding: 12px 0; font-weight: 650; }
+  .hub-finder .hf-evidence { border-top: 1px solid var(--ink-200, #D2D7E1); font-size: .82rem; }
+  .hub-finder .hf-evidence li { margin: 16px 0; }
+  .hub-finder .hf-evidence p { margin: 6px 0; }
+  .hub-finder .hf-evidence a { overflow-wrap: anywhere; }
+  .hub-finder .hf-advice { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; margin: 28px 0; }
+  .hub-finder .hf-advice ul { padding-left: 22px; margin: 12px 0 0; }
+  .hub-finder .hf-advice li { margin-bottom: 10px; }
+  .hub-finder .hf-next { margin: 20px 0; }
+  .hub-finder .hf-save, .hub-finder .hf-inquiry { margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--ink-200, #D2D7E1); }
+  .hub-finder .hf-actions { display: flex; flex-wrap: wrap; gap: 12px; margin: 18px 0; }
+  .hub-finder .hf-save .hf-field { margin: 12px 0; }
+  .hub-finder .hf-inquiry > p { margin-top: 12px; }
+  .hub-finder .hf-inquiry .form-shell { margin-top: 20px; }
+  .hub-finder .hf-directory { margin-top: 56px; padding-top: 28px; border-top: 1px solid var(--ink-200, #D2D7E1); }
+  .hub-finder .hf-answer-index, .hub-finder .hf-method { margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--ink-200, #D2D7E1); }
+  .hub-finder #hf-answer-heading, .hub-finder #how-this-directory-works, .hub-finder #product-directory { scroll-margin-top: 160px; }
+  .hub-finder .hf-answer-index > p, .hub-finder .hf-method > p { margin-top: 14px; }
+  .hub-finder .hf-answer-table { width: 100%; table-layout: fixed; border-collapse: collapse; margin-top: 20px; font-size: .9rem; }
+  .hub-finder .hf-answer-table caption { text-align: left; color: var(--text-muted, #616670); margin-bottom: 12px; font-size: .82rem; }
+  .hub-finder .hf-answer-table th, .hub-finder .hf-answer-table td { padding: 14px 12px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--ink-200, #D2D7E1); overflow-wrap: anywhere; }
+  .hub-finder .hf-answer-table th:first-child { width: 38%; }
+  .hub-finder .hf-answer-table thead { background: var(--surface-tint, #F6F8FA); }
+  .hub-finder .hf-method-question { border-bottom: 1px solid var(--ink-200, #D2D7E1); }
+  .hub-finder .hf-method-question > p { padding: 0 0 16px; }
+  .hub-finder .hf-directory > p { margin: 14px 0 24px; }
+  .hub-finder .hf-category-group { margin: 28px 0; }
+  .hub-finder .hf-category-group > h3 { margin-bottom: 10px; }
+  .hub-finder .hf-directory-product { border-bottom: 1px solid var(--ink-200, #D2D7E1); scroll-margin-top: 160px; }
+  .hub-finder .hf-directory-product > summary { padding: 17px 0; font-size: 1rem; }
+  .hub-finder .hf-directory-product > .hf-result-content { padding: 12px 0; }
+  .hub-finder .hf-static-refinement { padding: 12px 0 24px; }
+  .hub-finder .hf-maintenance { margin-top: 28px; font-size: .85rem; }
+  .hub-finder .hf-print-version { display: none; }
+  @media (max-width: 800px) {
+    .hub-finder .hf-search { grid-template-columns: 1fr 1fr; }
+    .hub-finder .hf-search > button { grid-column: 1 / -1; justify-self: start; }
+    .hub-finder .hf-product-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .hub-finder .hf-refine { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 540px) {
+    .hub-finder { padding: 28px 16px 40px; }
+    .hub-finder .hf-search, .hub-finder .hf-refine, .hub-finder .hf-advice { grid-template-columns: 1fr; padding: 16px; }
+    .hub-finder .hf-advice { padding: 0; }
+    .hub-finder .hf-product-list { grid-template-columns: 1fr; }
+    .hub-finder .hf-selection-head { flex-direction: column; gap: 4px; }
+    .hub-finder .hf-region { padding: 18px; }
+    .hub-finder .hf-actions > button { width: 100%; }
+  }
+  @media print {
+    .hub-finder-page .site-header, .hub-finder-page .site-footer, .hub-finder-page .breadcrumb, .hub-finder-page .wa-bar, .hub-finder-page .wa-fab, .hub-finder-page .skip-link { display: none !important; }
+    .hub-finder { max-width: none; padding: 0; font-size: 10pt; }
+    .hub-finder h1 { font-size: 22pt; }
+    .hub-finder .hf-search, .hub-finder .hf-product-list, .hub-finder .hf-count, .hub-finder .hf-refine, .hub-finder .hf-save, .hub-finder .hf-inquiry, .hub-finder .hf-text-button, .hub-finder .hf-maintenance { display: none !important; }
+    .hub-finder[data-has-result="true"] .hf-directory, .hub-finder[data-has-result="true"] .hf-answer-index, .hub-finder[data-has-result="true"] .hf-method { display: none; }
+    .hub-finder .hf-regions, .hub-finder .hf-advice { display: block; }
+    .hub-finder .hf-region, .hub-finder .hf-advice > div { break-inside: avoid; margin-bottom: 16px; }
+    .hub-finder .hf-evidence > ul { display: block !important; }
+    .hub-finder .hf-evidence { content-visibility: visible; }
+    .hub-finder .hf-evidence a::after { content: ' (' attr(href) ')'; overflow-wrap: anywhere; }
+    .hub-finder .hf-print-version { display: block; margin-top: 20px; font-size: 9pt; }
+    .hub-finder .hf-region { background: white; color: black; }
+  }
+</style>

@@ -70,7 +70,7 @@ const c = Astro.props;
 
 <Section>
   <div class="container container--md">
-    <SectionHead eyebrow="Why this category" title="What makes this category different to buy." />
+    <SectionHead eyebrow="Why this category" title="Sourcing considerations for this category" />
     <div class="prose stack">
       {c.why.map((p) => <p set:html={p} />)}
     </div>
@@ -81,7 +81,7 @@ const c = Astro.props;
   <div class="container container--md">
     <SectionHead
       eyebrow="Supply chain shape"
-      title="Who actually makes which part."
+      title="Supplier roles and production stages"
       lead={c.chainLead}
     />
     <ul class="spec-list clean">
@@ -107,8 +107,8 @@ const c = Astro.props;
   <div class="container">
     <SectionHead
       eyebrow="Numbers"
-      title="MOQ, sampling and lead time — the ranges we actually see."
-      lead="Ranges, not promises. Ask us for the driver behind any specific number before you plan a launch around it."
+      title="What affects MOQ, sampling and lead time"
+      lead="Confirm minimum quantities and timing for your specification with each supplier."
     />
     <ul class="spec-list clean spec-list--split">
       {
@@ -122,7 +122,7 @@ const c = Astro.props;
     {
       c.numberNote && (
         <div class="u-mt-6">
-          <NoteStrip label="Reading these ranges">{c.numberNote}</NoteStrip>
+          <NoteStrip label="Planning notes">{c.numberNote}</NoteStrip>
         </div>
       )
     }

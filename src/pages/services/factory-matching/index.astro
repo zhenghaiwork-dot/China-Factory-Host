@@ -12,17 +12,16 @@ import Icon from '../../../components/Icon.astro';
 import RelatedNav from '../../../components/RelatedNav.astro';
 import { waLink } from '../../../data/site.ts';
 
-const title = 'Factory matching — find the right manufacturers before you fly';
-const description =
-  'You know the product but not the region. We name the right cluster, build a candidate pool, pre-screen it, and hand you a shortlist worth visiting.';
+const title = "Find Manufacturers in China: Shortlisting for Factory Visits";
+const description = "Find manufacturers in China for your product. We identify sourcing regions, screen candidates and prepare a shortlist for factory visits.";
 
 const wa = waLink('Hi, I need help finding factories for my product in China.');
 
 const steps = [
   { n: '01', title: 'Define the spec', body: 'Product, material, quantity, target quality and the certifications your market requires. A spec that is vague produces a shortlist that is vague.', evidence: ['Product and material locked down', 'Quantity, annual and per order, stated', 'Certification requirements named'] },
-  { n: '02', title: 'Name the cluster', body: 'The region that actually makes your category — not the city with the best airport. This is where a category error becomes a two-day travel error.', evidence: ['Category matched to the right cluster', 'The reasoning explained, not just the name'] },
-  { n: '03', title: 'Build and pre-screen the pool', body: 'A candidate pool wider than what you need, cut down with the five checks. The shortlist is what survives the check, not what you started with.', evidence: ['Licence and scope checked', 'Address and capacity verified', 'The failures removed and documented'] },
-  { n: '04', title: 'Hand over the shortlist', body: 'The survivors, arranged for visiting, with the reason each one made it. Then the visit does the work the shortlist prepared for.', evidence: ['A shortlist worth visiting, not a spreadsheet', 'Each entry tied to the check that passed'] },
+  { n: '02', title: 'Name the cluster', body: 'Identify regions with relevant suppliers and processes, then plan travel around the shortlist.', evidence: ['Category matched to the right cluster', 'The reasoning explained, not just the name'] },
+  { n: '03', title: 'Build and pre-screen the pool', body: 'A candidate pool wider than what you need, cut down with the five checks. We record which checks have been completed and what needs confirmation.', evidence: ['Licence and scope checked', 'Address and capacity verified', 'The failures removed and documented'] },
+  { n: '04', title: 'Hand over the shortlist', body: 'The survivors, arranged for visiting, with the reason each one made it. Then the visit does the work the shortlist prepared for.', evidence: ['Supplier details and checks to follow up', 'Each entry tied to the check that passed'] },
 ];
 
 const needFromYou = [
@@ -35,9 +34,9 @@ const needFromYou = [
 
 const scoring = [
   { k: 'Cluster fit', v: 'Is the factory in the cluster that makes your category, or is it a generalist claiming to?' },
-  { k: 'Capacity match', v: 'Can it hold your volume, or are you a rounding error in someone else’s plant?' },
+  { k: 'Capacity match', v: 'Can it support your order volume and production schedule?' },
   { k: 'Certification match', v: 'Does it already hold the certificates your market requires?' },
-  { k: 'MOQ fit', v: 'Is your order its normal minimum, or a favour it will deprioritise?' },
+  { k: 'MOQ fit', v: 'What minimum applies to your specification, and can the supplier accept your order?' },
 ];
 
 const faqs = [
@@ -63,7 +62,7 @@ const faqs = [
   cta={{
     eyebrow: 'Next step',
     title: 'Tell us the product. We will name the cluster.',
-    lead: 'Category and quantity are enough to start. You get a shortlist worth visiting, not a spreadsheet of strangers.',
+    lead: 'Send your product, material and quantity to discuss a supplier shortlist.',
     primary: { label: 'Find my factories', href: '/contact/' },
     secondary: { label: 'Ask on WhatsApp', href: wa, external: true },
   }}
@@ -73,10 +72,9 @@ const faqs = [
       <div class="split-7-5">
         <div>
           <p class="eyebrow">Factory matching</p>
-          <h1>Know the product, not the region? Start here.</h1>
+          <h1>Find Manufacturers in China: Shortlisting for Factory Visits</h1>
           <p class="lead hero__lead">
-            China is not one place — it is a set of specialised clusters. The wrong city costs you
-            two travel days and shows you factories that were never going to make your product.
+            We identify sourcing regions and screen candidate suppliers using your product, material and quantity requirements.
           </p>
           <div class="btn-row">
             <a class="btn btn--primary" href="/contact/">Find my factories</a>
@@ -97,7 +95,7 @@ const faqs = [
       <SectionHead
         eyebrow="The process"
         title="From spec to shortlist."
-        lead="Matching is not a desk search with a nicer name. It is a spec turned into a cluster, a cluster turned into candidates, and candidates cut down by the checks."
+        lead="We use your product brief to identify sourcing regions, screen suppliers and prepare a shortlist for visits."
       />
       <ProcessSteps items={steps} />
       <p class="u-mt-6">

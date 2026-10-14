@@ -25,7 +25,7 @@ export const SERVICE_SCHEMA: Record<string, ServiceSchema> = {
   '/services/brand-sourcing-visit/': {
     name: 'Brand sourcing visit',
     description:
-      'A hosted verification trip to Chinese factories: five documented checks per factory, the production manager in the room, and a written report afterwards.',
+      'Hosted supplier visits in China with registration and production-site checks, meetings with relevant factory staff and a written visit report.',
     serviceType: 'Factory verification visit',
   },
   '/services/creator-factory-tour/': {
@@ -37,13 +37,13 @@ export const SERVICE_SCHEMA: Record<string, ServiceSchema> = {
   '/services/existing-supplier-visits/': {
     name: 'Existing supplier visits',
     description:
-      'Verification of suppliers you already have: we check each one, arrange the visits and run them so you meet the production manager instead of a sales representative.',
+      'Visits to suppliers on your existing shortlist, with registration checks, appointment coordination and a record of production-site findings.',
     serviceType: 'Supplier verification visit',
   },
   '/services/factory-matching/': {
     name: 'Factory matching',
     description:
-      'For buyers who know the product but not the region: we name the right cluster, build and pre-screen a candidate pool, and hand over a shortlist worth visiting.',
+      'Product-based sourcing-region research and candidate screening to prepare a supplier shortlist for factory visits.',
     serviceType: 'Supplier shortlisting',
   },
   '/services/factory-visit-interpreter/': {

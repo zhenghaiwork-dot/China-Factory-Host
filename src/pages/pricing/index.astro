@@ -10,9 +10,8 @@ import Caveat from '../../components/Caveat.astro';
 import FAQ from '../../components/FAQ.astro';
 import { waLink } from '../../data/site.ts';
 
-const title = 'Pricing — two visible lines, no hidden commissions';
-const description =
-  'How ChinaFactoryHost is paid: a hosting and coordination fee, and an optional sourcing commission disclosed in writing. We do not take factory commissions.';
+const title = "China Factory Visit Fees and Optional Sourcing Support";
+const description = "Understand factory visit fees, included support and optional sourcing commission. Request a quote for your product, dates and route.";
 
 const wa = waLink('Hi, I would like to understand your pricing.');
 
@@ -25,20 +24,20 @@ const included = [
 const notIncluded = [
   'Flights, hotels and visa — you book them, and we take no margin',
   'A formal factory audit or a product inspection — those are coordinated with specialists, not bundled',
-  'Any success outcome — we cannot sell a guarantee we cannot keep',
+  'A guarantee of supplier acceptance or future production quality',
 ];
 
 const faqs = [
   {
     q: 'How much does a factory visit cost?',
     a: [
-      'It depends on the category, the cluster, the number of days and how much permission work is involved. We would rather quote your specific dates than publish a range that does not survive contact with real factories. Ask and you will get a number, a scope and the conditions attached to it.',
+      'Fees depend on your route, days and support requirements. Send your product and dates for a quote with the scope and conditions.',
     ],
   },
   {
     q: 'Do you take commission from the factories?',
     a: [
-      'No. Our fee comes from you. That is the only way we can tell you to walk away from a factory on the day, and mean it.',
+      'No. Our fee is paid by the client. Any optional sourcing commission is agreed separately in writing.',
     ],
   },
   {
@@ -77,7 +76,7 @@ const faqSchema = {
   cta={{
     eyebrow: 'Next step',
     title: 'Get a number for your dates.',
-    lead: 'Send the category, the city and roughly when. You get a scope and a price, not a brochure.',
+    lead: 'Send the category, the city and roughly when. We will quote the scope and price.',
     primary: { label: 'Ask for a quote', href: '/contact/' },
     secondary: { label: 'Ask on WhatsApp', href: wa, external: true },
   }}
@@ -87,10 +86,9 @@ const faqSchema = {
       <div class="split-7-5">
         <div>
           <p class="eyebrow">Pricing</p>
-          <h1>Two visible lines. No hidden commissions.</h1>
+          <h1>China Factory Visit Fees and Optional Sourcing Support</h1>
           <p class="lead hero__lead">
-            We publish the structure rather than a fake price list. You always know who is paying
-            whom, which is the only part of this worth trusting — the same logic as <a href="/how-it-works/">the process</a>.
+            Visit fees depend on the route, days and support required. Any sourcing commission is quoted separately and agreed in writing.
           </p>
         </div>
         <div class="hero__media">
@@ -145,8 +143,8 @@ const faqSchema = {
   <Section>
     <div class="container container--md">
       <Caveat
-        title="Why we do not publish a price list"
-        body="A fixed price list would be fiction. The honest answer is a number attached to a scope — your category, your cluster, your dates. Ask, and that is what you get."
+        title="What affects your quote"
+        body="We quote for your product, route, dates and support requirements. The quote states what is included and any separately priced work."
         items={[
           'Tooling-led categories cost differently from market-floor categories.',
           'Filming permission work has its own lead time and its own effort.',

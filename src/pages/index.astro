@@ -33,14 +33,14 @@ import FairPromo from '../components/FairPromo.astro';
 import { REPLY_TIME_MICRO, FILMING_LEAD_TIME, FILMING_LEAD_TIME_DAYS, VET_STEPS } from '../data/site.ts';
 
 const creatorPoints = [
-  'Film inside real factories, not trade-company showrooms',
+  'Arrange factory filming with permission confirmed',
   'Bilingual fixer handles permits, access and interviews',
   'A shared route or a private crew, your call',
 ];
 
 const buyerPoints = [
-  'Verify the factory before you fly 20 hours',
-  'Meet the production manager, not a sales rep',
+  'Check supplier details before booking travel',
+  'Meet the staff responsible for your production questions',
   'Structured visit plan, plain-English reporting',
 ];
 
@@ -105,7 +105,7 @@ const steps = [
   {
     n: '02',
     title: 'We shortlist factories',
-    body: 'Vetted matches in the right industrial cluster, never trade companies.',
+    body: 'Supplier roles and production locations checked against your product brief.',
   },
   {
     n: '03',
@@ -115,7 +115,7 @@ const steps = [
   {
     n: '04',
     title: 'You walk the floor',
-    body: 'Meet the production manager. We handle everything around you.',
+    body: 'Meet the relevant factory staff, with interpreting and visit coordination.',
   },
 ];
 
@@ -125,7 +125,7 @@ const whyUs = [
   {
     icon: 'shield',
     title: 'Vetted before you book',
-    desc: 'Every shortlist starts from a checked business licence, a registered scope and a production floor we have walked.',
+    desc: 'We check registration and business scope, then confirm the production-site checks needed for your visit.',
     href: '/about/how-we-vet-factories/',
     cta: 'See the vetting steps',
   },
@@ -146,7 +146,7 @@ const whyUs = [
   {
     icon: 'target',
     title: 'One team, shortlist to floor',
-    desc: 'The people who vet the factory are the people standing next to you on the visit. Nothing is subcontracted.',
+    desc: 'Our team coordinates the shortlist, appointments and on-site support.',
     href: '/services/brand-sourcing-visit/',
     cta: 'Brand sourcing visits',
   },
@@ -167,37 +167,28 @@ const destinations = [
 const costRows = [
   {
     item: 'Finding factories that actually make your product',
-    diy: 'Marketplaces and search results, with no way to check which listing is a factory and which is a trading company',
+    diy: 'You identify suppliers and check their business and production details',
     us: 'Shortlisted from the clusters we work in, licence and registered scope checked first',
   },
   {
     item: 'Filming permission',
-    diy: 'Asked on arrival, factory by factory, in Mandarin',
+    diy: 'You request filming permission from each factory',
     us: `Requested in writing ${FILMING_LEAD_TIME} before you fly`,
-    hidden: true,
   },
   {
     item: 'Interpreter on the floor',
-    diy: 'Whoever the supplier sends, or a general guide without the technical vocabulary',
+    diy: 'You arrange interpreting for your product and meeting requirements',
     us: 'A bilingual escort who works in your category',
-    hidden: true,
   },
   {
     item: 'Routing between factories and cities',
-    diy: 'Built around hotels and whatever the city makes easy',
+    diy: 'You plan transport and appointment times',
     us: 'Sequenced by industrial cluster and shift times',
   },
   {
-    item: 'What the factory pays us',
-    diy: 'Often a commission folded into your unit price — invisible by design',
-    us: 'Nothing. Two visible lines, disclosed in writing before you pay',
-    hidden: true,
-  },
-  {
-    item: 'Trip cost',
-    diy: '—',
-    us: '—',
-    total: true,
+    item: 'Supplier and intermediary fees',
+    diy: 'You check and agree any intermediary fees',
+    us: 'No factory commission. Our visit fee and any optional sourcing commission are disclosed separately',
   },
 ];
 
@@ -233,7 +224,7 @@ const faqs = [
   {
     q: 'When should I avoid travelling to China for factory visits?',
     a: [
-      'Chinese New Year and National Day week shut most factories for one to three weeks. We plan around the holiday calendar so you do not fly 20 hours to an empty floor.',
+      'Confirm each supplier’s production and holiday schedule before booking. Closures around Chinese New Year and National Day vary by factory.',
     ],
   },
 ];
@@ -247,7 +238,7 @@ const faqs = [
    the single block here — see src/pages/faq/index.astro for that pattern. */
 ---
 <BaseLayout
-  title="Visit Real Chinese Factories — With Someone On The Ground | ChinaFactoryHost"
+  title="Factory Visits and Sourcing Trips in China"
   description="Factory tours for creators and verified sourcing visits for brands. We vet the factory, plan the route and stay with you on the floor."
   active=""
   bodyClass="over-hero"
@@ -307,10 +298,9 @@ const faqs = [
             under .js, and prefers-reduced-motion resets it (base.css:127-135). */}
         {/* "China" is load-bearing: without it a visitor arriving cold from search
             or a shared link cannot tell what country this service is in. */}
-        <h1 data-reveal style="--reveal-delay: 0ms">Walk the real China factory floor.<br />Not a trade&#8209;company showroom.</h1>
+        <h1 data-reveal style="--reveal-delay: 0ms">Factory Visits and Sourcing Trips in China</h1>
         <p class="hero-full__lead" data-reveal style="--reveal-delay: 120ms">
-          We vet the factory, plan the route and stay beside you on the floor. Filming for an
-          audience of millions, or signing your first production run.
+          We help buyers and creators find suppliers, arrange factory visits and coordinate interpreting or filming.
         </p>
 
         <div class="hero-full__actions" data-reveal style="--reveal-delay: 240ms">
@@ -380,11 +370,11 @@ const faqs = [
       },
       {
         figure: String(FILMING_LEAD_TIME_DAYS).padStart(2, '0'),
-        label: 'Working days of filming-permission lead time',
+        label: 'Working-day threshold for short-notice filming',
       },
       { figure: '00', label: 'Commission taken from factories' },
     ]}
-    foot="These are counts of steps and lead times we publish elsewhere on this site — every one of them links to the page that shows the work. We do not publish “factories verified” or “clients served” totals, because we cannot audit them."
+    foot="Request filming several weeks ahead. Availability and the approval window depend on the factory and filming scope."
   />
 
   {/* ── audience splitter ──────────────────────────────────────────────────── */}
@@ -392,7 +382,7 @@ const faqs = [
     <div class="container" data-reveal>
       <SectionHead
         eyebrow="Two routes"
-        title="Two ways to use us. One standard of proof."
+        title="Visits for buyers and creators"
         lead="Both routes start in the same place: a factory we have actually checked, and a plan that says what happens on which day."
       />
       <div class="splitter__grid">
@@ -500,7 +490,7 @@ const faqs = [
       <SectionHead
         eyebrow="Proof"
         title="Why teams bring us onto the floor"
-        lead="Each of these is someone else's job to prove. Ours is to show you where we checked."
+        lead="Supplier checks, filming requests and route coordination for your visit."
       />
       <div class="grid--2">
         {
@@ -535,15 +525,15 @@ const faqs = [
   <Section>
     <div class="container">
       <SectionHead
-        eyebrow="Straight numbers"
-        title="Self-organised vs hosted: where the week actually goes"
+        eyebrow="Visit arrangements"
+        title="What you arrange, and what we handle"
         lead="The same visit, planned two ways. Every row below is a task someone has to do before you are standing on the floor — this is who does it."
       />
       <div data-reveal>
         <CostComparison
           rows={costRows}
-          caption="Comparison of a self-organised factory visit against a hosted one: who does each task, and what each option costs."
-          footnote="We do not publish figures yet — every trip is scoped per category, city and dates, so any number here would be a guess. What we can put in writing before you pay: an escort and coordination fee, and an optional sourcing commission we disclose. No commission is taken from the factory."
+          caption="Who handles supplier checks, filming requests, interpreting and travel arrangements."
+          footnote="Visit fees and any optional sourcing commission are agreed separately in writing."
         />
       </div>
     </div>
@@ -583,7 +573,7 @@ const faqs = [
         <SectionHead
           eyebrow="Straight talk"
           title="What we will not do"
-          lead="Straight talk, because you are about to spend real money and twenty hours on a plane."
+          lead="Our service commitments"
         />
         <Checklist items={refusals} plain refusal />
       </div>

@@ -20,9 +20,8 @@ import {
   waLink,
 } from '../../data/site.ts';
 
-const title = "Contact — tell us what you're trying to do";
-const description =
-  'No funnel, no discovery call script. Five fields, or one WhatsApp message. If what you need is not something we do, you will hear that first.';
+const title = "Contact Our China Factory Visit Team";
+const description = "Contact ChinaFactoryHost about supplier visits or factory filming. Send your product, dates, supplier links and the support you need.";
 
 /* Empty until WA_NUMBER is set in site.ts — in which case no wa.me anchor is
    rendered anywhere on this page (critique M3). */
@@ -47,10 +46,9 @@ const filmingCaveat = `If your trip is inside the next ${FILMING_LEAD_TIME} and 
           {/* Not just "Contact": this page is a landing target from search and
               shared links, where the visitor has no idea whose site this is. */}
           <p class="eyebrow">Contact ChinaFactoryHost</p>
-          <h1>Tell us what you're trying to do. We'll tell you if we can help.</h1>
+          <h1>Contact Our China Factory Visit Team</h1>
           <p class="lead hero__lead">
-            No funnel, no discovery call script. Five fields, or one WhatsApp message. If what you
-            need is not something we do, you will hear that first.
+            Send your product, dates and the support you need. If you already have suppliers, include their names or links.
           </p>
         </div>
         <div class="hero__media">
@@ -70,8 +68,7 @@ const filmingCaveat = `If your trip is inside the next ${FILMING_LEAD_TIME} and 
           <span class="channel__icon"><Icon name="wa" size={22} /></span>
           <h2 class="channel__title">WhatsApp</h2>
           <p class="channel__desc">
-            Fastest route, and how most clients reach us. Works from abroad, and the message text is
-            pre-filled so you do not have to write an introduction.
+            Use WhatsApp when the contact number is available, or send your request using the form below.
           </p>
           {
             isWaConfigured ? (
@@ -120,16 +117,14 @@ const filmingCaveat = `If your trip is inside the next ${FILMING_LEAD_TIME} and 
     <div class="container container--md">
       <SectionHead
         eyebrow="Inquiry"
-        title="Five fields, one mandatory choice."
-        lead="The first question routes your message to the right person. Everything after that is whatever you think we need to know."
+        title="Send your visit request"
+        lead="Your name, email and visitor type are required. Add your product and dates if known."
       />
       <InquiryForm />
       <p class="u-mt-6 form-footnote">— {HOST_SIGNATURE}</p>
       <div class="u-mt-6">
         <NoteStrip label="What happens next"
-          >You get a reply from {HOST_NAME}, not an autoresponder. If your request is outside what we
-          do, the reply says that and suggests who might actually help. We do not add you to a
-          mailing list.</NoteStrip
+          >{HOST_NAME} reviews your request and confirms whether we can help. We do not add inquiries to a mailing list.</NoteStrip
         >
       </div>
     </div>
@@ -141,7 +136,7 @@ const filmingCaveat = `If your trip is inside the next ${FILMING_LEAD_TIME} and 
       <SectionHead
         eyebrow="Working hours"
         title="China Time (GMT+8) against your clock."
-        lead="Put here because timezone arithmetic is where most scheduling goes wrong."
+        lead="Use China Time when arranging appointments. Check daylight-saving differences for your location."
       />
       <table class="tz-table">
         <caption class="sr-only">China Time GMT+8 against common client timezones</caption>

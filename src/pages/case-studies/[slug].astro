@@ -40,8 +40,8 @@ const wa = waLink('Hi, I would like to plan a factory visit like one of your cas
 ---
 
 <BaseLayout
-  title={`${c.title} — ChinaFactoryHost case study`}
-  description={c.standfirst}
+  title={`${c.placeholder ? 'Sample report: ' : 'Factory visit report: '}${c.title}`}
+  description={(c.placeholder ? 'Illustrative report format, not a completed client trip. ' : '') + c.standfirst}
   track={isCreator ? 'creator' : 'buyer'}
   active="cases"
   crumbs={[{ href: '/case-studies/', label: 'Case studies' }]}
@@ -65,7 +65,7 @@ const wa = waLink('Hi, I would like to plan a factory visit like one of your cas
             {isCreator ? 'Creator' : 'Brand buyer'}
           </span>
         </p>
-        <h1>{c.title}</h1>
+        <h1>{c.placeholder ? 'Sample report: ' : ''}{c.title}</h1>
         <p class="lead hero__lead">{c.standfirst}</p>
         <div class="u-mt-5">
           <NoteStrip label="How to read this" marker="case"
@@ -276,7 +276,7 @@ const wa = waLink('Hi, I would like to plan a factory visit like one of your cas
           <div class="container container--md">
             <Caveat
               title="What did not go to plan"
-              body="Every real trip has one. Publishing this part is why the rest is worth reading."
+              body="Issues and follow-up actions recorded in the report."
               items={c.problems}
             />
           </div>

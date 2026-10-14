@@ -10,6 +10,7 @@ import WhatsAppBar from '../components/WhatsAppBar.astro';
 import CTASection from '../components/CTASection.astro';
 import { REPLY_TIME_MICRO, SITE, SITE_URL } from '../data/site.ts';
 import { SERVICE_SCHEMA } from '../data/service-schema.ts';
+import { formatPageTitle } from '../lib/page-title.ts';
 
 export interface Crumb { href: string; label: string; }
 interface Props {
@@ -72,8 +73,8 @@ const {
          at ONE button. The WhatsApp channel is already permanently reachable
          through .wa-fab / .wa-bar, which are exempt from the budget. */
   cta = {
-    title: 'Plan my factory trip.',
-    lead: 'Tell us the category, the city and roughly when. You get a straight answer about what is realistic — including when we are not the right people for the job.',
+    title: 'Plan your factory visit',
+    lead: 'Send your product, dates and the support you need. We will review the route and supplier requirements.',
     primary: { label: 'Plan my factory visit', href: '/contact/' },
     /* The site-wide constant, not a retyped sentence: the closing band, the rail
        and the footer must never disagree about response time (critique M2). */
@@ -92,6 +93,7 @@ const {
 const ctaProps = cta === false ? false : { micro: REPLY_TIME_MICRO, ...cta };
 
 const canonical = new URL(Astro.url.pathname, SITE_URL).href;
+const pageTitle = formatPageTitle(title, SITE);
 const og = new URL(ogImage, SITE_URL).href;
 
 /* True only on the home page, which is the only route that renders the hero
@@ -117,7 +119,7 @@ const orgSchema = {
   url: SITE_URL,
   logo: new URL(ogImage, SITE_URL).href,
   description:
-    'Hosted factory visits in China: verified factory shortlists, on-the-ground escorts and filming coordination for content creators and brand buyers.',
+    'Factory visits and sourcing trips in China, with supplier screening, local interpreting and filming coordination for buyers and creators.',
   areaServed: 'China',
   /* Region + country only — the granularity the site actually publishes. */
   address: {
@@ -187,16 +189,17 @@ const articleSchema = article
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{title}</title>
+    <title>{pageTitle}</title>
     <meta name="description" content={description} />
     <meta name="theme-color" content="#1A1917" />
     <meta property="og:type" content={article ? 'article' : 'website'} />
     <meta property="og:site_name" content={SITE} />
-    <meta property="og:title" content={title} />
+    <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={og} />
     <meta property="og:url" content={canonical} />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
     {!noindex && <link rel="canonical" href={canonical} />}
     {noindex && <meta name="robots" content="noindex, follow" />}
     <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48" />

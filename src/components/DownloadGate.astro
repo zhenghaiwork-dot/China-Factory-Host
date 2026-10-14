@@ -18,6 +18,10 @@ interface Props {
   lead?: string;
   meta?: string;
   photo?: string;
+  /** Cover of the file actually behind this gate. Rendered instead of the
+   *  empty plate. Default is the vetting checklist cover, which is the file
+   *  every gate hands over; pass '' to fall back to the named empty plate. */
+  cover?: string;
   downloadHref?: string;
 }
 const {
@@ -26,12 +30,17 @@ const {
   lead = 'The five checks and the twenty evidence points we work through on site, in the order we run them.',
   meta = '5 checks · 20 evidence points · 5-page PDF',
   photo = 'VETTING-CHECKLIST-COVER',
+  cover = '/images/checklist-cover.svg',
   downloadHref = '/downloads/factory-vetting-checklist.pdf',
 } = Astro.props;
 ---
 <div class="download" id={id}>
   <div>
-    <div class="download__thumb"><PhotoSlot name={photo} variant="doc" /></div>
+    <div class="download__thumb">
+      <PhotoSlot name={photo} variant="doc">
+        {cover && <img src={cover} alt="" width="200" height="283" loading="lazy" decoding="async" />}
+      </PhotoSlot>
+    </div>
     <h3>{title}</h3>
     <p class="lead u-mt-0">{lead}</p>
     <p class="download__meta">{meta}</p>

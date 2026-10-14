@@ -17,6 +17,12 @@
  *   - FOOTER_COMMISSION -> TrustBar figure 00 / "Commission taken from suppliers"      (line 63)
  *                          + FAQ "Do you take commission from factories?" / "Never."   (lines 292-294)
  *
+ * COVER ARTWORK
+ * The drawing on the cover is not an embedded image: scripts/cover-art.mjs
+ * draws it with pdfkit vector primitives (about 1 KB of operators), which is
+ * why the whole file still fits under 20 KB. The same geometry also renders
+ * the site thumbnail (public/images/checklist-cover.svg) via `npm run pdf`.
+ *
  * ENCODING NOTE
  * pdfkit's standard 14 fonts use WinAnsiEncoding, which covers U+2019 (’), U+201C/201D (“ ”),
  * U+2014 (—) and U+00B7 (·). In practice those still trip up when text comes from different
@@ -30,6 +36,7 @@ import { createRequire } from 'node:module';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { drawCoverArt, ART } from './cover-art.mjs';
 
 const require = createRequire(import.meta.url);
 const PDFDocument = require('pdfkit');
@@ -356,6 +363,21 @@ function drawCover(doc) {
     lineGap: 2.5,
   });
   doc.fillColor(INK);
+
+  /* Cover artwork: a site plan drawn with pdfkit primitives, so nothing is
+     embedded — vector operators only, and crisp at any zoom. Bottom-anchored
+     so the sheet sits on the same baseline as the footer rule whatever the
+     text above it measures. See scripts/cover-art.mjs for the design note. */
+  const artW = CONTENT_W;
+  const artH = (artW * ART.h) / ART.w;
+  const artTop = BOTTOM - artH;
+  if (doc.y + 24 > artTop) {
+    /* Not fatal, but it means the copy grew and the drawing would collide. */
+    console.warn(
+      `cover: text ends at ${doc.y.toFixed(0)}pt, art starts at ${artTop.toFixed(0)}pt — overlap`
+    );
+  }
+  drawCoverArt(doc, MARGIN, artTop, artW);
 }
 
 /* ---------------------------------------------------------------------- steps */

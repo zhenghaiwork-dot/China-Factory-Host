@@ -15,7 +15,7 @@
     "check": "astro check",
     "test": "node scripts/test-fair-status.mjs && node scripts/check-inline-spacing.mjs",
     "astro": "astro",
-    "pdf": "node scripts/build-checklist-pdf.mjs",
+    "pdf": "node scripts/build-cover-svg.mjs && node scripts/build-checklist-pdf.mjs",
     "icons": "node scripts/gen-icons.mjs",
     "cf:dev": "wrangler dev --config dist/server/wrangler.json",
     "cf:secret": "wrangler secret put"

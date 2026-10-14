@@ -212,7 +212,7 @@ const faqs = [
             confirm in writing and you group the visits. It is not enough for a multi-province tour.
           </p>
           <div class="btn-row">
-            <a class="btn btn--secondary" href="#checklist-download">Get the visit checklist</a>
+            <a class="btn btn--primary" href="#checklist-download">Get the visit checklist</a>
           </div>
         </div>
         <div class="hero__media">
@@ -268,7 +268,7 @@ const faqs = [
       2×2 grid, with one closing reminder. The full "what to ask for in
       writing" detail stays where it always lived — step three of the
       from-booth-to-visit guide. */}
-  <Section alternate>
+  <Section>
     <div class="container container--md">
       <SectionHead title="Four things decide whether the gap works." />
       <ReadinessList items={readiness} />
@@ -284,7 +284,7 @@ const faqs = [
       Was: three more key/value rows. "Best for" and "Watch out for" are the
       same two questions asked of each option — that is a table, and the
       table's own mobile rendering keeps the field order aligned. */}
-  <Section>
+  <Section alternate>
     <div class="container">
       <SectionHead title="How buyers actually use the gap." />
       <ComparisonTable
@@ -307,21 +307,13 @@ const faqs = [
       Was: three H3 + paragraph blocks in prose styling — a day-by-day plan
       wearing article clothes. Timeline renders days; it stays an example,
       stated in the heading, and no day gets a stock factory photo it does
-      not belong to. The band-level photograph below is a real factory-visit
-      frame (not tied to any one day) — the mid-page anchor this page
-      otherwise lacks between the hero and the footer. */}
+      not belong to. The band's weight comes from the h3-scale day titles,
+      not from enlarging the section heading (a 48px h2 would tie the H1). */}
   <Section alternate>
     <div class="container">
-      <div class="gap-head">
-        <SectionHead title="A three-day plan, as an example." />
-      </div>
+      <SectionHead title="A three-day plan, as an example." />
       <div class="gap-plan">
         <Timeline items={threeDay} />
-      </div>
-      <div class="gap-photo">
-        <PhotoSlot name="VISIT · BETWEEN WORKSHOPS" variant="card">
-          <OnsitePhoto id="10" />
-        </PhotoSlot>
       </div>
       <p class="u-mt-6">
         Day 1’s records-and-requests routine is the seven-step walkthrough in{' '}
@@ -334,6 +326,22 @@ const faqs = [
         <a href="/destinations/guangzhou-dongguan/">Guangzhou and Dongguan</a>, and the sequencing
         is what <a href="/services/factory-visit-planning/">visit planning</a> handles.
       </p>
+    </div>
+  </Section>
+
+  {/* ── The mid-page anchor ─────────────────────────────────────────────────
+      One real factory-visit frame on its own quiet white band — a full-width
+      21:9 plate (the dark weight of a 16:9 block drowned the grey band it
+      used to sit in), not tied to any one day of the plan, introduced by the
+      itinerary above it. sizes="100vw": this slot is a full container wide,
+      and the 45vw default would fetch the 700w file for it. */}
+  <Section tight>
+    <div class="container">
+      <div class="gap-photo">
+        <PhotoSlot name="VISIT · BETWEEN WORKSHOPS" variant="strip">
+          <OnsitePhoto id="10" sizes="(max-width: 720px) 100vw, 100vw" />
+        </PhotoSlot>
+      </div>
     </div>
   </Section>
 
@@ -364,7 +372,7 @@ const faqs = [
         </div>
         <div>
           <SectionHead title="What to bring." />
-          <Checklist title="Six things" plain items={prep} />
+          <Checklist title="Six things" items={prep} />
         </div>
       </div>
     </div>
@@ -463,32 +471,21 @@ const faqs = [
     .gap-plan :global(.timeline) { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   }
 
-  /* ── The mid-page peak ──────────────────────────────────────────────────
-     Every band between the hero and the footer renders at h2 + caption scale,
-     which is why the middle of the page read as one flat run of small text.
-     The example plan is the deliverable of this guide, so its band climbs:
-     the heading steps up to display size, and the DAY rows carry display
-     weight — the rest of the page stays exactly as it was. */
-  .gap-head :global(h2) {
-    /* Hero-xl (72px at 1280) towers over the page H1 (~43px) — wrong
-       hierarchy. The display step (~43px) sits just above every other h2
-       (35px) and level with the H1: a peak, not a new mountain. */
-    font-size: var(--fs-display);
-    line-height: var(--lh-h1);
-    letter-spacing: var(--ls-h1);
+  /* ── The example plan carries the mid-page weight ────────────────────────
+     Not by enlarging the section heading — an h2 at display size merely ties
+     the page H1 and reads as a mistake — but by letting the three day titles
+     climb to h3 scale and the descriptions read at body-sm, so the band has
+     a 35 → 25 → 16px gradient instead of 35 → 18 → 14 everywhere else. */
+  .gap-plan :global(.tl-title) {
+    font-size: var(--fs-h3);
+    /* The shared 3.3em title well is calibrated to the default 18px title
+       (2 x 1.65 line-height); at h3 scale two lines are only 2.56em, so the
+       well must shrink with it or one-line titles leave a dead zone above
+       the description. */
+    min-height: 2.6em;
   }
-  .gap-plan :global(.tl-time) {
-    font-family: var(--font-display);
-    font-size: var(--fs-body-lg);
-    font-weight: var(--fw-semibold);
-    color: var(--text-primary);
-    letter-spacing: 0.01em;
-  }
-  /* The anchor photograph: a real visit frame (1400w master, no upscaling at
-     the 1320 container), full column width, one 16:9 pause between the
-     itinerary and the cross-link paragraph. */
-  .gap-photo {
-    margin-top: var(--space-8);
+  .gap-plan :global(.tl-desc) {
+    font-size: var(--fs-body-sm);
   }
 
   /* The two compact lists share one band at desktop, stack on phones. */

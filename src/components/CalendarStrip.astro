@@ -1,20 +1,27 @@
 ---
-/* CalendarStrip — an exhibition schedule as one proportional strip.
+/* CalendarStrip — an exhibition schedule as one proportional rail.
    Built for /guides/visit-factories-between-canton-fair-phases/ (visual
-   refactor, docs/visual-layout-refactor-guide.md §4.2): the dates used to
-   live in a spec-list, where a date range was visually identical to every
-   other key/value row on the page. Here the sequence, the duration and the
-   two switch-over windows ARE the shape of the component.
+   refactor, docs/visual-layout-refactor-guide.md §4.2).
+
+   V2 (post-critique, 2026-10-14): the first version drew five rounded,
+   filled boxes — the two switch-over windows in a large --accent-100 tint,
+   which broke the site's own accent discipline (tokens.css: "accent never
+   fills a large area — max fill is a badge") and set a loud template tone
+   right after the hero. The grammar now borrows from the /canton-fair/ hub's
+   .fair-status__rail: a 10px hairline rail whose segments scale with their
+   day counts, the switch-over segments in accent red at badge scale, and
+   the readable schedule below as spec-list rows at body size. The dates
+   (the facts) live in the rows; the rail is the shape.
 
    Facts stay page-local on purpose. The /canton-fair/ hub owns its own copy
    of the same organiser dates; if these ever move to a shared data file,
    update both call sites in the same commit so the two pages cannot drift.
 
-   a11y: the strip is an <ol> (the segments have an order); every date range
-   is a <time datetime="…"> (ISO 8601 interval); gap vs phase is carried by
-   the visible label text as well as the colour, never colour alone; below
-   1024px the segments stack vertically — the full schedule stays readable
-   with no script and no horizontal scrolling. */
+   a11y: the rail is aria-hidden decoration (its proportions duplicate the
+   ordered rows, which carry the real <time datetime="…"> semantics); the
+   rows are an <ol> because the segments have an order; gap vs phase is
+   carried by the visible label text as well as the colour, never colour
+   alone. */
 export interface CalSegment {
   id: string;
   kind: 'phase' | 'gap';
@@ -23,9 +30,9 @@ export interface CalSegment {
   dates: string;
   /** ISO 8601 interval, e.g. "2026-10-15/2026-10-19". */
   iso: string;
-  /** Day count — drives the desktop column width, so duration stays honest. */
+  /** Day count — drives the rail segment width, so duration stays honest. */
   days: number;
-  /** Status line under the dates ("Exhibition open" / "Switch-over …"). */
+  /** Status line next to the dates ("Exhibition open" / "Switch-over …"). */
   note: string;
 }
 interface Props {
@@ -43,18 +50,21 @@ const { year, meta, segments, footnotes = [] } = Astro.props;
     <p class="calstrip__year">{year}</p>
     <p class="calstrip__meta-note">{meta}</p>
   </div>
-  <ol class="calstrip__bar clean">
-    {
-      segments.map((s) => (
-        <li class:list={['calstrip__seg', `calstrip__seg--${s.kind}`]} style={`--days:${s.days}`}>
-          <p class="calstrip__name">{s.name}</p>
-          <p class="calstrip__dates">
-            <time datetime={s.iso}>{s.dates}</time>
-          </p>
-          <p class="calstrip__note">{s.note}</p>
-        </li>
-      ))
-    }
+  <ol class="calstrip__rail" aria-hidden="true">
+    {segments.map((s) => (
+      <li class:list={['calstrip__seg', `calstrip__seg--${s.kind}`]} style={`--days:${s.days}`} />
+    ))}
+  </ol>
+  <ol class="calstrip__rows clean">
+    {segments.map((s) => (
+      <li>
+        <span class="calstrip__k">{s.name}</span>
+        <span class="calstrip__v">
+          <time datetime={s.iso}>{s.dates}</time>
+          <span class="calstrip__note"> — {s.note}</span>
+        </span>
+      </li>
+    ))}
   </ol>
   {
     footnotes.length > 0 && (
@@ -73,7 +83,7 @@ const { year, meta, segments, footnotes = [] } = Astro.props;
     justify-content: space-between;
     flex-wrap: wrap;
     gap: var(--space-1) var(--space-4);
-    margin: 0 0 var(--space-3);
+    margin: 0 0 var(--space-4);
   }
   .calstrip__year {
     margin: 0;
@@ -89,29 +99,46 @@ const { year, meta, segments, footnotes = [] } = Astro.props;
     font-size: var(--fs-caption);
     color: var(--text-muted);
   }
-  /* Mobile first: five stacked segments, order preserved, nothing squeezed. */
-  .calstrip__bar {
-    display: grid;
-    gap: var(--space-2);
-    margin: 0;
+  /* The rail: same grammar as the /canton-fair/ hub's status rail — 10px
+     tall, 4px gaps, segment width proportional to the day count. The two
+     switch-over segments carry the accent red at exactly badge scale: the
+     page's subject is visible at a glance without one large tinted fill. */
+  .calstrip__rail {
+    display: flex;
+    gap: 4px;
+    height: 10px;
+    margin: 0 0 var(--space-5);
     padding: 0;
     list-style: none;
   }
   .calstrip__seg {
-    padding: var(--space-3) var(--space-4);
-    border-radius: var(--radius-md);
-    background: var(--surface-sunken);
-    border: 1px solid var(--ink-100);
+    flex: 1 1 0;
+    flex-grow: var(--days);
+    min-width: 0;
+    border-radius: 2px;
+    background: var(--ink-200);
   }
-  /* The two switch-over windows are the point of the page: brand-coloured
-     edge and tint, everything else stays neutral. Red carries meaning here,
-     it is not spread over every date. */
-  .calstrip__seg--gap {
-    background: var(--accent-100);
-    border-color: var(--accent-200);
-  }
-  .calstrip__name {
+  .calstrip__seg--gap { background: var(--color-accent); }
+  /* The schedule itself: spec-list grammar — uppercase label, body-size
+     value — so the facts read at the same size as every other list on the
+     site instead of a caption-scale box. */
+  .calstrip__rows {
     margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 0;
+    border-top: 1px solid var(--ink-100);
+  }
+  .calstrip__rows li {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    gap: var(--space-4);
+    align-items: baseline;
+    padding: var(--space-3) 0;
+    border-bottom: 1px solid var(--ink-100);
+  }
+  .calstrip__k {
     font-family: var(--font-body);
     font-size: var(--fs-label);
     font-weight: 500;
@@ -119,47 +146,26 @@ const { year, meta, segments, footnotes = [] } = Astro.props;
     text-transform: uppercase;
     color: var(--text-muted);
   }
-  .calstrip__seg--gap .calstrip__name {
-    color: var(--accent-600);
-    font-weight: var(--fw-semibold);
-  }
-  .calstrip__dates {
-    margin: 2px 0 0;
+  .calstrip__v {
     font-family: var(--font-display);
-    font-size: var(--fs-body-sm);
-    font-weight: var(--fw-semibold);
+    font-size: var(--fs-body);
     color: var(--text-primary);
   }
   .calstrip__note {
-    margin: 0;
-    font-size: var(--fs-caption);
+    font-family: var(--font-body);
+    font-size: var(--fs-body-sm);
     color: var(--text-secondary);
   }
   .calstrip__notes {
-    margin: var(--space-4) 0 0;
-    padding: var(--space-3) 0 0;
-    border-top: 1px solid var(--ink-100);
+    margin: var(--space-5) 0 0;
+    padding: 0;
     list-style: none;
     display: grid;
     gap: var(--space-2);
     font-size: var(--fs-caption);
     color: var(--text-secondary);
   }
-  /* Desktop: one horizontal strip, column width proportional to the number
-     of days (flex-grow: var(--days)) — a five-day phase is visibly wider
-     than a three-day gap, and the two windows sit inside the fair, not
-     after it. */
-  @media (min-width: 1024px) {
-    .calstrip__bar {
-      display: flex;
-      gap: var(--space-2);
-      align-items: stretch;
-    }
-    .calstrip__seg {
-      flex: 1 1 0;
-      flex-grow: var(--days);
-      min-width: 0;
-    }
+  @media (min-width: 768px) {
     .calstrip__notes {
       grid-template-columns: 1fr 1fr;
       gap: var(--space-2) var(--space-8);

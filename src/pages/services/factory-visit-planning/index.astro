@@ -128,7 +128,13 @@ const faqs = [
   <Section>
     <div class="container container--md">
       <SectionHead eyebrow="A day" title="A planned day, hour by hour." />
-      <Timeline items={day} />
+      {/* Six hourly slots, not five days: the shared 5-column timeline grid
+          wraps the sixth item onto a lonely second row, so this page alone
+          widens the grid to six. Same pattern as the 3-column override on the
+          between-phases guide. */}
+      <div class="day-grid">
+        <Timeline items={day} />
+      </div>
     </div>
   </Section>
 
@@ -220,3 +226,20 @@ const faqs = [
     </div>
   </Section>
 </BaseLayout>
+
+<style>
+  /* Tier-step, same pattern as the header's tight band: 1024–1279 lays the six
+     hourly slots out as 3 x 2 (~150px columns would wrap the descriptions to
+     seven lines at six-across); from 1280 the day reads as one hour-by-hour
+     row. Below the desktop tier the component's vertical list applies. */
+  @media (min-width: 1024px) {
+    .day-grid :global(.timeline) {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+  @media (min-width: 1280px) {
+    .day-grid :global(.timeline) {
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+    }
+  }
+</style>

@@ -1,0 +1,337 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Section from '../../../components/Section.astro';
+import SectionHead from '../../../components/SectionHead.astro';
+import PhotoSlot from '../../../components/PhotoSlot.astro';
+import OnsitePhoto from '../../../components/OnsitePhoto.astro';
+import Checklist from '../../../components/Checklist.astro';
+import FAQ from '../../../components/FAQ.astro';
+import Caveat from '../../../components/Caveat.astro';
+import RelatedNav from '../../../components/RelatedNav.astro';
+import DownloadGate from '../../../components/DownloadGate.astro';
+import { waLink } from '../../../data/site.ts';
+
+const title = 'Canton Fair practical tips: hotels, interpreters and what to bring';
+const description =
+  'Three practical problems catch first-time Canton Fair buyers out: hotel prices during the fair, exhibitors whose staff speak limited English, and the weight of the catalogs and samples you collect. How to plan for all three.';
+
+const wa = waLink('Hi, I am going to Canton Fair and need help with an interpreter and the days around it.');
+
+/* Where the figures come from matters more than the figures. Every price in
+   this guide is a range reported by public buyer guides or the organiser's own
+   page — we have not audited any of them, and they move from session to
+   session. Saying so three times is the point of the page. */
+const carry = [
+  'Ask for a digital catalog or a QR code instead of paper whenever you can.',
+  'Photograph the sample and its tag, and write down the booth number and the company name immediately — then you are not relying on carrying everything home.',
+  'If you collect heavy samples, ask whether the supplier can ship them to your hotel or straight to you instead.',
+  'Wear comfortable shoes, and carry a charger and water. One buyer guide puts the daily walking at 15,000 to 20,000 steps.',
+];
+
+const interpreterOptions = [
+  { k: 'Official Canton Fair interpretation service', v: 'Reported at around RMB 600 a day for an English booth interpreter and RMB 800 for an escort interpreter, with other languages costing more. Numbers are limited and allocated first-come, first-served, so reserve early.' },
+  { k: 'Independent interpreter or student', v: 'Buyer guides report roughly RMB 400 to 800 a day for English. Quality varies a great deal, and your interpreter may need a badge of their own.' },
+  { k: 'Translation app', v: 'Free or close to it. Fine for simple questions, weak for technical points and price discussions — which is exactly where a misunderstanding costs the most.' },
+];
+
+const hireSafely = [
+  'Agree the daily rate, the working hours and what happens after eight hours before anyone starts.',
+  'Meet the person beforehand, or test them with a technical question in the first hour.',
+  'Be careful of anyone who approaches you outside the venue offering to take you to good factories. Some interpreters take a commission from suppliers — ask them to confirm in writing that they do not.',
+  'Do not spread your price targets, drawings or designs wider than the conversation needs. For sensitive projects, ask for confidentiality in writing.',
+  'Ask for a written summary of what was agreed at each booth, or write it down yourself while you are still standing there.',
+];
+
+const hotelFacts = [
+  'Rates across the city are reported to reach two to four times normal levels, and hotels within walking distance of the Pazhou complex three to five times.',
+  'The premium eases with distance: roughly a ten-minute metro ride away is much cheaper, and around 30 minutes out prices are closer to normal.',
+  'Rates are highest around the opening days of each phase, and the best rooms sell out well before the fair starts.',
+  'The same room can be priced differently on different platforms — compare at least three, and check the final total including taxes and cancellation terms.',
+];
+
+const ifNotBooked = [
+  'Search further from the venue. A hotel near a station on the line to the fair usually costs far less than one within walking distance.',
+  'Choose a refundable rate where you can, and recheck the price before the cancellation deadline.',
+  'Ask the hotel in writing whether a shuttle runs to the fair, and when. Many do — confirm it rather than assume it.',
+  'Book only through well-known platforms or the hotel itself.',
+  'Arrive a day early if you can. It buys time for jet lag, badge collection and learning the route.',
+  'If the room costs more than the trip is worth, spend the money differently: fewer days, one phase only, or a different plan altogether.',
+];
+
+const packing = [
+  'Passport, buyer badge or registration confirmation, and business cards.',
+  'A folding trolley or a light roller bag.',
+  'Your product specification with target quantities and prices.',
+  'Power bank, charger, and a local SIM or eSIM.',
+  'Comfortable shoes, plus a light jacket for the air-conditioned halls.',
+  'A notebook or a phone template, so every supplier is recorded the same way.',
+  'Water and snacks — the food courts get crowded.',
+];
+
+const faqs = [
+  {
+    q: 'Should I bring a trolley to Canton Fair?',
+    a: [
+      'A small folding trolley or a roller bag is genuinely useful, because by the second day you are carrying catalogs, brochures and samples. Ask suppliers for digital catalogs where you can, so you carry less in the first place.',
+    ],
+  },
+  {
+    q: 'Can I hire a student as an interpreter?',
+    a: [
+      'Many buyers do, and guides report roughly RMB 400 to 800 a day for English. Agree the rate and the hours first, test their level early, and check the current fair rules on interpreter badges before you commit.',
+    ],
+  },
+  {
+    q: 'How much do hotels cost during Canton Fair?',
+    a: [
+      'Guides report rates reaching two to four times normal levels across the city, and more than that near the Pazhou complex. The figure depends on the hotel and the date, so compare several platforms and treat any range as a planning figure, not a quote.',
+    ],
+  },
+  {
+    q: 'Is it cheaper to stay farther from the venue?',
+    a: [
+      'Usually yes. Hotels about ten minutes away by metro are reported to be much cheaper, and those around 30 minutes out closer to normal prices. Check the actual transport time before you book, not just the distance.',
+    ],
+  },
+  {
+    q: 'Do hotels offer a shuttle to the fair?',
+    a: [
+      'Many do, but confirm the schedule in writing before you book. A shuttle that runs twice in the morning is not the same as one that runs all day.',
+    ],
+  },
+  {
+    q: 'Should I use the official interpretation service?',
+    a: [
+      'It is the reliable option, but numbers are limited and allocated first-come, first-served, so reserve early. If you need technical vocabulary rather than general conversation, say so when you book.',
+    ],
+  },
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  active=""
+  crumbs={[{ href: '/canton-fair/', label: 'Canton Fair' }]}
+  current="Practical tips"
+  article={{
+    title,
+    description,
+    datePublished: '2026-10-14',
+    dateModified: '2026-10-14',
+    section: 'Canton Fair Guide',
+  }}
+  cta={{
+    eyebrow: 'Next step',
+    title: 'Need an interpreter, or the days planned?',
+    lead: 'Send us your product, your dates and the cities. We will tell you what we can cover — interpreting, verification, factory visits — and what we cannot.',
+    primary: { label: 'Tell us your plans', href: '/contact/' },
+    secondary: { label: 'Ask on WhatsApp', href: wa, external: true },
+  }}
+>
+  <section class="hero">
+    <div class="container">
+      <div class="split-7-5">
+        <div>
+          <p class="eyebrow">Guide</p>
+          <h1>Canton Fair practical tips: the three things that catch first-timers out.</h1>
+          <p class="lead hero__lead">
+            Hotel prices in Guangzhou rise sharply during the fair. Many exhibitors' staff speak
+            limited English. And you will end up carrying far more catalogs and samples than you
+            planned for. All three are solvable — book away from the walking-distance zone, arrange
+            the interpreter before you need one, and bring a folding trolley.
+          </p>
+          <div class="btn-row">
+            <a class="btn btn--secondary" href="#checklist-download">Get the trip planning checklist</a>
+          </div>
+        </div>
+        <div class="hero__media">
+          <PhotoSlot name="GUIDE · THE PRACTICAL DAYS" variant="media">
+            <OnsitePhoto id="04" />
+          </PhotoSlot>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Section tight>
+    <div class="container container--md">
+      <SectionHead
+        eyebrow="Where this comes from"
+        title="Two notes before the tips."
+      />
+      <div class="prose stack">
+        <p>
+          We have stood on the exhibitor side of the booth, so several points below are what the fair
+          looks like from there rather than from the aisle. That view is useful and it is also
+          partial — treat it as one side of the hall.
+        </p>
+        <p>
+          Every price and fee on this page is a range reported by public buyer guides or the
+          organiser's own page. <strong>We have not verified any of them, and they change from
+          session to session.</strong> They are good enough to plan around and not good enough to
+          budget to the exact figure.
+        </p>
+      </div>
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container container--md">
+      <SectionHead
+        eyebrow="Tip 1"
+        title="Bring a trolley. You will collect more than you think."
+        lead="By the second day most buyers are carrying a bag full of catalogs, brochures and small samples, and the fair is a great deal of walking."
+      />
+      <Checklist title="What to do instead of carrying it all" plain items={carry} />
+      <p class="u-mt-6">
+        The second one is the one people skip. Photograph the sample and the tag and write the booth
+        number down immediately — then the catalog is a backup rather than the only record you have.
+        The supplier record template that does this properly is the
+        <a href="/tools/factory-visit-scorecard/">factory visit scorecard</a>, which works at a
+        booth as well as on a floor.
+      </p>
+    </div>
+  </Section>
+
+  <Section>
+    <div class="container container--md">
+      <SectionHead
+        eyebrow="Tip 2"
+        title="Find an interpreter before you need one."
+        lead="Many exhibitors speak good English. Many do not — especially smaller factories and sales staff who are not trained for international trade. When a technical point or a price is at stake, a misunderstanding costs more than the interpreter does."
+      />
+      <ul class="spec-list">
+        {interpreterOptions.map((o) => (
+          <li>
+            <span class="spec-list__k">{o.k}</span><span class="spec-list__v">{o.v}</span>
+          </li>
+        ))}
+      </ul>
+      <p class="u-mt-6">
+        One rule sits outside that table: several guides say a local interpreter has to be registered
+        at the registration desk and pay a daily fee, reported at roughly RMB 300 a day plus a small
+        one-off charge. Check the current rules before you hire anyone, because both the fee and the
+        rule can change.
+      </p>
+      <Checklist title="How to hire safely" items={hireSafely} />
+      <p class="u-mt-6">
+        The commission point is the one worth reading twice. An interpreter who is paid by the
+        supplier is not working for you.
+      </p>
+      <p class="u-mt-6">
+        A note on what kind of interpreter you actually need: fair-hall interpreting is conversation
+        and price. Factory-floor interpreting is tolerances, tooling and payment terms, and it is a
+        different job — that difference is set out on
+        <a href="/services/factory-visit-interpreter/">the factory visit interpreter page</a>.
+      </p>
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container container--md">
+      <SectionHead
+        eyebrow="Tip 3"
+        title="Plan for hotel prices, do not be surprised by them."
+        lead="What public buyer guides report about Guangzhou during the fair. Treat every figure as a planning range, not a quote."
+      />
+      <Checklist title="Four things to expect" plain items={hotelFacts} />
+      <Checklist title="If you have not booked yet" numbered items={ifNotBooked} />
+      <p class="u-mt-6">
+        Hotels near the venue do sell out, so booking early is better. If you are reading this during
+        the fair itself, widen the search area first — that is the lever that still works.
+      </p>
+      <p class="u-mt-6">
+        The same pressure applies to factory availability, not just rooms:
+        <a href="/destinations/guangzhou-dongguan/">Guangzhou and Dongguan</a> during the April and
+        October fair weeks is a busier, more expensive version of itself.
+      </p>
+    </div>
+  </Section>
+
+  <Section>
+    <div class="container container--md">
+      <SectionHead
+        eyebrow="Free download"
+        title="Take the trip planning checklist with you."
+        lead="The checks in this guide, in the order we run them on site."
+      />
+      <DownloadGate id="checklist-download" photo="CANTON-FAIR-TRIP-CHECKLIST" />
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container container--md">
+      <SectionHead eyebrow="Packing" title="A short list, in the order you will reach for it." />
+      <Checklist title="Seven things" plain items={packing} />
+    </div>
+  </Section>
+
+  <Section>
+    <div class="container container--md">
+      <SectionHead
+        eyebrow="After the fair"
+        title="Comfort is not the point. Follow-up is."
+        lead="None of the practical tips matter if the suppliers you met never get sorted, checked and visited."
+      />
+      <ul class="spec-list clean">
+        <li>
+          <span class="spec-list__k">Within 48 hours</span>
+          <span class="spec-list__v">Sort the suppliers into continue, ask more and drop, while you still remember which was which.</span>
+        </li>
+        <li>
+          <span class="spec-list__k">Then verify</span>
+          <span class="spec-list__v">The seven-step check is in <a href="/guides/verify-canton-fair-suppliers/">how to verify Canton Fair suppliers</a>.</span>
+        </li>
+        <li>
+          <span class="spec-list__k">Then visit</span>
+          <span class="spec-list__v">The route from booth to factory floor is <a href="/guides/canton-fair-to-factory-visits/">from Canton Fair to factory visits</a>.</span>
+        </li>
+        <li>
+          <span class="spec-list__k">Then judge it</span>
+          <span class="spec-list__v">Whether the trip paid for itself is answered in <a href="/guides/is-canton-fair-worth-it-for-small-buyers/">is Canton Fair worth it for small buyers</a>.</span>
+        </li>
+      </ul>
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container container--md">
+      <SectionHead eyebrow="Questions" title="Frequently asked questions." />
+      <FAQ items={faqs} />
+      <p class="u-mt-6">
+        The interpreter questions have a longer answer on
+        <a href="/services/factory-visit-interpreter/">the factory visit interpreter page</a>, and
+        anything about the fair itself — phases, dates, switch-over days — sits on the
+        <a href="/canton-fair/">Canton Fair buyer guide</a>.
+      </p>
+    </div>
+  </Section>
+
+  <Section>
+    <div class="container container--md">
+      <Caveat
+        title="What we verified, and what we did not"
+        body="We have not verified any price, fee or rule on this page. Hotel multiples, interpreter day rates and badge fees are ranges reported by public buyer guides and the organiser's page; they move from session to session and from hotel to hotel. Confirm current figures with the official Canton Fair website and with the hotel or interpreter yourself."
+        items={[
+          'Treat every figure here as a planning range. Budget from a quote you obtained, not from a range you read.',
+          'Interpreter badges, registration rules and fees belong to the organisers — check them before you hire anyone.',
+        ]}
+      />
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container">
+      <SectionHead eyebrow="Go deeper" title="Related pages." />
+      <RelatedNav
+        items={[
+          { k: 'Canton Fair', t: 'The fair itself — phases, dates, factory days', href: '/canton-fair/' },
+          { k: 'Service', t: 'Factory visit interpreter — the technical vocabulary', href: '/services/factory-visit-interpreter/' },
+          { k: 'Guide', t: 'Verify Canton Fair suppliers — 7 steps', href: '/guides/verify-canton-fair-suppliers/' },
+          { k: 'Region', t: 'Guangzhou and Dongguan — the fair weeks in this city', href: '/destinations/guangzhou-dongguan/' },
+        ]}
+      />
+    </div>
+  </Section>
+</BaseLayout>

@@ -50,6 +50,7 @@ docs/LOCAL-*.md
 # _-prefixed; root-anchored (leading /) so nested source dirs are untouched.
 /_*
 /.chrome-audit-profile/
+/.chrome-*-profile/
 /.chrome-v2-profile/
 /.chrome-verify-profile/
 /alive.txt
@@ -61,3 +62,15 @@ docs/LOCAL-*.md
 /regress*.txt
 /build-*.txt
 /preview-*.txt
+
+# Agent handoff notes dropped at the repo ROOT get the same treatment as
+# docs/ — working material, not product content. (docs/ itself is already
+# fully ignored; this catches one-off files that land beside DEPLOYMENT.md,
+# which stays tracked on purpose.)
+/CANTON-FAIR-IMAGES-HANDOFF.md
+
+# Agent handoff notes dropped at the repo ROOT get the same treatment as
+# docs/ — working material, not product content. (docs/ itself is already
+# fully ignored; this catches one-off files that land beside DEPLOYMENT.md,
+# which stays tracked on purpose.)
+/CANTON-FAIR-IMAGES-HANDOFF.md

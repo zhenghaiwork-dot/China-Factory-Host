@@ -1695,8 +1695,14 @@
 }
 .tl-item:last-child::before { display: none; }
 @media (min-width: 1024px) {
-  .tl-item { display: block; }
+  /* Flex column per cell + .tl-media pushed to the bottom: photo thumbs line up
+     across the row even when the descriptions above them wrap to a different
+     number of lines (all thumbs share one width and ratio, so equal bottoms
+     means equal tops). Plain-flow margin made the media position float with the
+     copy above it — one 3-line desc among 4-line ones dropped its photo 53px. */
+  .tl-item { display: flex; flex-direction: column; }
   .tl-item::before { display: none; }
+  .tl-item > div { display: flex; flex-direction: column; flex: 1; }
 }
 .tl-dot {
   display: block;
@@ -1709,6 +1715,16 @@
 .tl-title { font-family: var(--font-display); font-size: var(--fs-body); font-weight: var(--fw-semibold); margin-top: var(--space-1); }
 .tl-desc { font-size: var(--fs-caption); color: var(--color-text-secondary); margin-top: var(--space-2); }
 .tl-media { margin-top: var(--space-3); }
+/* Photo thumbs must line up across the desktop row even when the descriptions
+   above them wrap to a different number of lines (all thumbs share one width
+   and ratio, so equal bottoms means equal tops). Plain-flow margin made the
+   media position float with the copy above it — one 3-line desc among 4-line
+   ones dropped its photo 53px. This block sits AFTER the base .tl-media rule
+   on purpose: same specificity, so source order decides, and margin-top:auto
+   must win. */
+@media (min-width: 1024px) {
+  .tl-media { margin-top: auto; padding-top: var(--space-3); }
+}
 
 /* ============================================================
    13. ChecklistBlock（第 5.15.1 节）

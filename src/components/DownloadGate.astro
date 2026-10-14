@@ -11,7 +11,14 @@ import Icon from './Icon.astro';
    The asset is real: public/downloads/factory-vetting-checklist.pdf, generated
    by `npm run pdf` from the vetting page content. It is only revealed after a
    200 from the server — we never show a download link for a request that did
-   not reach us. */
+   not reach us.
+
+   There is ONE asset. Every gate on the site hands over this same file, so
+   title and meta stay as they are (they describe it accurately) and each page
+   passes its own `lead` saying why its reader wants it. Do not add plate names
+   or copy that imply a second document exists — that used to be the case
+   (MOQ-QUESTION-SHEET, ZHEJIANG-CLUSTER-PLANNER and friends) and it was a lie
+   the download did not survive. */
 interface Props {
   id?: string;
   title?: string;

@@ -1,0 +1,365 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Section from '../../../components/Section.astro';
+import SectionHead from '../../../components/SectionHead.astro';
+import PhotoSlot from '../../../components/PhotoSlot.astro';
+import OnsitePhoto from '../../../components/OnsitePhoto.astro';
+import Checklist from '../../../components/Checklist.astro';
+import RedFlags from '../../../components/RedFlags.astro';
+import FAQ from '../../../components/FAQ.astro';
+import Caveat from '../../../components/Caveat.astro';
+import RelatedNav from '../../../components/RelatedNav.astro';
+import DownloadGate from '../../../components/DownloadGate.astro';
+import { waLink } from '../../../data/site.ts';
+
+const title = 'How to verify Canton Fair suppliers: 7-step checklist';
+const description =
+  'Met a supplier at Canton Fair? Verify the company, licence, factory address and payment details before you order. Free checklist included.';
+
+const wa = waLink('Hi, I met suppliers at Canton Fair and want them checked before I order.');
+
+/* Registry comparison rows — the six fields worth reading off NECIPS. */
+const registryFields = [
+  { k: 'Company name', v: 'Exact match with the licence copy.' },
+  { k: 'Unified Social Credit Code', v: 'Exact match — the 18-digit code identifies one legal entity.' },
+  { k: 'Legal representative', v: 'Same person as on the licence.' },
+  { k: 'Registered address', v: 'Same as on the licence.' },
+  { k: 'Business scope', v: 'Same wording.' },
+  { k: 'Status', v: 'Active — not cancelled and not revoked.' },
+];
+
+/* Factory vs trading signals. Deliberately NOT phrased as proof: every row is a
+   signal that changes what you ask next, not a verdict (§9 never-do: no
+   unsourced absolutes). */
+const signals = [
+  { k: 'Product range', v: 'Focused on one or a few related categories. Worth a closer look: many unrelated categories in one booth.' },
+  { k: 'Production answers', v: 'Explains steps, machines and materials. Worth a closer look: vague, or changes the subject.' },
+  { k: 'Factory address', v: 'Can give the city and the address. Worth a closer look: cannot, or will not.' },
+  { k: 'Business scope', v: 'Production terms matching the product. Worth a closer look: no production terms.' },
+  { k: 'Visit', v: 'Welcomes a visit after the fair. Worth a closer look: avoids or delays a visit.' },
+  { k: 'Payment', v: 'Account matches the contracting company. Worth a closer look: account is a different entity or a person.' },
+];
+
+const redFlags = [
+  'The supplier will not share a full business licence scan.',
+  'The name on the licence is different from the name on the quotation.',
+  'They ask you to pay into a personal account, or a different company account.',
+  'They cannot explain their own production process.',
+  'The price is far below every other quote, with no explanation of material or specification.',
+  'They pressure you to pay a deposit during the fair, before samples or checks.',
+];
+
+const afterFair = [
+  'Within 48 hours, sort your cards and notes into continue, ask more questions and drop.',
+  'Run the registry, scope, production, address and name-matching checks for every supplier on the continue list.',
+  'Order samples, and compare them with what you saw at the booth.',
+  'For your top two or three suppliers, plan a factory visit.',
+];
+
+const faqs = [
+  {
+    q: 'How do I verify a Canton Fair supplier?',
+    a: [
+      'Collect the supplier Chinese legal name and its 18-digit credit code, check the registration record on the official National Enterprise Credit Information Publicity System, compare it with the business licence, ask production questions, and make sure the contract and bank account names match.',
+      'For important orders, visit the factory.',
+    ],
+  },
+  {
+    q: 'Is a Canton Fair exhibitor always a real factory?',
+    a: [
+      'No. Exhibitors include factories, trading companies and mixed models. Appearing in the exhibitor list does not prove that the company makes all the products on display.',
+    ],
+  },
+  {
+    q: 'Is a trading company a bad choice?',
+    a: [
+      'Not necessarily. A trading company that openly states its partner factories, explains how it controls quality and takes responsibility for delivery can be a good partner, especially for small or mixed orders. The problem is hiding what it is.',
+    ],
+  },
+  {
+    q: 'Can I check a Chinese business licence online?',
+    a: [
+      'Yes. Use the official National Enterprise Credit Information Publicity System, and search by the exact Chinese company name or the 18-digit code. Compare every field with the licence copy you received.',
+    ],
+  },
+  {
+    q: 'Does the business scope prove a company is a factory?',
+    a: [
+      'No. It is a screening signal. Production wording is a good sign, but some trading companies include it too. A scope with no production terms at all is more informative.',
+    ],
+  },
+  {
+    q: 'What if the bank account name does not match the supplier name?',
+    a: [
+      'Pause and ask for a written explanation. Do not pay until the account holder matches the contracting company, or you have verified a legitimate reason.',
+    ],
+  },
+  {
+    q: 'Should I visit the factory before ordering?',
+    a: [
+      'For larger, custom or repeat orders, yes — a visit lets you see the production process directly. For small standard orders you may rely on samples and document checks, but the risk is yours to weigh.',
+    ],
+  },
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  active=""
+  crumbs={[]}
+  current="Verify Canton Fair suppliers"
+  article={{
+    title,
+    description,
+    datePublished: '2026-10-14',
+    dateModified: '2026-10-14',
+    section: 'Supplier Verification',
+  }}
+  cta={{
+    eyebrow: 'Next step',
+    title: 'Have a shortlist from the fair?',
+    lead: 'Send us the suppliers and your dates. We will tell you what we can check on the ground, and what is not worth checking.',
+    primary: { label: 'Share my shortlist', href: '/contact/' },
+    secondary: { label: 'Ask on WhatsApp', href: wa, external: true },
+  }}
+>
+  <section class="hero">
+    <div class="container">
+      <div class="split-7-5">
+        <div>
+          <p class="eyebrow">Guide</p>
+          <h1>How to verify Canton Fair suppliers before placing an order.</h1>
+          <p class="lead hero__lead">
+            A booth shows that a company sells products. It does not prove that the company makes
+            them. Confirm who the legal company is, check its registration record, ask which steps it
+            does in-house, and make sure the same name appears on the contract, the invoice and the
+            bank account.
+          </p>
+          <div class="btn-row">
+            <a class="btn btn--secondary" href="#checklist-download">Get the checklist</a>
+          </div>
+        </div>
+        <div class="hero__media">
+          <PhotoSlot name="GUIDE · CANTON FAIR CHECKS" variant="media">
+            <OnsitePhoto id="05" />
+          </PhotoSlot>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Section>
+    <div class="container container--md">
+      <SectionHead eyebrow="Why it matters" title="A booth is not proof of a factory." />
+      <div class="prose stack">
+        <p>
+          Appearing on the exhibitor list means a company took a booth. It does not mean that
+          company manufactures everything on display. What you really need to know is who makes the
+          product, who you will sign the contract with, and who is responsible for quality and
+          delivery.
+        </p>
+        <p>
+          Canton Fair exhibitors include factories, trading companies and mixed models, and none of
+          these is automatically bad. A trading company that openly names its partner factories,
+          explains its quotation and handles quality control can still be a good partner. The risk
+          is not the type of company. The risk is not knowing which type you are dealing with.
+        </p>
+        <p>
+          This guide is the verification half of a fair week. The fair itself — the three phases,
+          what is in each, and how the switch-over days work — is in the
+          <a href="/canton-fair/">Canton Fair buyer guide</a>.
+        </p>
+      </div>
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container container--md">
+      <SectionHead
+        eyebrow="Free download"
+        title="Take the checklist to the fair."
+        lead="The checks in this guide, in the order we run them on site."
+      />
+      <DownloadGate id="checklist-download" photo="CANTON-FAIR-CHECKLIST" />
+    </div>
+  </Section>
+
+  <Section>
+    <div class="container container--md">
+      <SectionHead eyebrow="The checks" title="The 7-step verification checklist." />
+      <div class="prose stack">
+        <h3>Step 1 — Capture the legal company details at the booth</h3>
+        <p>Before you leave the booth, photograph or note:</p>
+        <ul>
+          <li>The full legal company name in Chinese, not only the English brand name.</li>
+          <li>The 18-digit Unified Social Credit Code, if the licence is displayed or can be shown.</li>
+          <li>The business card, with a direct phone number and email.</li>
+          <li>The name of the person you spoke with, and their role.</li>
+        </ul>
+        <p>
+          Ask politely: “Could you send us a colour scan of your business licence showing the full
+          page?” A cropped photo is not enough.
+        </p>
+
+        <h3>Step 2 — Check the company on the official registry</h3>
+        <p>
+          The National Enterprise Credit Information Publicity System is the official, free, public
+          database of company registration records. Search by the exact Chinese legal name or the
+          18-digit code — English names usually return nothing.
+        </p>
+        <p>
+          Practical note: the site is in Chinese and its slider captcha can be hard to complete from
+          a phone or from outside mainland China. If you cannot complete the search, a local
+          assistant or a company-check service can do it for you.
+        </p>
+
+        <h3>Step 3 — Read the business scope, but do not over-trust it</h3>
+        <p>
+          Production wording in the business scope, next to the product category, is a good sign.
+          Trade, wholesale or import/export wording suggests a trading business. Treat this as a
+          screening signal, not proof: the scope is declared at registration, and some trading
+          companies include production wording to keep their options open. A scope with no
+          production terms at all tells you more than a scope that includes them.
+        </p>
+
+        <h3>Step 4 — Ask production questions a real factory can answer quickly</h3>
+        <ol>
+          <li>In which city is your factory?</li>
+          <li>Which production steps do you do in-house, and which do you outsource?</li>
+          <li>What are your main machines?</li>
+          <li>Where do you source your core raw materials?</li>
+          <li>Can you show me a short live video of the workshop today?</li>
+          <li>Can I visit your factory after the fair?</li>
+        </ol>
+        <p>
+          A supplier who answers clearly and offers a visit is a better candidate than one who stays
+          vague. A booth displaying many unrelated categories at once, with staff who cannot explain
+          production steps, is worth a closer look.
+        </p>
+
+        <h3>Step 5 — Compare the factory address with the registered address</h3>
+        <p>
+          The factory and the registered office are often in different places, so a mismatch is not
+          automatically a red flag. But the supplier should be able to explain the relationship
+          without difficulty. If they cannot name the factory address at all, note it.
+        </p>
+
+        <h3>Step 6 — Make sure the names match everywhere</h3>
+        <p>Before you pay, check that the same legal company appears on:</p>
+        <ul>
+          <li>The business licence</li>
+          <li>The quotation or proforma invoice</li>
+          <li>The contract</li>
+          <li>The bank account holder</li>
+          <li>The company chop (seal)</li>
+        </ul>
+        <p>
+          If the bank account belongs to a different company or to a private individual, pause. Ask
+          the supplier to explain in writing, and do not pay until you are satisfied.
+        </p>
+
+        <h3>Step 7 — Confirm with a factory visit for orders that matter</h3>
+        <p>
+          Documents and a booth conversation cannot show you the workshop. A visit lets you see
+          equipment, raw materials, semi-finished goods, the finished goods warehouse and packaging.
+          For larger or custom orders, schedule a visit before you commit —
+          <a href="/guides/how-to-plan-a-china-factory-visit/">here is how to plan one</a>.
+        </p>
+      </div>
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container container--md">
+      <SectionHead
+        eyebrow="Step 2 in detail"
+        title="What to compare on the registry record."
+        lead="Read every field against the licence copy you received, not against what you were told at the booth."
+      />
+      <ul class="spec-list clean">
+        {registryFields.map((f) => (
+          <li>
+            <span class="spec-list__k">{f.k}</span><span class="spec-list__v">{f.v}</span>
+          </li>
+        ))}
+      </ul>
+      <p class="u-mt-6">
+        Also look for administrative penalties and abnormal operation listings. If any field does
+        not match, ask the supplier to explain before you continue.
+      </p>
+    </div>
+  </Section>
+
+  <Section>
+    <div class="container container--md">
+      <SectionHead
+        eyebrow="Factory or trader"
+        title="Which signals point which way."
+        lead="A “worth a closer look” signal is not proof of a problem. It means you should ask more questions, or verify on site."
+      />
+      <ul class="spec-list clean">
+        {signals.map((s) => (
+          <li>
+            <span class="spec-list__k">{s.k}</span><span class="spec-list__v">{s.v}</span>
+          </li>
+        ))}
+      </ul>
+      <p class="u-mt-6">
+        The same distinction, with the checks ranked, is in
+        <a href="/guides/factory-vs-trading-company-china/">factory vs trading company</a>.
+      </p>
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container container--md">
+      <RedFlags
+        title="Red flags that should slow you down"
+        items={redFlags}
+        foot={{ href: '/about/how-we-vet-factories/', label: 'See how we check suppliers' }}
+      />
+    </div>
+  </Section>
+
+  <Section>
+    <div class="container container--md">
+      <SectionHead eyebrow="After the fair" title="What to do with the pile of business cards." />
+      <Checklist title="Four steps" numbered items={afterFair} />
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container container--md">
+      <SectionHead eyebrow="Questions" title="Frequently asked questions." />
+      <FAQ items={faqs} />
+    </div>
+  </Section>
+
+  <Section>
+    <div class="container container--md">
+      <Caveat
+        title="Scope of this guide"
+        body="This guide is general information, not legal advice. Check official sources, and consult a professional for contracts and payment disputes."
+        items={[
+          'Registry records are the authoritative source for company details; a supplier PDF is not.',
+          'If you see one red flag, do not assume fraud — ask for an explanation in writing, and verify before you pay anything.',
+        ]}
+      />
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container">
+      <SectionHead eyebrow="Go deeper" title="Related pages." />
+      <RelatedNav
+        items={[
+          { k: 'Guide', t: 'How to plan a China factory visit', href: '/guides/how-to-plan-a-china-factory-visit/' },
+          { k: 'Guide', t: 'Factory vs trading company — the signals', href: '/guides/factory-vs-trading-company-china/' },
+          { k: 'Trust', t: 'The five checks in full', href: '/about/how-we-vet-factories/' },
+          { k: 'Canton Fair', t: 'The fair itself — phases, dates, factory days', href: '/canton-fair/' },
+        ]}
+      />
+    </div>
+  </Section>
+</BaseLayout>

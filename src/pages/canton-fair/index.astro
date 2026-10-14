@@ -1,0 +1,253 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Section from '../../components/Section.astro';
+import SectionHead from '../../components/SectionHead.astro';
+import PhotoSlot from '../../components/PhotoSlot.astro';
+import OnsitePhoto from '../../components/OnsitePhoto.astro';
+import Checklist from '../../components/Checklist.astro';
+import FAQ from '../../components/FAQ.astro';
+import Caveat from '../../components/Caveat.astro';
+import RelatedNav from '../../components/RelatedNav.astro';
+import { waLink } from '../../data/site.ts';
+
+const title = 'Canton Fair buyer guide — from booth to verified factory';
+const description =
+  'The 140th Canton Fair runs 15 October to 4 November 2026 in three phases at Pazhou, Guangzhou. What the fair can and cannot tell you, and how to turn a booth conversation into a factory visit.';
+
+const wa = waLink('Hi, I am going to Canton Fair and want to add factory visits after it.');
+
+/* The 140th session, autumn 2026. Dates and phase themes are the organiser's
+   (Ministry of Commerce notice + cantonfair.org.cn); if an organiser moves
+   them, the honest move is to say so and send the reader to the source. */
+const phases = [
+  {
+    k: 'Phase 1 · 15–19 October 2026',
+    v: 'Advanced manufacturing: household appliances and consumer electronics, industrial automation and intelligent manufacturing, processing and general machinery, construction and agricultural machinery, new energy vehicles and smart mobility, vehicles and parts, motorcycles and bicycles, lighting, hardware and tools.',
+  },
+  {
+    k: 'Phase 2 · 23–27 October 2026',
+    v: 'Quality home life: daily-use ceramics, kitchenware and tableware, household goods, glass and handicrafts, home decorations, garden products, festival and gift items, watches and eyewear, building and decorative materials, sanitary ware, furniture.',
+  },
+  {
+    k: 'Phase 3 · 31 October – 4 November 2026',
+    v: 'Better living: toys, children baby and maternity, mens and womens wear, underwear, sportswear, fur leather down, garment accessories, textile raw materials and fabrics, shoes, bags and cases, home textiles, stationery, medicines and health products, food, sports and leisure.',
+  },
+];
+
+const whatItGives = [
+  'Breadth: more categories in one week than a month of online searching, with the product in your hand rather than on a screen.',
+  'Private-label and OEM conversations face to face, including the questions a listing never answers.',
+  'A shortlist you can price against itself, because every quote arrives within the same few days.',
+];
+
+const whatItCannot = [
+  { k: 'Who actually makes the product', v: 'A booth proves a company sells; it does not prove it manufactures. Exhibitors include factories, trading companies and mixed models.' },
+  { k: 'Which legal entity you will sign with', v: 'The brand on the booth is often not the name on the contract. Only the licence and the registry record settle it.' },
+  { k: 'Whether the floor exists', v: 'Equipment, raw materials, semi-finished goods and the finished-goods warehouse are on the factory floor, not in a hall.' },
+  { k: 'Whether the bank account matches', v: 'Payment details are a document check, and it is the one that costs the most when it is skipped.' },
+];
+
+const afterTheFair = [
+  'Within 48 hours, sort the cards into continue, ask more questions and drop — memory of a booth decays fast.',
+  'Run the licence, registry, scope and name-matching checks on every supplier you kept.',
+  'Order samples and compare them with what was on the table.',
+  'Put the top two or three into factory days before you commit.',
+];
+
+const faqs = [
+  {
+    q: 'Do I need to attend all three phases?',
+    a: [
+      'No. Each phase covers different categories, so attend the phase that holds your product. The halls close for switch-over between phases (20–22 October and 28–30 October 2026), which is often the best window for factory visits because suppliers are free of their booths.',
+    ],
+  },
+  {
+    q: 'Can I visit factories during the fair?',
+    a: [
+      'Yes, and it is usually easier during the switch-over days than during a phase. Many factories are 30–60 minutes from the Pazhou complex. Treat the fair as the filter and the factory days as the decision.',
+    ],
+  },
+  {
+    q: 'Is every Canton Fair exhibitor a real factory?',
+    a: [
+      'No. The exhibitor list includes factories, trading companies and mixed models. Appearing at the fair does not prove a company makes everything on its stand — the seven-step check in our verification guide is what settles it.',
+    ],
+  },
+  {
+    q: 'How many days should I add after the fair?',
+    a: [
+      'Two working days is enough for four to six factory visits if they are sequenced by cluster rather than by enthusiasm. Two visits in a day is the useful number, because the second conversation arrives informed by the first.',
+    ],
+  },
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  active="trade-shows"
+  crumbs={[]}
+  current="Canton Fair"
+  cta={{
+    eyebrow: 'Next step',
+    title: 'Going to the fair? Add the factory days.',
+    lead: 'Tell us your categories and which phase you are attending. We will say whether the factory days fit around it — including when the timing does not work.',
+    primary: { label: 'Plan a Canton Fair week', href: '/contact/' },
+    secondary: { label: 'Ask on WhatsApp', href: wa, external: true },
+  }}
+>
+  <section class="hero">
+    <div class="container">
+      <div class="split-7-5">
+        <div>
+          <p class="eyebrow">Canton Fair</p>
+          <h1>A booth gets you a conversation. It does not tell you who makes the product.</h1>
+          <p class="lead hero__lead">
+            The 140th session runs 15 October to 4 November 2026 in three phases at the Canton Fair
+            Complex in Pazhou, Guangzhou. This page is the part nobody at the fair sells you: what
+            to do with the suppliers you meet, and how to turn a shortlist into factory days.
+          </p>
+          <div class="btn-row">
+            <a class="btn btn--primary" href="/guides/verify-canton-fair-suppliers/"
+              >Get the 7-step verification checklist</a
+            >
+            <a class="btn btn--secondary" href="#after-the-fair">What to do afterwards</a>
+          </div>
+        </div>
+        <div class="hero__media">
+          <PhotoSlot name="CANTON FAIR · THE HALLS" variant="media">
+            <OnsitePhoto id="06" eager />
+          </PhotoSlot>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Section tight>
+    <div class="container">
+      <SectionHead
+        eyebrow="The 140th session"
+        title="Three phases, and what is in each."
+        lead="Dates, halls and themes belong to the organiser — confirm the current schedule on cantonfair.org.cn before you book flights."
+      />
+      <ul class="spec-list">
+        {phases.map((p) => (
+          <li>
+            <span class="spec-list__k">{p.k}</span><span class="spec-list__v">{p.v}</span>
+          </li>
+        ))}
+      </ul>
+      <p class="u-mt-6">
+        Between phases the halls close for switch-over — 20–22 October and 28–30 October 2026. Those
+        days are unusable for booths and unusually good for factory visits, because the suppliers you
+        met are off duty and the roads are quieter.
+      </p>
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container container--md">
+      <SectionHead eyebrow="What it is for" title="What the fair genuinely gives you." />
+      <Checklist title="Three things" plain items={whatItGives} />
+      <p class="u-mt-6">
+        Used that way, the fair is the most efficient filter in sourcing. Used as the decision itself,
+        it is how buyers end up paying a trading company and believing they paid a factory.
+      </p>
+    </div>
+  </Section>
+
+  <Section>
+    <div class="container container--md">
+      <SectionHead
+        eyebrow="What it cannot tell you"
+        title="Four questions no booth will answer."
+        lead="None of these is answered by a catalogue, a business card or a confident salesperson. Each one has a document or a floor behind it."
+      />
+      <ul class="spec-list">
+        {whatItCannot.map((w) => (
+          <li>
+            <span class="spec-list__k">{w.k}</span><span class="spec-list__v">{w.v}</span>
+          </li>
+        ))}
+      </ul>
+      <p class="u-mt-6">
+        The seven checks that answer them are set out step by step in
+        <a href="/guides/verify-canton-fair-suppliers/">how to verify Canton Fair suppliers</a>, and
+        the factory-versus-trader signals are in
+        <a href="/guides/factory-vs-trading-company-china/">factory vs trading company</a>.
+      </p>
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container container--md">
+      <SectionHead
+        eyebrow="The factory days"
+        title="Pazhou to a production line in under an hour."
+        lead="The fair city is not the manufacturing city. The factories behind most Canton Fair booths sit in Guangzhou's outer districts, Foshan and Dongguan."
+      />
+      <div class="prose stack">
+        <p>
+          That is the whole argument for adding days after the fair: the booth is where you select,
+          and the floor is where you decide. Two visits in a day is the useful number — the second
+          conversation is sharper because the first one already told you what to ask.
+        </p>
+        <p>
+          The clusters within reach of the fair are covered in
+          <a href="/destinations/guangzhou-dongguan/">Guangzhou and Dongguan</a>, and the sequencing —
+          hotels, drivers, which factory on which day — is what
+          <a href="/services/factory-visit-planning/">visit planning</a> handles. If you are building
+          the trip yourself, <a href="/guides/how-to-plan-a-china-factory-visit/">start with the
+          cluster, not the airport</a>.
+        </p>
+      </div>
+    </div>
+  </Section>
+
+  <Section id="after-the-fair">
+    <div class="container container--md">
+      <SectionHead eyebrow="After the fair" title="The week that decides it." />
+      <Checklist title="Four steps" numbered items={afterTheFair} />
+      <p class="u-mt-6">
+        The checks in step two are the same five we run on any visit —
+        <a href="/about/how-we-vet-factories/">how we vet factories</a> sets them out, and the
+        <a href="/tools/factory-visit-scorecard/">factory visit scorecard</a> is where they get
+        written down while you still remember which supplier was which.
+      </p>
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container container--md">
+      <SectionHead eyebrow="Questions" title="Canton Fair, answered plainly." />
+      <FAQ items={faqs} />
+    </div>
+  </Section>
+
+  <Section>
+    <div class="container container--md">
+      <Caveat
+        title="What we are not"
+        body="Fair dates, halls, badges and visitor registration belong to the organisers. We plan around them; we do not speak for them, and we do not sell booth space or take a percentage of your order."
+        items={[
+          'Confirm the current phase dates and hall layout on cantonfair.org.cn before booking anything.',
+          'A supplier who cannot produce a full business licence scan at the fair can usually produce one afterwards — if they cannot, treat that as the answer.',
+        ]}
+      />
+    </div>
+  </Section>
+
+  <Section alternate>
+    <div class="container">
+      <SectionHead eyebrow="Go deeper" title="Where to go next." />
+      <RelatedNav
+        items={[
+          { k: 'Guide', t: 'Verify Canton Fair suppliers — 7 steps', href: '/guides/verify-canton-fair-suppliers/' },
+          { k: 'Region', t: 'Guangzhou and Dongguan', href: '/destinations/guangzhou-dongguan/' },
+          { k: 'Trust', t: 'The five checks in full', href: '/about/how-we-vet-factories/' },
+          { k: 'Service', t: 'Factory visit planning', href: '/services/factory-visit-planning/' },
+        ]}
+      />
+    </div>
+  </Section>
+</BaseLayout>

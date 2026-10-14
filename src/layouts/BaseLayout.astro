@@ -41,6 +41,20 @@ interface Props {
       the site's 54). Canonical is the stronger assertion, so the two must never
       be emitted together. */
   noindex?: boolean;
+  /** Article metadata for blog/guide posts — emits Article JSON-LD.
+      The author is always the organization node: this site publishes no
+      individual bylines yet (team names are still outstanding data), and
+      inventing a person in machine-readable form is worse than omitting one.
+      Pass the real publication date from the article's own frontmatter. */
+  article?: {
+    title: string;
+    description: string;
+    /** ISO date, e.g. 2026-10-14 */
+    datePublished: string;
+    dateModified?: string;
+    /** category/section label from the article frontmatter */
+    section?: string;
+  };
 }
 
 const {
@@ -68,6 +82,7 @@ const {
   ogImage = '/og-default.svg',
   bodyClass,
   noindex = false,
+  article,
 } = Astro.props;
 
 /* Pages pass their own title / lead / primary and deliberately omit `micro`:
@@ -148,6 +163,24 @@ const serviceSchema = service && {
     url: SITE_URL,
   },
 };
+
+/* Article schema for blog/guide posts. Author and publisher both reference the
+   organization node rather than declaring a person we cannot name. */
+const articleSchema = article
+  ? {
+      '@context': 'https://schema.org',
+      '@type': 'Article',
+      headline: article.title,
+      description: article.description,
+      datePublished: article.datePublished,
+      dateModified: article.dateModified ?? article.datePublished,
+      inLanguage: 'en',
+      author: { '@id': SITE_URL + '/#organization' },
+      publisher: { '@id': SITE_URL + '/#organization' },
+      mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
+      ...(article.section ? { articleSection: article.section } : {}),
+    }
+  : null;
 ---
 <!doctype html>
 <html lang="en">
@@ -157,7 +190,7 @@ const serviceSchema = service && {
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="theme-color" content="#1A1917" />
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={article ? 'article' : 'website'} />
     <meta property="og:site_name" content={SITE} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
@@ -196,6 +229,9 @@ const serviceSchema = service && {
     )}
     {service && (
       <script type="application/ld+json" set:html={JSON.stringify(serviceSchema)} />
+    )}
+    {articleSchema && (
+      <script type="application/ld+json" set:html={JSON.stringify(articleSchema)} />
     )}
     {/* DELIBERATELY NO modulepreload HERE.
         The two module scripts Astro emits per page are

@@ -212,6 +212,7 @@ export const NAV: NavEntry[] = [
     items: [
       { href: '/guides/', label: 'Guides', sub: 'planning, checklists, vetting' },
       { href: '/tools/', label: 'Tools', sub: 'hub finder, visit scorecard' },
+      { href: '/china-trade-fairs/', label: 'China trade fairs', sub: 'dates, products and sourcing regions' },
       { href: '/who-we-help/', label: 'Who we help', sub: 'buyers, founders, teams, creators' },
       { href: '/how-it-works/', label: 'How it works', sub: 'enquiry to follow-up' },
       { href: '/pricing/', label: 'Pricing', sub: 'how a visit is quoted' },

@@ -1,0 +1,11 @@
+---
+const { f } = Astro.props;
+const crossesMonth = f.confirmed && f.start.slice(0,7) !== f.end.slice(0,7);
+const month = (crossesMonth ? 'From ' : '') + (f.month ? new Intl.DateTimeFormat('en-GB', {month:'short',timeZone:'UTC'}).format(new Date(f.month+'-01T00:00:00Z')) : 'Year');
+const year = f.month ? f.month.slice(0,4) : f.dates.match(/\b20\d{2}\b/)?.[0] || '—';
+const days = f.confirmed ? String(Number(f.start.slice(8))) + (crossesMonth ? '' : '–' + String(Number(f.end.slice(8)))) : 'TBC';
+---
+<details class="fair-card" id={'fair-'+f.id} data-fair data-city={f.city} data-province={f.province} data-industry={f.industry} data-month={f.month} data-start={f.start} data-end={f.end} data-confirmed={String(f.confirmed)}>
+        <summary><div class:list={["date-tile", {"date-tile--tentative": !f.confirmed}]} aria-hidden="true"><span>{month}</span><strong>{days}</strong><small>{year}</small></div><div class="fair-info"><div class="fair-top"><span class="industry">{f.industry}</span></div><h3>{f.name}</h3><p class="chinese" lang="zh-CN">{f.chinese}</p><div class="fair-meta"><span>{f.city}, {f.province}</span><span class:list={['dates',{'tbc-date':!f.confirmed}]}>{f.dates}</span>{!f.confirmed && <span class="tbc">Dates to be announced</span>}</div><div class="keywords">{f.keywords.map(k=><span>{k}</span>)}</div></div><span class="expand" aria-hidden="true">+</span></summary>
+        <div class="fair-body">{!f.confirmed && <p class="schedule-note">Expected schedule; exact dates may change. Dates awaiting confirmation do not mean the fair has been cancelled.</p>}<p><strong>Products:</strong> {f.products}</p>{f.detail && <p><strong>Edition notes:</strong> {f.detail}</p>}<p><strong>Edition cycle:</strong> {f.cycle}</p>{f.venue && <p><strong>Venue (Chinese):</strong> <span lang="zh-CN">{f.venue}</span></p>}{f.organizer && <p><strong>Organizer (Chinese):</strong> <span lang="zh-CN">{f.organizer}</span></p>}{f.url ? <a class="official" href={f.url} target="_blank" rel="noopener noreferrer">Official site ↗<span class="sr-only"> (opens in a new tab)</span></a> : <p class="source-note">An official website link is not yet listed. Confirm registration and dates with the organizer.</p>}{f.caveat && <p class="caveat">Dates and details are from the organizer's published information and may change. Check the official site.</p>}</div>
+      </details>

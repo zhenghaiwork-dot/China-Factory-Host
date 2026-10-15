@@ -1,0 +1,49 @@
+---
+import '../../styles/trade-fairs.css';
+import CantonFairPhoto from '../../components/CantonFairPhoto.astro';
+import TradeFairCard from '../../components/TradeFairCard.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { fairs, clusters, meta, faq, chinaToday, formatDate, monthLabel } from '../../data/trade-fairs/directory.mjs';
+const today = chinaToday();
+const upcoming = fairs.filter(f => f.confirmed && f.end >= today).sort((a,b)=>a.start.localeCompare(b.start)).slice(0,3);
+const months = [...new Set(fairs.map(f=>f.month).filter(Boolean))];
+const provinces = [...new Set(fairs.map(f=>f.province))].sort();
+const industries = [...new Set(fairs.map(f=>f.industry))].sort();
+const cities = [...new Set(fairs.map(f=>f.city))].sort();
+const url = 'https://chinafactoryhost.com/china-trade-fairs/';
+const title = 'China Trade Fairs for Overseas Buyers 2026-2027';
+const schema = { '@context':'https://schema.org', '@graph':[
+  {'@type':'WebPage', '@id':url, name:title, dateModified:meta.data_verified_on},
+  {'@type':'ItemList', itemListElement:fairs.map((f,i)=>({'@type':'ListItem',position:i+1,name:f.name,url:f.url || url+'#fair-'+f.id}))},
+  {'@type':'FAQPage',mainEntity:faq.map(([q,a])=>({'@type':'Question',name:q,acceptedAnswer:{'@type':'Answer',text:a}}))}
+]};
+---
+<BaseLayout title={title} exactTitle description="Explore China sourcing fairs by product, city and date. Compare 38 fairs and six supplier-cluster routes. Last verified Oct 2026." current="China trade fairs" crumbs={[{href:'/',label:'Home'}]} active="trade-shows" cta={false}>
+<script type="application/ld+json" set:html={JSON.stringify(schema)} />
+<div class="fair-directory">
+  <header class="directory-hero">
+    <div class="hero-copy"><p class="kicker">China sourcing / 2026–2027</p><h1>China Trade Fairs<span>for Overseas Buyers</span></h1><p class="intro">Find specialist trade fairs by product, place and date.<br/> Meet suppliers, then visit their factories in the same trip.</p><a class="browse-link" href="#directory">Explore the directory <span aria-hidden="true">↓</span></a><p class="verified">Last verified: <time datetime={meta.data_verified_on}>{formatDate(meta.data_verified_on)}</time></p></div>
+
+  </header>
+  <div class="calendar-panel"><p class="directory-scope">{fairs.length} fairs <span>in {provinces.length} regions</span> · {clusters.length} cluster routes</p><details class="calendar-disclosure"><summary>Browse by month</summary><div class="calendar-months">{months.map(m=><a href={'#filters='+encodeURIComponent(new URLSearchParams({when:m}).toString())}><span>{monthLabel(m)}</span><small>{fairs.filter(f=>f.month===m).length}</small><span class="sr-only"> fairs</span></a>)}</div></details></div>
+  <section class="next-section" aria-labelledby="next-heading"><div class="section-line"><h2 id="next-heading">Coming up next</h2><span>Published dates · confirm before booking</span></div><div class="next-grid">{upcoming.map((f,i)=><a class="next-card" href={'#fair-'+f.id} data-next-id={f.id}><span><strong>{f.dates}</strong><span class="next-title">{f.name}</span><small>{f.city} · {f.province}</small></span><span aria-hidden="true">↗</span></a>)}</div></section>
+  <section id="directory" aria-labelledby="directory-heading"><div class="section-line"><h2 id="directory-heading">Find your fair</h2><span>Choose a product, a place and a window to travel.</span></div>
+  <div class="directory-layout">
+    <aside class="filter-panel" id="fair-filters" hidden><details open><summary>Filter the directory <span id="active-filter-count" hidden></span></summary>
+      <fieldset><legend>When</legend><div class="chips"><button type="button" data-group="when" data-value="90" aria-pressed="false">Next 90 days</button><button type="button" data-group="when" data-value="tbc" aria-pressed="false">Dates to be announced</button>{months.map(m=><button type="button" data-group="when" data-value={m} aria-pressed="false">{monthLabel(m)}</button>)}</div></fieldset>
+      <fieldset><legend>Where</legend><div class="chips">{provinces.map(p=><button type="button" data-group="province" data-value={p} aria-pressed="false">{p}</button>)}</div></fieldset>
+      <details class="city-filter"><summary>Choose cities</summary><div class="chips">{cities.map(c=><button type="button" data-group="city" data-value={c} data-province={fairs.find(f=>f.city===c)?.province} aria-pressed="false">{c}</button>)}</div></details>
+      <fieldset><legend>Product category</legend><div class="chips">{industries.map(i=><button type="button" data-group="industry" data-value={i} aria-pressed="false">{i}</button>)}</div></fieldset>
+      <button type="button" id="clear-fairs" class="clear">Clear filters</button>
+    </details></aside>
+    <div class="results"><p class="date-key">Expected dates are marked; confirm with the organizer before travel.</p><div id="selected-filters" aria-label="Active filters" hidden></div><p id="fair-count" role="status" aria-live="polite">{fairs.length} fairs in this directory</p><div id="fair-list">
+      {fairs.filter(f=>!f.end || f.end >= today).map(f=><TradeFairCard f={f} />)}
+    </div><p id="fair-empty" hidden>No fairs match these filters. Try clearing one.</p><button type="button" id="fair-more" hidden>Show more fairs</button><details id="recent-fairs" hidden={!fairs.some(f=>f.end && f.end < today)}><summary>Recently held <span id="recent-count"></span></summary><div id="recent-list">{fairs.filter(f=>f.end && f.end < today).map(f=><TradeFairCard f={f} />)}</div></details></div>
+  </div></section>
+  <section class="cluster-section" aria-labelledby="cluster-heading"><div><p class="kicker">Beyond the exhibition hall</p><h2 id="cluster-heading">No local fair?<br/>How buyers reach these clusters</h2><p>A supplier region can still be worth exploring when this directory has no suitable local fair.</p><a href="/tools/china-manufacturing-hub-finder/">Explore manufacturing regions →</a></div><div>{clusters.map(c=><details class="cluster-route"><summary><h3>{c.name}</h3></summary><p>{c.route}</p></details>)}</div></section>
+  <section class="method">    <figure class="fair-hero-photo"><CantonFairPhoto id="02" sizes="(max-width:760px) 100vw, 45vw"/><figcaption>Canton Fair, Guangzhou <span>A starting point for a wider sourcing trip.</span></figcaption></figure><div class="method-copy"><h2>How we choose fairs</h2><p>This directory focuses on export and sourcing fairs. Listings distinguish source-confirmed dates from tentative schedules. The research was last checked on {formatDate(meta.data_verified_on)}; official links are included where available.</p><p>We do not publish exhibitor counts or imply that every exhibitor is a manufacturer. Check the organizer’s current dates and visitor requirements before booking. ChinaFactoryHost does not organize or represent these fairs.</p><p>Explore regional visit guides: <a href="/destinations/zhejiang/">Zhejiang</a>, <a href="/destinations/yiwu/">Yiwu</a>, <a href="/destinations/shaoxing-keqiao/">Keqiao</a> and <a href="/destinations/foshan-shunde/">Foshan–Shunde</a>.</p></div></section>
+  <section class="faq-section"><h2>Before you book</h2>{faq.map(([q,a],i)=><details><summary>{q}</summary><p>{i===faq.length-1 ? <a href="/factory-visits/">{a}</a> : a}</p></details>)}</section>
+  <section class="trip-cta"><div><h2>From the fair to the factory.</h2><p>Shortlist suppliers, confirm appointments and leave time to see production.</p></div><a href="/factory-visits/">Plan factory visits →</a></section>
+</div>
+<script>import '../../scripts/trade-fairs.js';</script>
+</BaseLayout>

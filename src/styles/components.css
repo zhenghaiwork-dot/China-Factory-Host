@@ -810,6 +810,13 @@
    the a11y tree by display:none (unlike visibility/opacity), so the accessible
    name always contains exactly one label. */
 .header-cta__long { display: none; }
+/* Keep the menu and visit action inside a 320px viewport. */
+@media (max-width: 360px) {
+  .site-header .brand__mark { display: none; }
+  .site-header .brand__word { font-size: 14px; }
+  .site-header__actions { gap: 4px; }
+  .site-header__actions .btn { padding-inline: 10px; }
+}
 @media (min-width: 768px) {
   /* Back to the values the unconditional .site-header__actions .btn rule above
      already declares — 16px inset and the caption step. Restating them (rather

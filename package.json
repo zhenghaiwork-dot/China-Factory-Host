@@ -13,7 +13,7 @@
     "prebuild": "node scripts/build-sitemap.mjs",
     "preview": "astro preview",
     "check": "astro check",
-    "test": "node --experimental-strip-types scripts/test-hub-finder.mjs && node scripts/test-fair-status.mjs && node scripts/check-inline-spacing.mjs",
+    "test": "node --experimental-strip-types scripts/test-hub-finder.mjs && node scripts/test-fair-status.mjs && node scripts/check-inline-spacing.mjs && node scripts/test-supplier-comparison.mjs",
     "astro": "astro",
     "pdf": "node scripts/build-cover-svg.mjs && node scripts/build-checklist-pdf.mjs",
     "icons": "node scripts/gen-icons.mjs",

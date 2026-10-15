@@ -130,7 +130,7 @@ function esc(s: string): string {
   return s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c] as string);
 }
 
-function json(body: unknown, status: number): Response {
+function jsonResponse(body: unknown, status: number): Response {
   return new Response(JSON.stringify(body), {
     status,
     headers: { 'content-type': 'application/json' },
@@ -138,12 +138,19 @@ function json(body: unknown, status: number): Response {
 }
 
 export const POST: APIRoute = async ({ request, clientAddress }) => {
+  const contentType = request.headers.get('content-type') || '';
+  const nativeForm = contentType.includes('application/x-www-form-urlencoded');
+  const json = (body: { ok: boolean; error?: string }, status: number) => {
+    if (!nativeForm) return jsonResponse(body, status);
+    const message = body.ok ? 'Your inquiry was sent. We will reply by email.' : body.error || 'Your inquiry could not be sent.';
+    return new Response('<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width"><meta name="robots" content="noindex"><title>Inquiry | ChinaFactoryHost</title><body><main style="max-width:42rem;margin:4rem auto;padding:1rem;font:18px/1.6 system-ui"><h1>' + (body.ok ? 'Inquiry received' : 'Please check your inquiry') + '</h1><p>' + esc(message) + '</p><p><a href="/contact/">Return to contact</a></p><p>Email: <a href="mailto:support@chinafactoryhost.com">support@chinafactoryhost.com</a></p></main></body></html>', {status, headers:{'content-type':'text/html; charset=utf-8','cache-control':'no-store'}});
+  };
   if (badOrigin(request.headers.get('origin'))) {
     return json({ ok: false, error: 'Cross-origin submissions are not accepted.' }, 403);
   }
 
-  if (!request.headers.get('content-type')?.includes('application/json')) {
-    return json({ ok: false, error: 'Expected JSON.' }, 415);
+  if (!contentType.includes('application/json') && !nativeForm) {
+    return json({ ok: false, error: 'Expected JSON or form data.' }, 415);
   }
 
   if ((Number(request.headers.get('content-length')) || 0) > MAX_BYTES) {
@@ -157,7 +164,11 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
 
   let body: Record<string, unknown>;
   try {
-    body = await request.json();
+    const raw = await request.text();
+    if (new TextEncoder().encode(raw).length > MAX_BYTES) return json({ok:false,error:'Payload too large.'},413);
+    const parsed = nativeForm ? Object.fromEntries(new URLSearchParams(raw)) : JSON.parse(raw);
+    if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) return json({ok:false,error:'Malformed request.'},400);
+    body = parsed;
   } catch {
     return json({ ok: false, error: 'Malformed request.' }, 400);
   }
@@ -226,7 +237,6 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     isDownload ? 'Requested asset:' : 'What they are trying to do:',
     displayGoal,
     '',
-    `IP: ${ip}`,
   ].join('\n');
 
   const html = `<div style="font:14px/1.6 system-ui,sans-serif;color:#1A1917">
@@ -247,7 +257,6 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     isDownload ? 'Requested asset' : 'What they are trying to do'
   }</p>
   <div style="padding:12px;background:#F4F6FA;border-radius:8px">${esc(displayGoal).replace(/\n/g, '<br>')}</div>
-  <p style="margin:16px 0 0;color:#868D96;font-size:12px">IP ${esc(ip)}</p>
 </div>`;
 
   /* Wrap the verified sender address in the public host display name so the

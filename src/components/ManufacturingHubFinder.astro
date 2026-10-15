@@ -12,7 +12,7 @@ const structuredData = JSON.stringify(hubFinderStructuredData()).replace(/</g, '
 ---
 <div class="hub-finder" data-hub-finder data-version={HUB_DATA_VERSION}>
   <div class="hf-intro">
-    <h1>Where should you source your product in China?</h1>
+    <h1>China manufacturing hubs by product</h1>
     <p class="lead">Choose a product to see sourcing regions, supplier types and checks.</p>
     <p class="hf-muted">Free to use. No email needed. {SOURCING_PRODUCTS.length} product entries · reviewed {HUB_REVIEWED}.</p>
   </div>
@@ -55,6 +55,9 @@ const structuredData = JSON.stringify(hubFinderStructuredData()).replace(/</g, '
     <p class="sr-only" role="status" aria-live="polite" data-hf-live></p>
   </div>
   <section class="hf-answer-index" aria-labelledby="hf-answer-heading">
+    <h2>Choose a region, then verify the supplier</h2>
+    <p>This product-to-region directory helps you compare manufacturing hubs and wholesale markets. A region is a research starting point, not a recommendation of every supplier there. Start with your product above, then check the production address and processes relevant to your order.</p>
+    <p>For fabrics, see the <a href="/destinations/shaoxing-keqiao/">Keqiao sourcing guide</a>. Once you have a shortlist, use the <a href="/guides/questions-to-ask-china-factory-visit/">supplier questions</a> and <a href="/tools/factory-visit-scorecard/">comparison template</a>.</p>
     <h2 id="hf-answer-heading">Where in China can you start sourcing these products?</h2>
     <p>Sourcing directions depend on the product and approach. Open an entry for its sources and checks.</p>
     <table class="hf-answer-table" data-hf-answer-table>

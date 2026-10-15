@@ -52,7 +52,6 @@ const intro =
     data-endpoint="/api/inquiry/"
     action="/api/inquiry/"
     method="post"
-    novalidate
   >
     <fieldset class="field" style="border:0;padding:0;margin:0">
       <legend class="field__label">Which one are you?</legend>
@@ -106,10 +105,11 @@ const intro =
     </div>
 
     <div class="field">
-      <label class="field__label" for={`in-goal-${uid}`}>What are you trying to do?</label>
+      <label class="field__label" for={`in-goal-${uid}`}>What are you trying to do? (required)</label>
       <textarea
         id={`in-goal-${uid}`}
         name="goal"
+        required
         rows={compact ? 3 : 5}
         placeholder="Film inside a cosmetics filling line in Guangzhou, 8–10 days, two crew. Or: verify three shortlisted suppliers before placing a deposit."
       ></textarea>
@@ -155,7 +155,7 @@ const intro =
         </>
       ) : (
         <p class="form-status__note">
-          Please try again, or <a href="/contact/">use the contact page</a> — it reaches the same team.
+          Please try again, or <a href="mailto:support@chinafactoryhost.com">email support@chinafactoryhost.com</a>.
         </p>
       )
     }

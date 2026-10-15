@@ -1,0 +1,15 @@
+import assert from 'node:assert/strict';
+import {blankComparison,parseComparison} from '../src/data/supplier-comparison.mjs';
+const v=blankComparison();v.product='Cotton & linen <sample>';v.date='2026-10-15';
+v.suppliers[0].name='Supplier A';
+v.suppliers[0].records[0].evidence='Line one\nLine two: 待确认';
+v.suppliers[0].records[0].status='Follow-up needed';
+assert.deepEqual(parseComparison(JSON.stringify(v)),v);
+assert.equal(v.suppliers[1].records[0].evidence,'');
+for(const bad of [null,[],{...v,version:2},{...v,suppliers:[]},{...v,date:'2026-invalid'}])assert.throws(()=>parseComparison(JSON.stringify(bad)));
+const invalid=structuredClone(v);invalid.suppliers[0].records[0].status='Approved';
+assert.throws(()=>parseComparison(JSON.stringify(invalid)));
+const long=structuredClone(v);long.suppliers[0].records[0].evidence='x'.repeat(4001);
+assert.throws(()=>parseComparison(JSON.stringify(long)));
+assert.throws(()=>parseComparison('x'.repeat(100001)));
+console.log('Supplier comparison: round-trip, independent entries and invalid imports passed.');

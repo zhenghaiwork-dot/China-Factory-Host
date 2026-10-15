@@ -1,152 +1,28 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
-import Section from '../../../components/Section.astro';
-import SectionHead from '../../../components/SectionHead.astro';
-import PhotoSlot from '../../../components/PhotoSlot.astro';
-import OnsitePhoto from '../../../components/OnsitePhoto.astro';
-import Checklist from '../../../components/Checklist.astro';
-import ProcessSteps from '../../../components/ProcessSteps.astro';
-import Caveat from '../../../components/Caveat.astro';
-import RelatedNav from '../../../components/RelatedNav.astro';
-import { waLink } from '../../../data/site.ts';
-
-const title = "How to Plan a China Factory Visit";
-const description =
-  'Plan a factory visit around your product: pick the cluster, shortlist real factories, pre-screen them, then build a route that respects the cluster.';
-
-const wa = waLink('Hi, I would like help planning a factory visit in China.');
-
-const steps = [
-  { n: '01', title: 'Define the product and quantity', body: 'Use the product, material and sourcing approach to identify suitable supplier types. Quantity helps define quotation and MOQ questions.' },
-  { n: '02', title: 'Pick the region, not the airport', body: 'Choose a region with suppliers and processes relevant to your product before booking travel.' },
-  { n: '03', title: 'Screen your supplier shortlist', body: 'Check registration, business scope and production locations. Record missing information before confirming appointments.' },
-  { n: '04', title: 'Confirm appointments with the decision-maker', body: 'A confirmed meeting with a sales rep is not a confirmed visit. The appointment has to reach the person who can say yes.' },
-  { n: '05', title: 'Build the route around clusters', body: 'Two visits a day in one cluster, sequenced so the second quote arrives informed by the first. Density, not distance, is what makes a trip productive.' },
-];
-
-const timing = [
-  { k: 'Days', v: 'Three to five for a first trip. Factories sit outside the cities, so every factory day is a travel day too.' },
-  { k: 'Factories per day', v: 'Two, in the same cluster. A walk-through with the production manager takes most of a morning; the second visit is the comparison.' },
-  { k: 'When to go', v: 'Avoid the holiday shutdowns — Chinese New Year and the National Day week close most floors. The calendar, not your availability, decides the good weeks.' },
-];
-
-const lockDown = [
-  'The supplier list, confirmed real — before you book flights, not after.',
-  'Filming permission in writing, if you are filming.',
-  'The hotel district near the industrial zone, not the tourist centre.',
-  'Payment and WeChat set up, so you are reachable the moment you land.',
-];
-
-const mistakes = [
-  'Starting with the travel and hoping the product fits the city.',
-  'Trusting a catalogue and a friendly salesperson without a registration check.',
-  'Overpacking the day — three visits usually means one walk-through gets cut short.',
-  'Booking flights before the supplier list is confirmed real.',
-];
+import '../../../styles/growth-editorial.css';
+const title="How to Plan a China Factory Visit";
+const description="Plan supplier appointments, travel time and an achievable factory visit agenda. Prepare the records, people and follow-up your buying decision needs.";
 ---
-
-<BaseLayout
-  title={title}
-  description={description}
-  active=""
-  crumbs={[]}
-  current="How to plan a China factory visit"
-  cta={{
-    eyebrow: 'Next step',
-    title: 'Plan the visit around your product.',
-    lead: 'Tell us the category and roughly when. We will build the route.',
-    primary: { label: 'Plan my visit', href: '/contact/' },
-    secondary: { label: 'Ask on WhatsApp', href: wa, external: true },
-  }}
->
-  <section class="hero">
-    <div class="container">
-      <div class="split-7-5">
-        <div>
-          <p class="eyebrow">Guide</p>
-          <h1>How to Plan a China Factory Visit</h1>
-          <p class="lead hero__lead">
-            The single biggest planning mistake is starting from the flights and hoping the factories
-            fit. Work backwards: product, <a href="/destinations/">cluster</a>, shortlist, route.
-          </p>
-        </div>
-        <div class="hero__media">
-          <PhotoSlot name="GUIDE · PLANNING" variant="media">
-            <OnsitePhoto id="09" />
-          </PhotoSlot>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <Section>
-    <div class="container container--md">
-      <SectionHead eyebrow="Work backwards" title="Five steps, in order." />
-      <ProcessSteps items={steps} />
-      <p class="u-mt-6">
-        If you do not know which region makes your product, run it through the <a href="/tools/china-manufacturing-hub-finder/">manufacturing hub finder</a> first.
-        The route itself is what <a href="/how-it-works/">the process</a> turns into a trip, and the <a href="/guides/china-factory-visit-checklist/">on-the-floor checklist</a> is what you run on each visit.
-      </p>
-    </div>
-  </Section>
-
-  <Section alternate>
-    <div class="container container--md">
-      <SectionHead eyebrow="The numbers" title="How long, and how many factories a day." />
-      <ul class="spec-list clean">
-        {timing.map((t) => (
-          <li>
-            <span class="spec-list__k">{t.k}</span><span class="spec-list__v">{t.v}</span>
-          </li>
-        ))}
-      </ul>
-      <p class="u-mt-6">
-        The exact number depends on the cluster — two factories in the same <a href="/destinations/">industrial zone</a>{' '}
-        need less travel time than two across a province. When the route gets complex, this is what{' '}
-        <a href="/services/factory-visit-planning/">visit planning</a> exists for.
-      </p>
-    </div>
-  </Section>
-
-  <Section>
-    <div class="container container--md">
-      <SectionHead eyebrow="Before you book" title="What to lock down before the flight." />
-      <Checklist title="Do these first" items={lockDown} />
-    </div>
-  </Section>
-
-  <Section alternate>
-    <div class="container container--md">
-      <SectionHead eyebrow="What goes wrong" title="The four mistakes that waste a trip." />
-      <Checklist title="Avoid these" items={mistakes} refusal plain />
-    </div>
-  </Section>
-
-  <Section>
-    <div class="container container--md">
-      <Caveat
-        title="When to hand the planning to someone local"
-        body="Planning is not hard because it is complicated — it is hard because the ground truth lives in industrial-zone addresses, shift times and a holiday calendar that a map does not show."
-        items={[
-          'Industrial-park addresses are poorly served by map apps; a driver who knows the park saves an hour a day.',
-          'The holiday calendar and the production calendar both decide your window, and neither is on your calendar.',
-          'A cluster only makes sense once you have seen how the factories sit relative to each other.',
-        ]}
-      />
-    </div>
-  </Section>
-
-  <Section alternate>
-    <div class="container">
-      <SectionHead eyebrow="Start here" title="Related pages." />
-      <RelatedNav
-        items={[
-          { k: 'Region', t: 'Pick the cluster', href: '/destinations/' },
-          { k: 'Service', t: 'Factory visit planning', href: '/services/factory-visit-planning/' },
-          { k: 'Trust', t: 'How we vet factories', href: '/about/how-we-vet-factories/' },
-          { k: 'Process', t: 'How it works', href: '/how-it-works/' },
-        ]}
-      />
-    </div>
-  </Section>
+<BaseLayout title={title} description={description} crumbs={[{href:"/guides/",label:"Guides"}]} current={title} cta={false}>
+<article class="growth-article">
+<header><p class="eyebrow">Visit planning</p><h1>How to plan a China factory visit</h1><p class="lead">Start with your product and the decision you need to make. Confirm the supplier, production address and meeting scope before arranging the route.</p></header>
+<nav class="jump-links" aria-label="On this page"><a href="#prepare">Before booking</a><a href="#capacity">Factories per day</a><a href="#agenda">Example agenda</a><a href="#follow-up">After the visit</a></nav>
+<section id="prepare"><h2>Work through the decisions in order</h2><ol class="timeline">
+<li><h3>Define what you need to learn</h3><p>Bring a product specification or sample reference, expected quantity and a short list of decisions. Exploring a process, reviewing a sample and negotiating an order need different meetings.</p></li>
+<li><h3>Choose suppliers and production locations</h3><p>Use the <a href="/tools/china-manufacturing-hub-finder/">manufacturing hub finder</a> if you are still choosing a region. For an existing shortlist, confirm which company and address actually perform the work relevant to your product.</p></li>
+<li><h3>Agree access and participants</h3><p>Get the date, address, host contact, available areas and meeting scope in writing. Ask which technical or commercial staff can attend. Confirm any photography or filming permission separately.</p></li>
+<li><h3>Build the route from confirmed appointments</h3><p>Check door-to-door travel, entrance procedures, meal breaks and time for notes. Ask each factory about its production schedule and holiday arrangements; a market opening does not confirm that a production line is operating.</p></li>
+<li><h3>Confirm the budget and records</h3><p>Agree support, transport and written deliverables. Use the <a href="/guides/china-factory-visit-cost/">cost planning guide</a> to check exclusions and the <a href="/guides/questions-to-ask-china-factory-visit/">supplier questions</a> to request records before you arrive.</p></li>
+</ol></section>
+<section id="capacity"><h2>How many factories can you visit in one day?</h2><div class="two-up"><article><h3>One detailed visit</h3><p>Allow a full day when you need a production walk-through, technical discussion, sample review and document follow-up. A first visit or a complex product may need more time than a repeat meeting.</p></article><article><h3>Two focused appointments</h3><p>Consider two only when the sites are close, the purpose of each meeting is narrow and both hosts have confirmed the schedule. Keep time for travel and notes; do not assume two addresses in the same city are nearby.</p></article></div><p>These are planning options, not a daily quota. For a multi-city trip, reserve travel blocks separately. Reduce the number of appointments if a delayed first meeting would make the second impractical.</p></section>
+<section id="agenda"><h2>An example agenda for one detailed visit</h2><p>Illustrative time blocks, not a fixed itinerary. Confirm the sequence and access with the host.</p><div class="table-wrap"><table><caption>Adapt the agenda to your product and appointment</caption><thead><tr><th scope="col">Block</th><th scope="col">Purpose</th><th scope="col">Record</th></tr></thead><tbody>
+<tr><th scope="row">Arrival and introductions</th><td>Confirm participants, product scope and permitted areas.</td><td>Names, roles and changes to the plan.</td></tr>
+<tr><th scope="row">Production review</th><td>Follow the relevant process and identify outsourced steps.</td><td>Observations, permitted photos and questions needing evidence.</td></tr>
+<tr><th scope="row">Technical and sample discussion</th><td>Compare specifications, samples and quality checks.</td><td>Sample references and unresolved requirements.</td></tr>
+<tr><th scope="row">Commercial discussion</th><td>Review the quote assumptions, MOQ and schedule.</td><td>Written terms to confirm and responsible contacts.</td></tr>
+<tr><th scope="row">Close and debrief</th><td>Agree next steps and leave time to write notes.</td><td>Action owner, evidence needed and response date.</td></tr>
+</tbody></table></div></section>
+<section id="follow-up" class="note"><h2>Write the comparison before the next meeting</h2><p>Separate what you saw from what the supplier said and what you still need to verify. Keep quote versions and sample references with the notes. Use the same <a href="/tools/factory-visit-scorecard/">supplier comparison template</a> for each company.</p><p>Where a formal audit, testing or shipment inspection is needed, arrange that as a separate task. A hosted visit does not provide those conclusions.</p></section>
+<div class="related"><a href="/guides/china-factory-visit-checklist/">On-site checklist</a><a href="/services/factory-visit-planning/">Get help arranging the route</a></div></article>
 </BaseLayout>

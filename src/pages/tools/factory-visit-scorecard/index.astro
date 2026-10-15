@@ -1,131 +1,124 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
-import Section from '../../../components/Section.astro';
-import SectionHead from '../../../components/SectionHead.astro';
-import PhotoSlot from '../../../components/PhotoSlot.astro';
-import OnsitePhoto from '../../../components/OnsitePhoto.astro';
-import Checklist from '../../../components/Checklist.astro';
-import RelatedNav from '../../../components/RelatedNav.astro';
-import { waLink } from '../../../data/site.ts';
-
-const title = "Factory Visit Scorecard: Supplier Evaluation Criteria";
-const description =
-  'Score every factory you visit on the same six dimensions, with a pass / flag / fail for each, so the shortlist is decided on evidence rather than impressions.';
-
-const wa = waLink('Hi, I would like a factory visit scorecard.');
-
-const dimensions = [
-  { k: 'Licence and scope', v: 'Does the registered business actually make this product? Pass: <a href="/about/how-we-vet-factories/">the licence</a> lists manufacturing and the scope matches. Flag: the scope is broad but not specific to your category. Fail: the licence says wholesale or retail, or belongs to a different entity.' },
-  { k: 'Floor and equipment', v: 'Can the line hold your volume, and is it theirs? Pass: the line for your product exists and is running. Flag: the right equipment is present but not running your product. Fail: no equipment — a showroom, a catalogue and a sample table. See the <a href="/guides/china-factory-visit-checklist/">on-the-floor checklist</a>.' },
-  { k: 'Quality control', v: 'How are failures caught, and what happens to them? Pass: a real QC bench, in-line checks and a record of defects. Flag: QC exists but nothing is written down. Fail: no QC, or "we never have defects", which is the same thing.' },
-  { k: 'Decision-maker', v: 'Is someone in the room who can agree terms? Pass: the production manager or owner answers directly. Flag: a sales rep answers but defers on numbers. Fail: "the boss is travelling", which we record as a failed visit.' },
-  { k: 'Subcontracting', v: 'Which steps are outsourced, and to whom? Pass: key processes are in-house and stated. Flag: some steps outsourced but disclosed. Fail: a step you were told is in-house turns out to be subcontracted — the classic <a href="/guides/factory-vs-trading-company-china/">trading-company</a> tell.' },
-  { k: 'Commercial fit', v: 'MOQ, lead time and tooling ownership in writing? Pass: all three stated, with the tooling ownership explicit. Flag: agreed verbally only. Fail: evasive on MOQ, or the payment entity does not match the licence.' },
-];
-
-const reading = [
-  'Any fail means fix it before you commit — a licence fail or a decision-maker fail is not a negotiation problem, it is a walk-away.',
-  'Flags are follow-up questions, not rejections. One flag is normal; three flags is a pattern.',
-  'Score all six for every factory, even the one you already like — the point is the comparison, not the favourite.',
-];
+import { CRITERIA, STATUSES } from '../../../data/supplier-comparison.mjs';
+const title = 'Supplier Comparison Template and Factory Visit Scorecard';
+const description = 'Compare three suppliers using the same evidence. Fill in a free factory visit scorecard, save it as a file and print your comparison. No email required.';
+const toolSchema = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'WebApplication',
+  name: 'Supplier Comparison Template and Factory Visit Scorecard',
+  url: 'https://chinafactoryhost.com/tools/factory-visit-scorecard/',
+  description,
+  applicationCategory: 'BusinessApplication',
+  operatingSystem: 'Any',
+  browserRequirements: 'JavaScript is required for saving and reopening comparison files.',
+  isAccessibleForFree: true,
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+  provider: { '@id': 'https://chinafactoryhost.com/#organization' },
+}).replace(/</g, '\\u003c');
 ---
+<BaseLayout title={title} description={description} crumbs={[{href:'/tools/',label:'Tools'}]} current="Supplier comparison" bodyClass="supplier-comparison-page" cta={false}>
+<div class="comparison">
+  <header class="comparison-intro">
+    <div><p class="comparison-kicker"><span></span> SUPPLIER COMPARISON TEMPLATE</p>
+      <h1>Compare suppliers.<br /><span>Keep the evidence.</span></h1>
+      <p class="lead">A practical supplier comparison template for your next factory visit. Three suppliers, the same six checks.</p>
+    </div>
+    <aside class="privacy-note"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 3 4 6v5c0 5 8 10 8 10s8-5 8-10V6Z"/><path d="m8 12 3 3 5-6"/></svg><div><strong>Your notes stay with you</strong><p>No account. No email. Download your work before leaving this page.</p></div></aside>
+  </header>
 
-<BaseLayout
-  title={title}
-  description={description}
-  active=""
-  crumbs={[]}
-  current="Factory visit scorecard"
-  cta={{
-    eyebrow: 'Next step',
-    title: 'Score your shortlist with someone on the ground.',
-    lead: 'Tell us the category and the shortlist. We will run the visits and the scoring.',
-    primary: { label: 'Plan my visits', href: '/contact/' },
-    secondary: { label: 'Ask on WhatsApp', href: wa, external: true },
-  }}
->
-  <section class="hero">
-    <div class="container">
-      <div class="split-7-5">
-        <div>
-          <p class="eyebrow">Tool</p>
-          <h1>Factory Visit Scorecard: Supplier Evaluation Criteria</h1>
-          <p class="lead hero__lead">
-            The failure mode in a multi-factory trip is that each visit gets remembered differently.
-            Six dimensions, scored pass / flag / fail, turns impressions into a comparison you can act
-            on.
-          </p>
-        </div>
-        <div class="hero__media">
-          <PhotoSlot name="TOOL · SCORECARD" variant="media">
-            <OnsitePhoto id="06" />
-          </PhotoSlot>
-        </div>
+  <div class="comparison-workspace">
+    <div class="comparison-toolbar" data-comparison-actions hidden>
+      <div class="workspace-label"><span class="workspace-dot"></span> Visit worksheet <span class="workspace-tag">FREE TOOL</span></div>
+      <div class="toolbar-buttons">
+        <button type="button" class="tool-button" data-open><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h7l2 2h9l-2 11H3Z"/><path d="M3 7V4h6l2 3"/></svg>Open file</button>
+        <input class="file-input" type="file" accept=".json,application/json" data-import aria-label="Open saved comparison" tabindex="-1" />
+        <button type="button" class="tool-button" data-print><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 8V3h10v5M7 17H4V9h16v8h-3M7 14h10v7H7Z"/><path d="M16 11h1"/></svg>Print / PDF</button>
+        <button type="button" class="tool-button tool-button--primary" data-export><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5"/></svg>Save file</button>
       </div>
     </div>
+    <p role="status" class="comparison-status" data-comparison-status></p>
+    <noscript><p class="nojs-note">Fill in and print this page with your browser. Enable JavaScript to save and reopen a comparison file.</p></noscript>
+    <form data-comparison-form>
+      <div class="brief-section">
+        <div class="section-caption"><span>01 / THE BRIEF</span><p>Keep every quote tied to the same specification.</p></div>
+        <div class="comparison-context">
+          <label>Product or specification<input name="product" maxlength="300" placeholder="e.g. 500 ml bottle · specification v2" /></label>
+          <label>Visit date<input name="date" type="date" max="9999-12-31" /></label>
+        </div>
+        <div class="supplier-names">{[0,1,2].map(i=><fieldset data-supplier={i}>
+          <legend><span class="supplier-letter">{['A','B','C'][i]}</span>{'Supplier '+(i+1)}</legend>
+          <label><span class="sr-only">{'Supplier '+(i+1)+' company or reference'}</span><input name={'supplier-'+i} maxlength="200" placeholder="Company or reference" /></label>
+        </fieldset>)}</div>
+      </div>
+      <div class="evidence-heading"><div><span class="section-caption">02 / THE EVIDENCE</span><h2>Compare one question at a time</h2></div><span class="note-count" data-note-count aria-live="polite">0 / 18 notes added</span></div>
+      <div class="evidence-sections">{CRITERIA.map((c,index)=><section class="criterion-section" aria-labelledby={'criterion-'+c.id}>
+        <div class="criterion-heading"><span class="criterion-number">{'0'+(index+1)}</span><div><h3 id={'criterion-'+c.id}>{c.label}</h3><p id={'help-'+c.id}>{c.prompt}</p></div></div>
+        <div class="evidence-grid">{[0,1,2].map(i=><div class="evidence-cell">
+          <p class="cell-supplier"><span class="supplier-letter">{['A','B','C'][i]}</span><span data-supplier-label={i}>{'Supplier '+(i+1)}</span></p>
+          <label><span class="sr-only">{c.label+' status for supplier '+(i+1)}</span><select name={'status-'+i+'-'+c.id} aria-describedby={'help-'+c.id} data-evidence-status>{STATUSES.map(s=><option>{s}</option>)}</select></label>
+          <label><span class="sr-only">{c.label+' evidence and notes for supplier '+(i+1)}</span><textarea name={'evidence-'+i+'-'+c.id} rows="3" maxlength="4000" aria-describedby={'help-'+c.id} placeholder="What did you find? What needs checking?"></textarea></label>
+        </div>)}</div>
+      </section>)}</div>
+    </form>
+    <div class="worksheet-bottom"><p>Unknown is a useful answer. Leave a clear next step.</p><button type="button" class="clear-button" data-clear>Clear worksheet</button></div>
+    <div data-print-summary></div>
+  </div>
+
+  <section class="comparison-help">
+    <div><p class="section-caption">READING YOUR NOTES</p><h2>Evidence, not an automatic verdict.</h2><p>An absent manager or an outsourced process alone does not rule out a supplier. Record the context, the evidence and what still needs an answer.</p><p class="boundary">This worksheet supports a buying decision. It is not a formal audit, compliance assessment or product inspection.</p></div>
+    <dl class="status-guide"><div><dt><span class="status-dot neutral"></span>Not checked</dt><dd>You do not have the answer yet.</dd></div><div><dt><span class="status-dot recorded"></span>Evidence recorded</dt><dd>You have a record; this is not an approval.</dd></div><div><dt><span class="status-dot followup"></span>Follow-up needed</dt><dd>A missing answer needs an owner and a date.</dd></div><div><dt><span class="status-dot concern"></span>Concern to resolve</dt><dd>A specific issue may affect your decision.</dd></div></dl>
   </section>
-
-  <Section>
-    <div class="container container--md">
-      <SectionHead
-        eyebrow="How to score"
-        title="Three levels, not a number out of ten."
-        lead="Mark each item as pass, flag or fail, and record the evidence. Use the same criteria for every supplier."
-      />
-      <div class="prose stack">
-        <p>
-          Pass means the evidence is there and you saw it. Flag means something is missing or
-          conditional and needs a follow-up. Fail means the evidence contradicts what you were told.
-          Most factories land somewhere in the middle — the scorecard's job is to make the pattern
-          visible, not to produce a single comforting number.
-        </p>
-        <p>
-          It is the same distinction as <a href="/guides/factory-visit-vs-audit-vs-inspection/">a factory visit,
-          an audit and an inspection</a> — three different questions, and only one of them is what we run.
-        </p>
-      </div>
-    </div>
-  </Section>
-
-  <Section alternate>
-    <div class="container container--md">
-      <SectionHead eyebrow="The six dimensions" title="What to check, and what counts as each level." />
-      <ul class="spec-list clean">
-        {dimensions.map((d) => (
-          <li>
-            <span class="spec-list__k">{d.k}</span><span class="spec-list__v" set:html={d.v} />
-          </li>
-        ))}
-      </ul>
-      <p class="u-mt-6">
-        This is the same scoring we run on an <a href="/services/existing-supplier-visits/">existing-supplier visit</a> —
-        the six dimensions travel with you, so every factory gets measured the same way.
-      </p>
-    </div>
-  </Section>
-
-  <Section>
-    <div class="container container--md">
-      <SectionHead eyebrow="Reading the result" title="What the scores actually mean." />
-      <Checklist title="How to read it" items={reading} />
-      <p class="u-mt-6">
-        The licence and scope dimensions mirror <a href="/about/how-we-vet-factories/">the five checks</a> we run
-        before a factory stays on an itinerary, so the scorecard and the vetting method agree rather than duplicate.
-      </p>
-    </div>
-  </Section>
-
-  <Section alternate>
-    <div class="container">
-      <SectionHead eyebrow="Go deeper" title="Related pages." />
-      <RelatedNav
-        items={[
-          { k: 'Guide', t: 'Factory visit checklist', href: '/guides/china-factory-visit-checklist/' },
-          { k: 'Guide', t: 'Visit vs audit vs inspection', href: '/guides/factory-visit-vs-audit-vs-inspection/' },
-          { k: 'Service', t: 'Visit existing suppliers', href: '/services/existing-supplier-visits/' },
-          { k: 'Trust', t: 'How we vet factories', href: '/about/how-we-vet-factories/' },
-        ]}
-      />
-    </div>
-  </Section>
+  <nav class="comparison-related" aria-label="Next steps"><span>For your next visit</span><a href="/guides/china-factory-visit-checklist/">On-site checklist <span aria-hidden="true">↗</span></a><a href="/guides/questions-to-ask-china-factory-visit/">Supplier questions <span aria-hidden="true">↗</span></a><a href="/factory-visits/">Local visit support <span aria-hidden="true">↗</span></a></nav>
+</div>
 </BaseLayout>
+<script type="application/ld+json" set:html={toolSchema} />
+<script>import '../../../scripts/supplier-comparison.js';</script>
+<style>
+.comparison{--line:#e1e5e9;--soft:#f6f8f9;--muted:#626c76;max-width:1240px;margin:auto;padding:50px 28px 64px;font-family:var(--font-body);color:#20282f}
+.comparison-intro{display:grid;grid-template-columns:1fr 280px;gap:64px;align-items:end;margin-bottom:36px}
+.comparison-kicker{display:flex;align-items:center;gap:10px;font-size:.62rem;letter-spacing:.13em;font-weight:750;margin:0 0 20px;color:var(--muted)}
+.comparison-kicker>span{width:22px;height:2px;background:var(--accent-600,#c52131)}
+.comparison h1{font-size:clamp(2rem,4vw,3.1rem);line-height:1.1;letter-spacing:-.045em;margin:0;font-weight:760}
+.comparison h1 span{color:var(--muted);font-weight:500}.comparison .lead{font-size:1rem;line-height:1.65;max-width:590px;margin:20px 0 0;color:#53606a}
+.privacy-note{display:flex;align-items:start;gap:12px;border-left:1px solid var(--line);padding:8px 0 8px 24px;margin-bottom:4px}.privacy-note svg{flex-shrink:0;color:#567363}.privacy-note strong{font-size:.77rem}.privacy-note p{font-size:.73rem;line-height:1.65;color:var(--muted);margin:6px 0 0}
+.comparison-workspace{border:1px solid #dbe1e6;border-radius:14px;box-shadow:0 8px 30px #20282f06;overflow:hidden;background:#fff}
+.comparison-toolbar{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:16px 24px;background:var(--soft);border-bottom:1px solid var(--line)}.comparison-toolbar[hidden]{display:none}
+.workspace-label{display:flex;align-items:center;gap:9px;font-weight:650;font-size:.8rem}.workspace-dot{width:7px;height:7px;border-radius:50%;background:#5d7568}.workspace-tag{font-size:.5rem;letter-spacing:.08em;background:white;border:1px solid var(--line);padding:3px 6px;border-radius:4px;color:var(--muted);margin-left:5px}
+.toolbar-buttons{display:flex;gap:8px;align-items:center}.tool-button{display:inline-flex;align-items:center;justify-content:center;gap:7px;border:1px solid #d4dbe0;border-radius:7px;background:white;padding:10px 13px;font:600 .7rem var(--font-body);color:#35424b;cursor:pointer;transition:background .15s,border-color .15s}.tool-button svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.65;stroke-linecap:round;stroke-linejoin:round}.tool-button:hover{background:#edf1f3;border-color:#aeb9c2}.tool-button--primary{background:#202b32;color:#fff;border-color:#202b32}.tool-button--primary:hover{background:#3a4953;border-color:#3a4953}.file-input{display:none}
+.comparison-status:empty{display:none}.comparison-status,.nojs-note{font-size:.78rem;margin:0;padding:14px 24px;background:#f1f6f3;border-bottom:1px solid var(--line)}
+.brief-section{padding:28px 28px 30px}.section-caption{font-size:.61rem;letter-spacing:.1em;font-weight:750;color:var(--muted)}.section-caption p{font-size:.75rem;font-weight:400;letter-spacing:0;margin:7px 0 0}
+.comparison-context{display:grid;grid-template-columns:2fr 1fr;gap:20px;margin:22px 0}.comparison label{display:grid;gap:8px;font-size:.73rem;font-weight:600;color:#44515b}
+.comparison input,.comparison select,.comparison textarea{box-sizing:border-box;width:100%;min-width:0;border:1px solid #d8dfe5;border-radius:6px;background:white;color:#25343e;font:400 .78rem/1.5 var(--font-body);padding:11px 12px;transition:border-color .15s,box-shadow .15s}
+.comparison input::placeholder,.comparison textarea::placeholder{color:#7c8790}.comparison input:hover,.comparison select:hover,.comparison textarea:hover{border-color:#aab7c0}.comparison input:focus,.comparison select:focus,.comparison textarea:focus{border-color:#5d7a88;box-shadow:0 0 0 3px #5d7a8815;outline:none}
+.supplier-names{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.supplier-names fieldset{min-width:0;margin:0;padding:14px;border:1px solid var(--line);border-radius:8px;background:#fbfcfd}.supplier-names legend{padding:0 5px;font-size:.72rem;font-weight:650;display:flex;align-items:center;gap:7px}
+.supplier-letter{display:inline-flex;align-items:center;justify-content:center;width:23px;height:23px;border-radius:5px;background:#e9eef2;color:#586874;font-size:.64rem;font-weight:750;flex-shrink:0}
+.evidence-heading{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:24px 28px;background:var(--soft);border-block:1px solid var(--line)}.evidence-heading h2{font-size:1.12rem;letter-spacing:-.02em;margin:7px 0 0}.note-count{font-size:.66rem;white-space:nowrap;background:white;border:1px solid var(--line);border-radius:20px;padding:6px 10px;color:#596771}
+.criterion-section{padding:26px 28px 28px;border-bottom:1px solid var(--line)}.criterion-section:last-child{border:0}.criterion-heading{display:flex;gap:14px;margin-bottom:20px}.criterion-number{font-size:.68rem;color:#7d8992;padding-top:4px;font-variant-numeric:tabular-nums}.criterion-heading h3{font-size:1rem;margin:0 0 6px;letter-spacing:-.015em}.criterion-heading p{font-size:.75rem;line-height:1.6;color:var(--muted);max-width:800px;margin:0}
+.evidence-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.evidence-cell{min-width:0}.cell-supplier{display:flex;align-items:center;gap:7px;font-size:.7rem;font-weight:650;margin:0 0 10px;min-width:0}.cell-supplier>span:last-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.evidence-cell select{background:#f7f9fa;font-size:.72rem;padding:9px 10px}.evidence-cell select[data-state="1"]{background:#f0f6f3;color:#35604a;border-color:#cbded3}.evidence-cell select[data-state="2"]{background:#fcf7ed;color:#805f25;border-color:#e8daba}.evidence-cell select[data-state="3"]{background:#fbf1f1;color:#884b4b;border-color:#e7cccc}.evidence-cell label+label{margin-top:10px}.comparison textarea{resize:vertical;min-height:100px}
+.worksheet-bottom{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:18px 28px;background:var(--soft);border-top:1px solid var(--line)}.worksheet-bottom p{font-size:.72rem;color:var(--muted);margin:0}.clear-button{border:0;background:none;text-decoration:underline;text-underline-offset:4px;color:#6d747b;font:400 .7rem var(--font-body);cursor:pointer;padding:6px;white-space:nowrap}.clear-button:hover{color:#9b3535}
+.comparison-help{display:grid;grid-template-columns:1fr 1fr;gap:70px;padding:44px 4px 32px}.comparison-help h2{font-size:1.35rem;letter-spacing:-.025em;line-height:1.3;margin:12px 0 16px}.comparison-help p:not(.section-caption){font-size:.8rem;line-height:1.75;color:#54616b;margin:0 0 12px}.comparison-help .boundary{font-size:.7rem!important;color:#737e86!important}.status-guide{margin:0}.status-guide>div{padding:12px 0;border-bottom:1px solid var(--line)}.status-guide>div:first-child{padding-top:0}.status-guide dt{display:flex;align-items:center;gap:9px;font-size:.76rem;font-weight:650}.status-guide dd{margin:5px 0 0 17px;font-size:.72rem;color:var(--muted)}.status-dot{width:8px;height:8px;border-radius:50%}.neutral{background:#98a4ae}.recorded{background:#638c76}.followup{background:#b89650}.concern{background:#b47676}
+.comparison-related{display:flex;flex-wrap:wrap;gap:18px 26px;border-top:1px solid var(--line);padding-top:24px;font-size:.74rem}.comparison-related>span{color:var(--muted);margin-right:auto}.comparison-related a{text-decoration:none;font-weight:600}.comparison-related a:hover{text-decoration:underline}.comparison-related a span{margin-left:5px;color:var(--muted)}.comparison :focus-visible{outline:3px solid #7d97a6;outline-offset:3px}
+@media(max-width:900px){.comparison-intro{grid-template-columns:1fr;gap:22px}.privacy-note{border-left:0;padding:0;max-width:500px}.privacy-note p{margin-top:2px}.comparison-help{gap:32px}.workspace-tag{display:none}}
+@media(max-width:640px){.comparison{padding:28px 16px 40px}.comparison h1{font-size:2.15rem}.comparison .lead{font-size:.9rem}.comparison-intro{margin-bottom:26px}.comparison-toolbar{padding:14px 16px;flex-wrap:wrap;gap:12px}.toolbar-buttons{width:100%}.tool-button{flex:1;padding:10px 8px;font-size:.68rem}.comparison-context{grid-template-columns:1fr;gap:16px}.brief-section{padding:22px 16px}.supplier-names{grid-template-columns:1fr;gap:14px}.supplier-names fieldset{padding:10px 12px}.evidence-heading{padding:20px 16px;align-items:start;flex-direction:column;gap:12px}.evidence-heading h2{font-size:1.05rem}.criterion-section{padding:22px 16px}.evidence-grid{grid-template-columns:1fr;gap:20px}.evidence-cell{padding-bottom:18px;border-bottom:1px dashed var(--line)}.evidence-cell:last-child{border:0;padding-bottom:0}.criterion-heading{gap:10px}.comparison textarea{min-height:84px}.worksheet-bottom{padding:16px;align-items:start}.comparison-help{grid-template-columns:1fr;gap:24px;padding-top:32px}.comparison-related{gap:15px}.comparison-related>span{width:100%}.comparison-status{padding:12px 16px}}
+</style>
+<style is:global>
+.supplier-comparison-page .tool-button{white-space:nowrap}
+.supplier-comparison-page .comparison-status{max-width:none;width:100%;line-height:1.6}
+.supplier-comparison-page .comparison-status[data-kind="error"]{background:#fbf3f1;color:#834c40}
+@media(max-width:640px){.supplier-comparison-page .tool-button{font-size:.62rem;gap:5px}.supplier-comparison-page .tool-button svg{width:14px;height:14px}}
+@media(max-width:640px){
+  body.supplier-comparison-page .comparison [data-comparison-form] input,
+  body.supplier-comparison-page .comparison [data-comparison-form] select,
+  body.supplier-comparison-page .comparison [data-comparison-form] textarea{font-size:16px}
+  .supplier-comparison-page .tool-button,
+  .supplier-comparison-page .clear-button{min-height:44px}
+}
+.supplier-comparison-page [data-print-summary]{display:none}
+@media print{
+.supplier-comparison-page header:not(.comparison header),.supplier-comparison-page footer,.supplier-comparison-page .utility-rail,.supplier-comparison-page .breadcrumb,.supplier-comparison-page .wa-bar,.supplier-comparison-page .wa-fab,.supplier-comparison-page .comparison-toolbar,.supplier-comparison-page .worksheet-bottom,.supplier-comparison-page .comparison-help,.supplier-comparison-page .comparison-related,.supplier-comparison-page .privacy-note,.supplier-comparison-page [data-comparison-status]{display:none!important}
+.supplier-comparison-page .comparison{padding:0;max-width:none}.supplier-comparison-page .comparison-intro{display:block!important;margin:0 0 20px}.supplier-comparison-page .comparison h1{font-size:20pt}.supplier-comparison-page .comparison-kicker{display:none}.supplier-comparison-page .comparison-workspace{border:0;box-shadow:none;overflow:visible}
+.supplier-comparison-page [data-print-summary]:not(:empty){display:block}.supplier-comparison-page .comparison:has([data-print-summary]:not(:empty)) form{display:none}.supplier-comparison-page [data-print-summary] section{break-before:page}.supplier-comparison-page [data-print-summary] section:first-child{break-before:auto}.supplier-comparison-page [data-print-summary] h2{font-size:17pt}.supplier-comparison-page [data-print-summary] h3{font-size:11pt;margin:16px 0 6px}.supplier-comparison-page [data-print-summary] p{font-size:10pt;white-space:pre-wrap;overflow-wrap:anywhere}
+.supplier-comparison-page .evidence-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.supplier-comparison-page .criterion-section{break-inside:avoid}
+}
+</style>

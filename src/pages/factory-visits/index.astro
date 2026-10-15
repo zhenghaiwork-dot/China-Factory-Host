@@ -21,15 +21,15 @@ const startingPoints = [
   {
     icon: 'clipboard',
     title: 'I already have suppliers',
-    desc: 'You have a shortlist and a sinking feeling. We verify each one and run the visit so you meet the production manager, not a sales rep.',
-    href: '/services/brand-sourcing-visit/',
+    desc: 'Confirm the production address, agree the meeting scope and collect evidence about the suppliers on your shortlist.',
+    href: '/services/existing-supplier-visits/',
     cta: 'Verify and visit',
   },
   {
     icon: 'target',
     title: 'I need help finding factories',
-    desc: 'You know the product but not the region. Tell us the category and quantity — we name the right cluster and shortlist real factories.',
-    href: '/contact/',
+    desc: 'Start with your product and quantity. Find relevant regions and supplier types before arranging appointments.',
+    href: '/tools/china-manufacturing-hub-finder/',
     cta: 'Find my factories',
   },
   {
@@ -42,11 +42,10 @@ const startingPoints = [
 ];
 
 const includes = [
-  'Five vetting checks run before a factory stays on your itinerary',
-  'Appointments made with the decision-maker, not only a sales contact',
-  'Transport between factories and inside the industrial cluster',
-  'An interpreter who knows the process vocabulary, not just small talk',
-  'Meeting notes, quotes and a written report after the trip',
+  'Supplier and production-address checks to agree before booking',
+  'Appointments with the staff needed for your technical or commercial questions',
+  'Local transport and interpreting, where included in your agreed scope',
+  'The records, meeting notes and follow-up you want delivered',
 ];
 
 const refusals = [
@@ -72,7 +71,7 @@ const faqs = [
   {
     q: 'How many factories can I visit in one day?',
     a: [
-      'In one industrial cluster, two focused visits a day is realistic and productive. Three usually means cutting a walk-through short. We plan density around the cluster, not around a wish list, and we will tell you when your plan is too full.',
+      'Allow a full day for a detailed production and technical review. Two focused appointments may fit when sites are close and both hosts confirm the timing. The route, access and meeting scope determine the schedule.',
     ],
   },
   {
@@ -84,7 +83,7 @@ const faqs = [
   {
     q: 'What if the factory says no?',
     a: [
-      'We build alternatives into the plan. A refusal costs you a location, not a trip day — and we say so before you fly rather than at the gate.',
+      'We review alternatives with you. Access and timing must be confirmed with each host; a replacement appointment is not guaranteed.',
     ],
   },
 ];
@@ -177,12 +176,14 @@ const faqs = [
   <Section>
     <div class="container container--md">
       <SectionHead
-        eyebrow="What is included"
-        title="What a visit actually includes."
+        eyebrow="Agree the scope"
+        title="Confirm the support you need"
       />
-      <Checklist title="On every hosted visit" numbered items={includes} />
+      <Checklist title="Items to agree in your visit brief" numbered items={includes} />
       <p class="u-mt-6">
-        The route and appointments are <a href="/services/factory-visit-planning/">visit planning</a>; the shortlist is <a href="/services/factory-matching/">factory matching</a>.
+        Send your product, dates, supplier addresses and the decisions you need to make.
+        Use the <a href="/guides/china-factory-visit-cost/">visit budget guide</a> to check costs and exclusions.
+        After the visits, use the <a href="/tools/factory-visit-scorecard/">supplier comparison template</a> to organise the evidence.
       </p>
     </div>
   </Section>

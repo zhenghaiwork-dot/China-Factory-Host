@@ -60,23 +60,22 @@ export default defineConfig({
     // Vite re-optimises (and therefore bulk-deletes) node_modules/.vite/deps when
     // its dependency hash changes. On this machine that delete is blocked by the
     // sandbox, so the optimiser is switched off and given its own directory.
-    // Nothing in this site needs dep pre-bundling: no UI framework, no client router.
+    // Explicit CommonJS dependencies are handled by the plugin below.
     cacheDir: 'node_modules/.vite-cfh',
     optimizeDeps: { noDiscovery: true, include: [] },
-    /* Astro 7 gives content collections their own environment, and it does not
-       inherit the top-level `optimizeDeps` above. The tool agent reported the
-       default `astro build` failing there with `require is not defined` from
-       picomatch's CJS entry, and fixed it by setting these per environment.
-
-       Not reproduced here: with Node 22.22.2 a cold build (`.astro/` removed)
-       passes both before and after this hook. So this applies the setting the
-       project already declares — no dep pre-bundling — to every environment,
-       rather than pre-bundling picomatch on the strength of a report I cannot
-       reproduce. If it recurs on another Node version or on the deploy target,
-       add 'picomatch' to `include` here and re-verify a cold build. */
-    configEnvironment(name, opts) {
-      opts.optimizeDeps = { ...(opts.optimizeDeps ?? {}), noDiscovery: true, include: [] };
-      void name;
-    },
+    /* Astro's content collection environment evaluates dependencies during
+       sync as well as dev. Explicitly prebundle picomatch's CommonJS entry.
+       Reproduced and verified with Astro 7.3.2 / Node 24.19.0.
+       Reference: github.com/withastro/astro/blob/main/reference/optimize-deps.md */
+    plugins: [{
+      name: 'cfh-content-dependencies',
+      configEnvironment(name, opts) {
+        // This is a Vite plugin hook, not a top-level Vite config option.
+        // Astro's content runner needs the CommonJS matcher prebundled.
+        opts.optimizeDeps = { ...(opts.optimizeDeps ?? {}), noDiscovery: true,
+          include: [...new Set([...(opts.optimizeDeps?.include ?? []), 'picomatch'])] };
+        void name;
+      },
+    }],
   },
 });

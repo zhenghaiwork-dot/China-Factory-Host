@@ -263,7 +263,7 @@ import { fairStatus } from './fair-status.js';
         })
         .catch(function () {
           var detail = form.parentNode.querySelector('[data-form-error]');
-          if (detail) { detail.textContent = 'The connection failed. Please try again, or message us on WhatsApp.'; }
+            if (detail) { detail.textContent = 'The connection failed. Please check your connection and try again.'; }
           showStatus(form, 'err');
         })
         .then(function () {

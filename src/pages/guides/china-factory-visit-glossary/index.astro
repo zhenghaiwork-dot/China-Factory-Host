@@ -1,0 +1,99 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { GLOSSARY_STAGES } from '../../../data/factory-visit-glossary.mjs';
+
+const title = 'China Factory Visit Glossary: 20 Sourcing Terms';
+const description = 'Plain-English definitions of the terms you will hear when visiting or vetting a Chinese factory, with what to ask, what to check and what to avoid on site.';
+const pageUrl = 'https://chinafactoryhost.com/guides/china-factory-visit-glossary/';
+const terms = GLOSSARY_STAGES.flatMap(stage => stage.terms);
+const schema = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'DefinedTermSet',
+  '@id': pageUrl + '#glossary',
+  name: title,
+  description,
+  url: pageUrl,
+  inLanguage: 'en',
+  hasDefinedTerm: terms.map(term => ({
+    '@type': 'DefinedTerm',
+    '@id': pageUrl + '#' + term.id,
+    name: term.title,
+    alternateName: term.chinese,
+    description: term.definition,
+    url: pageUrl + '#' + term.id,
+    inDefinedTermSet: pageUrl + '#glossary',
+  })),
+}).replace(/</g, '\\u003c');
+---
+<BaseLayout title={title} description={description} crumbs={[{href:'/guides/',label:'Guides'}]} current="Factory visit glossary" article={{title,description,datePublished:'2026-10-15',section:'Sourcing reference'}} cta={false} bodyClass="glossary-page">
+<div class="glossary" data-glossary>
+  <header class="glossary-hero">
+    <p class="glossary-kicker">THE FACTORY FLOOR, IN PLAIN ENGLISH</p>
+    <h1>China factory visit glossary</h1>
+    <p class="glossary-deck">20 sourcing terms.<br /><span>What they mean. What to check.</span></p>
+    <p class="glossary-intro">From the company you meet to the goods you approve: the language of a factory visit, with Chinese terms, pinyin and practical questions for your supplier.</p>
+    <p class="glossary-meta">ChinaFactoryHost · Updated <time datetime="2026-10-15">15 October 2026</time></p>
+  </header>
+
+  <div class="glossary-tools" data-glossary-tools hidden>
+    <div class="glossary-search"><label for="glossary-search">Find a term</label><input id="glossary-search" type="search" placeholder="Try MOQ, mould, 交期 or jiaoqi" autocomplete="off" aria-controls="glossary-entries" /></div>
+    <button type="button" data-clear-search>Clear search</button>
+    <button type="button" data-expand aria-expanded="false" aria-controls="glossary-entries">Expand visit notes</button>
+  </div>
+  <p class="glossary-count" data-glossary-count role="status">20 terms · 5 stages of a visit</p>
+
+  <div class="glossary-layout">
+    <aside class="glossary-sidebar"><nav aria-label="Glossary stages"><p>FOLLOW THE VISIT</p>
+      {GLOSSARY_STAGES.map(stage => <a href={'#'+stage.id}><span>{'0'+stage.number}</span><span>{stage.title}</span><small>{stage.terms.length}</small></a>)}
+    </nav><div class="glossary-sidebar-note"><strong>Put the terms to work</strong><a href="/tools/factory-visit-scorecard/">Record supplier evidence ↗</a><a href="/guides/questions-to-ask-china-factory-visit/">Prepare your questions ↗</a></div></aside>
+
+    <div id="glossary-entries">
+      <p class="glossary-empty" data-glossary-empty hidden>No matching term. Try an English name, Chinese word or pinyin, or clear your search.</p>
+      {GLOSSARY_STAGES.map(stage => <section class="glossary-stage" id={stage.id} data-glossary-stage>
+        <div class="stage-heading"><span>{'0'+stage.number}</span><h2>{stage.title}</h2></div>
+        {stage.terms.map(term => <article class="glossary-term" id={term.id} data-glossary-term>
+          <header class="term-heading"><div><h3><a href={'#'+term.id}>{term.title}</a></h3><p class="term-chinese" lang="zh-Hans">{term.chinese}</p></div><a class="term-anchor" href={'#'+term.id} aria-label={'Link to '+term.title}>#</a></header>
+          <p class="term-definition">{term.definition}</p>
+          <details class="term-notes"><summary>What to ask and check <span aria-hidden="true">+</span></summary>
+            <div class="term-note-content">
+              <div><h4>Why it matters</h4><p>{term.why}</p></div>
+              <div class="term-action"><h4>On your visit</h4><p>{term.visit}</p></div>
+              <div class="term-trap"><h4>Watch for</h4><p>{term.trap}</p></div>
+            </div>
+          </details>
+        </article>)}
+      </section>)}
+    </div>
+  </div>
+
+  <section class="glossary-sources" aria-labelledby="glossary-sources-heading">
+    <div><p class="glossary-kicker">SOURCES & USAGE</p><h2 id="glossary-sources-heading">Use the term. Confirm the details.</h2><p>These are practical sourcing explanations, not legal definitions or inspection instructions. Supplier terminology varies; record the scope, evidence and acceptance criteria that apply to your order.</p></div>
+    <div><ul>
+      <li><a href="https://www.cods.org.cn/cods/dmzs/index.html">National Unified Social Credit Code service centre</a>: the 18-character entity identifier.</li>
+      <li><a href="https://www.gsxt.gov.cn/">National Enterprise Credit Information Publicity System</a>: a company-record lookup resource. Access may require verification.</li>
+      <li><a href="https://www.qima.com/consumer-products/pre-shipment-inspection">QIMA: pre-shipment inspection</a>: inspection scope and readiness. Confirm the plan with your inspection provider.</li>
+    </ul><p class="source-note">Sources reviewed 15 October 2026. Holiday closures, quote inclusions, inspection thresholds and access arrangements must be confirmed for each supplier and order. OEM and ODM are commercial labels; they do not establish design ownership.</p></div>
+  </section>
+  <nav class="glossary-related" aria-label="Related guides"><a href="/guides/how-to-plan-a-china-factory-visit/">Plan a factory visit ↗</a><a href="/guides/factory-visit-vs-audit-vs-inspection/">Visit, audit or inspection? ↗</a><a href="/tools/factory-visit-scorecard/">Compare your suppliers ↗</a></nav>
+</div>
+<script type="application/ld+json" set:html={schema} />
+<script>import '../../../scripts/factory-visit-glossary.js';</script>
+</BaseLayout>
+
+<style>
+.glossary{--g-line:#dfe5e9;--g-muted:#64717a;max-width:1180px;margin:auto;padding:48px 26px 64px;font-family:var(--font-body)}
+.glossary-hero{max-width:820px;margin-bottom:32px}.glossary-kicker{font-size:.62rem;font-weight:750;letter-spacing:.11em;color:var(--g-muted);margin:0 0 18px}
+.glossary h1{font-size:clamp(1.9rem,3.7vw,2.8rem);letter-spacing:-.04em;line-height:1.15;margin:0 0 20px}.glossary-deck{font-size:clamp(1.5rem,2.7vw,2.15rem);line-height:1.25;letter-spacing:-.025em;font-weight:650;margin:0 0 18px}.glossary-deck span{font-weight:400;color:var(--g-muted)}.glossary-intro{font-size:.95rem;line-height:1.75;max-width:730px}.glossary-meta{font-size:.7rem;color:var(--g-muted);margin-top:18px}
+.glossary-tools{display:flex;align-items:end;gap:12px;border:1px solid var(--g-line);background:#f6f8f9;border-radius:10px;padding:18px 20px}.glossary-tools[hidden]{display:none}.glossary-search{flex:1;min-width:0}.glossary-search label{display:block;font-size:.7rem;font-weight:650;margin-bottom:7px}.glossary-search input{width:100%;min-width:0;border:1px solid #bdc9d2;border-radius:5px;background:white;padding:11px 12px;font:inherit;font-size:16px;color:#25333e;min-height:44px}
+.glossary-tools button{border:1px solid #cbd4db;border-radius:5px;padding:11px 14px;min-height:44px;background:white;font:600 .72rem var(--font-body);color:#354552;cursor:pointer}.glossary-tools button:hover{background:#eaf0f3}.glossary-count{font-size:.7rem;color:var(--g-muted);margin:14px 0 28px}
+.glossary-layout{display:grid;grid-template-columns:240px minmax(0,1fr);gap:48px;align-items:start}.glossary-sidebar{position:sticky;top:145px}.glossary-sidebar nav>p{font-size:.6rem;letter-spacing:.1em;font-weight:700;color:var(--g-muted);margin-bottom:14px}.glossary-sidebar nav>a{display:flex;gap:10px;align-items:baseline;padding:14px 0;border-bottom:1px solid var(--g-line);font-size:.77rem;text-decoration:none;line-height:1.5}.glossary-sidebar nav>a>span:first-child{font-size:.64rem;color:#84929c}.glossary-sidebar small{margin-left:auto;color:var(--g-muted);font-size:.63rem}.glossary-sidebar nav>a:hover{color:var(--accent-600)}.glossary-sidebar-note{padding-top:26px;display:grid;gap:13px;font-size:.72rem}.glossary-sidebar-note strong{font-size:.74rem}.glossary-sidebar-note a{color:var(--g-muted)}
+.glossary-stage{scroll-margin-top:145px;margin-bottom:42px}.glossary-stage[hidden],.glossary-term[hidden],.glossary-empty[hidden]{display:none}.stage-heading{display:flex;align-items:center;gap:14px;margin-bottom:18px;padding:15px 0;border-bottom:2px solid #26343d}.stage-heading>span{font-size:.68rem;color:var(--g-muted)}.stage-heading h2{font-size:1.15rem;letter-spacing:-.02em;line-height:1.4;margin:0}
+.glossary-term{scroll-margin-top:145px;border:1px solid var(--g-line);border-radius:9px;margin-bottom:14px;overflow:hidden;background:white}.term-heading{display:flex;justify-content:space-between;gap:14px;padding:22px 24px 0}.term-heading h3{font-size:1.05rem;line-height:1.4;margin:0 0 7px}.term-heading h3 a{text-decoration:none}.term-heading h3 a:hover{text-decoration:underline;text-underline-offset:4px}.term-chinese{font-size:.76rem;color:var(--g-muted);line-height:1.65;margin:0}.term-anchor{color:#84929c;text-decoration:none;padding:4px 8px;font-size:.85rem;flex-shrink:0;min-height:44px;min-width:32px;text-align:center}.term-definition{font-size:.85rem;line-height:1.75;margin:12px 24px 20px;color:#3f4b54}
+.term-notes{border-top:1px solid var(--g-line)}.term-notes summary{display:flex;align-items:center;justify-content:space-between;gap:12px;list-style:none;padding:13px 24px;font-size:.72rem;font-weight:650;background:#f7f9fa;cursor:pointer;min-height:44px}.term-notes summary::-webkit-details-marker{display:none}.term-notes summary span{font-size:1rem;color:var(--g-muted);transition:transform .15s}.term-notes[open] summary span{transform:rotate(45deg)}.term-note-content{padding:20px 24px}.term-note-content h4{font-size:.69rem;margin:0 0 7px;font-weight:750}.term-note-content p{font-size:.81rem;line-height:1.75;margin:0;color:#4d5a63}.term-note-content>div+div{margin-top:18px}.term-action{border-left:3px solid #7f9990;padding:2px 0 2px 14px}.term-trap{padding:14px 16px;background:#f8f5ef;border-radius:5px}.glossary-empty{padding:24px;background:#f6f8f9;border:1px solid var(--g-line);border-radius:8px;font-size:.85rem}
+.glossary-sources{display:grid;grid-template-columns:1fr 1fr;gap:50px;padding-top:34px;border-top:1px solid var(--g-line)}.glossary-sources h2{font-size:1.4rem;line-height:1.3;margin:0 0 16px;letter-spacing:-.025em}.glossary-sources p,.glossary-sources li{font-size:.78rem;color:var(--g-muted);line-height:1.75}.glossary-sources ul{margin:0;padding-left:20px}.glossary-sources li{margin-bottom:12px}.glossary-sources .source-note{font-size:.7rem;margin-top:18px}.glossary-related{display:flex;flex-wrap:wrap;gap:18px 28px;padding-top:28px;margin-top:28px;border-top:1px solid var(--g-line);font-size:.76rem}.glossary a:focus-visible,.glossary button:focus-visible,.glossary input:focus-visible,.glossary summary:focus-visible{outline:3px solid #7b96a6;outline-offset:3px}
+@media(max-width:850px){.glossary-layout{grid-template-columns:1fr;gap:24px}.glossary-sidebar{position:static}.glossary-sidebar nav{display:flex;flex-wrap:wrap;gap:8px}.glossary-sidebar nav>p{width:100%;margin:0 0 4px}.glossary-sidebar nav>a{border:1px solid var(--g-line);border-radius:5px;padding:9px 11px;font-size:.68rem;min-height:44px}.glossary-sidebar small,.glossary-sidebar-note{display:none}.glossary-sources{gap:28px}.glossary-stage,.glossary-term{scroll-margin-top:130px}}
+@media(max-width:540px){.glossary{padding:28px 16px 42px}.glossary-tools{flex-wrap:wrap;padding:14px}.glossary-search{flex-basis:100%}.glossary-tools button{flex:1;font-size:.68rem;padding:10px 7px}.glossary-sources{grid-template-columns:1fr}.term-heading{padding:18px 17px 0}.term-definition{margin:12px 17px 18px}.term-notes summary,.term-note-content{padding:15px 17px}.term-heading h3{font-size:1rem}.glossary-sidebar nav>a{font-size:.65rem}.glossary h1{font-size:1.9rem}.glossary-intro{font-size:.88rem}.glossary-stage{margin-bottom:28px}}
+</style>
+<style is:global>
+@media print{.glossary-page .glossary-tools,.glossary-page .glossary-sidebar,.glossary-page .glossary-related{display:none!important}.glossary-page .glossary-layout{display:block}.glossary-page .glossary-term{break-inside:avoid}.glossary-page .term-notes>div{display:block!important}.glossary-page .glossary{padding:0}.glossary-page .glossary-term[hidden],.glossary-page .glossary-stage[hidden]{display:block}}
+</style>

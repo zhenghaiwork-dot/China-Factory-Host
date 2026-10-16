@@ -5,15 +5,11 @@ import SectionHead from '../../components/SectionHead.astro';
 import Checklist from '../../components/Checklist.astro';
 import Caveat from '../../components/Caveat.astro';
 
-/* Privacy & disclaimer. Every sentence here is a description of what the code
-   actually does — verified by grepping src/ for analytics, cookies, localStorage
-   and third-party embeds (all absent). Nothing on this page is boilerplate: if
-   the site ever starts tracking visitors or storing inquiries in a database,
-   this page has to be rewritten in the same commit. */
+/* Keep this policy aligned with form delivery and optional analytics. */
 
 const title = "Privacy and Service Disclaimer";
 const description =
-  'The site collects the details you type into a form and emails them to our own inbox. No analytics, no cookies, no pixels, and we do not pass your details to anyone.';
+  'How we handle inquiries, optional analytics cookies, and your privacy choices.';
 ---
 
 <BaseLayout
@@ -34,9 +30,7 @@ const description =
       <p class="eyebrow">Privacy</p>
       <h1>Privacy and Service Disclaimer</h1>
       <p class="lead hero__lead">
-        This site collects one thing — the details you type into a form — and sends them to one
-        place: our own inbox. There is no analytics script, no advertising pixel and no cookie on
-        any page.
+        We use the details you submit to respond to your inquiry. When enabled, optional Google Analytics helps us understand visits and successful inquiries, only after you allow it.
       </p>
     </div>
   </section>
@@ -82,6 +76,15 @@ const description =
     </div>
   </Section>
 
+  <Section alternate>
+    <div class="container container--md">
+      <SectionHead title="Optional analytics." />
+      <p>When configured, we use Google Analytics 4 to measure page visits, successful inquiries and contact-link clicks. Google receives technical and usage data, and analytics cookies can distinguish visits. Advertising personalization and Google signals are disabled in our tag.</p>
+      <p>The Google tag loads only after you choose Allow analytics. Declining does not affect forms or tools. We store your preference in this browser for up to 180 days. Use Analytics preferences in the footer to change it. Withdrawing consent stops future collection and removes this site's Google Analytics cookies; it does not erase previously collected data.</p>
+      <p>Our custom events exclude names, email addresses and messages. Page URLs are sent without query strings or fragments. Hosting and security providers may separately process request logs to operate the site. See <a href="https://policies.google.com/privacy">Google’s privacy policy</a> for its data handling.</p>
+    </div>
+  </Section>
+
   <!-- 3 · What we do not do -->
   <Section>
     <div class="container container--md">
@@ -93,8 +96,8 @@ const description =
       <Checklist
         refusal
         items={[
-          'No analytics or visitor-tracking script on any page',
-          'No cookies, and no localStorage or session storage either',
+          'No names, email addresses or inquiry messages sent through our analytics events',
+
           'No advertising or remarketing pixel',
           'No third-party social embed',
           'We do not sell or rent your details; our email delivery provider processes submissions to deliver them',

@@ -196,7 +196,7 @@ import { fairStatus } from './fair-status.js';
         server-rendered route on this otherwise-static site
         (`export const prerender = false`). It returns real
         HTTP statuses: 200 sent, 400 bad input, 429 rate-limited,
-        502 SMTP failure, 503 SMTP not configured. The UI only
+        502 mail provider failure, 503 mail not configured. The UI only
         shows "sent" on a genuine 2xx with `ok: true`.
 
         NOTE: the endpoint URL must keep its trailing slash. This
@@ -205,13 +205,15 @@ import { fairStatus } from './fair-status.js';
         ends on the GET handler's 405.
      --------------------------------------------------------- */
   function showStatus(form, kind) {
+    Array.prototype.forEach.call(form.parentNode.querySelectorAll('[data-form-status]'), function (status) {
+      status.hidden = true;
+    });
     var target = form.parentNode.querySelector('[data-form-status="' + kind + '"]');
     if (!target) { return; }
     target.hidden = false;
     if (kind === 'ok') {
       form.hidden = true;
-      var focus = target.querySelector('[tabindex="-1"]');
-      if (focus) { focus.focus(); }
+      target.focus();
     } else {
       target.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
@@ -228,6 +230,9 @@ import { fairStatus } from './fair-status.js';
       }
 
       var button = form.querySelector('[data-submit]');
+      Array.prototype.forEach.call(form.parentNode.querySelectorAll('[data-form-status]'), function (status) {
+        status.hidden = true;
+      });
       var label = button ? button.textContent : null;
       if (button) {
         button.disabled = true;
@@ -255,6 +260,7 @@ import { fairStatus } from './fair-status.js';
         .then(function (out) {
           if (out.status >= 200 && out.status < 300 && out.json && out.json.ok) {
             showStatus(form, 'ok');
+            document.dispatchEvent(new CustomEvent('cfh:inquiry-success'));
           } else {
             var detail = form.parentNode.querySelector('[data-form-error]');
             if (detail && out.json && out.json.error) { detail.textContent = out.json.error; }

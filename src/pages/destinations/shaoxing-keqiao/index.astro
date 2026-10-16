@@ -5,7 +5,7 @@ const title="Keqiao Fabric Market and Textile Supplier Visits";
 const description="Prepare a Keqiao fabric sourcing trip: compare market samples, record fabric specifications and arrange confirmed textile supplier visits in Shaoxing.";
 ---
 <BaseLayout title={title} description={description} crumbs={[{href:"/destinations/",label:"Destinations"}]} current={title} cta={false}>
-<article class="growth-article">
+<article class="growth-article keqiao-page">
 <header><p class="eyebrow">Shaoxing · Zhejiang</p><h1>Keqiao fabric market and textile supplier visits</h1><p class="lead">Start at the market to compare fabrics. Arrange a separate production visit when you need to understand who makes the cloth and how your specification will be produced.</p><p>China Textile City is in Keqiao district, Shaoxing, Zhejiang. The regional textile industry includes weaving, dyeing and other production stages. A market address alone does not establish that a seller owns a mill.</p></header>
 <nav class="jump-links" aria-label="On this page"><a href="#brief">Prepare your fabric brief</a><a href="#route">Market to mill</a><a href="#confirm">Confirm before travel</a></nav>
 <section id="brief"><h2>Bring a specification you can compare</h2><p>Use a physical reference sample where possible. Record each quote against the same requirements, and label swatches before moving to the next supplier.</p><div class="table-wrap"><table><caption>Fabric sourcing brief</caption><thead><tr><th scope="col">Record</th><th scope="col">Clarify with the supplier</th></tr></thead><tbody>
@@ -16,7 +16,7 @@ const description="Prepare a Keqiao fabric sourcing trip: compare market samples
 <tr><th scope="row">Performance requirements</th><td>Your intended market and required test methods or results. Agree specialist testing where needed.</td></tr>
 <tr><th scope="row">Delivery and traceability</th><td>Lead-time assumptions, sample reference, seller identity and the production stages to verify.</td></tr>
 </tbody></table></div></section>
-<section id="route"><h2>Move from a market shortlist to a confirmed visit</h2><ol class="timeline">
+<section id="route"><h2>Move from a market shortlist to a confirmed visit</h2><ol class="keqiao-steps">
 <li><h3>Compare samples and collect records</h3><p>Record the stall or showroom, contact, swatch reference and quote assumptions together. Ask whether the offer is for stock fabric or production to order.</p></li>
 <li><h3>Clarify the seller's role</h3><p>Ask who weaves or knits the fabric and who dyes, prints or finishes it. The work may involve several businesses. Confirm which site is relevant to your question before asking for a visit.</p></li>
 <li><h3>Arrange the production appointment</h3><p>Confirm the address, host, permitted areas and whether the process you want to see will be running. Do not plan on same-day access simply because the market and supplier are in the same region.</p></li>
@@ -24,6 +24,78 @@ const description="Prepare a Keqiao fabric sourcing trip: compare market samples
 </ol></section>
 <section id="confirm"><h2>Confirm these details before travelling</h2><div class="two-up"><article><h3>Market appointment</h3><p>Ask for the specific market building, floor, stall or showroom and opening hours for your date. “China Textile City” is not a sufficiently precise meeting point.</p><p>Allow time for comparing materials rather than booking every hour with a different seller.</p></article><article><h3>Production appointment</h3><p>Confirm travel from your hotel or market, visitor requirements and the production schedule. Ask about seasonal or holiday changes directly.</p><p>Get permission before filming or photographing. Access to a sales area does not include access to production.</p></article></div></section>
 <section class="note"><h2>Plan the visit around the fabric</h2><p>Send your fabric specification, quantities, dates and any existing supplier contacts. We can review what needs checking and which appointments would support your decision.</p><p><a href="/contact/">Discuss a Keqiao sourcing visit</a></p></section>
-<section><h2>Regional sources</h2><p class="meta">Regional background checked 15 October 2026. These sources describe the market and textile industry; they do not verify individual suppliers or appointment availability.</p><ul><li><a href="https://www.ezhejiang.gov.cn/shaoxing/2025-04/03/c_1084790.htm">Zhejiang government portal: China Textile City in Keqiao</a> (3 April 2025).</li><li><a href="https://www.ezhejiang.gov.cn/shaoxing/2025-02/05/c_1069447.htm">Zhejiang government portal: Keqiao textile production and trade</a> (5 February 2025).</li></ul></section>
+<section class="regional-sources"><h2>Regional sources</h2><p class="meta">Regional background checked 15 October 2026. These sources describe the market and textile industry; they do not verify individual suppliers or appointment availability.</p><ul><li><a href="https://www.ezhejiang.gov.cn/shaoxing/2025-04/03/c_1084790.htm">Zhejiang government portal: China Textile City in Keqiao</a> (3 April 2025).</li><li><a href="https://www.ezhejiang.gov.cn/shaoxing/2025-02/05/c_1069447.htm">Zhejiang government portal: Keqiao textile production and trade</a> (5 February 2025).</li></ul></section>
 <div class="related"><a href="/china-trade-fairs/#filters=city%3DShaoxing%2B%2528Keqiao%2529">Keqiao textile fair — dates and details</a><a href="/destinations/zhejiang/">Other Zhejiang destinations</a><a href="/tools/china-manufacturing-hub-finder/">Find regions by product</a><a href="/guides/questions-to-ask-china-factory-visit/">Questions for your supplier</a></div></article>
 </BaseLayout>
+
+<style>
+  .keqiao-page { max-width:1080px; padding:44px 32px 76px; color:#30343a; }
+  .keqiao-page header { max-width:850px; margin-bottom:32px; }
+  .keqiao-page h1 { font-size:clamp(2rem,3.8vw,2.8rem); line-height:1.16; letter-spacing:-.04em; font-weight:650; text-wrap:pretty; margin:0 0 22px; }
+  .keqiao-page header .eyebrow { margin-bottom:18px; font-size:.7rem; }
+  .keqiao-page header .lead { font-size:1.08rem; line-height:1.75; color:#59616b; margin:0 0 20px; }
+  .keqiao-page p { font-size:.94rem; line-height:1.8; color:#606872; max-width:76ch; margin:0 0 16px; }
+  .keqiao-page section { margin:52px 0; }
+  .keqiao-page section[id] { scroll-margin-top:130px; }
+  .keqiao-page h2 { font-size:clamp(1.35rem,2.5vw,1.75rem); line-height:1.3; letter-spacing:-.025em; font-weight:600; margin:0 0 20px; text-wrap:pretty; }
+  .keqiao-page h3 { font-size:1.05rem; line-height:1.45; font-weight:600; letter-spacing:-.01em; margin:0 0 12px; }
+  .keqiao-page a { text-underline-offset:4px; text-decoration-color:#c0c5cd; }
+  .keqiao-page a:hover { color:#a82332; text-decoration-color:currentColor; }
+  .keqiao-page .jump-links { gap:10px 26px; border-block:1px solid #e6e8ec; padding:20px 0; }
+  .keqiao-page .jump-links a { font-size:.8rem; line-height:1.6; font-weight:500; color:#535d69; text-decoration:none; padding:4px 0; }
+  .keqiao-page .jump-links a:hover { color:#a82332; text-decoration:underline; }
+  .keqiao-page .table-wrap { margin-top:24px; }
+  .keqiao-page table { table-layout:fixed; font-size:.87rem; }
+  .keqiao-page caption { text-align:left; padding:0 0 13px; color:#7a828e; font-size:.73rem; }
+  .keqiao-page th, .keqiao-page td { min-width:0; overflow-wrap:break-word; padding:19px 22px; line-height:1.7; border-bottom:1px solid #e8eaee; }
+  .keqiao-page thead { background:#f3f5f8; }
+  .keqiao-page thead th { font-size:.75rem; color:#737d8a; font-weight:600; padding-block:14px; }
+  .keqiao-page th:first-child { width:29%; }
+  .keqiao-page tbody th { font-weight:550; color:#3e4752; }
+  .keqiao-page td { color:#646d79; }
+  .keqiao-page tbody tr:last-child > * { border-bottom:0; }
+  /* A page-specific name prevents the site's five-column timeline from leaking in. */
+  .keqiao-steps { list-style:none; padding:0; margin:30px 0 0; counter-reset:keqiao-step; max-width:900px; }
+  .keqiao-steps > li { position:relative; margin:0 0 0 19px; padding:0 0 32px 42px; border-left:1px solid #e1e5ec; counter-increment:keqiao-step; }
+  .keqiao-steps > li::before { content:counter(keqiao-step,decimal-leading-zero); position:absolute; top:0; left:-19px; display:grid; place-items:center; width:38px; height:38px; background:#f1f3f7; color:#66717f; border:3px solid white; border-radius:50%; font-size:.75rem; font-weight:600; line-height:1; font-variant-numeric:tabular-nums; }
+  .keqiao-steps > li:last-child { border-color:transparent; padding-bottom:0; }
+  .keqiao-steps h3 { padding-top:5px; margin-bottom:10px; }
+  .keqiao-steps p { margin:0; }
+  .keqiao-page .two-up { grid-template-columns:repeat(2,minmax(0,1fr)); gap:24px; }
+  .keqiao-page .two-up > article { padding:26px 28px; background:#f6f7fa; border-radius:12px; min-width:0; }
+  .keqiao-page .two-up h3 { margin-bottom:16px; }
+  .keqiao-page .two-up p { font-size:.9rem; }
+  .keqiao-page .two-up p:last-child { margin-bottom:0; }
+  .keqiao-page .note { padding:30px 34px; border:0; border-radius:12px; background:#f3f5f8; }
+  .keqiao-page .note h2 { font-size:1.4rem; margin-bottom:15px; }
+  .keqiao-page .note p:last-child { margin:20px 0 0; }
+  .keqiao-page .note a { font-size:.86rem; font-weight:600; color:#a82332; }
+  .keqiao-page .regional-sources h2 { font-size:1.2rem; }
+  .keqiao-page .regional-sources .meta { font-size:.78rem; line-height:1.75; color:#828a95; }
+  .keqiao-page .regional-sources ul { padding-left:20px; margin:20px 0 0; }
+  .keqiao-page .regional-sources li { font-size:.81rem; line-height:1.8; padding-left:4px; margin-bottom:10px; color:#7b838e; }
+  .keqiao-page .regional-sources li a { color:#596574; }
+  .keqiao-page .related { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; border-top:1px solid #e5e8ee; padding-top:26px; }
+  .keqiao-page .related a { display:flex; align-items:center; justify-content:space-between; gap:18px; padding:17px 20px; background:#f6f7fa; border-radius:8px; font-size:.82rem; line-height:1.6; text-decoration:none; color:#566170; }
+  .keqiao-page .related a::after { content:'→'; color:#9aa2ad; }
+  .keqiao-page .related a:hover { background:#eef1f6; color:#a82332; }
+  @media(max-width:700px) {
+    .keqiao-page { padding:28px 20px 46px; }
+    .keqiao-page header .lead { font-size:1rem; }
+    .keqiao-page p { font-size:.9rem; }
+    .keqiao-page section { margin:38px 0; }
+    .keqiao-page .jump-links { gap:8px 20px; padding:14px 0; }
+    .keqiao-page .jump-links a { font-size:.76rem; }
+    .keqiao-steps > li { padding-left:29px; padding-bottom:28px; margin-left:17px; }
+    .keqiao-steps > li::before { width:34px; height:34px; left:-17px; font-size:.7rem; }
+    .keqiao-steps h3 { font-size:.98rem; padding-top:3px; }
+    .keqiao-page th:first-child { width:35%; }
+    .keqiao-page th, .keqiao-page td { padding:14px 10px; font-size:.8rem; line-height:1.7; }
+    .keqiao-page thead th { font-size:.7rem; }
+    .keqiao-page .two-up, .keqiao-page .related { grid-template-columns:1fr; }
+    .keqiao-page .two-up { gap:16px; }
+    .keqiao-page .two-up > article { padding:22px; }
+    .keqiao-page .note { padding:24px 22px; }
+    .keqiao-page .related a { padding:16px 18px; }
+  }
+</style>

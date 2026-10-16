@@ -5,9 +5,8 @@ import SectionHead from '../../components/SectionHead.astro';
 import PhotoSlot from '../../components/PhotoSlot.astro';
 import OnsitePhoto from '../../components/OnsitePhoto.astro';
 import Checklist from '../../components/Checklist.astro';
-import CoverageMap from '../../components/CoverageMap.astro';
+import CoverageRegions from '../../components/CoverageRegions.astro';
 import Caveat from '../../components/Caveat.astro';
-import NoteStrip from '../../components/NoteStrip.astro';
 import VetLink from '../../components/VetLink.astro';
 import RelatedNav from '../../components/RelatedNav.astro';
 import { waLink, HOST_NAME } from '../../data/site.ts';
@@ -32,6 +31,7 @@ const wa = waLink('Hi, I have a question about your team and how the trips work.
     secondary: { label: 'Ask on WhatsApp', href: wa, external: true },
   }}
 >
+  <div class="about-page">
   <section class="hero">
     <div class="container">
       <div class="split-7-5">
@@ -95,14 +95,7 @@ const wa = waLink('Hi, I have a question about your team and how the trips work.
           </p>
         </div>
       </div>
-      <div class="u-mt-6">
-        {/* Label was "Placeholder" — a note about our own draft status. The body
-            is visitor-facing and stays; the marker moves to an attribute. */}
-        <NoteStrip label="Team bios" marker="case"
-          >Team names, roles and photographs are pending written sign-off from everyone involved. We
-          are not publishing bios until they have read them.</NoteStrip
-        >
-      </div>
+
     </div>
   </Section>
 
@@ -155,12 +148,12 @@ const wa = waLink('Hi, I have a question about your team and how the trips work.
     <div class="container container--md">
       <SectionHead
         eyebrow="Where we are based"
-        title="Home base, resident team, and the rest."
-        lead="We do not claim the same depth everywhere. Tier 1 is home, Tier 2 is staffed, Tier 3 is reachable with notice."
+        title="Where we support factory visits"
+        lead="Based in Zhejiang, with regional support confirmed for your product, dates and visit requirements."
       />
-      <CoverageMap />
+      <CoverageRegions />
       <p class="u-mt-6">
-        The depth we claim in each region is written on the <a href="/destinations/">destination pages</a>, tier by tier.
+        See the <a href="/destinations/">destination guides</a> for local industries and visit planning.
       </p>
     </div>
   </Section>
@@ -232,4 +225,85 @@ const wa = waLink('Hi, I have a question about your team and how the trips work.
       />
     </div>
   </Section>
+  </div>
 </BaseLayout>
+<style is:global>
+.about-page {
+  color:#30343a;
+  .container{max-width:1180px;padding-inline:32px}
+  .container--md{max-width:1080px}
+  .hero{padding:42px 0 54px;min-height:0}
+  .split-7-5{gap:52px;align-items:center}
+  h1{font-size:clamp(2.2rem,3.7vw,3.1rem);line-height:1.15;letter-spacing:-.04em;font-weight:650;text-wrap:pretty;max-width:650px}
+  .hero .lead{font-size:1.05rem;line-height:1.8;color:#68717d;margin-top:24px;max-width:580px}
+  .hero .btn-row{gap:18px;margin-top:28px;align-items:center}
+  .hero .btn{font-size:.82rem;min-height:48px;padding:13px 22px;border-radius:7px}
+  .hero .btn--secondary{border:0;background:none;padding:10px 0;color:#616b78;text-decoration:underline;text-underline-offset:5px;box-shadow:none}
+  .hero__media{min-width:0;border-radius:14px;overflow:hidden}
+  .hero__media img{width:100%;height:370px;object-fit:cover}
+  .section{padding-block:52px}
+  .section-head{margin-bottom:26px;max-width:850px}
+  h2{font-size:clamp(1.45rem,2.6vw,1.95rem);line-height:1.3;font-weight:600;letter-spacing:-.025em;text-wrap:pretty}
+  h3{line-height:1.4;letter-spacing:-.015em}
+  .eyebrow{font-size:.68rem;letter-spacing:.06em;margin-bottom:14px}
+  .section-head__lead{font-size:.98rem;line-height:1.8;color:#747d89;max-width:78ch;margin-top:14px}
+  .prose{max-width:80ch}
+  .prose p{font-size:.96rem;line-height:1.85;color:#626c79;margin-bottom:18px}
+  .grid--3{gap:22px;align-items:stretch}
+  .pillar{background:#f5f6f9;border:0;border-radius:12px;padding:26px;min-width:0}
+  .pillar__n{font-size:.66rem;color:#858d99;letter-spacing:.06em;font-weight:500;line-height:1.5;margin:0 0 13px}
+  .pillar__t{font-size:1.15rem;font-weight:600;letter-spacing:-.02em;margin:0 0 12px;line-height:1.4}
+  .pillar__d{font-size:.85rem;line-height:1.8;color:#6c7583;margin:0}
+  .checklist{background:#f6f7fa;border:0;border-radius:12px;padding:26px 30px;max-width:930px}
+  .checklist__title{font-size:.75rem;color:#7d8794;margin-bottom:18px;letter-spacing:.02em}
+  .checklist__list{display:grid;gap:0}
+  .checklist__list li{padding:14px 0;gap:18px;font-size:.9rem;line-height:1.8;border-bottom:1px solid #e4e8ee;align-items:baseline}
+  .checklist__list li:last-child{border-bottom:0;padding-bottom:0}
+  .checklist__num{font-size:.76rem;font-weight:500;color:#939ca8;min-width:25px}
+  .coverage{margin-top:26px}
+  .coverage__canvas{background:white;border-radius:12px;padding:20px}
+  .coverage .legend{gap:16px 24px;margin-top:20px}
+  .legend__item{font-size:.76rem;line-height:1.6}
+  .tier-card{border-radius:10px;box-shadow:none}
+  .caveat{padding:26px 30px;background:#f5f6f9;border:0;border-radius:12px;margin:0}
+  .caveat__eyebrow{display:none}
+  .caveat__title{font-size:1.12rem;margin-bottom:13px;font-weight:600}
+  .caveat__body{font-size:.9rem;line-height:1.8;color:#66717e;max-width:85ch}
+  .caveat__list{margin-top:18px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 32px}
+  .caveat__list li{font-size:.83rem;line-height:1.8;color:#77818d;margin:0;min-width:0}
+  .stack:has(>.caveat){gap:18px}
+  p.u-mt-6{font-size:.86rem;color:#727c89;line-height:1.8}
+  .related-nav{gap:16px}
+  .related-nav a{background:#f5f6f9;border:0;border-radius:10px;padding:24px;box-shadow:none}
+  .related-nav a:hover{background:#edf0f6;transform:none}
+  .related-nav__k{font-size:.67rem;color:#8a939f;letter-spacing:.04em}
+  .related-nav__t{font-size:.95rem;font-weight:550;line-height:1.55;margin-top:10px}
+  @media(max-width:900px){
+    .split-7-5{gap:28px}.hero__media img{height:320px}
+    .grid--3{gap:16px}.pillar{padding:22px}.pillar__t{font-size:1.05rem}
+  }
+  @media(max-width:700px){
+    .container,.container--md{padding-inline:20px}
+    .hero{padding:28px 0 36px}.split-7-5{grid-template-columns:1fr;gap:30px}
+    h1{font-size:2.1rem;line-height:1.18}.hero .lead{font-size:.97rem;line-height:1.8}
+    .hero .btn-row{gap:14px 20px}.hero__media img{height:260px}
+    .section{padding-block:36px}.section-head{margin-bottom:22px}
+    .grid--3{grid-template-columns:1fr;gap:14px}.pillar{padding:23px}
+    .prose p{font-size:.91rem}.section-head__lead{font-size:.92rem}
+    .checklist,.caveat{padding:22px}.checklist__list li{font-size:.86rem;gap:12px}
+    .caveat__list{grid-template-columns:1fr;gap:10px}.caveat__body{font-size:.86rem}
+    .coverage__canvas{padding:8px}.related-nav{grid-template-columns:1fr}
+    .related-nav a{padding:20px 22px}.related-nav__t{font-size:.91rem}
+  }
+}
+</style>
+<style is:global>
+  .about-page .hero .split-7-5 { grid-template-areas:none; align-items:center; gap:40px 52px; }
+  .about-page .hero .split-7-5 > div:first-child { display:block; }
+  .about-page .hero .split-7-5 > .hero__media { grid-area:auto; align-self:center; margin-top:0; }
+  .about-page .hero .split-7-5 > .hero__media .photo-slot { aspect-ratio:auto; }
+  .about-page .hero h1 { max-width:650px; font-size:clamp(2.2rem,3.7vw,3.1rem); margin-bottom:0; }
+  .about-page .section-head > .lead { font-size:.98rem; line-height:1.8; color:#747d89; margin-top:14px; }
+  @media(max-width:900px){ .about-page .hero .split-7-5 { gap:30px; } }
+  @media(max-width:700px){ .about-page .hero h1 { font-size:2.1rem; } .about-page .section-head > .lead { font-size:.92rem; } }
+</style>

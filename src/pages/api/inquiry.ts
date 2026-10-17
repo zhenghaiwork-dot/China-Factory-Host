@@ -1,5 +1,6 @@
 import type { APIRoute } from 'astro';
 import { sendMail } from '../../lib/mail';
+import { sourcePath, sourcePlacement } from '../../lib/inquiry-context.js';
 import { HOST_NAME } from '../../data/site.ts';
 
 /* ============================================================
@@ -186,6 +187,8 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
   const destination = clean(body.destination, 80);
   const goal = clean(body.goal, 4000);
   const source = clean(body.source, 200) || 'unknown page';
+  const entryPage = sourcePath(body.entry_page);
+  const entryPlacement = entryPage ? sourcePlacement(body.entry_placement) : '';
 
   /* Two intents share this endpoint.
      `download` is the lead-magnet gate (DownloadGate.astro) — it asks for an
@@ -227,6 +230,8 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     '',
     `Received:  ${when}`,
     `Source:    ${source}`,
+    `Contact entry page (visitor supplied): ${entryPage || 'not provided'}`,
+    `Contact entry placement: ${entryPlacement || 'not provided'}`,
     `Intent:    ${isDownload ? 'download' : 'inquiry'}`,
     `Type:      ${role || 'not stated'}`,
     `Name:      ${displayName}`,
@@ -246,6 +251,8 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
   <table style="border-collapse:collapse">
     <tr><td style="padding:4px 12px 4px 0;color:#616670">Received</td><td>${esc(when)}</td></tr>
     <tr><td style="padding:4px 12px 4px 0;color:#616670">Source page</td><td>${esc(source)}</td></tr>
+    <tr><td style="padding:4px 12px 4px 0;color:#616670">Contact entry page (visitor supplied)</td><td>${esc(entryPage || 'not provided')}</td></tr>
+    <tr><td style="padding:4px 12px 4px 0;color:#616670">Contact entry placement</td><td>${esc(entryPlacement || 'not provided')}</td></tr>
     <tr><td style="padding:4px 12px 4px 0;color:#616670">Intent</td><td>${isDownload ? 'download' : 'inquiry'}</td></tr>
     <tr><td style="padding:4px 12px 4px 0;color:#616670">Type</td><td>${esc(role || 'not stated')}</td></tr>
     <tr><td style="padding:4px 12px 4px 0;color:#616670">Name</td><td><strong>${esc(displayName)}</strong></td></tr>

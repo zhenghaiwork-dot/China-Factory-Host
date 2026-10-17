@@ -11,6 +11,7 @@
    Every block is defensive: missing markup never throws.
    ============================================================ */
 import { fairStatus } from './fair-status.js';
+import './inquiry-context.js';
 
 (function () {
   'use strict';

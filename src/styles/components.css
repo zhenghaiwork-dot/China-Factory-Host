@@ -1502,7 +1502,7 @@
   .cmp-desktop { display: block; }
   .cmp-mobile  { display: none; }
 }
-.cmp-cards { display: grid; gap: var(--space-4); }
+.cmp-cards { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-4); }
 .cmp-card {
   background: var(--color-surface);
   border: var(--border-default);
@@ -1510,15 +1510,20 @@
   padding: var(--space-5);
 }
 .cmp-card--featured { border-color: var(--color-border-accent); background: var(--color-accent-tint); }
-.cmp-card__head { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); margin-bottom: var(--space-4); }
+.cmp-card__head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-3); margin-bottom: var(--space-4); }
 .cmp-card__name { font-family: var(--font-display); font-size: var(--fs-h4); font-weight: var(--fw-semibold); }
 .cmp-card__rows { margin: 0; padding: 0; list-style: none; display: grid; }
-.cmp-card__rows li { display: grid; grid-template-columns: 1fr auto; gap: var(--space-3); padding: var(--space-3) 0; border-top: var(--border-hairline); }
+.cmp-card__rows li { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); gap: var(--space-3); padding: var(--space-3) 0; border-top: var(--border-hairline); }
+.cmp-card__rows li > * { min-width: 0; overflow-wrap: anywhere; }
 .cmp-card__rows li:first-child { border-top: 0; }
 .cmp-card__k { font-size: var(--fs-caption); color: var(--text-muted); }
 .cmp-card__v { font-size: var(--fs-body-sm); color: var(--text-secondary); text-align: right; }
 .cmp-card__cta { margin-top: var(--space-5); }
 .cmp-card__cta .btn { width: 100%; }
+@media (max-width: 480px) {
+  .cmp-card__rows li { grid-template-columns: minmax(0, 1fr); gap: 5px; }
+  .cmp-card__v { text-align: left; }
+}
 
 /* ============================================================
    11. CostComparisonTable（第 5.7 节）
@@ -2311,9 +2316,10 @@
 .cta--inverse .cta__form .btn--primary:hover { background: var(--action-bg-hover); border-color: var(--action-bg-hover); color: var(--action-text); }
 
 /* 三通道卡片 */
-.channels { display: grid; gap: var(--space-4); }
+.channels { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-4); }
 @media (min-width: 1024px) { .channels { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 .channel {
+  min-width: 0;
   background: var(--color-surface);
   border: var(--border-default);
   border-radius: var(--radius-md);
@@ -2333,7 +2339,8 @@
    (audit-visual.md P2-7) */
 .channel__title { font-family: var(--font-display); font-size: var(--fs-h4); font-weight: var(--fw-bold); line-height: var(--lh-h4); }
 .channel__desc { font-size: var(--fs-caption); color: var(--color-text-secondary); }
-.channel .btn { margin-top: auto; }
+.channel .btn { margin-top: auto; max-width: 100%; min-width: 0; white-space: normal; overflow-wrap: anywhere; height: auto; }
+.channel .btn[href^="mailto:"] { font-size: .875rem; padding-inline: 12px; }
 
 /* 时区表 */
 .tz-table { width: 100%; border-collapse: collapse; }

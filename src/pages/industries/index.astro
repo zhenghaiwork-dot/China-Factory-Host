@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import '../../styles/industries.css';
 import Section from '../../components/Section.astro';
 import SectionHead from '../../components/SectionHead.astro';
 import PhotoSlot from '../../components/PhotoSlot.astro';
@@ -39,6 +40,7 @@ const stages = [
   title={title}
   description={description}
   active="industries"
+  bodyClass="industry-index"
   crumbs={[]}
   current="Industries"
   cta={{

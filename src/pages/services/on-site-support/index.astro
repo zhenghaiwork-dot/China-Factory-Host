@@ -6,7 +6,7 @@ import PhotoSlot from '../../../components/PhotoSlot.astro';
 import OnsitePhoto from '../../../components/OnsitePhoto.astro';
 import ServiceCard from '../../../components/ServiceCard.astro';
 import ProcessSteps from '../../../components/ProcessSteps.astro';
-import CoverageMap from '../../../components/CoverageMap.astro';
+import CoverageRegions from '../../../components/CoverageRegions.astro';
 import Caveat from '../../../components/Caveat.astro';
 import VetLink from '../../../components/VetLink.astro';
 import { waLink } from '../../../data/site.ts';
@@ -202,14 +202,15 @@ const wa = waLink('Hi, I would like to add on-site support to my factory visit.'
 
   <!-- Coverage -->
   <Section>
-    <div class="container container--md">
+    <div class="container support-coverage">
       <SectionHead
         eyebrow="Coverage"
-        title="Tier 1 we run daily. Tier 2 we staff. Tier 3 needs notice."
+        title="Where we can support your visit."
+        lead="Based in Zhejiang, with regional support in the Pearl River Delta and other locations by arrangement. Confirm availability for your dates and service."
       />
-      <CoverageMap />
+      <div class="support-coverage__panel"><CoverageRegions /></div>
       <p class="u-mt-6">
-        The tiers map to the <a href="/destinations/">destination pages</a>, region by region.
+        Explore the <a href="/destinations/">destination guides</a> for local industries and factory-visit planning.
       </p>
     </div>
   </Section>
@@ -243,3 +244,11 @@ const wa = waLink('Hi, I would like to add on-site support to my factory visit.'
     </div>
   </Section>
 </BaseLayout>
+
+<style>
+  .support-coverage__panel { background: #f5f6f8; border-radius: 16px; padding: 24px; }
+  .support-coverage__panel :global(.coverage-regions) { margin-top: 0; }
+  @media (max-width: 760px) {
+    .support-coverage__panel { padding: 14px; border-radius: 12px; }
+  }
+</style>

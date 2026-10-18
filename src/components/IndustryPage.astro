@@ -9,6 +9,7 @@ import Caveat from './Caveat.astro';
 import NoteStrip from './NoteStrip.astro';
 import VetLink from './VetLink.astro';
 import RelatedNav from './RelatedNav.astro';
+import '../styles/industries.css';
 
 /* IndustryPage — shared skeleton for /industries/*.
    Same reasoning as DestinationPage: two pages, one template. */
@@ -54,7 +55,7 @@ const heroPhoto = pickPhoto(c.slotName);
     a `{ctr && <style>}` is emitted as raw template text, so :global() never
     compiles and every rule that uses it silently dies (verified in dist:
     the old conditional block shipped literal ":global(.eyebrow)" selectors). */}
-<div class:list={[{ 'ind-ctr': ctr }]}>
+<div class:list={['industry-page', { 'ind-ctr': ctr }]}>
 {ctr ? (
   <section class="hero hero--centered">
     <div class="container">

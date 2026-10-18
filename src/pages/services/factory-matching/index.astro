@@ -12,44 +12,137 @@ import Icon from '../../../components/Icon.astro';
 import RelatedNav from '../../../components/RelatedNav.astro';
 import { waLink } from '../../../data/site.ts';
 
-const title = "Find Manufacturers in China: Shortlisting for Factory Visits";
-const description = "Find manufacturers in China for your product. We identify sourcing regions, screen candidates and prepare a shortlist for factory visits.";
+const title = "Find Manufacturers in China for Your Product";
+const description = "Find manufacturers in China that fit your product, order size and target market. Get supplier screening and a shortlist to plan factory visits.";
 
 const wa = waLink('Hi, I need help finding factories for my product in China.');
 
 const steps = [
-  { n: '01', title: 'Define the spec', body: 'Product, material, quantity, target quality and the certifications your market requires. A spec that is vague produces a shortlist that is vague.', evidence: ['Product and material locked down', 'Quantity, annual and per order, stated', 'Certification requirements named'] },
-  { n: '02', title: 'Name the cluster', body: 'Identify regions with relevant suppliers and processes, then plan travel around the shortlist.', evidence: ['Category matched to the right cluster', 'The reasoning explained, not just the name'] },
-  { n: '03', title: 'Build and pre-screen the pool', body: 'A candidate pool wider than what you need, cut down with the five checks. We record which checks have been completed and what needs confirmation.', evidence: ['Licence and scope checked', 'Address and capacity verified', 'The failures removed and documented'] },
-  { n: '04', title: 'Hand over the shortlist', body: 'The survivors, arranged for visiting, with the reason each one made it. Then the visit does the work the shortlist prepared for.', evidence: ['Supplier details and checks to follow up', 'Each entry tied to the check that passed'] },
+  {
+    "n": "01",
+    "title": "Start with your product brief",
+    "body": "Share a product link, photos or drawings, materials, order quantity and destination market. We identify missing details before contacting suppliers.",
+    "evidence": [
+      "Product and manufacturing process",
+      "Initial order size and customization",
+      "Target market and required documents"
+    ]
+  },
+  {
+    "n": "02",
+    "title": "Identify relevant suppliers and regions",
+    "body": "Narrow the search by product and production process. Compare potential manufacturing locations before deciding where to travel.",
+    "evidence": [
+      "Candidate suppliers and locations",
+      "Reasons each region may fit your product"
+    ]
+  },
+  {
+    "n": "03",
+    "title": "Screen candidates against your requirements",
+    "body": "Review company identity, product scope and the evidence suppliers provide. Separate supplier claims from completed checks, and flag what needs a sample, site visit or specialist review.",
+    "evidence": [
+      "Company and production-site information",
+      "Supplier-stated MOQ and capacity",
+      "Missing evidence and follow-up questions"
+    ]
+  },
+  {
+    "n": "04",
+    "title": "Prepare a shortlist and next steps",
+    "body": "Compare suitable candidates, explain outstanding questions and agree which suppliers are worth contacting or visiting. Appointments depend on supplier confirmation.",
+    "evidence": [
+      "Reasons to include each candidate",
+      "Open questions and suggested next steps"
+    ]
+  }
 ];
 
 const needFromYou = [
-  { k: 'Product and material', v: 'What it is and what it is made of. Material is the second filter after category.' },
-  { k: 'Quantity', v: 'Annual and per order, stated separately — suppliers price them differently.' },
-  { k: 'Target price', v: 'A number, so the factory knows whether it is in the running.' },
-  { k: 'Destination market', v: 'Which market, because the certification requirements follow from it.' },
-  { k: 'Custom or stock', v: 'A stock shape you can buy is a market order; a custom mould is a tooling order.' },
+  {
+    "k": "Product reference",
+    "v": "A product link, photos, sample or drawing, with material and dimensions where known."
+  },
+  {
+    "k": "Order quantity",
+    "v": "Your first order quantity and likely repeat orders. An estimate is useful if demand is not yet confirmed."
+  },
+  {
+    "k": "Budget or target price",
+    "v": "Share a range if you have one, and say whether it includes packaging or shipping. It is fine to ask for a feasibility check first."
+  },
+  {
+    "k": "Destination market",
+    "v": "Where you will sell the product and any testing or compliance requirements already identified."
+  },
+  {
+    "k": "Customization",
+    "v": "Existing design, private label or new tooling? Note the changes you need and your preferred launch date."
+  }
 ];
 
 const scoring = [
-  { k: 'Cluster fit', v: 'Is the factory in the cluster that makes your category, or is it a generalist claiming to?' },
-  { k: 'Capacity match', v: 'Can it support your order volume and production schedule?' },
-  { k: 'Certification match', v: 'Does it already hold the certificates your market requires?' },
-  { k: 'MOQ fit', v: 'What minimum applies to your specification, and can the supplier accept your order?' },
+  {
+    "k": "Product and process fit",
+    "v": "Does the supplier make this type of product, and which production steps are in-house or subcontracted?"
+  },
+  {
+    "k": "Order size and timing",
+    "v": "Does the supplier’s stated MOQ and availability fit your initial order? Capacity and dates need evidence and confirmation."
+  },
+  {
+    "k": "Documents and open checks",
+    "v": "Do available reports relate to the correct company, product model and target market? Specialist compliance review may still be needed."
+  },
+  {
+    "k": "Commercial fit",
+    "v": "Compare customization, tooling, sample terms and quote scope rather than unit price alone."
+  }
 ];
 
 const faqs = [
-  { q: 'I do not know which city makes my product.', a: ['That is the most common starting point. Tell us the category and quantity, and we name the cluster — and explain why it is that city and not the one with the better airport.'] },
-  { q: 'How is matching different from a visit?', a: ['Matching produces the shortlist. The visit is what you do with it. Most people want both, in that order.'] },
-  { q: 'Do you take a cut from the factories you recommend?', a: ['No. We are paid by you, so a factory gets onto the shortlist because it fits your spec, not because it pays us to be there.'] },
-  { q: 'How many factories will I end up with?', a: ['Enough to compare, not enough to waste a week. Usually three to five survivors, each tied to the check that passed — the number depends on your category, not a target we force.'] },
-  { q: 'What if my category is too small or too niche?', a: ['We will say so, and point you at who serves it better. Matching a category we do not know is how we would hand you a bad shortlist, and we would rather not.'] },
-  { q: 'Can you match me without me visiting?', a: ['We can build and pre-screen the shortlist remotely, but the verification is only as good as the floor. The shortlist prepares for the visit; it does not replace it.'] },
-  { q: 'What if a matched factory does not respond?', a: ['We move down the shortlist. That is why it has more entries than you need — a silence does not stall the whole trip.'] },
-  { q: 'Do you charge per factory matched?', a: ['No. We charge for the trip and the coordination, not per factory. The shortlist is not a lead list we sell; it is the plan for your visit.'] },
-  { q: 'What is the difference between matching and vetting?', a: ['Matching finds the factories; vetting checks them. Both happen before you fly, but they answer different questions — where to go, versus whether the name is real.'] },
-  { q: 'Do you work through agents or resellers?', a: ['We work for the buyer, directly. We do not take factory commissions, and we do not white-label our service through intermediaries.'] },
+  {
+    "q": "How do I find a manufacturer in China for my product?",
+    "a": [
+      "Start with a product brief, then identify suppliers by product and manufacturing process. Compare their company details, order requirements and evidence before requesting samples or arranging visits. This service helps prepare that shortlist."
+    ]
+  },
+  {
+    "q": "Can you check suppliers I found on Alibaba or at a trade fair?",
+    "a": [
+      "Send their company names, profile links, quotes and contact details with your product brief. We can discuss screening your existing candidates instead of starting a new search. For an established shortlist, see our existing-supplier visit service."
+    ]
+  },
+  {
+    "q": "Can you help with a small order or low MOQ?",
+    "a": [
+      "Share your actual first-order quantity. Stock products and existing tooling may offer different options from a custom design, but no minimum quantity can be promised before suppliers review your specification."
+    ]
+  },
+  {
+    "q": "How do you distinguish a factory from a trading company?",
+    "a": [
+      "Review the legal entity, production address, product scope and evidence of relevant processes. A business licence or platform badge alone does not establish who makes the product. Record subcontracting and arrange further checks where the evidence is incomplete."
+    ]
+  },
+  {
+    "q": "What do I receive from supplier matching?",
+    "a": [
+      "The agreed shortlist includes candidate details, reasons for selection, screening status and questions to resolve before sampling or visiting. We confirm the scope and expected number of candidates with your project brief rather than promise a fixed number for every category."
+    ]
+  },
+  {
+    "q": "Do I have to visit China?",
+    "a": [
+      "Initial supplier research and document review can be handled remotely. A visit can help examine the production site and discuss technical questions, but neither a shortlist nor a visit replaces product testing or a specialist audit when required."
+    ]
+  },
+  {
+    "q": "How much does supplier matching cost, and how long does it take?",
+    "a": [
+      "Send your product brief and any existing candidates so we can confirm scope, fees and a schedule before you proceed. Supplier response times, customization and the checks required affect the work. Sampling, travel and specialist testing should be clarified separately."
+    ]
+  }
 ];
 ---
 
@@ -61,9 +154,9 @@ const faqs = [
   current="Factory matching"
   cta={{
     eyebrow: 'Next step',
-    title: 'Tell us the product. We will name the cluster.',
-    lead: 'Send your product, material and quantity to discuss a supplier shortlist.',
-    primary: { label: 'Find my factories', href: '/contact/' },
+    title: 'Start with your product and order size.',
+    lead: 'Send a product link, photos or drawings, your first-order quantity and target market. We will review whether we can help and confirm the proposed scope.',
+    primary: { label: 'Discuss my supplier shortlist', href: '/contact/' },
     secondary: { label: 'Ask on WhatsApp', href: wa, external: true },
   }}
 >
@@ -71,12 +164,12 @@ const faqs = [
     <div class="container">
       <div class="hero__center">
         <p class="eyebrow">Factory matching</p>
-        <h1>Find Manufacturers in China: Shortlisting for Factory Visits</h1>
+        <h1>Find Manufacturers in China for Your Product</h1>
         <p class="lead hero__lead">
-          We identify sourcing regions and screen candidate suppliers using your product, material and quantity requirements.
+          Need suppliers for a new product, or a second opinion on names you already have? We help identify relevant manufacturers, screen candidates and prepare a shortlist for sampling or factory visits.
         </p>
         <div class="btn-row">
-          <a class="btn btn--primary" href="/contact/">Find my factories</a>
+          <a class="btn btn--primary" href="/contact/">Discuss my supplier shortlist</a>
           <a class="btn btn--secondary" href="/destinations/">See the clusters</a>
         </div>
       </div>
@@ -98,15 +191,14 @@ const faqs = [
       />
       <ProcessSteps items={steps} />
       <p class="u-mt-6">
-        The cluster is named by the <a href="/tools/china-manufacturing-hub-finder/">manufacturing hub finder</a>, and the checks are the same{' '}
-        <a href="/about/how-we-vet-factories/">five vetting checks</a> run on every factory.
+        Use the <a href="/tools/china-manufacturing-hub-finder/">manufacturing hub finder</a> to explore possible regions, then review our <a href="/about/how-we-vet-factories/">supplier screening method</a>. Suppliers you meet at <a href="/china-trade-fairs/">trade fairs in China</a> can also be starting points for a shortlist.
       </p>
     </div>
   </Section>
 
   <Section alternate>
     <div class="container container--md">
-      <SectionHead center eyebrow="What we need" title="The inputs that make the shortlist real." />
+      <SectionHead center eyebrow="What we need" title="What to send us to get started." />
       <ul class="spec-list clean spec-list--split">
         {needFromYou.map((n) => (
           <li>
@@ -119,7 +211,7 @@ const faqs = [
 
   <Section>
     <div class="container container--md">
-      <SectionHead center eyebrow="How we score" title="What puts a factory on the shortlist." />
+      <SectionHead center eyebrow="How we score" title="How we compare potential suppliers." />
       <ul class="soft-grid clean">
         {scoring.map((s) => (
           <li>
@@ -139,21 +231,14 @@ const faqs = [
 
   <Section alternate>
     <div class="container container--md">
-      <SectionHead center eyebrow="Worked through" title="Three products, three matches." />
-      <ul class="soft-grid soft-grid--three clean">
-        <li>
-          <p class="soft-grid__k">A 30ml serum bottle, private label, 5,000 units</p>
-          <p class="soft-grid__v"><a href="/destinations/guangzhou-dongguan/">Guangzhou / Dongguan</a>. The packaging supplier and the filling plant are two companies there, and the cluster puts them close together.</p>
-        </li>
-        <li>
-          <p class="soft-grid__k">A custom injection-moulded toy, 10,000 units</p>
-          <p class="soft-grid__v"><a href="/destinations/guangzhou-dongguan/">Dongguan</a> or Shantou. The tooling and the injection capacity sit in the toy cluster, and the MOQ is set by the mould.</p>
-        </li>
-        <li>
-          <p class="soft-grid__k">Five hundred stock kitchen gadgets</p>
-          <p class="soft-grid__v"><a href="/destinations/yiwu/">Yiwu</a>. A stock shape at low quantity is a market order, and Yiwu is built around that.</p>
-        </li>
-      </ul>
+      <SectionHead center eyebrow="Deliverable" title="A shortlist you can compare." lead="Agree the scope before work starts. Each candidate should show what is known and what still needs checking." />
+      <Checklist items={[
+        'Company name, location and available contact details',
+        'Relevant products and production processes, with the source of the information',
+        'Supplier-stated MOQ, sample and customization terms where available',
+        'Completed screening checks, missing documents and unresolved questions',
+        'Suggested next steps: clarification, sample request or a factory visit',
+      ]} />
     </div>
   </Section>
 
@@ -163,15 +248,15 @@ const faqs = [
       <ul class="soft-grid soft-grid--three clean">
         <li>
           <p class="soft-grid__k">Matching</p>
-          <p class="soft-grid__v">Produces the shortlist — spec-driven and largely remote.</p>
+          <p class="soft-grid__v">Finds and compares candidates against your product requirements.</p>
         </li>
         <li>
           <p class="soft-grid__k">A visit</p>
-          <p class="soft-grid__v">Verifies the shortlist on the floor, as in an <a href="/services/existing-supplier-visits/">existing-supplier visit</a>.</p>
+          <p class="soft-grid__v">Examines the site and follows up on production questions, as in an <a href="/services/existing-supplier-visits/">existing-supplier visit</a>.</p>
         </li>
         <li>
           <p class="soft-grid__k">A full trip</p>
-          <p class="soft-grid__v">Matching plus visiting plus <a href="/china-sourcing-trips/">the follow-through</a>, in one booking.</p>
+          <p class="soft-grid__v">Coordinates supplier appointments and travel around your shortlist. Discuss the scope of <a href="/china-sourcing-trips/">a sourcing trip</a> before booking.</p>
         </li>
       </ul>
     </div>
@@ -182,8 +267,8 @@ const faqs = [
       <SectionHead center eyebrow="How long" title="How long matching takes." />
       <ul class="spec-list clean spec-list--split">
         <li><span class="spec-list__k">It depends on the category</span><span class="spec-list__v">A well-documented category moves faster than an unusual one.</span></li>
-        <li><span class="spec-list__k">It depends on the checks</span><span class="spec-list__v">Registration checks are quick; capacity and floor checks need a visit.</span></li>
-        <li><span class="spec-list__k">We will give you a window</span><span class="spec-list__v">Not a promise we cannot keep — a realistic window for your specific category.</span></li>
+        <li><span class="spec-list__k">It depends on the checks</span><span class="spec-list__v">Public records, supplier responses, samples and on-site checks have different timelines.</span></li>
+        <li><span class="spec-list__k">We will give you a window</span><span class="spec-list__v">We confirm the proposed schedule after reviewing your brief and the checks needed.</span></li>
       </ul>
     </div>
   </Section>
@@ -192,11 +277,11 @@ const faqs = [
     <div class="container container--md">
       <Caveat
         title="What matching does not do"
-        body="We shortlist and verify. We do not pretend a desk search is a factory visit."
+        body="A shortlist supports your next decision. It is not a guarantee of supplier performance or product compliance."
         items={[
-          'We do not hand you an un-vetted spreadsheet and call it a shortlist.',
-          'We do not guarantee a factory will accept your order — we get you to the right doors, then the visit does the work.',
-          'We do not build remote supplier lists for a flat fee and call it sourcing. Matching is the front half of a trip, not a substitute for one.',
+          'Completed checks and supplier-provided information are identified separately.',
+          'Order acceptance, pricing, MOQ and production dates require supplier confirmation.',
+          'Product testing, formal audits and shipment inspection are separate tasks; confirm what your project requires.',
         ]}
       />
     </div>

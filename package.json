@@ -24,6 +24,7 @@
     "@astrojs/cloudflare": "^14.3.2",
     "@astrojs/node": "^11.1.6",
     "astro": "^7.3.2",
+    "lunar-javascript": "^1.7.7",
     "wrangler": "^4.134.0"
   },
   "devDependencies": {

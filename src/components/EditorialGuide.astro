@@ -1,0 +1,94 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+const { document, current, quickLinks = [], quickLabel = 'Explore topics', category = 'Sourcing guide' } = Astro.props;
+const { compiledContent, frontmatter, getHeadings } = document;
+import '../styles/wholesale-guide.css';
+const headings = await getHeadings();
+let body = await compiledContent();
+const title = body.match(/<h1[^>]*>([\s\S]*?)<\/h1>/)?.[1] ?? frontmatter.title;
+body = body.replace(/<h1[^>]*>[\s\S]*?<\/h1>/, '');
+const intro = body.match(/<p>[\s\S]*?<\/p>/)?.[0] ?? '';
+body = body.replace(intro, '');
+const note = body.match(/<p>[\s\S]*?<\/p>/)?.[0] ?? '';
+body = body.replace(note, '');
+let tableIndex = 0;
+body = body.replace(/<table[\s\S]*?<\/table>/g, table => {
+  tableIndex++;
+  return `<div class="market-table"><div class="market-table__hint">Comparison ${String(tableIndex).padStart(2, '0')}<span>Scroll across to view all columns →</span></div><div class="market-table__scroll" tabindex="0" role="region" aria-label="Comparison table ${tableIndex}">${table}</div></div>`;
+});
+const sections = body.split(/(?=<h2\b)/).filter(part => part.trim()).map(section => {
+  if (!/^<h2\b[^>]*>\s*(FAQ|Frequently asked questions)\s*<\/h2>/i.test(section)) return section;
+  return section.replace(/<p><strong>([\s\S]*?)<\/strong>\s*([\s\S]*?)<\/p>/g,
+    '<div class="market-faq-item"><h3>$1</h3><p>$2</p></div>');
+});
+const chapters = headings.filter(h => h.depth === 2);
+const cities = quickLinks;
+const updated = new Intl.DateTimeFormat('en-GB', {day:'numeric',month:'long',year:'numeric',timeZone:'UTC'}).format(new Date(frontmatter.updated));
+---
+<BaseLayout title={frontmatter.title} description={frontmatter.description} current={current} crumbs={[{href:'/guides/',label:'Guides'}]} cta={false}>
+  <div class="market-guide">
+    <header class="market-hero" id="article-top">
+      <div class="market-meta"><span>{category}</span><span>Updated {updated}</span></div>
+      <h1 set:html={title} />
+      <div class="market-intro" set:html={intro} />
+      {cities.length > 0 && <nav class="market-cities" aria-label="Jump to a topic">
+        <span>{quickLabel}</span>
+        {cities.map(city => <a href={`#${city.slug}`}>{city.text}<span aria-hidden="true">↗</span></a>)}
+      </nav>}
+    </header>
+    <div class="market-reading">
+      <aside class="market-sidebar">
+        <details open>
+          <summary>In this guide</summary>
+          <nav aria-label="Article chapters">{chapters.map((chapter, i) => <a href={`#${chapter.slug}`}><span>{String(i+1).padStart(2,'0')}</span>{chapter.text}</a>)}</nav>
+        </details>
+        <a class="market-back" href="#article-top">Back to top ↑</a>
+      </aside>
+      <article class="market-prose">
+        <div class="market-editor-note" set:html={note} />
+        {sections.map(section => <section class="market-chapter" set:html={section} />)}
+      </article>
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  const guide = document.querySelector('.market-guide');
+  if (guide) {
+    const navLinks = [...guide.querySelectorAll<HTMLAnchorElement>('.market-sidebar nav a')];
+    const chapterHeads = [...guide.querySelectorAll<HTMLElement>('.market-chapter h2')];
+    let queued = false;
+    const update = () => {
+      queued = false;
+      const offset = parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 140;
+      let active = chapterHeads[0];
+      for (const heading of chapterHeads) if (heading.getBoundingClientRect().top <= offset) active = heading;
+      for (const link of navLinks) {
+        if (active && link.hash === '#' + active.id) link.setAttribute('aria-current', 'location');
+        else link.removeAttribute('aria-current');
+      }
+    };
+    window.addEventListener('scroll', () => { if (!queued) { queued = true; requestAnimationFrame(update); } }, {passive:true});
+    window.addEventListener('resize', update, {passive:true});
+    update();
+    const details = guide.querySelector('details');
+    if (details && matchMedia('(max-width:600px)').matches) details.open = false;
+    navLinks.forEach(link => link.addEventListener('click', () => {
+      if (details && matchMedia('(max-width:600px)').matches) details.open = false;
+    }));
+    for (const region of guide.querySelectorAll<HTMLElement>('.market-table__scroll')) {
+      const hint = region.parentElement?.querySelector<HTMLElement>('.market-table__hint span');
+      const sync = () => {
+        const overflows = region.scrollWidth > region.clientWidth + 2;
+        region.classList.toggle('can-scroll-left', overflows && region.scrollLeft > 3);
+        region.classList.toggle('can-scroll-right', overflows && region.scrollLeft + region.clientWidth < region.scrollWidth - 3);
+        if (hint) hint.hidden = !overflows;
+        region.tabIndex = overflows ? 0 : -1;
+        if (hint) hint.textContent = region.scrollLeft + region.clientWidth >= region.scrollWidth - 3 ? '← Scroll back to earlier columns' : 'Scroll across to view all columns →';
+      };
+      new ResizeObserver(sync).observe(region);
+      region.addEventListener('scroll', sync, {passive:true});
+      sync();
+    }
+  }
+</script>

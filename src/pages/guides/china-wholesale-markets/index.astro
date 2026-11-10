@@ -1,0 +1,10 @@
+---
+import EditorialGuide from '../../../components/EditorialGuide.astro';
+import * as document from '../../../data/editorial/china-wholesale-markets.md';
+const quickLinks = [
+  {slug:'yiwu',text:'Yiwu'}, {slug:'guangzhou',text:'Guangzhou'},
+  {slug:'shenzhen-huaqiangbei',text:'Shenzhen'}, {slug:'keqiao-shaoxing',text:'Keqiao'},
+  {slug:'foshan-and-shunde-furniture',text:'Foshan and Shunde'},
+];
+---
+<EditorialGuide document={document} current="Wholesale markets" quickLinks={quickLinks} quickLabel="Explore markets" />

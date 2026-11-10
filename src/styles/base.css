@@ -384,3 +384,12 @@ ul.clean, ol.clean { list-style: none; margin: 0; padding: 0; }
   color: var(--text-muted);
   margin: 0 0 var(--space-2);
 }
+
+/* Standalone section introductions can use more of the available container.
+   Body prose and split layouts retain their own reading measures. */
+.container > .section-head:not(.section-head--center){max-width:min(100%, 960px)}
+.container > .section-head:not(.section-head--center) > .lead{max-width:88ch}
+
+/* Avoid a second measure cap inside already bounded introduction blocks. */
+.section-head > .lead{max-width:none}
+.section-head--center > .lead{max-width:80ch;margin-inline:auto}

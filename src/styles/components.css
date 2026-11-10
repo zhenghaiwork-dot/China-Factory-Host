@@ -3133,3 +3133,9 @@ ul.legend.clean { margin-top: var(--space-5); }
   font-size: var(--fs-body-sm);
   color: var(--text-muted);
 }
+
+/* A caveat's own box controls width; avoid an extra short text column inside it. */
+.caveat .caveat__body{max-width:none}
+
+/* Full-width notices use a balanced block; split-column notices stay local. */
+.section .container > .note-strip{max-width:min(100%, 960px);margin-inline:auto}

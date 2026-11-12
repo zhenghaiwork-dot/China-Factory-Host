@@ -2,14 +2,27 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import '../../styles/growth-editorial.css';
 const guides=[["Calendar", "Chinese calendar, holidays and factory visit timing", "/guides/chinese-calendar/"],["Plan","Plan a China factory visit","/guides/how-to-plan-a-china-factory-visit/"],["Budget","Factory visit costs and quote inclusions","/guides/china-factory-visit-cost/"],["Prepare","Questions to ask Chinese suppliers","/guides/questions-to-ask-china-factory-visit/"],["Check","Factory visit checklist","/guides/china-factory-visit-checklist/"],["Choose","Factory or trading company?","/guides/factory-vs-trading-company-china/"],["Choose","Visit, audit or product inspection?","/guides/factory-visit-vs-audit-vs-inspection/"],["Film","Filming permission in Chinese factories","/guides/can-you-film-inside-a-chinese-factory/"],["Canton Fair","Verify a supplier after the fair","/guides/verify-canton-fair-suppliers/"],["Canton Fair","Turn a fair shortlist into factory visits","/guides/canton-fair-to-factory-visits/"],["Canton Fair","Visit factories between fair phases","/guides/visit-factories-between-canton-fair-phases/"],["Canton Fair","Is the fair worth it for small buyers?","/guides/is-canton-fair-worth-it-for-small-buyers/"],["Canton Fair","Hotels, interpreters and practical preparation","/guides/canton-fair-practical-tips-hotels-interpreters/"],["Canton Fair","Continue to Zhejiang","/destinations/zhejiang/canton-fair-to-zhejiang-factory-visits/"],["Canton Fair","Discuss MOQ as a small buyer","/guides/canton-fair-moq-for-small-buyers/"]];
+guides.unshift(["Travel", "Shanghai to Yiwu: trains, airport transfers and arrival planning", "/guides/shanghai-to-yiwu/"]);
+
+guides.unshift(["Shopping", "What to buy in China: gifts and useful finds", "/guides/what-to-buy-in-china/"]);
+
+guides.unshift(["Markets", "Yiwu market maps, districts and booth navigation", "/guides/yiwu-market-map/"]);
+
 guides.unshift(["Products", "Products to import from China: selection and trade-offs", "/guides/products-to-import-from-china/"]);
 guides.unshift(["Markets", "China wholesale markets by product category", "/guides/china-wholesale-markets/"]);
 guides.unshift(["Directory", "China trade fairs by product, city and date", "/china-trade-fairs/"]);
 
 guides.unshift(["Reference", "Factory visit glossary — 20 terms in English, Chinese and pinyin", "/guides/china-factory-visit-glossary/"]);
+const guideGroups = [
+  { id: 'markets-and-products', title: 'Markets and product selection', labels: ['Markets', 'Products'] },
+  { id: 'shopping-and-travel', title: 'Shopping and travel preparation', labels: ['Shopping', 'Travel', 'Calendar'] },
+  { id: 'visits-and-suppliers', title: 'Factory visits and supplier checks', labels: ['Plan', 'Budget', 'Prepare', 'Check', 'Choose', 'Film'] },
+  { id: 'fairs-and-reference', title: 'Trade fairs and reference', labels: ['Canton Fair', 'Directory', 'Reference'] },
+];
 ---
-<BaseLayout title="China Factory Visit and Sourcing Guides" description="Prepare a China sourcing trip: budgets, supplier questions, on-site checks and practical Canton Fair guides." current="Guides" cta={false}>
-<div class="growth-article"><header><h1>China factory visit and sourcing guides</h1><p class="lead">Prepare the visit, ask better questions and keep the evidence you need to compare suppliers.</p></header>
-<section><h2>Choose the question you need to answer</h2><nav class="related-nav" aria-label="Guides">{guides.map(g=><a href={g[2]}><span class="related-nav__k">{g[0]}</span><span class="related-nav__t">{g[1]}</span></a>)}</nav></section>
+<BaseLayout title="China Sourcing, Shopping and Travel Guides" description="Explore China sourcing, market navigation, personal shopping and travel preparation, plus supplier checks and trade-fair guides." current="Guides" cta={false}>
+<div class="growth-article"><header><h1>China sourcing, shopping and travel guides</h1><p class="lead">Choose a market, plan a sourcing visit or prepare personal shopping. Start with the guide that matches your purpose.</p></header>
+<nav class="jump-links" aria-label="Guide categories">{guideGroups.map(group => <a href={`#${group.id}`}>{group.title}</a>)}</nav>
+{guideGroups.map(group => <section id={group.id}><h2>{group.title}</h2><nav class="related-nav" aria-label={group.title}>{guides.filter(g => group.labels.includes(g[0])).map(g => <a href={g[2]}><span class="related-nav__k">{g[0]}</span><span class="related-nav__t">{g[1]}</span></a>)}</nav></section>)}
 <section class="note"><h2>Use the tools alongside the guides</h2><p>Find research starting points with the <a href="/tools/china-manufacturing-hub-finder/">manufacturing hub finder</a>. Record observations and open questions in the <a href="/tools/factory-visit-scorecard/">supplier comparison template</a>.</p><p><a href="/factory-visits/">See what local visit support can cover</a></p></section>
 </div></BaseLayout>

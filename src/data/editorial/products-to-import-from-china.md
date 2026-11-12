@@ -17,6 +17,8 @@ This guide is for importers who are choosing a first product, or reviewing a pro
 It does not tell you which product will make money. No honest guide can. What it can do is give you a method for deciding, and a checklist for not making expensive mistakes.
 
 
+Buying gifts or items for personal use? The [China shopping guide](/guides/what-to-buy-in-china/) covers visitor purchases, price references and packing considerations.
+
 ## Part 1: Core principles (market-neutral)
 
 ### There is no universally best product to import
@@ -82,6 +84,8 @@ The ten categories below are presented as research starting points. Each has its
 8. **Seasonal decor, gifts, and string lights.** Strong seasonal peaks, so timing is critical. Powered lighting requires electrical safety certification in most markets.
 9. **Furniture and bulky goods.** High freight cost relative to value, low tolerance for returns, and sample-versus-production mismatch is a common problem. Formaldehyde and VOC limits apply in several markets.
 10. **Fabrics and trims.** Dye lot variation is normal in textiles. Confirm whether your supplier weaves and dyes, or is a trader, and agree on an acceptable dye-lot tolerance in writing.
+
+Planning to compare samples in person? Start with the [Yiwu district and product-floor map](/guides/yiwu-market-map/) for small commodities, and confirm each shop’s minimum order before visiting.
 
 ### Where to find each category
 

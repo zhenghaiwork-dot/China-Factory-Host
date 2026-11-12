@@ -14,6 +14,8 @@ updated: 2026-11-09
 
 ## Start here
 
+For personal gifts and single-item shopping, start with [what to buy in China](/guides/what-to-buy-in-china/). For resale, use the [product selection and import trade-offs guide](/guides/products-to-import-from-china/) to decide what is worth researching before choosing a market.
+
 | If you are buying | Start with | Why |
 |---|---|---|
 | Toys, artificial flowers, festival decorations, jewellery and hair accessories | Yiwu, Districts 1 and 3 | Published floor plans put these categories together |
@@ -141,6 +143,8 @@ The two other Yiwu markets matter for specific products:
 **Plan the first visit.** Pick one or two districts that match your product and stay there. The operator says a three-minute stop at every booth would take more than a year of eight-hour days. Do not try to cover the whole market in a day.
 
 **Where sources disagree.** Floor-level details in the table above, closing times for some markets, and what is now on District 5's top floor.
+
+For floor diagrams, booth signs and route planning, use the [Yiwu market map and district guide](/guides/yiwu-market-map/).
 
 **Beyond the market.** The Trade City is a place to review ready-made products and take samples. For custom work, repeat orders or a quality process you need to see, ask who produces the item and move to a verified supplier. See [Yiwu sourcing and supplier visits](/destinations/yiwu/).
 
@@ -445,6 +449,8 @@ Yiwu is big enough that you need a plan. The operator cites 8 million square met
 | Around a fair | 2 to 3 | Leave market days before and after the fair, and keep fair days for the fair |
 
 The order of Guangzhou and Shenzhen follows how the markets work: Guangzhou apparel trades mainly in the morning, and many Huaqiangbei counters are busiest after midday. Intercity trains between Guangzhou East and Shenzhen are reported at roughly an hour (published figures range from 57 to 68 minutes). The Guangzhou South to Shenzhen North high-speed link can take as little as 29 minutes, but both stations are away from the market districts.
+
+For a Yiwu visit starting in Shanghai, plan the [train and airport connections](/guides/shanghai-to-yiwu/) before committing to supplier appointments.
 
 ### Timing
 

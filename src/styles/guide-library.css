@@ -37,4 +37,16 @@
 .library-tools a:hover{color:var(--accent-700)}
 @media(max-width:800px){.library-feature{gap:28px;padding:28px}.library-collection{gap:32px;grid-template-columns:minmax(0,1fr) minmax(0,1.6fr)}.library-row{grid-template-columns:minmax(0,1fr) 20px;gap:7px}.library-topics{gap:0 28px}.row-category{grid-column:1/-1}}
 @media(max-width:600px){.library-hero h1{font-size:clamp(36px,9vw,48px);line-height:1.12}.library-feature{padding:24px;gap:24px}.library-topics{margin-bottom:48px;gap:0 20px}.library-topics a{padding:16px 0;gap:8px;font-size:12px}.library-collection{grid-template-columns:minmax(0,1fr);gap:24px;margin-bottom:52px}.library-collection h2{font-size:25px;max-width:none}.library-row{padding:20px 0}.row-title{font-size:16px}.library-tools{gap:24px}.feature-image>span{font-size:9px;padding:12px}.library-intro>span{font-size:11px}}
-@media(prefers-reduced-motion:reduce){.row-arrow,.row-title,.library-button{transition:none}}
+.library-topics a{display:grid;grid-template-columns:18px minmax(0,1fr) 14px;column-gap:10px;align-items:start;min-height:64px;transition:color .18s}
+.library-topics .topic-title{font-size:13px;line-height:1.6;text-wrap:pretty}
+.library-topics a>span:first-child{padding-top:2px}
+.library-topics a>span:last-child{margin:0;transition:transform .18s}
+.library-eyebrow,.feature-image>span{font-size:11px}
+.library-intro>span{font-size:12px}
+.library-collection header p,.feature-copy p,.row-title{text-wrap:pretty}
+.library-button{min-height:44px}
+.library-button>span,.library-tools a>span{transition:transform .18s;color:var(--ink-600)}
+.library-row:focus-visible .row-title{color:var(--accent-700)}
+@media(hover:hover){.library-topics a:hover>span:last-child{transform:translateY(3px)}.library-button:hover>span,.library-tools a:hover>span{transform:translate(2px,-2px);color:var(--accent-700)}}
+@media(max-width:600px){.library-topics{gap:0 18px}.library-topics a{grid-template-columns:16px minmax(0,1fr);min-height:76px}.library-topics a>span:last-child{display:none}.library-topics .topic-title{font-size:13px}.library-collection{scroll-margin-top:120px}.feature-image>span{font-size:10px;line-height:1.6;gap:12px}.library-eyebrow{margin-bottom:18px}.row-category{font-size:12px}.library-hero h1 br{display:none}.library-hero h1{max-width:100%;text-wrap:balance}}
+@media(prefers-reduced-motion:reduce){.row-arrow,.row-title,.library-button,.library-button>span,.library-tools a>span,.library-topics a,.library-topics a>span:last-child{transition:none}}

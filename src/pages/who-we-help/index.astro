@@ -1,4 +1,5 @@
 ---
+import '../../styles/audience-faq.css';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Section from '../../components/Section.astro';
 import SectionHead from '../../components/SectionHead.astro';
@@ -38,6 +39,7 @@ const audiences = [
     secondary: { label: 'Ask on WhatsApp', href: wa, external: true },
   }}
 >
+  <div class="audience-index refined-index">
   <section class="hero">
     <div class="container">
       <div class="split-7-5">
@@ -52,7 +54,7 @@ const audiences = [
             around it is not the same trip.
           </p>
           <div class="btn-row">
-            <a class="btn btn--primary" href="/contact/">Tell us what you are trying to do</a>
+            <a class="btn btn--primary" href="/contact/">Tell us your plans</a>
           </div>
         </div>
         <div class="hero__media">
@@ -72,10 +74,10 @@ const audiences = [
       />
       <div class="related-nav" role="navigation" aria-label="Who we help">
         {
-          audiences.map((d) => (
+          audiences.map((d, i) => (
             <a href={d.href}>
-              <span class="related-nav__k">{d.k}</span>
-              <span class="related-nav__t">{d.t}</span>
+              <span class="audience-number" aria-hidden="true">0{i + 1}</span><span class="related-nav__k">{d.k}</span>
+              <span class="related-nav__t">{d.t}</span><span class="audience-link">Explore this trip <span aria-hidden="true">↗</span></span>
             </a>
           ))
         }
@@ -156,4 +158,4 @@ const audiences = [
       </p>
     </div>
   </Section>
-</BaseLayout>
+</div></BaseLayout>

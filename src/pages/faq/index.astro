@@ -1,4 +1,5 @@
 ---
+import '../../styles/audience-faq.css';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Section from '../../components/Section.astro';
 import SectionHead from '../../components/SectionHead.astro';
@@ -74,6 +75,7 @@ const faqSchema = {
   {/* One combined FAQPage covering all four groups — built in the frontmatter. */}
   <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
 
+  <div class="faq-index refined-index">
   <section class="hero">
     <div class="container">
       <div class="split-7-5">
@@ -94,7 +96,13 @@ const faqSchema = {
     </div>
   </section>
 
-  <Section>
+  <nav class="faq-topics container" aria-label="FAQ topics">
+    <a href="#about-us">About us <span>03</span></a>
+    <a href="#visits">Factory visits <span>04</span></a>
+    <a href="#filming">Filming <span>03</span></a>
+    <a href="#pricing">Pricing &amp; timing <span>03</span></a>
+  </nav>
+  <Section class="faq-group" id="about-us">
     <div class="container container--md">
       <SectionHead eyebrow="About us" title="Who we are and what we do." />
       <FAQ schema={false} items={service} />
@@ -104,7 +112,7 @@ const faqSchema = {
     </div>
   </Section>
 
-  <Section alternate>
+  <Section class="faq-group" id="visits">
     <div class="container container--md">
       <SectionHead eyebrow="Visits" title="How visits and trips work." />
       <FAQ schema={false} items={visits} />
@@ -114,7 +122,7 @@ const faqSchema = {
     </div>
   </Section>
 
-  <Section>
+  <Section class="faq-group" id="filming">
     <div class="container container--md">
       <SectionHead eyebrow="Filming" title="Filming inside factories." />
       <FAQ schema={false} items={filming} />
@@ -124,7 +132,7 @@ const faqSchema = {
     </div>
   </Section>
 
-  <Section alternate>
+  <Section class="faq-group" id="pricing">
     <div class="container container--md">
       <SectionHead eyebrow="Money" title="Pricing, commissions and timing." />
       <FAQ schema={false} items={money} />
@@ -133,4 +141,4 @@ const faqSchema = {
       </p>
     </div>
   </Section>
-</BaseLayout>
+</div></BaseLayout>

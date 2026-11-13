@@ -1,0 +1,25 @@
+.destination-refined .hero{padding-block:56px}
+.destination-refined .hero h1{font-size:clamp(36px,4.2vw,56px);line-height:1.14;font-weight:600;letter-spacing:-.035em;text-wrap:balance}
+.destination-refined .hero .lead{font-size:18px;line-height:1.8}
+.destination-refined .hero .photo-slot{border-radius:8px;overflow:hidden}
+.destination-refined .section{padding-block:56px}
+.destination-refined .section--alternate{background:#f7f7f5}
+.destination-refined .container--md{max-width:1120px}
+.destination-refined .section-head{max-width:1020px;margin-bottom:28px}
+.destination-refined .section-head h2{font-size:clamp(26px,2.8vw,34px);font-weight:600;line-height:1.3;letter-spacing:-.025em;text-wrap:balance}
+.destination-refined .section-head .lead{font-size:17px;line-height:1.8;max-width:none}
+.destination-refined .prose{max-width:84ch;font-size:17px;line-height:1.8}
+.destination-refined .spec-list--split{gap:0 40px}
+.destination-refined .spec-list--split li{display:flex;flex-direction:column;align-items:stretch;gap:10px;padding:24px 0;border-top:1px solid #dededb}
+.destination-refined .spec-list__k{font-size:17px;font-weight:600;letter-spacing:-.01em;text-transform:none;color:var(--ink-900)}
+.destination-refined .spec-list__v{font-size:16px;line-height:1.8}
+.destination-refined .fact-grid{gap:28px;margin-top:32px}
+.destination-refined .fact{border-radius:0;box-shadow:none;background:transparent;border:0;border-top:1px solid #dededb;padding:24px 0}
+.destination-refined .fact__v{font-size:28px;line-height:1.25;letter-spacing:-.025em}
+.destination-refined .fact__note{font-size:14px;line-height:1.75}
+.destination-refined .related-nav{grid-template-columns:repeat(2,minmax(0,1fr));gap:0 36px}
+.destination-refined .related-nav a{border:0;border-top:1px solid #dededb;border-radius:0;box-shadow:none;background:none;padding:22px 0;transform:none}
+.destination-refined .related-nav a:hover{transform:none;box-shadow:none;border-color:var(--accent-700)}
+.destination-refined .related-nav__t{font-size:17px;line-height:1.6;overflow-wrap:normal}
+.destination-refined a:focus-visible{outline:2px solid var(--accent-700);outline-offset:4px}
+@media(max-width:700px){.destination-refined .hero,.destination-refined .section{padding-block:36px}.destination-refined .hero .lead{font-size:17px}.destination-refined .spec-list--split,.destination-refined .related-nav{grid-template-columns:1fr}.destination-refined .section-head h2{font-size:27px}.destination-refined .spec-list--split li{padding:20px 0}.destination-refined .fact-grid{gap:20px}}

@@ -1,4 +1,5 @@
 ---
+import '../../../styles/destination-refinement.css';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import DestinationPage from '../../../components/DestinationPage.astro';
 
@@ -24,6 +25,7 @@ const description =
     form: { destination: 'Guangzhou / Dongguan' },
   }}
 >
+  <div class="destination-refined">
   <DestinationPage
     region="Guangdong"
     cityShort="Guangzhou"
@@ -152,4 +154,4 @@ const description =
       { k: 'Canton Fair', t: 'The fair in this city — phases and factory days', href: '/canton-fair/' },
     ]}
   />
-</BaseLayout>
+</div></BaseLayout>

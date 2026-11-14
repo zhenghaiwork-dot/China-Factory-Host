@@ -146,6 +146,8 @@ The two other Yiwu markets matter for specific products:
 
 For floor diagrams, booth signs and route planning, use the [Yiwu market map and district guide](/guides/yiwu-market-map/).
 
+For jewelry-specific materials, sample checks and order preparation, read the [Yiwu jewelry market buyer guide](/guides/yiwu-jewelry-market/).
+
 **Beyond the market.** The Trade City is a place to review ready-made products and take samples. For custom work, repeat orders or a quality process you need to see, ask who produces the item and move to a verified supplier. See [Yiwu sourcing and supplier visits](/destinations/yiwu/).
 
 

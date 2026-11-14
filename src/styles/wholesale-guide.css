@@ -1,3 +1,13 @@
+/* Keep long-guide scrollbars quiet without hiding the scroll affordance. */
+html:has(.market-guide),.market-sidebar,.market-table__scroll{
+  --scrollbar-thumb:#858585;
+  --scrollbar-track:#fafafa;
+  scrollbar-width:thin;
+  scrollbar-color:var(--scrollbar-thumb) var(--scrollbar-track);
+}
+@media(forced-colors:active),(prefers-contrast:more){
+  html:has(.market-guide),.market-sidebar,.market-table__scroll{scrollbar-width:auto;scrollbar-color:auto}
+}
 .market-guide{max-width:1240px;margin:0 auto;padding:36px 36px 96px;color:var(--ink-900)}
 .market-hero{border-bottom:1px solid #e9eaec;padding-bottom:32px;margin-bottom:40px}
 .market-meta{display:flex;gap:24px;align-items:center;font-size:13px;color:var(--ink-600);margin-bottom:22px}

@@ -30,7 +30,7 @@ Use these categories as a starting point, then confirm the exact shop listing. A
 | Beauty Tools & Cosmetics | District 3 | 3F | Includes mirrors, combs, hair accessories |
 | Bedding & Home Textiles | District 5 | 2F | Bedding sets, wedding textiles |
 | Buttons, Zippers & Apparel Accessories | District 3 | 3F | Full garment trimming selection |
-| Fashion Jewelry & Hair Accessories | District 1 | 2F | Necklaces, earrings, bracelets, hair clips |
+| [Fashion Jewelry & Hair Accessories](/guides/yiwu-jewelry-market/) | District 1 | 2F | Necklaces, earrings, bracelets, hair clips |
 | Small Home Appliances & Electronics | District 2 | 3F | Small appliances, telecom accessories, batteries |
 | Eyeglasses & Optical Products | District 3 | 1F | Confirm frame specifications and lens requirements with the supplier |
 | Footwear of All Types | District 4 | 3F | Men's, women's, children's shoes and slippers |
@@ -58,7 +58,7 @@ The floor lists below follow the online market directory. Photographed signs can
 
 **Floor Breakdown**:
 - **1F**: Artificial flowers, flower accessories, plush/electric/inflatable/general toys
-- **2F**: Hair accessories, fashion jewelry
+- **2F**: Hair accessories, [fashion jewelry](/guides/yiwu-jewelry-market/)
 - **3F**: Festive crafts, decorative crafts, tourist souvenirs, porcelain & crystal, photo frames, jewelry findings
 - **4F**: Factory direct sales center
 - **East Extension**: 1F = jewelry findings; 2–3F = jewelry; 4F = flower accessories

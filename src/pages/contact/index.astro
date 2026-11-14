@@ -1,10 +1,10 @@
 ---
+import '../../styles/contact.css';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Section from '../../components/Section.astro';
 import SectionHead from '../../components/SectionHead.astro';
 import PhotoSlot from '../../components/PhotoSlot.astro';
 import OnsitePhoto from '../../components/OnsitePhoto.astro';
-import Icon from '../../components/Icon.astro';
 import InquiryForm from '../../components/InquiryForm.astro';
 import NoteStrip from '../../components/NoteStrip.astro';
 import Caveat from '../../components/Caveat.astro';
@@ -37,8 +37,10 @@ const filmingCaveat = `If your trip is inside the next ${FILMING_LEAD_TIME} and 
   description={description}
   track="neutral"
   current="Contact"
+  bodyClass="contact-refined"
   cta={false}
 >
+  <div class="contact-page">
   <section class="hero">
     <div class="container">
       <div class="split-7-5">
@@ -60,72 +62,45 @@ const filmingCaveat = `If your trip is inside the next ${FILMING_LEAD_TIME} and 
     </div>
   </section>
 
-  <!-- Three channels -->
-  <Section tight>
+  <section class="contact-options">
     <div class="container">
-      <div class="channels">
-        <div class="channel">
-          <span class="channel__icon"><Icon name="wa" size={22} /></span>
-          <h2 class="channel__title">WhatsApp</h2>
-          <p class="channel__desc">
-            Use WhatsApp when the contact number is available, or send your request using the form below.
-          </p>
-          {
-            isWaConfigured ? (
-              <p class="u-mb-0">
-                <a class="btn btn--whatsapp" href={wa} target="_blank" rel="noopener"
-                  >Message us on WhatsApp</a
-                >
-              </p>
-            ) : (
-              <NoteStrip label="WhatsApp number" marker="wa-number"
-                >WhatsApp number to be published. Until then, use the form below — it reaches the
-                same team.</NoteStrip
-              >
-            )
-          }
-          <p class="form-footnote u-mt-0">{REPLY_TIME_PROMISE}, China working hours</p>
-        </div>
-        <div class="channel">
-          <span class="channel__icon"><Icon name="mail" size={22} /></span>
-          <h2 class="channel__title">Inquiry form</h2>
-          <p class="channel__desc">
-            Best when you have detail worth writing down — a category, a city, a specification, or a
-            supplier you already have doubts about.
-          </p>
-          <p class="u-mb-0"><a class="btn btn--secondary" href="#inquiry">Use the form below</a></p>
-          <p class="form-footnote u-mt-0">China time GMT+8 · we reply {REPLY_TIME}</p>
-        </div>
-        <div class="channel">
-          <span class="channel__icon"><Icon name="mail" size={22} /></span>
-          <h2 class="channel__title">Email</h2>
-          <p class="channel__desc">
-            For anything longer than a quick message, or if you prefer a written thread. Reaches the
-            same team as the form and WhatsApp.
-          </p>
-          <p class="u-mb-0"
-            ><a class="btn btn--secondary" href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a></p
-          >
-          <p class="form-footnote u-mt-0">China time GMT+8 · we reply {REPLY_TIME}</p>
-        </div>
+      <div class="contact-option">
+        <span class="eyebrow">01 / Start here</span>
+        <h2>Tell us about your visit</h2>
+        <p>A product, a destination, or a supplier shortlist — start with what you know.</p>
+        <a href="#visit-request">Send a visit request <span aria-hidden="true">↗</span></a>
       </div>
+      <div class="contact-option">
+        <span class="eyebrow">02 / Email us</span>
+        <h2>Prefer a written thread?</h2>
+        <p>Send your questions and supplier details directly to the same team.</p>
+        <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL} <span aria-hidden="true">↗</span></a>
+      </div>
+      {isWaConfigured && <div class="contact-option">
+        <span class="eyebrow">03 / WhatsApp</span>
+        <h2>A quick conversation</h2>
+        <p>{REPLY_TIME_PROMISE}, China working hours.</p>
+        <a href={wa} target="_blank" rel="noopener">Message us on WhatsApp <span aria-hidden="true">↗</span></a>
+      </div>}
     </div>
-  </Section>
+  </section>
 
-  <!-- Form -->
   <Section id="inquiry">
-    <div class="container container--md">
-      <SectionHead
-        eyebrow="Inquiry"
-        title="Send your visit request"
-        lead="Your name, email and visitor type are required. Add your product and dates if known."
-      />
-      <InquiryForm />
-      <p class="u-mt-6 form-footnote">— {HOST_SIGNATURE}</p>
-      <div class="u-mt-6">
-        <NoteStrip label="What happens next"
-          >{HOST_NAME} reviews your request and confirms whether we can help. We do not add inquiries to a mailing list.</NoteStrip
-        >
+    <div class="container contact-inquiry">
+      <aside class="contact-inquiry__intro">
+        <p class="eyebrow">Your next step</p>
+        <h2>A few details.<br />A useful first conversation.</h2>
+        <p>Tell us where you are in the planning process. Dates and supplier links are helpful if you have them.</p>
+        <div class="contact-next">
+          <h3>What happens next</h3>
+          <p>{HOST_NAME} reviews your request and confirms whether we can help.</p>
+          <p>{REPLY_TIME_PROMISE}<br />Monday–Friday · China Time (GMT+8)</p>
+          <p class="contact-privacy">We do not add inquiries to a mailing list.</p>
+        </div>
+        <p class="contact-signature">— {HOST_SIGNATURE}</p>
+      </aside>
+      <div id="visit-request" class="contact-request">
+        <InquiryForm title="Send your visit request" lead="Your name, email, visitor type and a short description are required." />
       </div>
     </div>
   </Section>
@@ -138,6 +113,8 @@ const filmingCaveat = `If your trip is inside the next ${FILMING_LEAD_TIME} and 
         title="China Time (GMT+8) against your clock."
         lead="Use China Time when arranging appointments. Check daylight-saving differences for your location."
       />
+      <p class="contact-table-hint" id="contact-table-hint" hidden>Scroll across for local times →</p>
+      <div class="contact-table-scroll" role="region" aria-label="Time zone comparison" aria-describedby="contact-table-hint">
       <table class="tz-table">
         <caption class="sr-only">China Time GMT+8 against common client timezones</caption>
         <thead>
@@ -156,6 +133,7 @@ const filmingCaveat = `If your trip is inside the next ${FILMING_LEAD_TIME} and 
           <tr><th scope="row">Southeast Asia</th><td>ICT / WIB</td><td>08:00–17:00</td></tr>
         </tbody>
       </table>
+      </div>
       <p class="cost-footnote">
         Our working day is Monday to Friday, 09:00–18:00 China Time. Overlap with North America is
         small — that is why WhatsApp tends to work better than scheduled calls for anything urgent.
@@ -207,8 +185,8 @@ const filmingCaveat = `If your trip is inside the next ${FILMING_LEAD_TIME} and 
   <Section alternate>
     <div class="container container--md">
       <Caveat
-        title="Times when you should not contact us"
-        body="Honest about this too, so neither side wastes a week."
+        title="Is our support right for you?"
+        body="A few boundaries to help you plan the right next step."
         items={[
           'If you only want the cheapest possible unit price and are not visiting China — a remote sourcing agent will serve you better.',
           'If you need a licensed product certification or a full social-compliance audit — we are neither an auditor nor a certification body.',
@@ -218,4 +196,19 @@ const filmingCaveat = `If your trip is inside the next ${FILMING_LEAD_TIME} and 
       />
     </div>
   </Section>
+  </div>
 </BaseLayout>
+
+<script>
+  const tableRegion = document.querySelector<HTMLElement>('.contact-table-scroll');
+  const tableHint = document.querySelector<HTMLElement>('#contact-table-hint');
+  if (tableRegion && tableHint) {
+    const updateTable = () => {
+      const overflowing = tableRegion.scrollWidth > tableRegion.clientWidth + 1;
+      tableHint.hidden = !overflowing;
+      tableRegion.tabIndex = overflowing ? 0 : -1;
+    };
+    new ResizeObserver(updateTable).observe(tableRegion);
+    updateTable();
+  }
+</script>
